@@ -1,8 +1,9 @@
 'use client'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
-
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [emailConfirm, setEmailConfirm] = useState('');
@@ -26,7 +27,9 @@ const page = () => {
       })
       .then((res=>{
         res.text().then((response)=>{console.log(response)})
-    }));}
+    }));
+    router.push('/login')
+  }
 
   }
 

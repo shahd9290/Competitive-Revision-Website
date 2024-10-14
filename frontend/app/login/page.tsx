@@ -1,8 +1,9 @@
 'use client'
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
 const page = () => {
-
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +21,7 @@ const page = () => {
     .then((res=>{
       res.text().then((response)=>{console.log(response)})
     }));
-
+    router.push('/')
   }
 
     return (
