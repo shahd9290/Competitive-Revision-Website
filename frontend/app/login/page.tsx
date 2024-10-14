@@ -1,6 +1,28 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 
 const page = () => {
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const login = async (event: { preventDefault: () => void; }) =>  {
+    event.preventDefault();
+    
+    const token = await fetch("http://localhost:8080/api/auth/login", {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin' : 'localhost:3000'},
+      body: JSON.stringify({
+        "username": username,
+        "password": password}
+      )
+    })
+    .then((res=>{
+      res.text().then((response)=>{console.log(response)})
+    }));
+
+  }
+
     return (
         <>
           {/* This login form component was made available by TailwindCSS. It has been modified to reflect my designs for
@@ -16,7 +38,7 @@ const page = () => {
                     </h2>
                 </div>
                 
-              <form action="#" method="POST" className="space-y-6 pt-5 sm:max-w-sm ml-auto mr-auto">
+              <form className="space-y-6 pt-5 sm:max-w-sm ml-auto mr-auto" onSubmit={login}>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                     Username
