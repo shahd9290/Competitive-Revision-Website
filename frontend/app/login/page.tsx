@@ -21,7 +21,7 @@ const page = () => {
     .then((res=>{
       res.text().then((response)=>{console.log(response)})
     }));
-    router.push('/')
+    router.push('/dashboard')
   }
 
     return (
