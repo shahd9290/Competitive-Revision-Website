@@ -40,7 +40,7 @@ const page = () => {
                 
               <form className="space-y-6 pt-5 sm:max-w-sm ml-auto mr-auto" onSubmit={login}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
                     Username
                   </label>
                   <div className="mt-2">
@@ -51,6 +51,7 @@ const page = () => {
                       required
                       autoComplete="username"
                       className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      onChange={event=>setUsername(event.target.value)}
                     />
                   </div>
                 </div>
@@ -72,6 +73,7 @@ const page = () => {
                       required
                       autoComplete="current-password"
                       className="block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      onChange={event=>setPassword(event.target.value)}
                     />
                   </div>
                 </div>
