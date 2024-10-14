@@ -1,6 +1,35 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 
 const page = () => {
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailConfirm, setEmailConfirm] = useState('');
+  const [password, setPassword] = useState('');
+
+  const register = async (event: { preventDefault: () => void; }) =>  {
+    event.preventDefault();
+    
+    if (!(email === emailConfirm)) {
+      alert("Please ensure you have entered the correct email address in both sections!");
+    }
+    else{
+      const token = await fetch("http://localhost:8080/api/auth/register", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin' : 'localhost:3000'},
+        body: JSON.stringify({
+          "username": username,
+          "email": email,
+          "password": password}
+        )
+      })
+      .then((res=>{
+        res.text().then((response)=>{console.log(response)})
+    }));}
+
+  }
+
     return (
         <>
           {/* This login form component was made available by TailwindCSS. It has been modified to reflect my designs for
@@ -16,7 +45,7 @@ const page = () => {
                     </h2>
                 </div>
                 
-              <form action="#" method="POST" className="space-y-6 pt-5 sm:max-w-sm ml-auto mr-auto">
+              <form className="space-y-6 pt-5 sm:max-w-sm ml-auto mr-auto" onSubmit={register}>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                     Username
@@ -29,6 +58,7 @@ const page = () => {
                       required
                       autoComplete="username"
                       className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      onChange={event=>setUsername(event.target.value)}
                     />
                   </div>
                 </div>
@@ -50,6 +80,7 @@ const page = () => {
                       required
                       autoComplete="email"
                       className="block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      onChange={event=>setEmail(event.target.value)}
                     />
                   </div>
                 </div>
@@ -65,11 +96,12 @@ const page = () => {
                   </div>
                   <div className="mt-2">
                     <input
-                      id="confemail"
-                      name="confemail"
-                      type="confemail"
+                      id="emailConfirm"
+                      name="emailConfirm"
+                      type="text"
                       required
                       className="block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      onChange={event=>setEmailConfirm(event.target.value)}
                     />
                   </div>
                 </div>
@@ -91,6 +123,7 @@ const page = () => {
                       required
                       autoComplete="current-password"
                       className="block w-full rounded-md border-0 py-1.5 px-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                      onChange={event=>setPassword(event.target.value)}
                     />
                   </div>
                 </div>
