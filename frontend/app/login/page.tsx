@@ -1,4 +1,5 @@
 'use client'
+import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
@@ -18,9 +19,12 @@ const page = () => {
         "password": password}
       )
     })
-    .then((res=>{
-      res.text().then((response)=>{console.log(response)})
-    }));
+    .then((res => {
+      res.json().then((response)=>{
+        var tokenString = response.token;
+        setCookie("token",tokenString, {
+          secure:true, sameSite:'strict'})
+      })}));
     router.push('/dashboard')
   }
 
