@@ -1,7 +1,6 @@
 package danyal.fyp.awd.service;
 
 import danyal.fyp.awd.dto.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.AuthenticationResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,12 +13,12 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request) {
+    public String authenticate(final AuthenticationRequestDto request) {
         final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
 
         final var authentication = authenticationManager.authenticate(authToken);
 
         final var token = jwtService.generateToken(request.username());
-        return new AuthenticationResponseDto(token);
+        return token;
     }
 }
