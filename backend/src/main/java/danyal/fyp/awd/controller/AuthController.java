@@ -1,10 +1,10 @@
 package danyal.fyp.awd.controller;
 
 import danyal.fyp.awd.dto.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.AuthenticationResponseDto;
 import danyal.fyp.awd.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +19,17 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponseDto> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequestDto));
+    public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
+        String token = authenticationService.authenticate(authenticationRequestDto);
+
+        ResponseCookie cookie = ResponseCookie.from("token", token)
+                .httpOnly(true)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(900)
+                .build();
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body("User logged in successfully");
     }
 
 }

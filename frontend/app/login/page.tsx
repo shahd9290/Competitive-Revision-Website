@@ -1,4 +1,5 @@
 'use client'
+import axios from 'axios';
 import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
@@ -11,20 +12,15 @@ const page = () => {
   const login = async (event: { preventDefault: () => void; }) =>  {
     event.preventDefault();
     
-    const token = await fetch("http://localhost:8080/api/auth/login", {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin' : 'localhost:3000'},
-      body: JSON.stringify({
-        "username": username,
-        "password": password}
-      )
-    })
-    .then((res => {
-      res.json().then((response)=>{
-        var tokenString = response.token;
-        setCookie("token",tokenString, {
-          secure:true, sameSite:'strict'})
-      })}));
+    const payload = {
+      "username":username,
+      "password":password
+    }
+
+    const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials:true});
+
+    console.log(login_confirm.data)
+    
     router.push('/dashboard')
   }
 
