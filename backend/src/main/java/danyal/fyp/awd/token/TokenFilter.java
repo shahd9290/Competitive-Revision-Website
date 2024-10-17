@@ -21,25 +21,15 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().contains("/api/auth")) {
+        String token = request.getHeader("Cookie");
+        if (request.getRequestURI().contains("/api/auth") || token != null) {
             filterChain.doFilter(request, response);
         }
-        else {
-            String token = request.getHeader("Cookie");
-            if (token != null) {
-                token = token.substring(6); // Token cookie less "token=" prefix.
-                requestWrapper = new HttpRequestWrapper(request);
-                requestWrapper.addHeader("Authorization", "Bearer " + token);
+        assert token != null;
+        token = token.substring(6); // Token cookie less "token=" prefix.
+        requestWrapper = new HttpRequestWrapper(request);
+        requestWrapper.addHeader("Authorization", "Bearer " + token);
 
-
-                filterChain.doFilter(requestWrapper, response);
-            }
-            else {
-                // Not an auth api request, but also no token. Could be expired - consider dropping request.
-                // To be completed later.
-                filterChain.doFilter(request, response);
-            }
-
-        }
+        filterChain.doFilter(requestWrapper, response);
     }
 }
