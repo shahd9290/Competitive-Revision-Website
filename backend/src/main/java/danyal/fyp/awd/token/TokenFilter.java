@@ -5,6 +5,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import danyal.fyp.awd.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +18,28 @@ import java.io.IOException;
 
 public class TokenFilter extends OncePerRequestFilter {
 
-    HttpRequestWrapper requestWrapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("Cookie");
-        if (request.getRequestURI().contains("/api/auth") || token != null) {
+        String token = getJwtFromCookies(request);
+        if (request.getRequestURI().contains("/api/auth") || token == null) {
             filterChain.doFilter(request, response);
+            return;
         }
-        assert token != null;
-        token = token.substring(6); // Token cookie less "token=" prefix.
-        requestWrapper = new HttpRequestWrapper(request);
+        HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
         requestWrapper.addHeader("Authorization", "Bearer " + token);
 
         filterChain.doFilter(requestWrapper, response);
+    }
+
+    private String getJwtFromCookies(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

@@ -18,25 +18,29 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
         customHeaderMap.put(name, value);
     }
 
+    @Override
     public String getHeader(String name) {
-        String headerValue = customHeaderMap.get(name);
 
-        if (headerValue != null) {
-            return headerValue;
+        if (customHeaderMap.containsKey(name)) {
+            return customHeaderMap.get(name);
         }
         return super.getHeader(name);
     }
 
+    @Override
     public Enumeration<String> getHeaders(String name) {
-        Set<String> set = new HashSet<String>(customHeaderMap.keySet());
+        List<String> values = new ArrayList<>();
 
-        Enumeration<String> e = super.getHeaders(name);
-        while (e.hasMoreElements()) {
-            String n = e.nextElement();
-            set.add(n);
+        if (customHeaderMap.containsKey(name)) {
+            values.add(customHeaderMap.get(name));
         }
 
-        return Collections.enumeration(set);
+        Enumeration<String> headers = super.getHeaders(name);
+        while (headers.hasMoreElements()) {
+            values.add(headers.nextElement());
+        }
+
+        return Collections.enumeration(values);
     }
 
     @Override
