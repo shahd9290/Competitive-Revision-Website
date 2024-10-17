@@ -5,6 +5,11 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import java.util.*;
 
+/**
+ * Sources:
+ * <a href = https://bijubnair.blogspot.com/2008/12/adding-header-information-to-existing.html> Tech Flavors via blogspot.com</a>
+ * <a href = https://wilddiary.com/adding-custom-headers-java-httpservletrequest/> Drona via wilddiary.com
+ */
 public class HttpRequestWrapper extends HttpServletRequestWrapper {
 
     private final Map<String, String> customHeaderMap;
