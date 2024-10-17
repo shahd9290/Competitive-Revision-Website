@@ -27,13 +27,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
-                ).cors(c -> c.configurationSource(corsConfig))
+                )
+                .cors(c -> c.configurationSource(corsConfig))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(server -> server
                         .jwt(Customizer.withDefaults())
-                        .authenticationEntryPoint(
-                                new BearerTokenAuthenticationEntryPoint())
+                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
                 .build();
