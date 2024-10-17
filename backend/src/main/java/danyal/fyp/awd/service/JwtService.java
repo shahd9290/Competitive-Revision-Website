@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 
 @RequiredArgsConstructor
 public class JwtService {
@@ -34,5 +35,10 @@ public class JwtService {
         // If we get to this function - the token should already be authenticated as it's called via the /api/refresh/ path - which requires authentication.
         DecodedJWT decodedJWT = JWT.decode(token);
         return decodedJWT.getSubject();
+    }
+
+    public boolean isExpired(String token) {
+        DecodedJWT decodedJWT = JWT.decode(token);
+        return decodedJWT.getExpiresAt().before(new Date());
     }
 }
