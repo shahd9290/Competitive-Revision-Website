@@ -21,17 +21,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    @Value("${jwt.refresh-token-ttl}")
-    private final Duration refreshTokenTtl;
-
     private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;
 
     private final UserRepository userRepository;
 
-    private final RefreshTokenRepository refreshTokenRepository;
-
+    private final RefreshTokenService refreshTokenService;
 
     public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request) {
         final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
@@ -43,24 +39,9 @@ public class AuthenticationService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User with username [%s] not found".formatted(request.username())));
 
-        var refreshToken = new RefreshToken();
-        refreshToken.setUser(user);
-        refreshToken.setExpiresAt(Instant.now().plus(refreshTokenTtl));
-        refreshTokenRepository.save(refreshToken);
+        RefreshToken refreshToken = refreshTokenService.createToken(user);
 
         return new AuthenticationResponseDto(accessToken, refreshToken.getId());
-    }
-
-    public AuthenticationResponseDto refreshToken(UUID refreshToken) {
-        final var refreshTokenEntity = refreshTokenRepository.findByIdAndExpiresAtAfter(refreshToken, Instant.now())
-                .orElseThrow(() -> new BadCredentialsException("Invalid or expired refresh token"));
-
-        final var newAccessToken = jwtService.generateToken(refreshTokenEntity.getUser().getUsername());
-        return new AuthenticationResponseDto(newAccessToken, refreshToken);
-    }
-
-    public void revokeRefreshToken(UUID refreshToken) {
-        refreshTokenRepository.deleteById(refreshToken);
     }
 
 }

@@ -1,5 +1,7 @@
 package danyal.fyp.awd.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -26,5 +28,11 @@ public class JwtService {
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet))
                 .getTokenValue();
+    }
+
+    public String extractUsernameFromToken(String token) {
+        // If we get to this function - the token should already be authenticated as it's called via the /api/refresh/ path - which requires authentication.
+        DecodedJWT decodedJWT = JWT.decode(token);
+        return decodedJWT.getSubject();
     }
 }
