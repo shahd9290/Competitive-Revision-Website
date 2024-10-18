@@ -1,0 +1,212 @@
+\documentclass[]{final_report}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Input project details
+\def\studentname{Danyal Shah}
+\def\reportyear{2024}
+\def\projecttitle{Advanced Web Development}
+\def\supervisorname{Christos Dexiades}
+\def\degree{BSc Computer Science (Software Engineering)}
+\def\fullOrHalfUnit{Full Unit} % indicate if you are doing the project as a Full Unit or Half Unit
+\def\finalOrInterim{Project Plan} % indicate if this document is your Final Report or Interim Report
+
+\newcommand{\bpoint}{\hspace {-2.75pt}$\bullet$ \hspace{5pt}}
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Declaration
+
+\chapter*{Declaration}
+
+This report has been prepared on the basis of my own work. Where other published and unpublished source materials have been used, these have been acknowledged.
+
+\vskip3em
+
+Word Count: 2222
+
+\vskip3em
+
+Student Name: \studentname
+
+\vskip3em
+
+Date of Submission: October 11th 2024
+
+\vskip3em
+
+Signature:
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Table of Contents
+\tableofcontents\pdfbookmark[0]{Table of Contents}{toc}\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Your Abstract here
+
+\begin{abstract}
+
+When it was first introduced to the public in 1991, the World Wide Web was conceived as a "Universal Linked Information System"~\cite{TBL_WWW} - allowing users to access various documents and media content made available to them via web browsers. In 2000, companies began to shift to a web-centric approach when it came to enterprise development, as it was then when the World Wide web began to take off~\cite{MODERN_WEB}. Since then, many different websites and applications were published, allowing both users and businesses to take advantage of how accessible this system is across the world. In 2023, the average household with Internet access was seen to be 93\%, with this statistic being higher for homes with children ages 0-18, at 97\%~\cite{INTERNET_USERS}.
+
+Given this, it comes as no surprise that there are a plethora of websites designed to facilitate children's education. A noticeable example would be BBC Bitesize - which comes bundled with many different topics about many subjects, allowing students to test their knowledge via quizzes testing select areas of the curriculum. Websites such as MathsWatch provide a similar service - though they would specialise in one particular subject. To support older students, many of these websites provide resources to help them with preparation for their exams, by providing past paper questions for them to practice with.
+
+When using resources such as the aforementioned, and not having an adult watching them - students are more likely to distract themselves from their revision. Despite 45\% of children utilising devices for help with their assignments\cite{DEVICE_REPORT} - it leaves 55\% of children using devices for many other priorities. Alternatively, students may struggle to find a suitable educational website to support them in their revision or may not use one at all for their education. 
+
+In this project, my goal is to address these concerns and design an educational website that will support students in their revision - whilst providing them with an incentive to return to the website in order to continue studying. From working in education, I have observed how some children love to be competitive with each other when there is a reward promised at the end of a certain competition - to the extent that they may try to find a way to cheat the system. Although cheating is far from ideal - I believe there is an opportunity to capitalise on this competitive nature, wherein a scoreboard system can be established for all students; whether it be across the country, or within a certain school. 
+
+This can be achieved by adopting a points system similar to Picarats seen in the Professor Layton series~\cite{LAYTON} - where students will lose marks each time they fail to answer a question correctly until a set minimum. My intention with this system is that students are encouraged to try their hardest to answer correctly in their initial attempt, in order for them to score maximum marks - enabling their competitive spirit when comparing against others. This can be enhanced by hosting regular contests similarly to websites such as LeetCode~\cite{LEETCODE}, who host weekly and biweekly contests for their users to compete in for a similar purpose. Of course, there will also be some students who may be anxious at the idea that their performance would be public for all to see - for which this competitive feature can be optional for students to participate in. 
+
+Teachers will also have access to this system if they wish to monitor the progress of their class. In this scenario all students statistics will be made available to them, allowing the teacher to gain an insight into the performance of their class, as well as host their own contests if they wish to. This way, everyone in the education sector can have a role in this application - allowing students to have support from all possible avenues in their studies.
+
+\end{abstract}
+\newpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Specification
+
+\section*{Project Specification}
+\addcontentsline{toc}{chapter}{Project Specification}
+
+For the development of this project, I will follow a full stack development approach.
+
+For the frontend I will be using a combination of Next.JS with TailwindCSS. This will allow me to develop necessary web pages by using components; making it easier to focus on a particular section of a webpage during design implementation. At the same time Next.JS, while based on the React framework, is designed to overcome React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS}, making it optimal to use for developing the frontend of the application.
+
+For the backend I have opted to use Spring Boot; having served me well during my Team Project module previously and thus having experience with navigating the system. The benefit of Spring Boot will be that it will allow for seamless integration with the database system required - allowing me to focus on developing the endpoints required for the product. With regards to the database, I have opted to use an SQL based database - specifically PostgreSQL - as opposed to a NoSQL approach; known for using ACID properties over BASE allowing for improved data integrity~\cite{SQL}, required at this stage for the application.
+
+It is important that during development I ensure that there is no room for any vulnerabilities to be exploited within my application. Out of all software available, the web browser is one that will run code provided from untrusted sources whenever presented\cite{WEB_SEC} despite being used to submit and receive private information across the world. To prevent this, I will be making use of escaping techniques, where control characters are converted into an escape sequence, avoiding the possibility of executing code.
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Timeline
+
+\chapter*{Timeline}
+\addcontentsline{toc}{chapter}{Timeline}
+
+In order to facilitate development, I will be separating this project into two major stages; one for each academic term. The first stage will focus on the implementation of revision materials and a question bank, whilst the second stage handles the contest and points system. 
+
+\textbf{\textit{Stage 1:}}\\
+\begin{tabular}{|@{\bpoint} l}
+	\textbf{Week 1}: Research and compose Project Plan \\
+	\textbf{Week 2-3}: Begin work on user system, look into creating account and logging in \\
+	\textbf{Week 4-5}: Establish Student and Teacher profiles, and create dashboards suiting both groups \\ 
+	\textbf{Week 6-7}: Begin work on question bank, apply marks to student profiles,\\
+	\textbf{Week 8:} Fix bugs and begin preparing prototypes, draft report on Web Technologies used.\\
+	\textbf{Week 9}: Test thoroughly for interim submission, draft report on architectural\\ paradigms and design patterns\\
+	\textbf{Week 10-11}: Draft system report and use cases. Prepare for interim report and presentation
+\end{tabular}
+
+\textbf{\textit{Stage 2:}}\\
+\begin{tabular}{|@{\bpoint} l}
+	\textbf{Week 1-2}: Conclude question bank, test thoroughly \\
+	\textbf{Week 3-5}: Work on contest system, create a scoreboard, both national and local\\
+	\textbf{Week 6-7}: Focus on UX Design, ensure accessibility requirements are met \\
+	\textbf{Week 8-9}: Tidy up product, test thoroughly for final submission, draft user manual. \\
+	\textbf{Week 10-11}: Prepare for final report and demonstration
+\end{tabular}
+
+There will be various reports that I will be drafting across development of my product.
+
+The first of which will focus on the Web Technologies that have been used in this project. While I spoke about some of the technologies that I will be using in the Project Specification previously - I intend to use this report to go into further detail as I weigh out the benefits of the many technologies available for use. There are many frameworks designed to benefit developers - and this report will provide me an opportunity to research them and ascertain whether my choices are suitable for the project ahead, or if I will have to change early on.
+
+I will also write a report that covers architectural paradigms and design patterns. This will explain the structure of my application and the development methodology that I have chosen, and why it is more beneficial as opposed to others used in web development. This will also cover security of the application in detail, where I would explain the protective measures that I have used as well as the many vulnerabilities that are exploitable if not handled properly.
+
+Finally, I will also define a set of use cases and user stories to assist me in laying out the core features and overall connectivity of the various components of the product. This will ultimately describe the system - and how each component links with another in order to deliver the required feature to the user. This will expand further from what I have previously written in the abstract of this document. 
+
+These aforementioned reports will prove beneficial for me - as by drafting them I will be able to evaluate the choices that I have currently made for the web application, and if required then I will make necessary changes whilst I am still in the early stages of development.
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Risks and Mitigations
+\chapter*{Risks and Mitigations}
+\addcontentsline{toc}{chapter}{Risks and Mitigations}
+
+There will, of course, be some risks to consider throughout development of this project. When talking about the possible risks that may occur - I will be using a scale of 1-5 to describe them, where 1 is very unlikely and 5 is very likely.
+\subsection*{Hardware Failure}
+\textbf{Likelihood: 1/5}\\
+As I work on this project, there may be situations where my hardware will fail to work - resulting in loss of work. Though this has not happened to me on neither my laptop nor my desktop - it is never known when such an issue will surface and to what degree. To accommodate this - I will be committing my work regularly and pushing it to GitLab, whilst also backing up all of my code and documents onto OneDrive.
+
+If unfortunately this were to occur - the impact would be significant as any pending work due to be saved would be lost. As a result, I would be required to program certain sections again.
+
+\subsection*{Time Management}
+\textbf{Likelihood: 4/5}\\
+Given the nature and complexity of the project - it is very likely that I may not be able to follow the timeline exactly. To compensate for this, I have made sure to over-estimate the time required to complete the core features in the project, ensuring to allocate time dedicated to bug fixes, as well as time to prepare reports and presentations for the end of each term.
+
+If this were to occur then the impact would not be severe. As stated, I have made sure to over-estimate the time required to complete each task - allowing me to have extra time to complete core features if required. If not, then that time was equally be used for the next core feature that is to be implemented.
+
+\subsection*{Prioritisation of Tasks}
+\textbf{Likelihood: 4/5}\\
+During development, it is likely that I may become engrossed in developing a certain feature - to the extent where I may start developing something extra that was not initially planned, as opposed to the core features. Alternatively, I may not give equal attention to my reports compared to my coding tasks. As I did with Time Management, I have accounted for this by over-estimating the time required to complete various core features of my program, as well as allocate time to prepare reports and presentations for the end of each term.
+
+The impact of this would be moderate depending on the point at which this occurs in. If this were to happen early on in development, it would only push some of the core tasks back and thus reducing available time to complete them. If, however, this was towards the end of the term the impact becomes more severe as it reduces the time I would need to then focus on preparing the interim/final reports for the end of the term.
+
+\subsection*{Market Testing}
+\textbf{Likelihood: 5/5}\\
+As the final product is designed for use by school age students, it is imperative that I receive adequate feedback from the target audience such that I am able to use it towards developing the final application. Unfortunately, I am not able to directly interview students and families to gain their opinions without going through third-parties. As an alternative, I will be utilising contacts who work in the education sector to assess whether they believe the product will be suitable to them for revision.
+
+For this, I don't expect the impact to be significant. Once again - I will be consulting with contacts who have experience in the education sector who I'm hoping will provide feedback on behalf of their students. This isn't as preferable compared to receiving feedback directly from students, however I trust this to be an equally viable source.
+
+\subsection*{Technical Understanding}
+\textbf{Likelihood: 4/5}\\
+For this project, I have previous experience with Spring Boot and PostgreSQL so I do not expect many issues with utilising their features. For Next.JS however, I would consider myself a beginner as I do not have much experience with using it. Throughout development, I anticipate that there will be moments where I may fail to understand how to achieve the design that I would like. To mitigate this, I would be required to read various documentation and follow different guides in order to help me develop the frontend of the application.
+
+Here the impact would be negligible - given that I will be learning how to use Next.JS as I progress through the project. It would only be more severe if I struggle to find the answers that I am looking for, or I continue to misunderstand them however most of the time this usually isn't the case.
+
+\subsection*{Burnout}
+\textbf{Likelihood: 3/5}\\
+From past experience, there is a chance that I may choose to develop many features in one sitting over a period of several hours, taking away time that would be better spent away from the project. Alternatively, working in the same environment consistently may also take a toll on me mentally as well. This would be an unhealthy approach and may cause me to feel the stress from the project when things may not go well. To combat this - I aim to take regular breaks when programming, and on occasion work in different environments where possible.
+
+This could have a significant impact on the development of the application, as the time I spend away from programming could be of any length. Thus, it is imperative that I take regular breaks, as if I spent several weeks away from the computer I will be rushing to program any remaining features whilst also completing reports towards the end of term.
+
+%%%% ADD YOUR BIBLIOGRAPHY HERE
+\newpage
+\begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibitem{TBL_WWW} Tim Berners-Lee (1990),
+\emph{Information Management: A Proposal - \url{https://www.w3.org/History/1989/proposal.html}}.\\
+\textbf{Value:} This is the original proposal document for the World Wide Web, and is where we can how Tim Berners-Lee originally referred to his product as a Universal Linked Information System.
+
+\bibitem{MODERN_WEB} Kyle Brown, Roland Barcia, Karl Bishop, Matthew Perrins (2014),
+\emph{Modern Web Development with IBM® WebSphere®: Developing, Deploying, and Managing Mobile and Multi-Platform Apps; Chapter 1 - \url{https://learning.oreilly.com/library/view/modern-web-development/9780133067064/ch01.html}}\\
+\textbf{Value:} Provides insight in the history of the Web, and it's evolution to date.
+
+\bibitem{INTERNET_USERS} Ofcom (2023),
+\emph{Children and Parents: Media Use and Attitudes, Page 1 - \url{https://www.ofcom.org.uk/siteassets/resources/documents/research-and-data/media-literacy-research/children/childrens-media-use-and-attitudes-2023/childrens-media-use-and-attitudes-report-2023.pdf?v=329412}}.\\
+\textbf{Value:} Provides statistical data regarding internet usage, especially those with children - which provides a broad idea of how the internet is widely used in the United Kingdom.
+
+\bibitem{DEVICE_REPORT} Kaspersky (2021),
+\emph{Raising the smartphone generation - \url{https://www.kaspersky.com/blog/digital-habits-report-2021/}}\\
+\textbf{Value:} Provides a deeper insight on the reasons behind children receiving their own devices, providing an insight in what activities children like to engage with online.
+
+\bibitem{LAYTON} Level-5, Nintendo (2007),
+\emph{ Professor Layton Series [Video Game]}\\
+\textbf{Value:} Inspiration for the points system that is to be implemented into the product.
+
+\bibitem{LEETCODE} LeetCode LLC (2011),
+\emph{LeetCode - \url{https://leetcode.com/}}\\
+\textbf{Value:} Inspiration for the contest system that may be implemented into the product.
+
+\bibitem{DB_NEXTJS} Dinh Bui (2023),
+\emph{Next.JS For Front-End and Compatible Backend Solutions - \url{https://www.theseus.fi/bitstream/handle/10024/800535/Bui_Dinh.pdf?sequence=2}}\\
+\textbf{Value:} Goes into detail about the benefits of Next.JS and it's advantages over using React.
+
+\bibitem{SQL} Raif Deari, Xhemal Zenuni, Jaumin Ajdari, Florije Ismaili, Bujar Raufi (2018),
+\emph{Analysis And Comparision of Document-Based Databases with Relational Databases: MongoDB vs MySQL - \url{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8510719&tag=1}}\\
+\textbf{Value:} Explains the differences between ACID and BASE databases, and the pros and cons of each.
+
+\bibitem{WEB_SEC} Malcolm McDonald (2024),
+\emph{Grokking Web Application Security - \url{https://learning.oreilly.com/library/view/grokking-web-application/9781633438262/OEBPS/Text/06.html}}\\
+\textbf{Value:} Talks about security for Web Applications - and how to protect a Web App from common vulnerabilities.
+\end{thebibliography}
+\label{endpage}
+
+
+
+\end{document}
+
+\end{article}

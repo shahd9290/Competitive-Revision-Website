@@ -1,79 +1,79 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-frontend/node_modules
-frontend/.pnp
-frontend/.pnp.js
-frontend/.yarn/install-state.gz
+product/frontend/node_modules
+product/frontend/.pnp
+product/frontend/.pnp.js
+product/frontend/.yarn/install-state.gz
 
 # testing
-frontend/coverage
+product/frontend/coverage
 
 # next.js
-frontend/.next/
-frontend/out/
+product/frontend/.next/
+product/frontend/out/
 
 # production
-frontend/build
+product/frontend/build
 
 # misc
-frontend/.DS_Store
-frontend/*.pem
+product/frontend/.DS_Store
+product/frontend/*.pem
 
 # debug
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
+product/frontend/npm-debug.log*
+product/frontend/yarn-debug.log*
+product/frontend/yarn-error.log*
 
 # local env files
-frontend/.env*.local
+product/frontend/.env*.local
 
 # vercel
-frontend/.vercel
+product/frontend/.vercel
 
 # typescript
-frontend/*.tsbuildinfo
-frontend/next-env.d.ts
+product/frontend/*.tsbuildinfo
+product/frontend/next-env.d.ts
 
 #####################################
 
-backend/HELP.md
-backend/.gradle
-backend/build/
-backend/!gradle/wrapper/gradle-wrapper.jar
-backend/!**/src/main/**/build/
-backend/!**/src/test/**/build/
+product/backend/HELP.md
+product/backend/.gradle
+product/backend/build/
+product/backend/!gradle/wrapper/gradle-wrapper.jar
+product/backend/!**/src/main/**/build/
+product/backend/!**/src/test/**/build/
 
 ### STS ###
-backend/.apt_generated
-backend/.classpath
-backend/.factorypath
-backend/.project
-backend/.settings
-backend/.springBeans
-backend/.sts4-cache
-backend/bin/
-backend/!**/src/main/**/bin/
-backend/!**/src/test/**/bin/
+product/backend/.apt_generated
+product/backend/.classpath
+product/backend/.factorypath
+product/backend/.project
+product/backend/.settings
+product/backend/.springBeans
+product/backend/.sts4-cache
+product/backend/bin/
+product/backend/!**/src/main/**/bin/
+product/backend/!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-backend/.idea
-backend/*.iws
-backend/*.iml
-backend/*.ipr
-backend/out/
-backend/!**/src/main/**/out/
-backend/!**/src/test/**/out/
+product/backend/.idea
+product/backend/*.iws
+product/backend/*.iml
+product/backend/*.ipr
+product/backend/out/
+product/backend/!**/src/main/**/out/
+product/backend/!**/src/test/**/out/
 
 ### NetBeans ###
-backend/nbproject/private/
-backend/nbbuild/
-backend/dist/
-backend/nbdist/
-backend/.nb-gradle/
+product/backend/nbproject/private/
+product/backend/nbbuild/
+product/backend/dist/
+product/backend/nbdist/
+product/backend/.nb-gradle/
 
 ### VS Code ###
-backend/.vscode/
+product/backend/.vscode/
 
 .vscode/**
 .idea/**
