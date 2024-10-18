@@ -26,7 +26,8 @@ public class AuthController {
     public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
         AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
         String cookie = cookieService.createTokenCookie(response.accessToken());
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie).body("User logged in successfully");
+        String cookieExpire = cookieService.createTimerCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie, cookieExpire).body("User logged in successfully");
     }
 
 }

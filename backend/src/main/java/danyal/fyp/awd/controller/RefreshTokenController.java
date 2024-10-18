@@ -21,7 +21,8 @@ public class RefreshTokenController {
     public ResponseEntity<String> refreshToken(@CookieValue(name="token") String accessToken) {
         AuthenticationResponseDto response = refreshTokenService.refreshToken(accessToken);
         String cookie = cookieService.createTokenCookie(response.accessToken());
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie).body("Token Updated Successfully");
+        String cookieExpire = cookieService.createTimerCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie, cookieExpire).body("Token Updated Successfully");
     }
 
     @PostMapping("/logout")
