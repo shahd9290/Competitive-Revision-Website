@@ -34,24 +34,36 @@ public class RefreshTokenService {
     }
 
     public AuthenticationResponseDto refreshToken(String accessToken) {
-        // Need to get RefreshToken from database, via User ID.
-        // Decode access token to get username -> get id -> use to get refresh token + validate
-        String username = jwtService.extractUsernameFromToken(accessToken);
-        User user = userService.getUserByUsername(username);
-        // Refresh Token should exist because the user would've been required to log into the system - which generates one and saves it anyways.
-        // It should not be possible for the user to be authenticated without a refresh token in the database.
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(user.getId()).orElse(null);
-        assert refreshToken != null;
-
+       RefreshToken refreshToken = getRefreshToken(accessToken);
+       User user = refreshToken.getUser();
         // Checks expiry data is valid.
-        final var refreshTokenEntity = refreshTokenRepository.findByIdAndExpiresAtAfter(refreshToken.getId(), Instant.now())
-                .orElseThrow(() -> new BadCredentialsException("Invalid or expired refresh token"));
+        if (hasInvalidRefreshToken(user))
+            // No token found? Somehow? Brand new one then
+                refreshToken = createToken(user);
 
-        final var newAccessToken = jwtService.generateToken(refreshTokenEntity.getUser().getUsername());
-        return new AuthenticationResponseDto(newAccessToken, refreshToken.getId());
+        final var newAccessToken = jwtService.generateToken(user.getUsername());
+        return new AuthenticationResponseDto(newAccessToken);
     }
 
     public void revokeRefreshToken(UUID refreshToken) {
         refreshTokenRepository.deleteById(refreshToken);
     }
+
+    public RefreshToken getRefreshToken(String accessToken) {
+        // Need to get RefreshToken from database, via User ID.
+        // Decode access token to get username -> get id -> use to get refresh token + validate
+        String username = jwtService.extractUsernameFromToken(accessToken);
+        User user = userService.getUserByUsername(username);
+
+        // Refresh Token should exist because the user would've been required to log into the system - which generates one and saves it anyways.
+        // It should not be possible for the user to be authenticated without a refresh token in the database.
+        return refreshTokenRepository.findByUserId(user.getId()).orElse(null);
+    }
+
+    public boolean hasInvalidRefreshToken(User user) {
+        RefreshToken token = refreshTokenRepository.findByIdAndExpiresAtAfter(user.getId(), Instant.now()).orElse(null);
+
+        return token == null;
+    }
+
 }

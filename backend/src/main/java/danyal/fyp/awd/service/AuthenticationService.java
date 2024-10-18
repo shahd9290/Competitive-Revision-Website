@@ -39,9 +39,14 @@ public class AuthenticationService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User with username [%s] not found".formatted(request.username())));
 
-        RefreshToken refreshToken = refreshTokenService.createToken(user);
+        // Check if valid refresh token is in database.
+        // If not (expired or non-existent) then create one
+        // Otherwise ignore and continue
+        if (refreshTokenService.hasInvalidRefreshToken(user)) {
+             refreshTokenService.createToken(user);
+        }
 
-        return new AuthenticationResponseDto(accessToken, refreshToken.getId());
+        return new AuthenticationResponseDto(accessToken);
     }
 
 }

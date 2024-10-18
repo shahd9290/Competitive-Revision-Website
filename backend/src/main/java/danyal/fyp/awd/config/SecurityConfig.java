@@ -1,6 +1,6 @@
 package danyal.fyp.awd.config;
 
-import danyal.fyp.awd.token.TokenFilter;
+import danyal.fyp.awd.filter.TokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
