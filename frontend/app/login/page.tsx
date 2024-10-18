@@ -1,6 +1,5 @@
 'use client'
 import axios from 'axios';
-import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
