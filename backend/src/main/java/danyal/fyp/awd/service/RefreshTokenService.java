@@ -6,7 +6,6 @@ import danyal.fyp.awd.model.User;
 import danyal.fyp.awd.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -34,12 +33,12 @@ public class RefreshTokenService {
     }
 
     public AuthenticationResponseDto refreshToken(String accessToken) {
-       RefreshToken refreshToken = getRefreshToken(accessToken);
-       User user = refreshToken.getUser();
+        User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
+        RefreshToken refreshToken = getRefreshToken(user);
         // Checks expiry data is valid.
         if (hasInvalidRefreshToken(user))
             // No token found? Somehow? Brand new one then
-                refreshToken = createToken(user);
+            refreshToken = createToken(user);
 
         final var newAccessToken = jwtService.generateToken(user.getUsername());
         return new AuthenticationResponseDto(newAccessToken);
@@ -49,19 +48,14 @@ public class RefreshTokenService {
         refreshTokenRepository.deleteById(refreshToken);
     }
 
-    public RefreshToken getRefreshToken(String accessToken) {
-        // Need to get RefreshToken from database, via User ID.
-        // Decode access token to get username -> get id -> use to get refresh token + validate
-        String username = jwtService.extractUsernameFromToken(accessToken);
-        User user = userService.getUserByUsername(username);
-
+    public RefreshToken getRefreshToken(User user) {
         // Refresh Token should exist because the user would've been required to log into the system - which generates one and saves it anyways.
         // It should not be possible for the user to be authenticated without a refresh token in the database.
         return refreshTokenRepository.findByUserId(user.getId()).orElse(null);
     }
 
     public boolean hasInvalidRefreshToken(User user) {
-        RefreshToken token = refreshTokenRepository.findByIdAndExpiresAtAfter(user.getId(), Instant.now()).orElse(null);
+        RefreshToken token = refreshTokenRepository.findByUserIdAndExpiresAtAfter(user.getId(), Instant.now()).orElse(null);
 
         return token == null;
     }
