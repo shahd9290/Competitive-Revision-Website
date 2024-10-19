@@ -35,6 +35,8 @@ product/frontend/.vercel
 product/frontend/*.tsbuildinfo
 product/frontend/next-env.d.ts
 
+product/frontend/.vscode
+
 #####################################
 
 product/backend/HELP.md
