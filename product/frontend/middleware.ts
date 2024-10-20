@@ -8,14 +8,6 @@ export const config = {
 
 export async function middleware(req: NextRequest) {
     console.log("Middleware Running");
-    const {pathname} = req.nextUrl;
-
-    const publicPaths = ['/api/auth/'];
-
-    if (publicPaths.includes(pathname)) {
-        return NextResponse.next();
-    }
-
 
     const tokenExpiry = req.cookies.get("tokenExpiry")?.value;
     // not found?
@@ -34,6 +26,7 @@ export async function middleware(req: NextRequest) {
 
                 },
                 withCredentials: true}).then((resp) => {
+                    // Apply new values to the cookies
                     response.cookies.set("token", resp.data.token);
                     response.cookies.set("tokenExpiry", resp.data.tokenExpiry);
                     console.log("Token Refreshed!");
