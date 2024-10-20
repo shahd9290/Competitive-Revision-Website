@@ -6,7 +6,7 @@ export const config = {
     matcher: ['/dashboard']
 }
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
     console.log("Middleware Running");
     const {pathname} = req.nextUrl;
 
@@ -21,23 +21,28 @@ export function middleware(req: NextRequest) {
     // not found?
     if (tokenExpiry !== undefined) {
 
+        let response = NextResponse.next()
+
         const isExpired = checkExpiration(tokenExpiry);
         // time is up?
         if (isExpired) {
             console.log("Token Expired!")
             const token = req.cookies.get("token")?.value;
-            axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
+            const axios_response = await axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
                 headers: {
                     'Cookie': `token=${token}`,
 
                 },
-                withCredentials: true})
-            console.log("Token Refreshed!");
+                withCredentials: true}).then((resp) => {
+                    response.cookies.set("token", resp.data.token);
+                    response.cookies.set("tokenExpiry", resp.data.tokenExpiry);
+                    console.log("Token Refreshed!");
+                })
         }
-
-        return NextResponse.next()
+        
+        return response
     } else {
-        NextResponse.redirect(new URL('/login', "http://localhost:3000/"));
+        return NextResponse.redirect(new URL('/login', req.url));
     }
 }
 

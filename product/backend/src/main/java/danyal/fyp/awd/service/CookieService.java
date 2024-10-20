@@ -15,7 +15,7 @@ public class CookieService {
     @Value("${jwt.ttl}")
     private final Duration ttl;
 
-    public String createTokenCookie(String token) {
+    public ResponseCookie createTokenCookie(String token) {
         ResponseCookie cookie = ResponseCookie.from("token", token)
                 .httpOnly(true)
                 .sameSite("Strict")
@@ -24,10 +24,10 @@ public class CookieService {
                 .maxAge(ttl.getSeconds())
                 .build();
 
-        return cookie.toString();
+        return cookie;
     }
 
-    public String createTimerCookie() {
+    public ResponseCookie createTimerCookie() {
         Duration expiryD = ttl.minusMinutes(2);
         Instant expiryI = Instant.now().plus(expiryD);
         ResponseCookie cookie = ResponseCookie.from("tokenExpiry", String.valueOf(expiryI.getEpochSecond()))
@@ -37,6 +37,6 @@ public class CookieService {
                 .maxAge(ttl.getSeconds())
                 .build();
 
-        return cookie.toString();
+        return cookie;
     }
 }
