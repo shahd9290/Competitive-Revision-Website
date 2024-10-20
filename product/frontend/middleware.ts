@@ -1,6 +1,11 @@
 import {NextRequest, NextResponse} from "next/server";
 import axios from "axios";
 
+// Store sub-directories here?
+export const config = {
+    matcher: ['/dashboard']
+}
+
 export function middleware(req: NextRequest) {
     console.log("Middleware Running");
     const {pathname} = req.nextUrl;

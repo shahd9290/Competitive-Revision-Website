@@ -12,7 +12,8 @@ const Page = () => {
         };
 
         profile().then(data => {
-            console.log(data);
+            console.log(data.username);
+            console.log(data.email);
         })
     }, [])
 
