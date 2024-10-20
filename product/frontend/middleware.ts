@@ -1,6 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
 import axios from "axios";
-import config from "@/tailwind.config";
 
 export function middleware(req: NextRequest) {
     console.log("Middleware Running");
