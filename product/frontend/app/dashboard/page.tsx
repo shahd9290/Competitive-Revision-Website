@@ -1,24 +1,24 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, {useEffect} from 'react'
+import axios from "axios";
 
-import axiosInstance from '../lib/axiosInstance';
+const Page = () => {
 
+    useEffect(() => {
 
-const page = () => {
+        const profile = async () => {
+            const response = await axios.get("http://localhost:8080/api/user/profile", {withCredentials: true})
+            return response.data;
+        };
 
-  useEffect(() => {
-    axiosInstance.get('http://localhost:8080/api/user/profile')
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
-  }, [])
+        profile().then(data => {
+            console.log(data);
+        })
+    }, [])
 
-  return (
-    <div>Dashboard.</div>
-  )
+    return (
+        <div>Dashboard.</div>
+    )
 }
 
-export default page
+export default Page

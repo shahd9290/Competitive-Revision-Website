@@ -18,9 +18,9 @@ const page = () => {
 
     const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials:true});
 
-    console.log(login_confirm.data)
-    
-    router.push('/dashboard')
+    if (login_confirm) {
+      router.push('/dashboard')
+    }
   }
 
     return (
