@@ -27,8 +27,14 @@ export async function middleware(req: NextRequest) {
                 },
                 withCredentials: true}).then((resp) => {
                     // Apply new values to the cookies
-                    response.cookies.set("token", resp.data.token);
-                    response.cookies.set("tokenExpiry", resp.data.tokenExpiry);
+                    const newToken = resp.data.token;
+                    const newExpiry = resp.data.tokenExpiry;
+                    // Calculate cookie expiry time
+                    const cookieExpiry = Number(newExpiry) + 120;
+                    const newExpiryDate = new Date(0).setUTCSeconds(cookieExpiry);
+                    // Apply to new cookies
+                    response.cookies.set("token", newToken, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
+                    response.cookies.set("tokenExpiry", newExpiry, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
                     console.log("Token Refreshed!");
                 })
         }

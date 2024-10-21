@@ -34,11 +34,10 @@ public class RefreshTokenService {
 
     public AuthenticationResponseDto refreshToken(String accessToken) {
         User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
-        RefreshToken refreshToken = getRefreshToken(user);
         // Checks expiry data is valid.
         if (hasInvalidRefreshToken(user))
             // No token found? Somehow? Brand new one then
-            refreshToken = createToken(user);
+            createToken(user);
 
         final var newAccessToken = jwtService.generateToken(user.getUsername());
         return new AuthenticationResponseDto(newAccessToken);

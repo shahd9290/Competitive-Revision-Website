@@ -16,27 +16,26 @@ public class CookieService {
     private final Duration ttl;
 
     public ResponseCookie createTokenCookie(String token) {
-        ResponseCookie cookie = ResponseCookie.from("token", token)
+
+        return ResponseCookie.from("token", token)
                 .httpOnly(true)
                 .sameSite("Strict")
                 .secure(true)
                 .path("/")
                 .maxAge(ttl.getSeconds())
                 .build();
-
-        return cookie;
     }
 
     public ResponseCookie createTimerCookie() {
         Duration expiryD = ttl.minusMinutes(2);
         Instant expiryI = Instant.now().plus(expiryD);
-        ResponseCookie cookie = ResponseCookie.from("tokenExpiry", String.valueOf(expiryI.getEpochSecond()))
+
+        return ResponseCookie.from("tokenExpiry", String.valueOf(expiryI.getEpochSecond()))
+                .httpOnly(true)
                 .sameSite("Strict")
                 .secure(true)
                 .path("/")
                 .maxAge(ttl.getSeconds())
                 .build();
-
-        return cookie;
     }
 }
