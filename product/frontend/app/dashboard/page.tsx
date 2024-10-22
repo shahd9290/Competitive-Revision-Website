@@ -1,6 +1,7 @@
 'use client'
 import React, {useEffect} from 'react'
 import axios from "axios";
+import { SidebarDemo } from '../_components/Sidebardemo';
 
 const Page = () => {
 
@@ -18,7 +19,9 @@ const Page = () => {
     }, [])
 
     return (
-        <div>Dashboard.</div>
+        <div>
+            <SidebarDemo/>
+        </div>
     )
 }
 
