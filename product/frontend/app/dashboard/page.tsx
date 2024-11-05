@@ -1,7 +1,16 @@
 'use client'
 import React, {useEffect} from 'react'
 import axios from "axios";
-import { SidebarDemo } from '../_components/Sidebardemo';
+import { SidebarMenu } from '@/components/SidebarMenu';
+
+// Dummy dashboard component with content
+const Dashboard = () => {
+    return (
+        <div>
+
+        </div>
+    );
+};
 
 const Page = () => {
 
@@ -20,7 +29,9 @@ const Page = () => {
 
     return (
         <div>
-            <SidebarDemo/>
+            <SidebarMenu>
+                <Dashboard/>
+            </SidebarMenu>
         </div>
     )
 }
