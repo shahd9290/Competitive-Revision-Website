@@ -1,18 +1,12 @@
 'use client'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import { SidebarMenu } from '@/components/SidebarMenu';
 
 // Dummy dashboard component with content
 const Dashboard = () => {
-    return (
-        <div>
 
-        </div>
-    );
-};
-
-const Page = () => {
+    const [user, setUser] = useState([]);
 
     useEffect(() => {
 
@@ -22,10 +16,18 @@ const Page = () => {
         };
 
         profile().then(data => {
-            console.log(data.username);
-            console.log(data.email);
+            setUser(data);
         })
     }, [])
+
+    return (
+        <div>
+            <h1>Dashboard</h1>
+        </div>
+    );
+};
+
+const Page = () => {
 
     return (
         <div>

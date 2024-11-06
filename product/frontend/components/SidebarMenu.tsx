@@ -61,28 +61,11 @@ export function SidebarMenu(content) {
                 ))}
               </div>
             </div>
-            <div>
-              <SidebarLink
-                  link={{
-                    label: "Manu Arora",
-                    href: "#",
-                    icon: (
-                        <Image
-                            src="https://assets.aceternity.com/manu.png"
-                            className="h-7 w-7 flex-shrink-0 rounded-full"
-                            width={50}
-                            height={50}
-                            alt="Avatar"
-                        />
-                    ),
-                  }}
-              />
-            </div>
           </SidebarBody>
         </Sidebar>
         <div className="flex flex-1">
           <div
-              className="p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-gradient flex flex-col gap-2 flex-1 w-full h-full">
+              className="p-2 md:p-10 border border-neutral-200 dark:border-neutral-700 bg-gradient flex flex-col gap-2 flex-1 w-full h-full">
             {content.children}
           </div>
         </div>
@@ -103,7 +86,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium text-black dark:text-white whitespace-pre"
       >
-        Acet Labs
+        Study App
       </motion.span>
     </Link>
   );
