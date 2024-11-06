@@ -20,20 +20,25 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <div className="grid max-w-4xl mx-auto gap-4 md:grid-cols-3">
-            {/* Item with col-span 2 */}
-            <div className="col-span-2 bg-gray-800 text-white p-6 rounded-lg">
+        <div className="flex items-center justify-center min-h-screen ">
+            <div className="w-full max-w-7xl p-6 rounded-lg ">
 
-            </div>
+                <div className="grid gap-4 md:grid-cols-3">
+                    {/* Top Left */}
+                    <div className=" bg-gray-200 h-96 rounded-lg shadow-lg">
 
-            {/* Item with col-span 1 */}
-            <div className="col-span-1 bg-gray-800 text-white p-6 rounded-lg">
+                    </div>
 
-            </div>
+                    {/* Top right box */}
+                    <div className="col-span-2 bg-gray-200 h-96 rounded-lg shadow-lg">
 
-            {/* Item with col-span 3 */}
-            <div className="col-span-3 bg-gray-800 text-white p-6 rounded-lg">
+                    </div>
 
+                    {/* Bottom section */}
+                    <div className="col-span-3 bg-gray-200 h-96 rounded-lg shadow-lg">
+
+                    </div>
+                </div>
             </div>
         </div>
     );
