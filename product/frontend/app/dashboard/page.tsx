@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import { SidebarMenu } from '@/components/SidebarMenu';
 
-// Dummy dashboard component with content
 const Dashboard = () => {
 
     const [user, setUser] = useState([]);
@@ -21,8 +20,21 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <div>
-            <h1>Dashboard</h1>
+        <div className="grid max-w-4xl mx-auto gap-4 md:grid-cols-3">
+            {/* Item with col-span 2 */}
+            <div className="col-span-2 bg-gray-800 text-white p-6 rounded-lg">
+
+            </div>
+
+            {/* Item with col-span 1 */}
+            <div className="col-span-1 bg-gray-800 text-white p-6 rounded-lg">
+
+            </div>
+
+            {/* Item with col-span 3 */}
+            <div className="col-span-3 bg-gray-800 text-white p-6 rounded-lg">
+
+            </div>
         </div>
     );
 };
