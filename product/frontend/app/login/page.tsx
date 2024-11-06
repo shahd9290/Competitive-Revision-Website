@@ -16,11 +16,15 @@ const page = () => {
       "password":password
     }
 
-    const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials:true});
-
-    if (login_confirm) {
-      router.push('/dashboard')
+    try {
+      const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials: true});
+      if (login_confirm) {
+        router.push('/dashboard')
+      }
+    }catch{
+      alert("Invalid Credentials");
     }
+
   }
 
     return (
