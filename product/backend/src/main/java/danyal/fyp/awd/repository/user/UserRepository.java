@@ -1,6 +1,6 @@
-package danyal.fyp.awd.repository;
+package danyal.fyp.awd.repository.user;
 
-import danyal.fyp.awd.model.User;
+import danyal.fyp.awd.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

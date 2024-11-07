@@ -1,7 +1,7 @@
-package danyal.fyp.awd.controller;
+package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.UserProfileDto;
-import danyal.fyp.awd.service.UserService;
+import danyal.fyp.awd.dto.user.UserProfileDto;
+import danyal.fyp.awd.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

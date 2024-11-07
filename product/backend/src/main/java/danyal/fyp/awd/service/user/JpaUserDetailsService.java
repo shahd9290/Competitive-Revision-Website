@@ -1,6 +1,6 @@
-package danyal.fyp.awd.service;
+package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.repository.UserRepository;
+import danyal.fyp.awd.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

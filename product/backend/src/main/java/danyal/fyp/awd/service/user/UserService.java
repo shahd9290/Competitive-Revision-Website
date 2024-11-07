@@ -1,7 +1,7 @@
-package danyal.fyp.awd.service;
+package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.model.User;
-import danyal.fyp.awd.repository.UserRepository;
+import danyal.fyp.awd.model.user.User;
+import danyal.fyp.awd.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

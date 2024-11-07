@@ -1,4 +1,4 @@
-package danyal.fyp.awd.dto;
+package danyal.fyp.awd.dto.user;
 
 import java.util.UUID;
 

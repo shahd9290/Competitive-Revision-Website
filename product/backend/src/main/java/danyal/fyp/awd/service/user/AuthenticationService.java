@@ -1,21 +1,13 @@
-package danyal.fyp.awd.service;
+package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.AuthenticationResponseDto;
-import danyal.fyp.awd.model.RefreshToken;
-import danyal.fyp.awd.repository.RefreshTokenRepository;
-import danyal.fyp.awd.repository.UserRepository;
+import danyal.fyp.awd.dto.user.AuthenticationRequestDto;
+import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
-import java.time.Instant;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

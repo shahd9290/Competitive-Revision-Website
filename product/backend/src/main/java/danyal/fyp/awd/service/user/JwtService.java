@@ -1,4 +1,4 @@
-package danyal.fyp.awd.service;
+package danyal.fyp.awd.service.user;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;

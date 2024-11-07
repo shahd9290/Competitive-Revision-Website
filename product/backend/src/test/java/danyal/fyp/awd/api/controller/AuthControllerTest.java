@@ -2,7 +2,7 @@ package danyal.fyp.awd.api.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import danyal.fyp.awd.service.JwtService;
+import danyal.fyp.awd.service.user.JwtService;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

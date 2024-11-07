@@ -1,12 +1,11 @@
-package danyal.fyp.awd.controller;
+package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.AuthenticationResponseDto;
-import danyal.fyp.awd.dto.RefreshResponseDto;
-import danyal.fyp.awd.dto.RefreshTokenDto;
-import danyal.fyp.awd.service.CookieService;
-import danyal.fyp.awd.service.RefreshTokenService;
+import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.dto.user.RefreshResponseDto;
+import danyal.fyp.awd.dto.user.RefreshTokenDto;
+import danyal.fyp.awd.service.user.CookieService;
+import danyal.fyp.awd.service.user.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,8 @@
-package danyal.fyp.awd.service;
+package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.RegistrationRequestDto;
-import danyal.fyp.awd.model.User;
-import danyal.fyp.awd.repository.UserRepository;
+import danyal.fyp.awd.dto.user.RegistrationRequestDto;
+import danyal.fyp.awd.model.user.User;
+import danyal.fyp.awd.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;

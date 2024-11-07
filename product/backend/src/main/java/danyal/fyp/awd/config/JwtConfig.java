@@ -3,7 +3,7 @@ package danyal.fyp.awd.config;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import danyal.fyp.awd.service.JwtService;
+import danyal.fyp.awd.service.user.JwtService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package danyal.fyp.awd.service;
+package danyal.fyp.awd.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

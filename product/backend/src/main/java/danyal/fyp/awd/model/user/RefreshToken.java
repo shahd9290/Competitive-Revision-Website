@@ -1,4 +1,4 @@
-package danyal.fyp.awd.model;
+package danyal.fyp.awd.model.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

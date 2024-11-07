@@ -1,9 +1,9 @@
-package danyal.fyp.awd.service;
+package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.AuthenticationResponseDto;
-import danyal.fyp.awd.model.RefreshToken;
-import danyal.fyp.awd.model.User;
-import danyal.fyp.awd.repository.RefreshTokenRepository;
+import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.model.user.RefreshToken;
+import danyal.fyp.awd.model.user.User;
+import danyal.fyp.awd.repository.user.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

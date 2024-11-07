@@ -1,10 +1,9 @@
-package danyal.fyp.awd.controller;
+package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.AuthenticationResponseDto;
-import danyal.fyp.awd.service.AuthenticationService;
-import danyal.fyp.awd.service.CookieService;
-import jakarta.servlet.http.Cookie;
+import danyal.fyp.awd.dto.user.AuthenticationRequestDto;
+import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.service.user.AuthenticationService;
+import danyal.fyp.awd.service.user.CookieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;

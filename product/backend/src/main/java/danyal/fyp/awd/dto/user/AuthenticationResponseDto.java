@@ -1,6 +1,4 @@
-package danyal.fyp.awd.dto;
-
-import java.util.UUID;
+package danyal.fyp.awd.dto.user;
 
 public record AuthenticationResponseDto(String accessToken) {
 }
