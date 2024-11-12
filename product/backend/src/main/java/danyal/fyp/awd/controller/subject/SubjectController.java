@@ -25,22 +25,37 @@ public class SubjectController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addSubject(@RequestBody final SubjectDto subjectDto) {
-        Subject subject = new Subject();
-        subject.setName(subjectDto.name());
 
-        String qualificationString = subjectDto.qualification();
 
-        Qualification qualification = qualificationService.getQualification(qualificationString).orElse(null);
-        if (qualification == null) return ResponseEntity.badRequest().body("Invalid Qualification");
+        String subjectName = subjectDto.name();
+        String subjectQual = subjectDto.qualification();
 
-        Set<Qualification> qualificationSet = new HashSet<>();
-        qualificationSet.add(qualification);
+        Subject subject;
 
-        subject.setQualifications(qualificationSet);
+        // REVERSE THIS
 
-        subjectService.saveSubject(subject);
+        if ((subject=subjectService.getSubject(subjectName).orElse(null)) != null){
+            Qualification qualification;
+            if ((qualification = qualificationService.getQualification(subjectQual).orElse(null)) != null) {
+                return ResponseEntity.badRequest().body("Subject Already Exists");
+            }
+            else {
+                // Update subject with new qualification
+                Set<Qualification> updatedQuals = newQual(subject.getQualifications(), subjectQual);
+            }
+        }
+        else {
+            subject = new Subject();
+            subject.setName(subjectName);
+            subject.setQualifications();
+        }
+    }
 
-        return ResponseEntity.ok("Subject Added Successfully");
+    private Set<Qualification> newQual (Set<Qualification> quals, String subjectQual) {
+        Qualification qualification = new Qualification();
+        qualification.setName(subjectQual);
+        qualificationService.saveQualification(qualification);
+        quals.add(qualification);
     }
 
 }
