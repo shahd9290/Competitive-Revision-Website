@@ -26,6 +26,6 @@ public class Subject {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="subject_qualification", joinColumns = @JoinColumn(name="subject_id"),
     inverseJoinColumns = @JoinColumn(name="qualification_id"))
-    private Set<Qualification> qualifications = new HashSet<>();
+    private Set<Qualification> qualifications;
 
 }
