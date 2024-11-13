@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuthControllerTest {
 
-    private final Map<String, Object> payload = new HashMap<>();
+    private Map<String, Object> payload;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -43,6 +43,7 @@ public class AuthControllerTest {
 
     @Test
     public void loginSuccess() throws Exception {
+        payload = new HashMap<>();
         payload.put("username", "user");
         payload.put("password", "password");
 
@@ -68,6 +69,21 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.tokenExpiry").exists())
                 .andExpect(jsonPath("$.token").isString())
                 .andExpect(jsonPath("$.tokenExpiry").isString());
+    }
+
+    @Test
+    public void registerSuccess() throws Exception {
+        payload = new HashMap<>();
+        payload.put("username", "test");
+        payload.put("password", "test");
+        payload.put("email", "testing@test.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("test"))
+                .andExpect(jsonPath("$.email").value("testing@test.com"));
     }
 
 

@@ -21,26 +21,15 @@ public class RegistrationController {
     private final UserRegistrationService userRegistrationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> registerUser(
-            @Valid @RequestBody final RegistrationRequestDto registrationDTO) {
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody final RegistrationRequestDto registrationDTO) {
         try {
+            final var user = userRegistrationService.registerUser(registrationDTO);
 
-            final var registeredUser = userRegistrationService
-                    .registerUser(registrationDTO);
+            return ResponseEntity.ok(new RegistrationResponseDto(user.getUsername(), user.getEmail()));
 
-            return ResponseEntity.ok(
-                    toRegistrationResponseDto(registeredUser)
-            );
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    private RegistrationResponseDto toRegistrationResponseDto(
-            final User user) {
-
-        return new RegistrationResponseDto(
-                user.getUsername(), user.getEmail());
     }
 
 }
