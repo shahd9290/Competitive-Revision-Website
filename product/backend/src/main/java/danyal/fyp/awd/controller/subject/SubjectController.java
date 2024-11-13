@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/subject")
@@ -37,6 +34,30 @@ public class SubjectController {
         * If subject does not exist but qualification does, new subject and add qualification to it.
         * If qualification does not exist, return error. Needs to exist beforehand.
         * */
+
+        // Check if Qualification exists?
+        Qualification qualification;
+        if ((qualification = qualificationService.getQualification(subjectQual).orElse(null))== null) {
+            return ResponseEntity.badRequest().body("Qualification Does Not Exist.");
+        }
+        // Check if subject exists now.
+        Subject subject;
+        if ((subject = subjectService.getSubject(subjectName).orElse(null))!= null) {
+            // Subject exists, does it already have the qualification?
+            if (subject.getQualifications().contains(qualification)) {
+                return ResponseEntity.badRequest().body("Subject already exists with this qualification!");
+            }
+            // It doesn't, needs to be updated.
+            else {
+                subjectService.addQualification(subject, qualification);
+                return ResponseEntity.ok("Updated Existing Subject with new qualification");
+            }
+        }
+        // Subject does not exist. Qualification does so we can create a new one with it.
+        else {
+            subjectService.addSubject(subjectName, qualification);
+            return ResponseEntity.ok("Created new subject");
+        }
     }
 
 }

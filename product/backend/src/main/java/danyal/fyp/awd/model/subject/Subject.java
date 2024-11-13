@@ -28,4 +28,8 @@ public class Subject {
     inverseJoinColumns = @JoinColumn(name="qualification_id"))
     private Set<Qualification> qualifications;
 
+    public void addQualification(Qualification qualification) {
+        qualifications.add(qualification);
+    }
+
 }
