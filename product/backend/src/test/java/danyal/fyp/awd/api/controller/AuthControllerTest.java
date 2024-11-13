@@ -44,7 +44,7 @@ public class AuthControllerTest {
 
     @Test
     public void loginSuccess() throws Exception {
-        payload.put("username", "user2");
+        payload.put("username", "user");
         payload.put("password", "password");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
