@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -65,7 +64,10 @@ public class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(payload))
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Token Updated Successfully"));
+                .andExpect(jsonPath("$.token").exists())
+                .andExpect(jsonPath("$.tokenExpiry").exists())
+                .andExpect(jsonPath("$.token").isString())
+                .andExpect(jsonPath("$.tokenExpiry").isString());
     }
 
 
