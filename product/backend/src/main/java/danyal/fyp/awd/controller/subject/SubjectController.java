@@ -30,32 +30,13 @@ public class SubjectController {
         String subjectName = subjectDto.name();
         String subjectQual = subjectDto.qualification();
 
-        Subject subject;
-
-        // REVERSE THIS
-
-        if ((subject=subjectService.getSubject(subjectName).orElse(null)) != null){
-            Qualification qualification;
-            if ((qualification = qualificationService.getQualification(subjectQual).orElse(null)) != null) {
-                return ResponseEntity.badRequest().body("Subject Already Exists");
-            }
-            else {
-                // Update subject with new qualification
-                Set<Qualification> updatedQuals = newQual(subject.getQualifications(), subjectQual);
-            }
-        }
-        else {
-            subject = new Subject();
-            subject.setName(subjectName);
-            subject.setQualifications();
-        }
-    }
-
-    private Set<Qualification> newQual (Set<Qualification> quals, String subjectQual) {
-        Qualification qualification = new Qualification();
-        qualification.setName(subjectQual);
-        qualificationService.saveQualification(qualification);
-        quals.add(qualification);
+        /*
+        * Check both tables
+        * If subject exists with the qualification already, great do nothing
+        * If subject exists without the qualification & qualification exists, need to update qualifications set to include it.
+        * If subject does not exist but qualification does, new subject and add qualification to it.
+        * If qualification does not exist, return error. Needs to exist beforehand.
+        * */
     }
 
 }
