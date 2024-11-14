@@ -11,6 +11,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+/* This Sidebar component was made free for use in web development by Manu Arora at Aceternity UI - https://ui.aceternity.com/components/sidebar*/
 
 export function SidebarMenu(content) {
   const links = [
@@ -65,7 +66,7 @@ export function SidebarMenu(content) {
         </Sidebar>
         <div className="flex flex-1">
           <div
-              className="p-2 md:p-10 border border-neutral-200 dark:border-neutral-700 bg-gradient flex flex-col gap-2 flex-1 w-full h-full">
+              className="bg-gradient flex flex-col gap-2 flex-1 w-full h-full">
             {content.children}
           </div>
         </div>
