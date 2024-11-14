@@ -6,6 +6,7 @@ import danyal.fyp.awd.repository.subject.QualificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,10 @@ public class QualificationService {
 
     public Optional<Qualification> getQualification(String name) {
         return qualificationRepository.findByName(name);
+    }
+
+    public List<Qualification> getAllQualifications() {
+        return qualificationRepository.findAll();
     }
 
     public int getIdByName(String qualificationName) throws QualificationException {
