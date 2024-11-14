@@ -2,6 +2,7 @@ package danyal.fyp.awd.controller.user;
 
 import danyal.fyp.awd.dto.user.RegistrationRequestDto;
 import danyal.fyp.awd.dto.user.RegistrationResponseDto;
+import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.service.user.UserRegistrationService;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ public class RegistrationController {
             return ResponseEntity.ok(
                     toRegistrationResponseDto(registeredUser)
             );
-        } catch (ValidationException e) {
+        } catch (ValidationException | QualificationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -40,7 +41,7 @@ public class RegistrationController {
             final User user) {
 
         return new RegistrationResponseDto(
-                user.getUsername(), user.getEmail());
+                user.getUsername(), user.getEmail(), user.getQualificationId());
     }
 
 }
