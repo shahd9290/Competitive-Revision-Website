@@ -23,10 +23,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
-        AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
-        ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
-        ResponseCookie cookieExpire = cookieService.createTimerCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
+        try {
+            AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
+            ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
+            ResponseCookie cookieExpire = cookieService.createTimerCookie();
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Username or password is incorrect.");
+        }
     }
 
 }
