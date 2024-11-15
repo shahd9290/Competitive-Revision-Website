@@ -17,7 +17,11 @@ const page = () => {
 
         if (email !== emailConfirm) {
             alert("Please ensure you have entered the correct email address in both sections!");
-        } else {
+        }
+        else if (qualificationInput === "") {
+            alert("Please select a qualification");
+        }
+        else {
             const payload = {
                 "username": username, "email": email, "password": password, "qualification": qualificationInput
             }
