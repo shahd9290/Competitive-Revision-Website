@@ -79,3 +79,19 @@ product/backend/.vscode/
 
 .vscode/**
 .idea/**
+
+### Documentation ###
+documents/*.aux
+documents/*.lof
+documents/*.log
+documents/*.lot
+documents/*.fls
+documents/*.out
+documents/*.toc
+documents/*.fmt
+documents/*.fot
+documents/*.cb
+documents/*.cb2
+documents/.*.lb
+documents/*.pdf
+documents/*.synctex.gz
