@@ -18,6 +18,7 @@ import java.util.Set;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
 
     @Column(nullable = false)
@@ -27,6 +28,9 @@ public class Subject {
     @JoinTable(name="subject_qualification", joinColumns = @JoinColumn(name="subject_id"),
     inverseJoinColumns = @JoinColumn(name="qualification_id"))
     private Set<Qualification> qualifications;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Topic> topics;
 
     public void addQualification(Qualification qualification) {
         qualifications.add(qualification);

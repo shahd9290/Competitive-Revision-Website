@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
   IconArrowLeft,
-  IconBrandTabler, IconSearch,
+  IconHome, IconSearch,
   IconSettings,
   IconUserBolt,
 } from "@tabler/icons-react";
@@ -19,7 +19,7 @@ export function SidebarMenu(content) {
       label: "Dashboard",
       href: "/dashboard",
       icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <IconHome className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
     {
