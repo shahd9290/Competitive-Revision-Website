@@ -32,10 +32,7 @@ public class QualificationService {
     }
 
     public int getIdByName(String qualificationName) throws QualificationException {
-        Qualification qualification = getQualification(qualificationName).orElse(null);
-        if (qualification == null) {
-            throw new QualificationException("Qualification Does Not Exist");
-        }
+        Qualification qualification = getQualification(qualificationName).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
         return qualification.getId();
     }
 
