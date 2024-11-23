@@ -11,6 +11,8 @@ import danyal.fyp.awd.repository.subject.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TopicService {
@@ -43,5 +45,12 @@ public class TopicService {
 
     public Topic getTopic(String topicName, int qualificationId) {
         return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
+    }
+
+    public List<Object[]> getAllForSubQual(String qualName, String subName) throws Exception {
+        Qualification qualification = qualificationService.getQualification(qualName).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
+        Subject subject = subjectService.getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
+
+        return topicRepository.findAllBySubjectIdAndQualificationId(subject.getId(), qualification.getId());
     }
 }
