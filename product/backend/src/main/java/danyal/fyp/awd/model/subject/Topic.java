@@ -1,5 +1,6 @@
 package danyal.fyp.awd.model.subject;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,12 @@ public class Topic {
 
     @ManyToOne
     @JoinColumn(name="qualification_id", nullable = false)
+    @JsonBackReference
     private Qualification qualification;
 
     @ManyToOne
     @JoinColumn(name="subject_id", nullable = false)
+    @JsonBackReference
     private Subject subject;
 
 

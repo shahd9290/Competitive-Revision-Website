@@ -2,6 +2,7 @@ package danyal.fyp.awd.controller.subject;
 
 import danyal.fyp.awd.dto.subject.TopicAllDto;
 import danyal.fyp.awd.dto.subject.TopicDto;
+import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.service.subject.TopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class TopicController {
     @GetMapping("/get-all")
     public ResponseEntity<Object> getAllTopics(@RequestBody final TopicAllDto topicAllDto) {
         try {
-            List<Object[]> topics = topicService.getAllForSubQual(topicAllDto.qualification(), topicAllDto.subject());
+            List<Topic> topics = topicService.getAllForSubQual(topicAllDto.qualification(), topicAllDto.subject());
             return ResponseEntity.ok(topics);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

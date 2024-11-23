@@ -47,7 +47,7 @@ public class TopicService {
         return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
     }
 
-    public List<Object[]> getAllForSubQual(String qualName, String subName) throws Exception {
+    public List<Topic> getAllForSubQual(String qualName, String subName) throws Exception {
         Qualification qualification = qualificationService.getQualification(qualName).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
         Subject subject = subjectService.getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
 

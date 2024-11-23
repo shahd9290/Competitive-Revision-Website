@@ -11,8 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Integer> {
-    @Query("SELECT t.id, t.name FROM Topic t WHERE t.subject.id = :subjectId AND t.qualification.id = :qualificationId")
-    List<Object[]> findAllBySubjectIdAndQualificationId(@Param("subjectId") Integer subjectId, @Param("qualificationId") Integer qualificationId);
+    List<Topic> findAllBySubjectIdAndQualificationId(Integer subjectId, Integer qualificationId);
 
     Optional<Topic> findByNameAndQualificationId(String name, Integer qualificationId);
 
