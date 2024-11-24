@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +16,6 @@ public class QualificationService {
 
     public void saveQualification(Qualification qualification) {
         qualificationRepository.save(qualification);
-    }
-
-    public boolean doesExist(String name) {
-        return qualificationRepository.existsByName(name);
     }
 
     public Qualification getQualification(String name) throws QualificationException {

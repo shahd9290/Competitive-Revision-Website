@@ -1,7 +1,6 @@
 package danyal.fyp.awd.service.subject;
 
 import danyal.fyp.awd.dto.subject.TopicDto;
-import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.exception.SubjectException;
 import danyal.fyp.awd.exception.TopicException;
 import danyal.fyp.awd.model.subject.Qualification;
