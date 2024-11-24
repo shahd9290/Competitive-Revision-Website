@@ -1,12 +1,14 @@
 package danyal.fyp.awd.controller.subject;
 
 import danyal.fyp.awd.dto.subject.SubjectAllDto;
+import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
 import danyal.fyp.awd.dto.subject.SubjectDto;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
 import danyal.fyp.awd.service.subject.QualificationService;
 import danyal.fyp.awd.service.subject.SubjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +57,7 @@ public class SubjectController {
     @GetMapping("/get-all")
     public ResponseEntity<Object> getAllSubjects(@RequestBody SubjectAllDto subjectAllDto) {
         try {
-            List<Subject> subjects = subjectService.getAllSubjects(subjectAllDto.qualification());
+            List<SubjectAllResultDto> subjects = subjectService.getAllSubjects(subjectAllDto.qualification());
             return ResponseEntity.ok(subjects);
         }
         catch (Exception e) {

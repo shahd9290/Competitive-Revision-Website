@@ -1,5 +1,6 @@
 package danyal.fyp.awd.service.subject;
 
+import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
@@ -7,10 +8,7 @@ import danyal.fyp.awd.repository.subject.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class SubjectService {
         return subjectRepository.findByName(name);
     }
 
-    public List<Subject> getAllSubjects(String qualName) throws QualificationException {
+    public List<SubjectAllResultDto> getAllSubjects(String qualName) throws QualificationException {
         Qualification qualification = qualificationService.getQualification(qualName).orElseThrow(()-> new QualificationException("Qualification Does Not Exist"));
         return subjectRepository.findSubjectsByQualificationId(qualification.getId());
     }
