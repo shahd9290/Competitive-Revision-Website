@@ -55,9 +55,9 @@ public class SubjectController {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<Object> getAllSubjects(@RequestBody SubjectAllDto subjectAllDto) {
+    public ResponseEntity<Object> getAllSubjects(@RequestParam String qualification) {
         try {
-            List<SubjectAllResultDto> subjects = subjectService.getAllSubjects(subjectAllDto.qualification());
+            List<SubjectAllResultDto> subjects = subjectService.getAllSubjects(qualification);
             return ResponseEntity.ok(subjects);
         }
         catch (Exception e) {

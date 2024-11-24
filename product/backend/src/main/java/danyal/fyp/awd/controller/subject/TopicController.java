@@ -29,9 +29,9 @@ public class TopicController {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<Object> getAllTopics(@RequestBody final TopicAllDto topicAllDto) {
+    public ResponseEntity<Object> getAllTopics(@RequestParam String qualification, @RequestParam String subject) {
         try {
-            List<Topic> topics = topicService.getAllForSubQual(topicAllDto.qualification(), topicAllDto.subject());
+            List<Topic> topics = topicService.getAllForSubQual(qualification, subject);
             return ResponseEntity.ok(topics);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
