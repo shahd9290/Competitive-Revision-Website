@@ -23,8 +23,12 @@ public class QualificationService {
         return qualificationRepository.existsByName(name);
     }
 
-    public Optional<Qualification> getQualification(String name) {
-        return qualificationRepository.findByName(name);
+    public Qualification getQualification(String name) throws QualificationException {
+        return qualificationRepository.findByName(name).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
+    }
+
+    public Qualification getQualification(int id) throws QualificationException {
+        return qualificationRepository.findById(id).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
     }
 
     public List<Qualification> getAllQualifications() {
@@ -32,7 +36,7 @@ public class QualificationService {
     }
 
     public int getIdByName(String qualificationName) throws QualificationException {
-        Qualification qualification = getQualification(qualificationName).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
+        Qualification qualification = getQualification(qualificationName);
         return qualification.getId();
     }
 

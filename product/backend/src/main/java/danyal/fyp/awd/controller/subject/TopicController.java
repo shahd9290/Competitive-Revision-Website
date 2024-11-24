@@ -1,6 +1,5 @@
 package danyal.fyp.awd.controller.subject;
 
-import danyal.fyp.awd.dto.subject.TopicAllDto;
 import danyal.fyp.awd.dto.subject.TopicDto;
 import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.service.subject.TopicService;

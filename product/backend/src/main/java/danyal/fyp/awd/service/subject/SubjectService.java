@@ -34,7 +34,7 @@ public class SubjectService {
     }
 
     public List<SubjectAllResultDto> getAllSubjects(String qualName) throws QualificationException {
-        Qualification qualification = qualificationService.getQualification(qualName).orElseThrow(()-> new QualificationException("Qualification Does Not Exist"));
+        Qualification qualification = qualificationService.getQualification(qualName);
         return subjectRepository.findSubjectsByQualificationId(qualification.getId());
     }
 

@@ -1,14 +1,13 @@
 package danyal.fyp.awd.controller.subject;
 
-import danyal.fyp.awd.dto.subject.SubjectAllDto;
 import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
 import danyal.fyp.awd.dto.subject.SubjectDto;
+import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
 import danyal.fyp.awd.service.subject.QualificationService;
 import danyal.fyp.awd.service.subject.SubjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,20 +22,17 @@ public class SubjectController {
     private final QualificationService qualificationService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addSubject(@RequestBody final SubjectDto subjectDto) {
+    public ResponseEntity<String> addSubject(@RequestBody final SubjectDto subjectDto) throws QualificationException {
 
 
         String subjectName = subjectDto.name();
         String subjectQual = subjectDto.qualification();
 
         // Check if Qualification exists?
-        Qualification qualification;
-        if ((qualification = qualificationService.getQualification(subjectQual).orElse(null))== null) {
-            return ResponseEntity.badRequest().body("Qualification Does Not Exist.");
-        }
+        Qualification qualification = qualificationService.getQualification(subjectQual);
         // Check if subject exists now.
         Subject subject;
-        if ((subject = subjectService.getSubject(subjectName).orElse(null))!= null) {
+        if ((subject = subjectService.getSubject(subjectName).orElse(null)) != null) {
             // Subject exists, does it already have the qualification?
             if (subject.getQualifications().contains(qualification)) {
                 return ResponseEntity.badRequest().body("Subject already exists with this qualification!");
@@ -59,8 +55,7 @@ public class SubjectController {
         try {
             List<SubjectAllResultDto> subjects = subjectService.getAllSubjects(qualification);
             return ResponseEntity.ok(subjects);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

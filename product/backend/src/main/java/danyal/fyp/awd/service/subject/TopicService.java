@@ -27,7 +27,7 @@ public class TopicService {
         String subName = topicDto.subject();
         String topicName = topicDto.name();
 
-        Qualification qualification = qualificationService.getQualification(qualName).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
+        Qualification qualification = qualificationService.getQualification(qualName);
         Subject subject = subjectService.getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
 
         Topic topic = getTopic(topicName, qualification.getId());
@@ -48,7 +48,7 @@ public class TopicService {
     }
 
     public List<Topic> getAllForSubQual(String qualName, String subName) throws Exception {
-        Qualification qualification = qualificationService.getQualification(qualName).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
+        Qualification qualification = qualificationService.getQualification(qualName);
         Subject subject = subjectService.getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
 
         return topicRepository.findAllBySubjectIdAndQualificationId(subject.getId(), qualification.getId());
