@@ -1,6 +1,7 @@
 package danyal.fyp.awd.controller.user;
 
 import danyal.fyp.awd.dto.user.UserProfileDto;
+import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,12 @@ public class UserProfileController {
         final var user = userService.getUserByUsername(authentication.getName());
 
         return ResponseEntity.ok(new UserProfileDto(user.getEmail(), user.getUsername()));
+    }
+
+    @GetMapping("/get-qualification")
+    public ResponseEntity<Qualification> getQualification(final Authentication authentication) {
+        Qualification qualification = userService.getUserQualification(authentication.getName());
+        return ResponseEntity.ok(qualification);
     }
 
 }
