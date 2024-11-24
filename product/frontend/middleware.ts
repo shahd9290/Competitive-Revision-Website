@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Store sub-directories here?
 export const config = {
-    matcher: ['/dashboard']
+    matcher: ['/dashboard', '/search']
 }
 
 export async function middleware(req: NextRequest) {

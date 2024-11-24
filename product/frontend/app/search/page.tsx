@@ -1,13 +1,50 @@
+'use client'
 import {SidebarMenu} from "@/components/SidebarMenu";
-import React from "react";
+import {useEffect, useState} from "react";
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import axios from "axios";
 
-const Search = () => {
+export function Search() {
+
+    const [subjects, setSubjects] = useState([]);
+    const [userQual, setUserQual] = useState("");
+
+    useEffect(() => {
+        const qual = async () => {
+            const response = await axios.get("http://localhost:8080/api/user/get-qualification", {withCredentials:true})
+            return response.data;
+        }
+
+        qual().then(data => {
+            setUserQual(data.name);
+        });
+    },[])
+
+    useEffect(() => {
+        if (!userQual) return;
+
+        const subjects = async () => {
+            const response = await axios.get(`http://localhost:8080/api/subject/get-all?qualification=${userQual}`, {withCredentials:true});
+            setSubjects(response.data)
+        }
+
+        subjects();
+    }, [userQual]);
+
     return (
-        <div>
-            <h1>Search</h1>
-        </div>
+        <BentoGrid className="max-w-4xl mx-auto">
+            {subjects.map((item, i) => (
+                <BentoGridItem
+                    key={i}
+                    title={item.name}
+                />
+            ))}
+        </BentoGrid>
     );
-};
+}
+const Skeleton = () => (
+    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-neutral-200 dark:from-neutral-900 dark:to-neutral-800 to-neutral-100"></div>
+);
 
 const Page = () => {
 
