@@ -32,7 +32,7 @@ export function Search() {
     }, [userQual]);
 
     return (
-        <BentoGrid className="max-w-7xl mx-auto">
+        <BentoGrid className="max-w-7xl mx-auto flex justify-center items-center h-screen w-screen">
             {subjects.map((item, i) => (
                 <BentoGridItem
                     key={i}
