@@ -1,5 +1,5 @@
 'use client'
-import {SidebarMenu} from "@/components/SidebarMenu";
+import {SidebarMenu} from "@/components/ui/SidebarMenu";
 import {useEffect, useState} from "react";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import axios from "axios";
