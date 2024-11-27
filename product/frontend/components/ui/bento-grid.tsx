@@ -1,5 +1,13 @@
 import { cn } from "@/lib/utils";
 import {Children} from "react";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
 
 // Bento Grid component made available for public use via Aceternity UI - https://ui.aceternity.com/components/bento-grid
 
@@ -30,15 +38,9 @@ export const BentoGrid = ({
 export const BentoGridItem = ({
   className,
   title,
-  description,
-  header,
-  icon,
 }: {
     className?: string;
     title?: string | React.ReactNode;
-    description?: string | React.ReactNode;
-    header?: React.ReactNode;
-    icon?: React.ReactNode;
 }) => {
     return (
         <div
@@ -51,7 +53,18 @@ export const BentoGridItem = ({
         >
             <div className="group-hover/bento:scale-110 transition duration-200 text-gray-900">
                 <div className="text-center font-sans font-bold mb-2 mt-2">
-                    {title}
+                    <Dialog>
+                        <DialogTrigger>{title}</DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                <DialogDescription>
+                                    This action cannot be undone. This will permanently delete your account
+                                    and remove your data from our servers.
+                                </DialogDescription>
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
                 </div>
 
             </div>
