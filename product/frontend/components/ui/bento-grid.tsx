@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Children } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 
 // Bento Grid component made available for public use via Aceternity UI - https://ui.aceternity.com/components/bento-grid
 
@@ -30,9 +30,11 @@ export const BentoGrid = ({
 export const BentoGridItem = ({
   className,
   title,
+    topics
 }: {
     className?: string;
     title?: string | React.ReactNode;
+    topics?: Array<React.ReactNode>;
 }) => {
     return (
         <Dialog>
@@ -54,7 +56,10 @@ export const BentoGridItem = ({
                 </button>
             </DialogTrigger>
             <DialogContent>
-                <h1>{title}</h1>
+                <DialogTitle>{title}</DialogTitle>
+                {/*{topics.map((topic) => (*/}
+                {/*    <DialogDescription>{topic.name}</DialogDescription>*/}
+                {/*))}*/}
             </DialogContent>
         </Dialog>
     );
