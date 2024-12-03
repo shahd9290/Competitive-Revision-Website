@@ -19,6 +19,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
             "FROM Subject s JOIN s.qualifications q WHERE q.id = :qualificationId")
     List<SubjectResultDto> findSubjectsByQualificationId(@Param("qualificationId") Integer qualificationId);
 
-    Optional<Subject> findByName(String name);
+    @Query("SELECT 1 FROM Subject s JOIN s.qualifications q WHERE q.id = :qualificationId AND s.name = :subName")
+    Optional<Subject> findByName(@Param("subName") String name, @Param("qualificationId") Integer qualificationId);
 
 }
