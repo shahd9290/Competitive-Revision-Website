@@ -37,6 +37,7 @@ export function Search() {
                 <BentoGridItem
                     key={i}
                     title={item.name}
+                    topics={item.topics}
                 />
             ))}
         </BentoGrid>

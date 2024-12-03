@@ -30,11 +30,11 @@ export const BentoGrid = ({
 export const BentoGridItem = ({
   className,
   title,
-    topics
+  topics
 }: {
     className?: string;
     title?: string | React.ReactNode;
-    topics?: Array<React.ReactNode>;
+    topics?: [];
 }) => {
     return (
         <Dialog>
@@ -57,9 +57,11 @@ export const BentoGridItem = ({
             </DialogTrigger>
             <DialogContent>
                 <DialogTitle>{title}</DialogTitle>
-                {/*{topics.map((topic) => (*/}
-                {/*    <DialogDescription>{topic.name}</DialogDescription>*/}
-                {/*))}*/}
+                {topics && topics.length > 0 ? (topics.map((topic, i) => (
+                    <DialogDescription key={i}>{topic.name}</DialogDescription>
+                ))):(
+                    <DialogDescription>No Topics Found!</DialogDescription>)
+                }
             </DialogContent>
         </Dialog>
     );
