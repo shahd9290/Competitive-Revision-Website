@@ -8,7 +8,7 @@ import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
 import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.service.subject.QualificationService;
-import danyal.fyp.awd.service.subject.SubjectService;
+import danyal.fyp.awd.service.subject.SubjectTopicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +18,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/")
-public class SubjectController {
+public class SubjectTopicController {
 
-    private final SubjectService subjectService;
+    private final SubjectTopicService subjectTopicService;
     private final QualificationService qualificationService;
 
     @PostMapping("/subject/add")
@@ -34,20 +34,20 @@ public class SubjectController {
         Qualification qualification = qualificationService.getQualification(subjectQual);
         // Check if subject exists now.
         Subject subject;
-        if ((subject = subjectService.getSubject(subjectName).orElse(null)) != null) {
+        if ((subject = subjectTopicService.getSubject(subjectName).orElse(null)) != null) {
             // Subject exists, does it already have the qualification?
             if (subject.getQualifications().contains(qualification)) {
                 return ResponseEntity.badRequest().body("Subject already exists with this qualification!");
             }
             // It doesn't, needs to be updated.
             else {
-                subjectService.addQualification(subject, qualification);
+                subjectTopicService.addQualification(subject, qualification);
                 return ResponseEntity.ok("Updated Existing Subject with new qualification");
             }
         }
         // Subject does not exist. Qualification does so we can create a new one with it.
         else {
-            subjectService.addSubject(subjectName, qualification);
+            subjectTopicService.addSubject(subjectName, qualification);
             return ResponseEntity.ok("Created new subject");
         }
     }
@@ -55,7 +55,7 @@ public class SubjectController {
     @GetMapping("/subject/get-all")
     public ResponseEntity<Object> getAllSubjects(@RequestParam String qualification) {
         try {
-            List<SubjectAllResultDto> subjects = subjectService.getAllSubjects(qualification);
+            List<SubjectAllResultDto> subjects = subjectTopicService.getAllSubjects(qualification);
             return ResponseEntity.ok(subjects);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -65,7 +65,7 @@ public class SubjectController {
     @PostMapping("/topic/add")
     public ResponseEntity<String> addTopic(@RequestBody final TopicDto topicDto) {
         try {
-            subjectService.saveTopic(topicDto);
+            subjectTopicService.saveTopic(topicDto);
             return ResponseEntity.ok("Topic saved successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -76,7 +76,7 @@ public class SubjectController {
     @GetMapping("/topic/get-all")
     public ResponseEntity<Object> getAllTopics(@RequestParam String qualification, @RequestParam String subject) {
         try {
-            List<Topic> topics = subjectService.getAllForSubQual(qualification, subject);
+            List<Topic> topics = subjectTopicService.getAllForSubQual(qualification, subject);
             return ResponseEntity.ok(topics);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

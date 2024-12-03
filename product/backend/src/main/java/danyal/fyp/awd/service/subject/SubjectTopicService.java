@@ -1,9 +1,7 @@
 package danyal.fyp.awd.service.subject;
 
 import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
-import danyal.fyp.awd.dto.subject.SubjectResultDto;
 import danyal.fyp.awd.dto.subject.TopicDto;
-import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.exception.SubjectException;
 import danyal.fyp.awd.exception.TopicException;
 import danyal.fyp.awd.model.subject.Qualification;
@@ -18,7 +16,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class SubjectService {
+public class SubjectTopicService {
 
     private final SubjectRepository subjectRepository;
     private final QualificationService qualificationService;
@@ -40,15 +38,23 @@ public class SubjectService {
         return subjectRepository.findByName(name);
     }
 
+    public List<Subject> getSubjectWithQual(Qualification qualification) {
+        return subjectRepository.findSubjectsByQualificationId(qualification.getId());
+    }
+
     public List<SubjectAllResultDto> getAllSubjects(String qualName) throws Exception {
         Qualification qualification = qualificationService.getQualification(qualName);
-        List<SubjectResultDto> subjectResults = subjectRepository.findSubjectsByQualificationId(qualification.getId());
+        List<Subject> subjectResults = getSubjectWithQual(qualification);
+        List<SubjectAllResultDto> subjectAllResultDtos = new ArrayList<>();
 
-        for (SubjectResultDto subject : subjectResults) {
-            List<Topic> topics = getAllForSubQual(subject.name(), qualification.getName());
+        // Get the topics specifically for the given qualification. This way there is no clashes.
+        for (Subject subject : subjectResults) {
+            List<Topic> topics = getAllForSubQual(subject.getName(), qualification.getName());
+            SubjectAllResultDto subjectAllResultDto = new SubjectAllResultDto(subject.getId(), subject.getName(), topics);
+            subjectAllResultDtos.add(subjectAllResultDto);
         }
 
-        return null;
+        return subjectAllResultDtos;
     }
 
     public void addQualification(Subject subject, Qualification qualification) {
@@ -81,7 +87,7 @@ public class SubjectService {
         return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
     }
 
-    public List<Topic> getAllForSubQual(String qualName, String subName) throws Exception {
+    public List<Topic> getAllForSubQual(String subName, String qualName) throws Exception {
         Qualification qualification = qualificationService.getQualification(qualName);
         Subject subject = getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
 
