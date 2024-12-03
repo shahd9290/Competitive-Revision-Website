@@ -2,9 +2,11 @@ package danyal.fyp.awd.controller.subject;
 
 import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
 import danyal.fyp.awd.dto.subject.SubjectDto;
+import danyal.fyp.awd.dto.subject.TopicDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
+import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.service.subject.QualificationService;
 import danyal.fyp.awd.service.subject.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +17,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/subject")
+@RequestMapping("/api/")
 public class SubjectController {
 
     private final SubjectService subjectService;
     private final QualificationService qualificationService;
 
-    @PostMapping("/add")
+    @PostMapping("/subject/add")
     public ResponseEntity<String> addSubject(@RequestBody final SubjectDto subjectDto) throws QualificationException {
 
 
@@ -50,11 +52,32 @@ public class SubjectController {
         }
     }
 
-    @GetMapping("/get-all")
+    @GetMapping("/subject/get-all")
     public ResponseEntity<Object> getAllSubjects(@RequestParam String qualification) {
         try {
             List<SubjectAllResultDto> subjects = subjectService.getAllSubjects(qualification);
             return ResponseEntity.ok(subjects);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/topic/add")
+    public ResponseEntity<String> addTopic(@RequestBody final TopicDto topicDto) {
+        try {
+            subjectService.saveTopic(topicDto);
+            return ResponseEntity.ok("Topic saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+    @GetMapping("/topic/get-all")
+    public ResponseEntity<Object> getAllTopics(@RequestParam String qualification, @RequestParam String subject) {
+        try {
+            List<Topic> topics = subjectService.getAllForSubQual(qualification, subject);
+            return ResponseEntity.ok(topics);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
