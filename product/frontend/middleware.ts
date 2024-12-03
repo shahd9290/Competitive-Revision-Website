@@ -1,9 +1,9 @@
 import {NextRequest, NextResponse} from "next/server";
 import axios from "axios";
 
-// Store sub-directories here?
+// Store subdirectories here?
 export const config = {
-    matcher: ['/dashboard', '/subjects']
+    matcher: ['/dashboard', '/subjects', '/logout']
 }
 
 export async function middleware(req: NextRequest) {
@@ -13,32 +13,37 @@ export async function middleware(req: NextRequest) {
     // not found?
     if (tokenExpiry !== undefined) {
 
-        let response = NextResponse.next()
+        const response = NextResponse.next()
+
+        if (req.url.includes('/logout')) {
+            response.cookies.set("tokenExpiry", "0", {httpOnly: true, expires: new Date(0)});
+            response.cookies.set("token", "", {httpOnly:true, expires: new Date(0)})
+        }
 
         const isExpired = checkExpiration(tokenExpiry);
         // time is up?
         if (isExpired) {
             console.log("Token Expired!")
             const token = req.cookies.get("token")?.value;
-            const axios_response = await axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
+            await axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
                 headers: {
                     'Cookie': `token=${token}`,
 
                 },
                 withCredentials: true}).then((resp) => {
-                    // Apply new values to the cookies
-                    const newToken = resp.data.token;
-                    const newExpiry = resp.data.tokenExpiry;
-                    // Calculate cookie expiry time
-                    const cookieExpiry = Number(newExpiry) + 120;
-                    const newExpiryDate = new Date(0).setUTCSeconds(cookieExpiry);
-                    // Apply to new cookies
-                    response.cookies.set("token", newToken, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
-                    response.cookies.set("tokenExpiry", newExpiry, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
-                    console.log("Token Refreshed!");
-                })
+                // Apply new values to the cookies
+                const newToken = resp.data.token;
+                const newExpiry = resp.data.tokenExpiry;
+                // Calculate cookie expiry time
+                const cookieExpiry = Number(newExpiry) + 120;
+                const newExpiryDate = new Date(0).setUTCSeconds(cookieExpiry);
+                // Apply to new cookies
+                response.cookies.set("token", newToken, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
+                response.cookies.set("tokenExpiry", newExpiry, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
+                console.log("Token Refreshed!");
+            });
         }
-        
+
         return response
     } else {
         return NextResponse.redirect(new URL('/login', req.url));
