@@ -10,17 +10,15 @@ export async function middleware(req: NextRequest) {
     console.log("Middleware Running");
 
     const tokenExpiry = req.cookies.get("tokenExpiry")?.value;
+    const response = NextResponse.next()
+
     // not found?
-    if (tokenExpiry !== undefined || !req.url.endsWith('/')) {
+    if (req.url.endsWith('/logout')) {
+        response.cookies.set("tokenExpiry", "0", {httpOnly: true, expires: new Date(0)});
+        response.cookies.set("token", "", {httpOnly:true, expires: new Date(0)})
 
-        const response = NextResponse.next()
-
-
-
-        if (req.url.includes('/logout')) {
-            response.cookies.set("tokenExpiry", "0", {httpOnly: true, expires: new Date(0)});
-            response.cookies.set("token", "", {httpOnly:true, expires: new Date(0)})
-        }
+    }
+    else if (tokenExpiry !== undefined && !req.url.endsWith('/')) {
 
         const isExpired = checkExpiration(tokenExpiry);
         // time is up?
@@ -47,12 +45,12 @@ export async function middleware(req: NextRequest) {
         }
 
         return response
-    } else {
-        return NextResponse.redirect(new URL('/login', req.url));
     }
+    return NextResponse.redirect(new URL('/login', req.url));
+
 }
 
-function checkExpiration(expiry: string) {
+function checkExpiration(expiry: string | undefined) {
     const now = Math.floor(Date.now() / 1000);
     return (Number(expiry) < now)
 }
