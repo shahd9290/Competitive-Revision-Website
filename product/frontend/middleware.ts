@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Store subdirectories here?
 export const config = {
-    matcher: ['/dashboard', '/subjects', '/logout']
+    matcher: ['/dashboard', '/subjects', '/logout', '/']
 }
 
 export async function middleware(req: NextRequest) {
@@ -11,9 +11,11 @@ export async function middleware(req: NextRequest) {
 
     const tokenExpiry = req.cookies.get("tokenExpiry")?.value;
     // not found?
-    if (tokenExpiry !== undefined) {
+    if (tokenExpiry !== undefined || !req.url.endsWith('/')) {
 
         const response = NextResponse.next()
+
+
 
         if (req.url.includes('/logout')) {
             response.cookies.set("tokenExpiry", "0", {httpOnly: true, expires: new Date(0)});
