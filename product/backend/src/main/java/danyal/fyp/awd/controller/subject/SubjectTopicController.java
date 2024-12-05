@@ -31,24 +31,29 @@ public class SubjectTopicController {
         String subjectQual = subjectDto.qualification();
 
         // Check if Qualification exists?
-        Qualification qualification = qualificationService.getQualification(subjectQual);
-        // Check if subject exists now.
-        Subject subject;
-        if ((subject = subjectTopicService.getSubject(subjectName).orElse(null)) != null) {
-            // Subject exists, does it already have the qualification?
-            if (subject.getQualifications().contains(qualification)) {
-                return ResponseEntity.badRequest().body("Subject already exists with this qualification!");
+        try {
+            Qualification qualification = qualificationService.getQualification(subjectQual);
+            // Check if subject exists now.
+            Subject subject;
+            if ((subject = subjectTopicService.getSubject(subjectName).orElse(null)) != null) {
+                // Subject exists, does it already have the qualification?
+                if (subject.getQualifications().contains(qualification)) {
+                    return ResponseEntity.badRequest().body("Subject already exists with this qualification!");
+                }
+                // It doesn't, needs to be updated.
+                else {
+                    subjectTopicService.addQualification(subject, qualification);
+                    return ResponseEntity.ok("Updated Existing Subject with new qualification");
+                }
             }
-            // It doesn't, needs to be updated.
+            // Subject does not exist. Qualification does so we can create a new one with it.
             else {
-                subjectTopicService.addQualification(subject, qualification);
-                return ResponseEntity.ok("Updated Existing Subject with new qualification");
+                subjectTopicService.addSubject(subjectName, qualification);
+                return ResponseEntity.ok("Created new subject");
             }
         }
-        // Subject does not exist. Qualification does so we can create a new one with it.
-        else {
-            subjectTopicService.addSubject(subjectName, qualification);
-            return ResponseEntity.ok("Created new subject");
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

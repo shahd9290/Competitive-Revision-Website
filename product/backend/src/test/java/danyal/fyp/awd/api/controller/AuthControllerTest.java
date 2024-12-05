@@ -4,6 +4,7 @@ package danyal.fyp.awd.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danyal.fyp.awd.service.user.JwtService;
 import jakarta.servlet.http.Cookie;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -77,6 +78,7 @@ public class AuthControllerTest {
         payload.put("username", "test");
         payload.put("password", "test");
         payload.put("email", "testing@test.com");
+        payload.put("qualification", "GCSE");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

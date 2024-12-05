@@ -102,7 +102,7 @@ public class SubjectQualificationTest {
                         .content(objectMapper.writeValueAsString(payload))
                         .cookie(tokenCookie))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Qualification Does Not Exist."));
+                .andExpect(content().string("Qualification Does Not Exist"));
 
     }
 
