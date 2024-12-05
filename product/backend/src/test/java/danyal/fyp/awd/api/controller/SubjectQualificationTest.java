@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -133,6 +132,27 @@ public class SubjectQualificationTest {
 
     }
 
+    @Test
+    public void getAllSubjects() throws Exception {
+        payload = new HashMap<>();
+        payload.put("name", "Mathematics");
+        payload.put("qualification", "GCSE");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/subject/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all?qualification=GCSE")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Mathematics"));
+    }
 
 
 

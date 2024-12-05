@@ -102,5 +102,35 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.email").value("testing@test.com"));
     }
 
+    @Test
+    public void registerFailOne() throws Exception {
+        payload = new HashMap<>();
+        payload.put("username", "user");
+        payload.put("password", "test");
+        payload.put("email", "testing@test.com");
+        payload.put("qualification", "GCSE");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Username or Email already exists"));
+
+    }
+
+    @Test
+    public void registerFailTwo() throws Exception {
+        payload = new HashMap<>();
+        payload.put("username", "test2");
+        payload.put("password", "test");
+        payload.put("email", "testing1@test.com");
+        payload.put("qualification", "A-Levels");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Qualification Does Not Exist"));
+    }
 
 }
