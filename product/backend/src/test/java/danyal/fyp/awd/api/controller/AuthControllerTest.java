@@ -57,6 +57,20 @@ public class AuthControllerTest {
     }
 
     @Test
+    public void loginFail() throws Exception {
+        payload = new HashMap<>();
+        payload.put("username", "user");
+        payload.put("password", "incorrect");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Username or password is incorrect."));
+    }
+
+    @Test
     public void refreshTokenSuccess() throws Exception {
         Cookie tokenCookie = new Cookie("token", token);
 
