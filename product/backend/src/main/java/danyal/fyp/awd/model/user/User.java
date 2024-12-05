@@ -41,6 +41,9 @@ public class User {
     @LastModifiedDate
     private Instant updatedAt;
 
+    @JoinColumn(name = "qualification_id", table = "qualifications", nullable = false)
+    private int qualificationId;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
 }
