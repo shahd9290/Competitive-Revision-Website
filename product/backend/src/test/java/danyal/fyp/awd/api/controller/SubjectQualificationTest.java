@@ -3,6 +3,7 @@ package danyal.fyp.awd.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danyal.fyp.awd.service.user.JwtService;
 import jakarta.servlet.http.Cookie;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -42,6 +43,7 @@ public class SubjectQualificationTest {
     }
 
     @Test
+
     public void addQualification() throws Exception {
         tokenCookie = new Cookie("token", token);
 
@@ -133,19 +135,10 @@ public class SubjectQualificationTest {
     }
 
     @Test
+    @AfterAll // Last test to run
     public void getAllSubjects() throws Exception {
-        payload = new HashMap<>();
-        payload.put("name", "Mathematics");
-        payload.put("qualification", "GCSE");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/subject/add")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload))
-                        .cookie(tokenCookie))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all?qualification=GCSE")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all?qualification=GCSEs")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie))

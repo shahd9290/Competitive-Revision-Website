@@ -49,7 +49,7 @@ public class SubjectTopicService {
 
         // Get the topics specifically for the given qualification. This way there is no clashes.
         for (Subject subject : subjectResults) {
-            List<Topic> topics = getAllForSubQual(subject.getName(), qualification.getName());
+            List<Topic> topics = getAllForSubQual(qualification.getName(), subject.getName());
             SubjectAllResultDto subjectAllResultDto = new SubjectAllResultDto(subject.getId(), subject.getName(), topics);
             subjectAllResultDtos.add(subjectAllResultDto);
         }
@@ -87,7 +87,7 @@ public class SubjectTopicService {
         return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
     }
 
-    public List<Topic> getAllForSubQual(String subName, String qualName) throws Exception {
+    public List<Topic> getAllForSubQual(String qualName, String subName) throws Exception {
         Qualification qualification = qualificationService.getQualification(qualName);
         Subject subject = getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
 
