@@ -152,6 +152,12 @@ public class SubjectQualificationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("Mathematics"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all?qualification=Bachelors")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie))
+                .andExpect(status().isBadRequest());
     }
 
 
