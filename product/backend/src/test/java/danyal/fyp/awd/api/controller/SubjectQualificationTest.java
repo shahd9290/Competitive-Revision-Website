@@ -61,6 +61,19 @@ public class SubjectQualificationTest {
     }
 
     @Test
+    public void getQualifications() throws Exception {
+        tokenCookie = new Cookie("token", token);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/qualification/get-all")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("GCSE"));
+    }
+
+    @Test
     public void addSubjectNew() throws Exception {
         tokenCookie = new Cookie("token", token);
 
