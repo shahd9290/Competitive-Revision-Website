@@ -2,9 +2,65 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[font=small,labelfont=bf]{caption}
 
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 \graphicspath{{./images/}}
 
+
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, const, switch, var, if, in, while, do, else, case, break, try, alert},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{Java}{
+	keywords={public, new, true, false, catch, throws, return, null, const, switch, var, if, in, while, do, else, case, break, try, alert},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+
+\lstset{
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
 %%%%%%%%%%%%%%%%%%%%%%
 %%% Input project details
 \def\studentname{Danyal Shah}
@@ -107,21 +163,81 @@ For the backend, two of the most popular frameworks are Spring Boot and Node.JS.
 \chapter{Current Implementation}
 \section{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
-\\\includegraphics[scale=0.3]{create}
+\\\\\includegraphics[scale=0.3]{create}
+\captionof{figure}{The Account Creation Page}
+
+When submitted, the frontend will check to make sure that the email and email confirmation match. Following that, it also checks if the qualification has a valid input. If neither of these is the case, an alert would show on the screen to inform the user - and nothing would happen.
+\\\\\includegraphics[scale=0.3]{create-alerts}
+\captionof{figure}{The alert thrown when the emails do not match.}
+
+\newpage % for formatting
+\begin{lstlisting}[language=JavaScript, caption={An excerpt from the frontend code where the conditions are checked for the alerts to be thrown.}]
+// create/page.tsx
+if (email !== emailConfirm) {
+	alert("Please ensure you have entered the correct email address in both sections!");
+}
+else if (qualificationInput === "") {
+	alert("Please select a qualification");
+}
+\end{lstlisting}
+
+When both of these are satisfied, the frontend will collect the variables together into a JSON body to be submitted with the API POST request to the backend. The frontend then waits for a response from the backend before redirecting the user to the homepage. If any issues were to occur at this stage, an exception would be caught and stop the user from being redirected - instead presenting them with an alert informing them of the error.
+
+\begin{lstlisting}[language=JavaScript, caption={The variables are put together into a JSON array, and are then supplied to axios to be send in a request to the backend. Any exceptions that are thrown are caught and handled appropriately.}]
+// create/page.tsx
+const payload = {
+	"username": username, "email": email, "password": password, "qualification": qualificationInput
+}
+
+try {
+	const response = await axios.post("http://localhost:8080/api/auth/register", payload);
+	alert("Account created successfully.");
+	router.push('/login')
+	
+} catch (error: any) {
+	if (error.response && error.response.data) {
+		alert(error.response.data || "An error occurred during registration.");
+	} else {
+		alert("Unable to connect to server.");
+	}
+}
+
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption={An except from the backend logic creating a User object and saving it to the database.}]
+// RegistrationService.java
+@Transactional
+public User registerUser(RegistrationRequestDto request) throws QualificationException {
+	if (userRepository.existsByUsername(request.username()) ||
+	userRepository.existsByEmail(request.email())) {
+		
+		throw new ValidationException(
+		"Username or Email already exists");
+	}
+	
+	User user = new User();
+	user.setUsername(request.username());
+	user.setEmail(request.email());
+	user.setPassword(passwordEncoder.encode(request.password()));
+	user.setQualificationId(qualificationService.getIdByName(request.qualification()));
+	
+	return userRepository.save(user);
+}
+\end{lstlisting}
 
 \section{User Login}
 Placeholder Text.
-\\\includegraphics[scale=0.3]{login}
+\\\\\includegraphics[scale=0.3]{login}
 
 \section{Dashboard}
 Placeholder Text.
-\\\includegraphics[scale=0.3]{dashboard1}
-\\\includegraphics[scale=0.3]{dashboard2}
+\\\\\includegraphics[scale=0.3]{dashboard1}
+\\\\\includegraphics[scale=0.3]{dashboard2}
 
 \section{Subject Search \& Topics}
 Placeholder Text.
-\\\includegraphics[scale=0.3]{search}
-\\\includegraphics[scale=0.3]{topics}
+\\\\\includegraphics[scale=0.3]{search}
+\\\\\includegraphics[scale=0.3]{topics}
 
 \chapter{Software Engineering}
 
