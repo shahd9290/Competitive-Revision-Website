@@ -254,7 +254,7 @@ const login = async (event: { preventDefault: () => void; }) => {
 }
 \end{lstlisting}
 
-In the backend, the user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed.
+In the backend, the user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window.
 
 \begin{lstlisting}[language=Java, caption={The controller code showing the steps required to authenticate the user.}]
 @PostMapping("/login")
@@ -269,6 +269,7 @@ public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequ
 	}
 }
 \end{lstlisting}
+
 \section{Dashboard}
 Placeholder Text.
 \\\\\includegraphics[scale=0.3]{dashboard1}
