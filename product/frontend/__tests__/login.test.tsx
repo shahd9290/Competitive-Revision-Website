@@ -4,7 +4,7 @@ import Page from '@/app/login/page'
 import {userEvent} from "@testing-library/user-event/";
 import axios from "axios";
 
-///////////////////////////////// START OF CHAT-GPT GENERATED CODE /////////////////////////////////////
+//////////////////////////////// START OF CHAT-GPT GENERATED CODE ////////////////////////////////////
 // Generative AI was used for this section to ensure mocks were created properly for these tests.
 // These were required for the tests to run.
 
