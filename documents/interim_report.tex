@@ -226,9 +226,49 @@ public User registerUser(RegistrationRequestDto request) throws QualificationExc
 \end{lstlisting}
 
 \section{User Login}
-Placeholder Text.
+Once the user has created their account, they will be redirected to the login page where they are able to enter their details. 
 \\\\\includegraphics[scale=0.3]{login}
 
+When submitted, the username and password are packaged into a JSON body to be sent via an axios request to the backend.
+
+\begin{lstlisting}[language=JavaScript, caption={The username and password are added to a payload, and sent as the request body to the backend}]
+const login = async (event: { preventDefault: () => void; }) => {
+	event.preventDefault();
+	
+	const payload = {
+		"username": username, "password": password
+	}
+	
+	try {
+		const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials: true});
+		router.push('/dashboard')
+		
+	} catch (error: any) {
+		if (error.response && error.response.data) {
+			alert(error.response.data || "An error occurred during logging in.");
+		} else {
+			alert("Unable to connect to server.");
+		}
+		
+	}
+}
+\end{lstlisting}
+
+In the backend, the user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed.
+
+\begin{lstlisting}[language=Java, caption={The controller code showing the steps required to authenticate the user.}]
+@PostMapping("/login")
+public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
+	try {
+		AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
+		ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
+		ResponseCookie cookieExpire = cookieService.createTimerCookie();
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
+	} catch (Exception e) {
+		return ResponseEntity.badRequest().body("Username or password is incorrect.");
+	}
+}
+\end{lstlisting}
 \section{Dashboard}
 Placeholder Text.
 \\\\\includegraphics[scale=0.3]{dashboard1}
