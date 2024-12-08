@@ -6,4 +6,5 @@
 04/11/24 - 08/11/24: Begin work on Question Bank\
 12/11/24 - 16/11/24: Created Subject and Qualification models. Qualifications embedded into the system. Subject Search functionality to be implemented.\
 23/11/24 - 24/11/24: Implemented Topics & Begin search implementation to frontend.
-27/11/24 - 03/12/24: Integrated Modal into search - with topics for the subject in each dialog box.
+27/11/24 - 03/12/24: Integrated Modal into search - with topics for the subject in each dialog box.\
+03/12/24 - 08/12/24: Completed Tests for all components & worked on interim report.
