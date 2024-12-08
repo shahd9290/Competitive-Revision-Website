@@ -129,6 +129,8 @@ In 2023, the average household with Internet access was seen to be 93\%, with th
 % Might be ideal to discuss key features here, i.e. what students can do, what teachers can do, what admins can do, etc. Also partially dependent on whether these features can be impleemnted.
 This project aims to facilitate revision for the average student, whilst also capitalizing on their competitive nature.  From working in education, I have observed how some children love to be competitive with each other when there is a reward promised at the end of a certain competition - to the extent that they may try to find a way to cheat the system. Though cheating is discouraged, it gave me the idea to encourage competition in a way that benefits the student when it comes to their revision. This in turn would provide them with an incentive to return to the system, and continue to build up their marks, acting as points, in order to improve their rank on a dedicated scoreboard whilst simultaneously deepening their understanding of the topic that they are aiming to study.
 
+I aim to achieve this by adopting a points system inspired by the Picarats seen in the Professor Layton video game series~\cite{LAYTON} - where students will lose marks each time they fail to answer a question correctly until a set minimum. My intention with this system is that students are encouraged to try their hardest to answer correctly in their initial attempt, in order for them to score maximum marks - enabling their competitive spirit when comparing against others. This can be enhanced by hosting regular contests similarly to websites such as LeetCode~\cite{LEETCODE}, who host weekly and biweekly contests for their users to compete in for a similar purpose. Of course, there will also be some students who may be anxious at the idea that their performance would be public for all to see - for which this competitive feature can be optional for students to participate in. 
+
 \section{User Stories}
 
 User Stories allow me to gain an insight into what features need to be implemented into the system, and to who they should be made available. At this interim stage of development I have the following user stories:
@@ -199,7 +201,9 @@ public class AssetService {
 \end{lstlisting}
 
 \subsection{Model-View-Controller (MVC) Pattern}
-\subsubsection{hi}
+\subsection{Component Based Architecture}
+\subsection{Client-Server Architecture}
+
 \chapter{Current Implementation}
 \section{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
@@ -341,6 +345,8 @@ Placeholder Text.
 \\\\\includegraphics[scale=0.3]{search}
 \\\\\includegraphics[scale=0.3]{topics}
 
+\section {Middleware}
+
 \chapter{Software Engineering}
 
 \section{Methodology}
@@ -372,6 +378,13 @@ Placeholder Text.
 \emph{Raising the smartphone generation - \url{https://www.kaspersky.com/blog/digital-habits-report-2021/}}\\
 \textbf{Value:} Provides a deeper insight on the reasons behind children receiving their own devices, providing an insight in what activities children like to engage with online.
 
+\bibitem{LAYTON} Level-5, Nintendo (2007),
+\emph{ Professor Layton Series [Video Game]}\\
+\textbf{Value:} Inspiration for the points system that is to be implemented into the product.
+
+\bibitem{LEETCODE} LeetCode LLC (2011),
+\emph{LeetCode - \url{https://leetcode.com/}}\\
+\textbf{Value:} Inspiration for the contest system that may be implemented into the product.
 
 \bibitem{DB_NEXTJS} Dinh Bui (2023),
 \emph{Next.JS For Front-End and Compatible Backend Solutions - \url{https://www.theseus.fi/bitstream/handle/10024/800535/Bui_Dinh.pdf?sequence=2}}\\
