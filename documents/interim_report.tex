@@ -230,12 +230,13 @@ public User registerUser(RegistrationRequestDto request) throws QualificationExc
 \end{lstlisting}
 
 \section{User Login}
-Once the user has created their account, they will be redirected to the login page where they are able to enter their details. 
+Once the user has created their account, they will be redirected to the login page where they are able to enter their details. Through this, they will be able to access the application to then carry out their revision tasks.
 \\\\\includegraphics[scale=0.3]{login}
 
-When submitted, the username and password are packaged into a JSON body to be sent via an axios request to the backend.
+When submitted, the username and password are packaged into a JSON body to be sent via an axios request to the backend. The user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window.
 
 \begin{lstlisting}[language=JavaScript, caption={The username and password are added to a payload, and sent as the request body to the backend}]
+// login/page.tsx
 const login = async (event: { preventDefault: () => void; }) => {
 	event.preventDefault();
 	
@@ -258,9 +259,8 @@ const login = async (event: { preventDefault: () => void; }) => {
 }
 \end{lstlisting}
 
-In the backend, the user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window.
-
 \begin{lstlisting}[language=Java, caption={The controller code showing the steps required to authenticate the user.}]
+// AuthController.java
 @PostMapping("/login")
 public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
 	try {
@@ -273,6 +273,27 @@ public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequ
 	}
 }
 \end{lstlisting}
+
+Both cookies have been designed to be as secure as possible.This includes setting the HTTP-Only and Secure flags to true, so that they are not detected by any external JavaScript - as well as ensuring that the sameSite flag is set to Strict. This way these cookies can only be used within the application itself, and not anywhere else.
+\\\\\includegraphics[scale=0.725]{cookies}
+\captionof{figure}{Example cookies as they appear in browser's cookies tab.}
+\begin{lstlisting}[language=Java, caption={The code used to create the token cookie. For the tokenExpiry the only difference would be the value of the cookie instead.}]
+// CookieService.java
+public ResponseCookie createTokenCookie(String token) {
+	
+	return ResponseCookie.from("token", token)
+	.httpOnly(true)
+	.sameSite("Strict")
+	.secure(true)
+	.path("/")
+	.maxAge(ttl.getSeconds())
+	.build();
+}
+
+\end{lstlisting}
+\section{Refresh Tokens}
+
+The tokens used to verify the user's authenticity have been designed to expire after 15 minutes, for situations where the token is stolen by an attacker.
 
 \section{Dashboard}
 Placeholder Text.
