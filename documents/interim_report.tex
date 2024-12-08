@@ -32,7 +32,7 @@
 }
 
 \lstdefinelanguage{Java}{
-	keywords={public, new, true, false, catch, throws, return, null, const, switch, var, if, in, while, do, else, case, break, try, alert},
+	keywords={public, private, new, true, false, catch, throws, return, null, const, switch, var, if, in, while, do, else, case, break, try, alert},
 	keywordstyle=\color{blue}\bfseries,
 	ndkeywords={class, export, boolean, throw, implements, import, this},
 	ndkeywordstyle=\color{darkgray}\bfseries,
@@ -168,6 +168,38 @@ For the backend, two of the most popular frameworks are Spring Boot and Node.JS.
 
 % A report on Web development architectural paradigms and applicable design patterns, including an initial discussion of security, privacy and key-operational aspects and considerations (e.g. cloud deployments and DevOps aspects)
 
+Many design patterns have been considered throughout the development of the product thus far. This section will break down how and why some have been used in this project.
+\subsection{Dependency Injection}
+Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through Autowiring. In this project however, I am using the Lombok plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
+
+\begin{lstlisting}[language=java, caption={An example of a Spring Boot Component with the Lombok Plugin.}]
+// UserProfileController.java
+@RestController
+@RequestMapping("/api/user")
+@RequiredArgsConstructor
+public class UserProfileController {
+	private final UserService userService;
+	...
+}
+\end{lstlisting}
+
+In the provided example, the use of the @RequiredArgsConstructor annotation is what generates the constructor for this class. As the controller requires use of a UserService object, Spring will instantiate that and pass it through this constructor to be used for any requests made via this endpoint. This way - I would not be required to manually autowire each of the components that make up a class throughout my backend, in comparison to a regular Spring class such as that provided below.
+
+\begin{lstlisting}[language=Java, caption={An example of a Spring Boot Component without the Lombok Plugin. Use of the plugin prevents the need for boilerplate code such as this.}]
+@Service
+public class AssetService {
+	
+	private final AssetRepository assetsRepo;
+	
+	@Autowired
+	public AssetService(AssetRepository assetsRepo) {
+		this.assetsRepo = assetsRepo;
+	}
+	
+\end{lstlisting}
+
+\subsection{Model-View-Controller (MVC) Pattern}
+\subsubsection{hi}
 \chapter{Current Implementation}
 \section{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
