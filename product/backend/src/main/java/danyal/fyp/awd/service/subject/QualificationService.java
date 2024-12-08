@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +18,12 @@ public class QualificationService {
         qualificationRepository.save(qualification);
     }
 
-    public boolean doesExist(String name) {
-        return qualificationRepository.existsByName(name);
+    public Qualification getQualification(String name) throws QualificationException {
+        return qualificationRepository.findByName(name).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
     }
 
-    public Optional<Qualification> getQualification(String name) {
-        return qualificationRepository.findByName(name);
+    public Qualification getQualification(int id) throws QualificationException {
+        return qualificationRepository.findById(id).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
     }
 
     public List<Qualification> getAllQualifications() {
@@ -32,10 +31,7 @@ public class QualificationService {
     }
 
     public int getIdByName(String qualificationName) throws QualificationException {
-        Qualification qualification = getQualification(qualificationName).orElse(null);
-        if (qualification == null) {
-            throw new QualificationException("Qualification Does Not Exist");
-        }
+        Qualification qualification = getQualification(qualificationName);
         return qualification.getId();
     }
 

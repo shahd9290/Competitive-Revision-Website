@@ -25,9 +25,4 @@ public class RefreshTokenController {
         return ResponseEntity.ok(new RefreshResponseDto(response.accessToken(), cookieExpire.getValue()));
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<Void> revokeToken(@RequestBody RefreshTokenDto rT) {
-        refreshTokenService.revokeRefreshToken(rT.refreshToken());
-        return ResponseEntity.noContent().build();
-    }
 }

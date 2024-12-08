@@ -27,10 +27,7 @@ public class AuthenticationService {
 
         final var accessToken = jwtService.generateToken(request.username());
 
-        final var user = userRepository.findByUsername(request.username())
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User with username [%s] not found".formatted(request.username())));
-
+        final var user = userRepository.findByUsername(request.username()).orElse(null);
         // Check if valid refresh token is in database.
         // If not (expired or non-existent) then create one
         // Otherwise ignore and continue

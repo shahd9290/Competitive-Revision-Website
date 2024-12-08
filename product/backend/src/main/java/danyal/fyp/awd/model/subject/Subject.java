@@ -1,5 +1,6 @@
 package danyal.fyp.awd.model.subject;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Set;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;
 
     @Column(nullable = false)
@@ -26,7 +28,12 @@ public class Subject {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="subject_qualification", joinColumns = @JoinColumn(name="subject_id"),
     inverseJoinColumns = @JoinColumn(name="qualification_id"))
+    @JsonManagedReference
     private Set<Qualification> qualifications;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Topic> topics;
 
     public void addQualification(Qualification qualification) {
         qualifications.add(qualification);

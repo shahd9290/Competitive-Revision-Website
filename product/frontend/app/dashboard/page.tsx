@@ -1,7 +1,7 @@
 'use client'
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
-import { SidebarMenu } from '@/components/SidebarMenu';
+import { SidebarMenu } from '@/components/ui/SidebarMenu';
 
 const Dashboard = () => {
 
