@@ -200,7 +200,16 @@ public class AssetService {
 	
 \end{lstlisting}
 
-\subsection{Model-View-Controller (MVC) Pattern}
+\subsection{Controller-Service-Repository Pattern}
+
+Usage of Spring Boot for the backend has helped introduce a pattern similar to a Model-View-Controller Pattern. This is done by grouping the individual components into separate packages: Controller, Service and Repository; each of which have their own roles when it comes to organising the code.
+
+The Controller is used to receive the RestAPI endpoint request. This does not contain much logic - rather it instead acts as a protective layer to separate the external endpoint and the core application logic, as well as builds the final ResponseEntity to be sent back to the frontend. 
+
+The Service is where the core application logic is kept. Given that it is not directly exposed to external sources, it is safer to handle business logic and processing requests here - as this is what will be accessing the repositories used to perform operations on the system's database.  
+
+The Repository is used as the bridge between the backend and the database. Any entities that have been saved to the repository are translated into a record for the database table that the repository represents. At the same time, these repository classes can have different types of functions designed specifically to retrieve certain pieces of data from the database, to then use in the service layer.
+
 \subsection{Component Based Architecture}
 \subsection{Client-Server Architecture}
 
