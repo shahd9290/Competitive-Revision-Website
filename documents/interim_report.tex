@@ -393,13 +393,15 @@ public AuthenticationResponseDto refreshToken(String accessToken) {
 \end{lstlisting}
 \section{Dashboard}
 
-The dashboard is the first screen that the user will see upon successfully logging in. The dashboard is separated into three sections, of which only one has information at the moment. This will greet the user, and show the amount of points which they currently have. This could change to their position in the leaderboard in the future when implemented. 
+The dashboard is the first screen that the user will see upon successfully logging in. The dashboard is separated into three sections, of which only one has information at the moment. This will greet the user, and show the amount of points which they currently have. This could change to their position in the leaderboard in the future when implemented. The section at the bottom I plan to allow students to use that to view their recent attempts, while I am not so certain about how I can use the section in the top right at this stage of development. It is likely it will be related to the competition side of the product.
 \\\\\includegraphics[scale=0.3]{dashboard1}
-All pages from here will also include a Sidebar. By default the sidebar is collapsed, however it will expand to show what each of the buttons represent in further details - when the user's cursor hovers over it. At the moment, there are only buttons to take the user to the dashboard and search page, as well as to log out of the system
+\captionof{figure}{The view that the user is presented when they log into the application, at this current stage in development.}
+All pages from here will also include a Sidebar. By default the sidebar is collapsed, however it will expand to show what each of the buttons represent in further details - when the user's cursor hovers over it. At the moment, there are only buttons to take the user to the dashboard and search page, as well as to log out of the system.
 \\\\\includegraphics[scale=0.3]{dashboard2}
+\captionof{figure}{The same view with the sidebar expanded. Each icon has text next to it showing the user where to go.}
 
 \section{Subject Search \& Topics}
-Placeholder Text.
+When the user wants to choose the subject which they would like to study, they would visit this screen at first. A request is made which will fetch all of the subjects that are suitable for the user's qualification. For every subject, they will appear in a grid to be displayed to the user.
 \\\\\includegraphics[scale=0.3]{search}
 \\\\\includegraphics[scale=0.3]{topics}
 
