@@ -212,12 +212,9 @@ The Repository is used as the bridge between the backend and the database. Any e
 
 \subsection{Component Based Architecture}
 
-Powered by React, Next.JS allows the use of components to streamline frontend development. These components encapsulate various functionalities and designs, with the benefit of being able to re-use these easily across different pages, such as for the Sidebar that appears on every page after authentication.
-\\\\\includegraphics[scale=0.3]{sidebar-outline}
-\captionof{figure}{The sidebar here is an example of a component that I have reused across the application}
+Component Based Architecture refers to the idea that a system can be developed via the use of off-the-shelf components, assembled with well defined software architecture~\cite{GPOUR_COMPONENT}. Based on React, Next.JS uses this architecture by allowing developers to make use of reusable components, that contain logic and styling specific to it. This allows for a more organised codebase, making it easier to identify where any potential issues may lie should they appear.
 
-For each page that requires the use of the sidebar, I would split them into separate constants for example. The actual page content itself would be in one constant, which is then surrounded by the SidebarMenu component to add the sidebar to the page - before being exported for rendering
-
+Given this, I have made sure to use different components within my project. A key component that will be present on majority of my webpages would be the Sidebar. By containing this into its own module it has been possible to pass the webpage content as a child component that is wrapped around by the Sidebar.
 \begin{lstlisting}[language=JavaScript, caption={The SidebarMenu represents the sidebar, while the Dashboard represents the actual page being rendered.}]
 	const Page = () => {
 		
@@ -232,8 +229,9 @@ For each page that requires the use of the sidebar, I would split them into sepa
 	
 	export default Page
 \end{lstlisting}
+\includegraphics[scale=0.3]{sidebar-outline}
+\captionof{figure}{The result of surrounding the Dashboard with the SidebarMenu component tags.}
 
-This also makes designing the frontend substantially easier - as it provides the flexibility for me to use components made freely available for public use. This is beneficial for me personally, as this project doubles as an opportunity to learn about frontend development, with usage of these components simplifying the process.
 \subsection{Client-Server Architecture}
 
 
@@ -466,6 +464,9 @@ For all subjects, topics and qualifications - it is possible to add them to the 
 \emph{Analysis And Comparision of Document-Based Databases with Relational Databases: MongoDB vs MySQL - \url{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8510719&tag=1}}\\
 \textbf{Value:} Explains the differences between ACID and BASE databases, and the pros and cons of each.
 
+\bibitem{GPOUR_COMPONENT} Gilda Pour (1998),
+\emph{Component-Based Software Development Approach: Is It the Next Silver Bullet? - \url{https://ieeexplore.ieee.org/document/711055}}\\
+\textbf{Value:} Evaluates the benefits of Component Based Software Development in detail.
 
 \end{thebibliography}
 
