@@ -210,9 +210,9 @@ The Service is where the core application logic is kept. Given that it is not di
 
 The Repository is used as the bridge between the backend and the database. Any entities that have been saved to the repository are translated into a record for the database table that the repository represents. At the same time, these repository classes can have different types of functions designed specifically to retrieve certain pieces of data from the database, to then use in the service layer.
 
-\subsection{Component Based Architecture}
+\subsection{Component Based Approach}
 
-Component Based Architecture refers to the idea that a system can be developed via the use of off-the-shelf components, assembled with well defined software architecture~\cite{GPOUR_COMPONENT}. Based on React, Next.JS uses this architecture by allowing developers to make use of reusable components, that contain logic and styling specific to it. This allows for a more organised codebase, making it easier to identify where any potential issues may lie should they appear.
+The Component Based Software Development Approach refers to the idea that a system can be developed via the use of off-the-shelf components, assembled with well defined software architecture~\cite{GPOUR_COMPONENT}. Based on React, Next.JS uses this by allowing developers to make use of reusable components, that contain logic and styling specific to it. This allows for a more organised codebase, making it easier to identify where any potential issues may lie should they appear.
 
 Given this, I have made sure to use different components within my project. A key component that will be present on majority of my webpages would be the Sidebar. By containing this into its own module it has been possible to pass the webpage content as a child component that is wrapped around by the Sidebar.
 \begin{lstlisting}[language=JavaScript, caption={The SidebarMenu represents the sidebar, while the Dashboard represents the actual page being rendered.}]
@@ -233,8 +233,6 @@ Given this, I have made sure to use different components within my project. A ke
 \captionof{figure}{The result of surrounding the Dashboard with the SidebarMenu component tags.}
 
 \subsection{Client-Server Architecture}
-
-
 
 \chapter{Current Implementation}
 \section{User Registration}
