@@ -32,7 +32,7 @@
 }
 
 \lstdefinelanguage{Java}{
-	keywords={public, private, new, true, false, catch, throws, return, null, const, switch, var, if, in, while, do, else, case, break, try, alert},
+	keywords={public, private, new, true, false, catch, throws, return, null, switch, var, if, in, while, do, else, case, break, try, alert},
 	keywordstyle=\color{blue}\bfseries,
 	ndkeywords={class, export, boolean, throw, implements, import, this},
 	ndkeywordstyle=\color{darkgray}\bfseries,
@@ -175,29 +175,29 @@ Many design patterns have been considered throughout the development of the prod
 Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through Autowiring. In this project however, I am using the Lombok plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
 
 \begin{lstlisting}[language=java, caption={An example of a Spring Boot Component with the Lombok Plugin.}]
-// UserProfileController.java
-@RestController
-@RequestMapping("/api/user")
-@RequiredArgsConstructor
-public class UserProfileController {
-	private final UserService userService;
-	...
-}
+	// UserProfileController.java
+	@RestController
+	@RequestMapping("/api/user")
+	@RequiredArgsConstructor
+	public class UserProfileController {
+		private final UserService userService;
+		...
+	}
 \end{lstlisting}
 
 In the provided example, the use of the @RequiredArgsConstructor annotation is what generates the constructor for this class. As the controller requires use of a UserService object, Spring will instantiate that and pass it through this constructor to be used for any requests made via this endpoint. This way - I would not be required to manually autowire each of the components that make up a class throughout my backend, in comparison to a regular Spring class such as that provided below.
 
 \begin{lstlisting}[language=Java, caption={An example of a Spring Boot Component without the Lombok Plugin. Use of the plugin prevents the need for boilerplate code such as this.}]
-@Service
-public class AssetService {
-	
-	private final AssetRepository assetsRepo;
-	
-	@Autowired
-	public AssetService(AssetRepository assetsRepo) {
-		this.assetsRepo = assetsRepo;
+	@Service
+	public class AssetService {
+		
+		private final AssetRepository assetsRepo;
+		
+		@Autowired
+		public AssetService(AssetRepository assetsRepo) {
+			this.assetsRepo = assetsRepo;
+		}
 	}
-	
 \end{lstlisting}
 
 \subsection{Controller-Service-Repository Pattern}
@@ -211,7 +211,32 @@ The Service is where the core application logic is kept. Given that it is not di
 The Repository is used as the bridge between the backend and the database. Any entities that have been saved to the repository are translated into a record for the database table that the repository represents. At the same time, these repository classes can have different types of functions designed specifically to retrieve certain pieces of data from the database, to then use in the service layer.
 
 \subsection{Component Based Architecture}
+
+Powered by React, Next.JS allows the use of components to streamline frontend development. These components encapsulate various functionalities and designs, with the benefit of being able to re-use these easily across different pages, such as for the Sidebar that appears on every page after authentication.
+\\\\\includegraphics[scale=0.3]{sidebar-outline}
+\captionof{figure}{The sidebar here is an example of a component that I have reused across the application}
+
+For each page that requires the use of the sidebar, I would split them into separate constants for example. The actual page content itself would be in one constant, which is then surrounded by the SidebarMenu component to add the sidebar to the page - before being exported for rendering
+
+\begin{lstlisting}[language=JavaScript, caption={The SidebarMenu represents the sidebar, while the Dashboard represents the actual page being rendered.}]
+	const Page = () => {
+		
+		return (
+			<div>
+				<SidebarMenu>
+					<Dashboard/>
+				</SidebarMenu>
+			</div>
+		)
+	}
+	
+	export default Page
+\end{lstlisting}
+
+This also makes designing the frontend substantially easier - as it provides the flexibility for me to use components made freely available for public use. This is beneficial for me personally, as this project doubles as an opportunity to learn about frontend development, with usage of these components simplifying the process.
 \subsection{Client-Server Architecture}
+
+
 
 \chapter{Current Implementation}
 \section{User Registration}
@@ -225,57 +250,51 @@ When submitted, the frontend will check to make sure that the email and email co
 
 \newpage % for formatting
 \begin{lstlisting}[language=JavaScript, caption={An excerpt from the frontend code where the conditions are checked for the alerts to be thrown.}]
-// create/page.tsx
-if (email !== emailConfirm) {
-	alert("Please ensure you have entered the correct email address in both sections!");
-}
-else if (qualificationInput === "") {
-	alert("Please select a qualification");
-}
+	// create/page.tsx
+	if (email !== emailConfirm) {
+		alert("Please ensure you have entered the correct email address in both sections!");
+	}
+	else if (qualificationInput === "") {
+		alert("Please select a qualification");
+	}
 \end{lstlisting}
 
 When both of these are satisfied, the frontend will collect the variables together into a JSON body to be submitted with the API POST request to the backend. The frontend then waits for a response from the backend before redirecting the user to the homepage. If any issues were to occur at this stage, an exception would be caught and stop the user from being redirected - instead presenting them with an alert informing them of the error.
 
 \begin{lstlisting}[language=JavaScript, caption={The variables are put together into a JSON array, and are then supplied to axios to be send in a request to the backend. Any exceptions that are thrown are caught and handled appropriately.}]
-// create/page.tsx
-const payload = {
-	"username": username, "email": email, "password": password, "qualification": qualificationInput
-}
-
-try {
-	const response = await axios.post("http://localhost:8080/api/auth/register", payload);
-	alert("Account created successfully.");
-	router.push('/login')
-	
-} catch (error: any) {
-	if (error.response && error.response.data) {
-		alert(error.response.data || "An error occurred during registration.");
-	} else {
-		alert("Unable to connect to server.");
+	// create/page.tsx
+	const payload = {
+		"username": username, "email": email, "password": password, "qualification": qualificationInput
 	}
-}
-
+	
+	try {
+		const response = await axios.post("http://localhost:8080/api/auth/register", payload);
+		alert("Account created successfully.");
+		router.push('/login')
+		
+	}
+	// Error Handling 
 \end{lstlisting}
 
 \begin{lstlisting}[language=Java, caption={An except from the backend logic creating a User object and saving it to the database.}]
-// RegistrationService.java
-@Transactional
-public User registerUser(RegistrationRequestDto request) throws QualificationException {
-	if (userRepository.existsByUsername(request.username()) ||
-	userRepository.existsByEmail(request.email())) {
+	// RegistrationService.java
+	@Transactional
+	public User registerUser(RegistrationRequestDto request) throws QualificationException {
+		if (userRepository.existsByUsername(request.username()) ||
+		userRepository.existsByEmail(request.email())) {
+			
+			throw new ValidationException(
+			"Username or Email already exists");
+		}
 		
-		throw new ValidationException(
-		"Username or Email already exists");
+		User user = new User();
+		user.setUsername(request.username());
+		user.setEmail(request.email());
+		user.setPassword(passwordEncoder.encode(request.password()));
+		user.setQualificationId(qualificationService.getIdByName(request.qualification()));
+		
+		return userRepository.save(user);
 	}
-	
-	User user = new User();
-	user.setUsername(request.username());
-	user.setEmail(request.email());
-	user.setPassword(passwordEncoder.encode(request.password()));
-	user.setQualificationId(qualificationService.getIdByName(request.qualification()));
-	
-	return userRepository.save(user);
-}
 \end{lstlisting}
 
 \section{User Login}
@@ -285,59 +304,49 @@ Once the user has created their account, they will be redirected to the login pa
 When submitted, the username and password are packaged into a JSON body to be sent via an axios request to the backend. The user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window.
 
 \begin{lstlisting}[language=JavaScript, caption={The username and password are added to a payload, and sent as the request body to the backend}]
-// login/page.tsx
-const login = async (event: { preventDefault: () => void; }) => {
-	event.preventDefault();
-	
-	const payload = {
-		"username": username, "password": password
-	}
-	
-	try {
-		const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials: true});
-		router.push('/dashboard')
-		
-	} catch (error: any) {
-		if (error.response && error.response.data) {
-			alert(error.response.data || "An error occurred during logging in.");
-		} else {
-			alert("Unable to connect to server.");
+	// login/page.tsx
+	const login = async (event: { preventDefault: () => void; }) => {
+		event.preventDefault();
+		const payload = {
+			"username": username, "password": password
 		}
-		
+		try {
+			const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials: true});
+			router.push('/dashboard')
+		}
+		// Error Handling
 	}
-}
 \end{lstlisting}
 
 \begin{lstlisting}[language=Java, caption={The controller code showing the steps required to authenticate the user.}]
-// AuthController.java
-@PostMapping("/login")
-public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
-	try {
-		AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
-		ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
-		ResponseCookie cookieExpire = cookieService.createTimerCookie();
-		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
-	} catch (Exception e) {
-		return ResponseEntity.badRequest().body("Username or password is incorrect.");
+	// AuthController.java
+	@PostMapping("/login")
+	public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
+		try {
+			AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
+			ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
+			ResponseCookie cookieExpire = cookieService.createTimerCookie();
+			return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
+		} 
+		// Error Handling
 	}
-}
 \end{lstlisting}
 
 Both cookies have been designed to be as secure as possible.This includes setting the HTTP-Only and Secure flags to true, so that they are not detected by any external JavaScript - as well as ensuring that the sameSite flag is set to Strict. This way these cookies can only be used within the application itself, and not anywhere else.
 \\\\\includegraphics[scale=0.725]{cookies}
 \captionof{figure}{Example cookies as they appear in browser's cookies tab.}
 \begin{lstlisting}[language=Java, caption={The code used to create the token cookie. For the tokenExpiry the only difference would be the value of the cookie instead.}]
-// CookieService.java
-public ResponseCookie createTokenCookie(String token) {
-	
-	return ResponseCookie.from("token", token)
-	.httpOnly(true)
-	.sameSite("Strict")
-	.secure(true)
-	.path("/")
-	.maxAge(ttl.getSeconds())
-	.build();
-}
+	// CookieService.java
+	public ResponseCookie createTokenCookie(String token) {
+		
+		return ResponseCookie.from("token", token)
+		.httpOnly(true)
+		.sameSite("Strict")
+		.secure(true)
+		.path("/")
+		.maxAge(ttl.getSeconds())
+		.build();
+	}
 
 \end{lstlisting}
 \section{Refresh Tokens}
@@ -346,13 +355,8 @@ The tokens used to verify the user's authenticity have been designed to expire a
 
 The middleware will take the tokenExpiry cookie that was previously generated when the user logs in, as shown in Section 3.2. This cookie contains a timestamp that represents two minutes before the token cookie itself is due to expire. The middleware will check to see if the time is within those two minutes, and if that is the case it will send an API request to generate a new token. The token is generated and sent back to the middleware, where it's converted to a cookie and then sent with the original request response to the frontend.
 
-\begin{lstlisting}[language=JavaScript, caption={First the token is checked to see if it is valid, which will be true if the tokenExpiry value is greater than the current time.}]
-function checkExpiration(expiry: string | undefined) {
-	const now = Math.floor(Date.now() / 1000);
-	return (Number(expiry) < now)
-}
-\end{lstlisting}
 \begin{lstlisting}[language=JavaScript, caption={If we have entered that expiry window, then the request is sent for a new token. The values are then unpacked and converted to cookies for the next response to the frontend.}]
+	// middleware.ts
 	const isExpired = checkExpiration(tokenExpiry);
 	// time is up?
 	if (isExpired) {
@@ -379,17 +383,17 @@ function checkExpiration(expiry: string | undefined) {
 \end{lstlisting}
 In the backend, the API request will gets the user from the database and check to see if they have a valid refresh token. It is unlikely that they won't have one - given that a valid one would generate when they log in should one be expired - however if this is not the case then they would have a new one generated. After this, with the refresh token confirmed - a new JWT is generated using the user's username as the payload.
 \begin{lstlisting}[language=Java, caption={The backend checks if the token is valid, before generating a new JWT}]
-// RefreshTokenService.java
-public AuthenticationResponseDto refreshToken(String accessToken) {
-	User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
-	// Checks expiry data is valid.
-	if (hasInvalidRefreshToken(user))
-	// No token found? Somehow? Brand new one then
-	createToken(user);
-	
-	final var newAccessToken = jwtService.generateToken(user.getUsername());
-	return new AuthenticationResponseDto(newAccessToken);
-}
+	// RefreshTokenService.java
+	public AuthenticationResponseDto refreshToken(String accessToken) {
+		User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
+		// Checks expiry data is valid.
+		if (hasInvalidRefreshToken(user))
+		// No token found? Somehow? Brand new one then
+		createToken(user);
+		
+		final var newAccessToken = jwtService.generateToken(user.getUsername());
+		return new AuthenticationResponseDto(newAccessToken);
+	}
 \end{lstlisting}
 \section{Dashboard}
 
@@ -403,7 +407,13 @@ All pages from here will also include a Sidebar. By default the sidebar is colla
 \section{Subject Search \& Topics}
 When the user wants to choose the subject which they would like to study, they would visit this screen at first. A request is made which will fetch all of the subjects that are suitable for the user's qualification. For every subject, they will appear in a grid to be displayed to the user.
 \\\\\includegraphics[scale=0.3]{search}
+\captionof{figure}{How the subjects appear to the user on the frontend}
+
+Each subject will have a separate list of topics compared to others. For any subjects that may exist for more than one qualification - the topics shown will only be relevant to the qualifcation that the user may have. These topics will appear in a dialogue modal box as a list for the user to select. At this point in development - there are no further interactions, however the plan is that the user can select a topic from this list and will be redirected to the question page, which will consist of a random selection of questions with random values. 
 \\\\\includegraphics[scale=0.3]{topics}
+\captionof{figure}{How the topics appear to the user on the frontend after selecting a subject}
+
+For all subjects, topics and qualifications - it is possible to add them to the system via the use of a dedicated endpoint. At the moment I have not developed a frontend counterpart to them, however this will be a feature for the admin profiles in the future. 
 
 \chapter{Software Engineering}
 
