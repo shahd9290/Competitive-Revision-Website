@@ -342,19 +342,66 @@ public ResponseCookie createTokenCookie(String token) {
 \end{lstlisting}
 \section{Refresh Tokens}
 
-The tokens used to verify the user's authenticity have been designed to expire after 15 minutes, for situations where the token is stolen by an attacker.
+The tokens used to verify the user's authenticity have been designed to expire after 15 minutes, for situations where the token is stolen by an attacker. However, users will want to utilise the system for a period longer than 15 minutes - so to accommodate I have introduced a Refresh Token system. This I have achieved with the introduction of middleware. 
 
+The middleware will take the tokenExpiry cookie that was previously generated when the user logs in, as shown in Section 3.2. This cookie contains a timestamp that represents two minutes before the token cookie itself is due to expire. The middleware will check to see if the time is within those two minutes, and if that is the case it will send an API request to generate a new token. The token is generated and sent back to the middleware, where it's converted to a cookie and then sent with the original request response to the frontend.
+
+\begin{lstlisting}[language=JavaScript, caption={First the token is checked to see if it is valid, which will be true if the tokenExpiry value is greater than the current time.}]
+function checkExpiration(expiry: string | undefined) {
+	const now = Math.floor(Date.now() / 1000);
+	return (Number(expiry) < now)
+}
+\end{lstlisting}
+\begin{lstlisting}[language=JavaScript, caption={If we have entered that expiry window, then the request is sent for a new token. The values are then unpacked and converted to cookies for the next response to the frontend.}]
+	const isExpired = checkExpiration(tokenExpiry);
+	// time is up?
+	if (isExpired) {
+		console.log("Token Expired!")
+		const token = req.cookies.get("token")?.value;
+		await axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
+			headers: {
+				'Cookie': `token=${token}`,
+				
+			},
+			withCredentials: true}).then((resp) => {
+			// Apply new values to the cookies
+			const newToken = resp.data.token;
+			const newExpiry = resp.data.tokenExpiry;
+			// Calculate cookie expiry time
+			const cookieExpiry = Number(newExpiry) + 120;
+			const newExpiryDate = new Date(0).setUTCSeconds(cookieExpiry);
+			// Apply to new cookies
+			response.cookies.set("token", newToken, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
+			response.cookies.set("tokenExpiry", newExpiry, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
+			console.log("Token Refreshed!");
+		});
+	}
+\end{lstlisting}
+In the backend, the API request will gets the user from the database and check to see if they have a valid refresh token. It is unlikely that they won't have one - given that a valid one would generate when they log in should one be expired - however if this is not the case then they would have a new one generated. After this, with the refresh token confirmed - a new JWT is generated using the user's username as the payload.
+\begin{lstlisting}[language=Java, caption={The backend checks if the token is valid, before generating a new JWT}]
+// RefreshTokenService.java
+public AuthenticationResponseDto refreshToken(String accessToken) {
+	User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
+	// Checks expiry data is valid.
+	if (hasInvalidRefreshToken(user))
+	// No token found? Somehow? Brand new one then
+	createToken(user);
+	
+	final var newAccessToken = jwtService.generateToken(user.getUsername());
+	return new AuthenticationResponseDto(newAccessToken);
+}
+\end{lstlisting}
 \section{Dashboard}
-Placeholder Text.
+
+The dashboard is the first screen that the user will see upon successfully logging in. The dashboard is separated into three sections, of which only one has information at the moment. This will greet the user, and show the amount of points which they currently have. This could change to their position in the leaderboard in the future when implemented. 
 \\\\\includegraphics[scale=0.3]{dashboard1}
+All pages from here will also include a Sidebar. By default the sidebar is collapsed, however it will expand to show what each of the buttons represent in further details - when the user's cursor hovers over it. At the moment, there are only buttons to take the user to the dashboard and search page, as well as to log out of the system
 \\\\\includegraphics[scale=0.3]{dashboard2}
 
 \section{Subject Search \& Topics}
 Placeholder Text.
 \\\\\includegraphics[scale=0.3]{search}
 \\\\\includegraphics[scale=0.3]{topics}
-
-\section {Middleware}
 
 \chapter{Software Engineering}
 
