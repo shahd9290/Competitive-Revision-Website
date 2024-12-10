@@ -286,8 +286,21 @@ This is not the only point of concern when it comes to security. It is also cruc
 
 \subsection{Privacy}
 
+The United Kingdom has a General Data Protection Regulation Act that has been imposed to set out the legislation behind usage of personal data in a variety of applications. The following principles are set out in the act~\cite{GDPR}:
 
+\begin{itemize}[label=-]
+	\item Lawfulness, Fairness and Transparency - Refers to the idea that businesses and organisations must be open about how they use data, and that it should only be used for necessary or legitimate reasons.
+	\item Purpose Limitation - Should not be used more than it has been collected for.
+	\item Data Minimisation - Should only be limited to what is required for the intended purpose
+	\item Accuracy - Should be kept accurate and up to date
+	\item Storage Limitation - Should be stored for as long as have been required
+	\item Integrity and Confidentiality - Data must be kept secure, and protected against unauthorized misuse or amendments.
+	\item Accountability - Organisations are required to comply with the other principles of the act.
+\end{itemize}
 
+In this application, the user is required to enter their username, password, email and qualification when they sign up to the service. The qualification is required for the system, so the user can see information that is relevant to their studies. The username and password are required for authentication, while the email is used for verification purposes - though this has not been implemented into the system as of yet. There are no further uses for the email at this time, and there are currently no concrete plans for this.\\
+
+The password, however, is required to be kept securely. This is achieved through the use of Bcrypt Hashing. Created in 1999, Bcrypt has become a widely adopted hashing algorithm to encode passwords, and keep them protected without needed to decode them. To authenticate, the password input is encoded, and the hashes are then compared against each other before authentication is granted to the user. 
 \chapter{Current Implementation}
 \section{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
@@ -531,6 +544,9 @@ For all subjects, topics and qualifications - it is possible to add them to the 
 
 \bibitem{SQL_PARAM} Mkyong (2010),
 \emph{Hibernate Parameter Binding Examples - \url{https://mkyong.com/hibernate/hibernate-parameter-binding-examples/}}
+
+\bibitem{GDPR} Data Protection Commission (2019),
+\emph{Quick Guide to the Principles of Data Protection - \url{https://www.dataprotection.ie/sites/default/files/uploads/2019-11/Guidance\%20on\%20the\%20Principles\%20of\%20Data\%20Protection_Oct19.pdf}}
 
 \end{thebibliography}
 
