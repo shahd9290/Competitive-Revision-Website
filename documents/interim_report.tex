@@ -275,6 +275,19 @@ The ResponseEntity object would then contain the necessary data that was request
 
 \subsection{Security Detail}
 
+Being a web application that handles a user's private data, is is imperative that I secure the product, by minimising possible weaknesses that can be exploited. Out of all software available, the web browser is one that will run code provided from untrusted sources whenever presented\cite{WEB_SEC} despite being used to submit and receive private information across the world. With that in mind, it was important that I research adequate methods to protect the JSON Web Token that it used to prove the user's authenticity.\\
+
+There are many ways that people may choose to store JWTs, be it in memory or even in the browser's session storage. However, research has shown that these are not as viable compared to the use of cookies. Storing the token in memory leaves the risk of it disappearing when the browser is closed or reset. On the other hand, storing it in Session Storage leaves the token vulnerable to Cross-Site Scripting (XSS) attacks. With cookies, by settings the HTTPOnly, Secure and SameSite flags to be true - there is added protection which prevents these cookies from ebing identified by external JavaScript, protecting them from XSS attacks~\cite{JWT}.
+
+\includegraphics[scale=0.465]{cookies-outline}
+\captionof{figure}{The HttpOnly and Secure flags are set to true, and the SameSite flag has been set to "Strict"}
+
+This is not the only point of concern when it comes to security. It is also crucial to sanitise inputs as a means of removing any possible control characters - so as to not inject any malicious code into the system. This is a benefit of React, and therefore Next.JS, as all inputs are sanitised before being used within the frontend application. This is achieved by converting everything to a string before being rendered or used, adding further prevention to XSS attacks~\cite{XSS_REACT}. Where SQL injections are concerned, there are two types of queries that have been written for the backend. One type refers to the default functions that come with a JpaRepository, representing standard queries - while the other type relates to custom queries that I have had to write for the system. These custom queries are written with the use of named parameters, reducing the user's input only to valid arguments to complement them~\cite{SQL_PARAM}. The query is therefore built through the code, instead of being completed by the code.
+
+\subsection{Privacy}
+
+
+
 \chapter{Current Implementation}
 \section{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
@@ -506,6 +519,19 @@ For all subjects, topics and qualifications - it is possible to add them to the 
 
 \bibitem{API} Kinza Yasar (2024),
 \emph{What is an API endpoint? - \url{https://www.techtarget.com/searchapparchitecture/definition/API-endpoint}}
+
+\bibitem{WEB_SEC} Malcolm McDonald (2024),
+\emph{Grokking Web Application Security - \url{https://learning.oreilly.com/library/view/grokking-web-application/9781633438262/OEBPS/Text/06.html}}
+
+\bibitem{JWT} Omkar Hiremath (2024),
+\emph{How To Properly Secure Your JWTs - \url{https://www.softwaresecured.com/post/how-to-properly-secure-your-jwts}}
+
+\bibitem{XSS_REACT} React.JS (2024),
+\emph{Introducing JSX - \url{https://legacy.reactjs.org/docs/introducing-jsx.html}}
+
+\bibitem{SQL_PARAM} Mkyong (2010),
+\emph{Hibernate Parameter Binding Examples - \url{https://mkyong.com/hibernate/hibernate-parameter-binding-examples/}}
+
 \end{thebibliography}
 
 \chapter*{Appendix}
