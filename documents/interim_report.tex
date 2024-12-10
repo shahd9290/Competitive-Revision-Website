@@ -241,6 +241,7 @@ Communication is facilitated through the use of API endpoints. These endpoints a
 An example of how this is setup in my application can be with how we view the list of qualifications that the user sees when they sign up to the application. When the create page is loaded, an API request is sent to the backend to fetch all of the qualification, the result of which will be stored as a constant to be used in the registration form itself.
 
 \begin{lstlisting}[language=JavaScript, caption={When the page is loaded, axios sends an API request to get all the qualifications.}]
+	// create/page.tsx
 	useEffect(() => {
 		const quals = async () => {
 			const response = await axios.get("http://localhost:8080/api/qualification/get-all")
@@ -256,6 +257,7 @@ An example of how this is setup in my application can be with how we view the li
 \verb|localhost:8080| refers to the Spring Boot backend, while \verb|/api/qualification/get-all| refers to the specific endpoint mapped to the function that returns all of the qualifications in the system.
 
 \begin{lstlisting}[language=Java, caption={The other side of the endpoint. The mapping /api/qualification points to the class, while /get-all points to the function}]
+	// QualificationController.java
 	...
 	@RequestMapping("/api/qualification")
 	public class QualificationController {
