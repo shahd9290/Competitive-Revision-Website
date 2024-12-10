@@ -236,7 +236,42 @@ Given this, I have made sure to use different components within my project. A ke
 
 Client/Server Architecture relates to the idea that two separate applications communicate with each other as part of a wider product. The Client would ask for and receive services that the Server would provide~\cite{CSA}. This is the case in my product, wherein the backend is responsible for managing any information that is to be stored and retrieved from the database, and the frontend requests this for for the end user to interact with.\\
 
-Communication is facilitated through the use of API endpoints. These endpoints are URLs within a web application which point towards the different functionalities that an application provides. On the server side of the connection, the server would process the information required, whereas the requests for each function are called on the client side~\cite{API}.
+Communication is facilitated through the use of API endpoints. These endpoints are URLs within a web application which point towards the different functionalities that an application provides. On the server side of the connection, the server would process the information required, whereas the requests for each function are called on the client side~\cite{API}.\\
+
+An example of how this is setup in my application can be with how we view the list of qualifications that the user sees when they sign up to the application. When the create page is loaded, an API request is sent to the backend to fetch all of the qualification, the result of which will be stored as a constant to be used in the registration form itself.
+
+\begin{lstlisting}[language=JavaScript, caption={When the page is loaded, axios sends an API request to get all the qualifications.}]
+	useEffect(() => {
+		const quals = async () => {
+			const response = await axios.get("http://localhost:8080/api/qualification/get-all")
+			return response.data;
+		};
+		
+		quals().then(data => {
+			setQualifications(data);
+		})
+	}, [])
+\end{lstlisting}
+
+\verb|localhost:8080| refers to the Spring Boot backend, while \verb|/api/qualification/get-all| refers to the specific endpoint mapped to the function that returns all of the qualifications in the system.
+
+\begin{lstlisting}[language=Java, caption={The other side of the endpoint. The mapping /api/qualification points to the class, while /get-all points to the function}]
+	...
+	@RequestMapping("/api/qualification")
+	public class QualificationController {
+		
+		private final QualificationService qualificationService;
+		...
+		@GetMapping("/get-all")
+		public ResponseEntity<List<Qualification>> getAllQualifications() {
+			return ResponseEntity.ok(qualificationService.getAllQualifications());
+		}
+	}
+\end{lstlisting}
+
+The ResponseEntity object would then contain the necessary data that was requested, and is then returned to the frontend's calling function. In this case, it contains all of the qualifications that were requested for the frontend to receive.
+
+\subsection{Security Detail}
 
 \chapter{Current Implementation}
 \section{User Registration}
