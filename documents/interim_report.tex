@@ -166,23 +166,35 @@ For the development of this project, I will follow a full stack development appr
 
 In order to utilise the World Wide Web that he had invented in 1990, Tim Berners-Lee had created WorldWideWeb, later Nexus~\cite{NEXUS}, the first web browser - which served as an inspiration for many subsequent browsers. These browsers were designed to load HyperText Markup Language (HTML) files, which later evolved into different web pages for consumer use as the Web had developed. Combined with Cascading Style Sheets (CSS) and JavaScript, they form the base framework used to create webpages ever since the dawn of the internet - with HTML files serving as the base, CSS files beautifying the styles, and JavaScript adding functionality to the webpages.
 
-While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultiamtely, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: React, Angular and Vue.js, though there are many others written in different programming languages.
+While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: React, Angular and Vue.js, though there are many others written in different programming languages.
 
 When it comes to the differences between the three of them, there are some notable differences. For starters, Angular is known to have a steeper learning curve - given that it uses TypeScript as opposed to JavaScript, along with the extensive features that it provides. React has an easier learning curve as it revolves around the idea of reusable components, while Vue is the easiest to learn - given that the syntax is similar to HTML. Alongside this, Vue and React are best used for smaller applications, while Angular is the first choice for large enterprise applications~\cite{FRAMEWORKS_COMPARE}. 
 
-However, for the frontend of this project I will be using a combination of Next.JS with TailwindCSS. Next.js is based on the React framework, and is designed to overcome React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS} such as better Search-Engine Optimisation and Routing.  These additional features include both of which would be required for the web application to gain traction in the future.
+However, for the frontend of this project I will be using a combination of Next.JS with TailwindCSS. Next.js is based on the React framework, and is designed to overcome React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS} such as better Search-Engine Optimisation and Routing, both of which would be required for the web application to gain traction in the future.
 
 \subsection {Backend Technologies}
 
-For the backend, two of the most popular frameworks are Spring Boot and Node.JS. I have chosen to use the former, given that it comes with powerful security measures and a larger support community - allowing for ease of development during this project~\cite{SPRING}. Furthermore, the benefit of Spring Boot will be that it will allow for seamless integration with the database system required - allowing me to focus on developing the endpoints required for the product. With regards to the database, I have opted to use an SQL based database - specifically PostgreSQL - as opposed to a NoSQL approach; known for using ACID properties over BASE allowing for improved data integrity~\cite{SQL}, required at this stage for the application.
+Similarly to the frontend, there are a number of backend frameworks in existence that are widely used for different web applications. These frameworks are designed to act as the core of any client-server based system, as they process majority of the application logic, and facilitate communication with database systems. Many of these frameworks are widely used, including - but not limited to Node.js and Spring Boot.
 
-\section{Architectural Paradigms \& Design Patterns}
+Node.js is based on JavaScript, and is known for its high performance and scalability. It is an event-drive runtime environment designed to build scalable network applications, where callbacks are triggered for each connection. Unfortunately, these features can also be seen as disadvantages of the system, wherein the code for callbacks can be increasingly difficult to manage in complex applications - while the event-driven architecture won't be beneficial for tasks that may be more CPU-intensive~\cite{BACKEND_FRAMEWORKS_BLOG}~\cite{BACKEND_FRAMEWORKS_REPORT}~\cite{SPRING}.
+
+Spring Boot is part of the Spring framework, and is known for its security and integration capabilities. It uses a three-tiered architecture which include layers acting as Controllers, Services and Data Repositories - forming microservices as part of the overall backend system. Compared with Node.js, Spring Boot would be more preferable for security with the many libraries that it uses for it, as well as the fact that it has a larger support community - allowing for ease of development during this project~\cite{SPRING}. Furthermore, the benefit of Spring Boot will be that it will allow for seamless integration with the database system required - allowing me to focus on developing the endpoints required for the product. As a result I have chosen to use this framework for backend development.
+
+\subsection {Database Management Systems}
+
+There are two major types of databases that are widely used across different applications, SQL and NoSQL. SQL (Structured Query Languages) have been the most popular form of storing data since the beginning of web application history, and this is largely due to the durability factor. This stems from the ACID properties that relational databases follow - which ensures that database transactions are full, and that data is kept intact and consistent. NoSQL databases on the other hand do not follow the idea of having a relational structure. These are typically customized to fit the needs of a particular application, and it is unlikely that one example of a NoSQL database can be used for many different types of applications~\cite{SQL_COMPARE}.
+
+The biggest difference that NoSQL databases have in common is the use of BASE properties over ACID. BASE (Basically Available, Soft state with Eventual consistency) has been a critical discussion point when the two types of databases have been compared in the past - and are typically used in applications where inconsistent data can be tolerated~\cite{SQL}. This is not the case for my application - especially given that user details are required to be stored securely, so it is imperative that I make use of a database system that follows ACID properties.
+
+There are still many databases to choose from that follow ACID properties. Two of the biggest database management systems include PostgreSQL and MySQL - which appear very similar on the surface however there are some key differences which make them stand out from each other. The biggest is that PostgreSQL is an Object-Relational Database Management System, providing the facilities of a standard Relational DBMS with additional Object Oriented concepts. This is beneficial for integration with Spring Boot, as it allows me to define entities that can be translated to database tables - allowing me to manipulate the system via the use of the Repository level in the backend. As a result, I have opted to use PostgreSQL to serve as my database.
+
+\newpage\section{Architectural Paradigms \& Design Patterns}
 
 % A report on Web development architectural paradigms and applicable design patterns, including an initial discussion of security, privacy and key-operational aspects and considerations (e.g. cloud deployments and DevOps aspects)
 
 Many design patterns have been considered throughout the development of the product thus far. This section will break down how and why some have been used in this project.
 \subsection{Dependency Injection}
-Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through Autowiring. In this project however, I am using the Lombok plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
+Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through autowiring. In this project however, I am using the Lombok plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
 
 \begin{lstlisting}[language=java, caption={An example of a Spring Boot Component with the Lombok Plugin.}]
 	// UserProfileController.java
@@ -482,7 +494,7 @@ When the user wants to choose the subject which they would like to study, they w
 \\\\\includegraphics[scale=0.3]{search}
 \captionof{figure}{How the subjects appear to the user on the frontend}
 
-Each subject will have a separate list of topics compared to others. For any subjects that may exist for more than one qualification - the topics shown will only be relevant to the qualifcation that the user may have. These topics will appear in a dialogue modal box as a list for the user to select. At this point in development - there are no further interactions, however the plan is that the user can select a topic from this list and will be redirected to the question page, which will consist of a random selection of questions with random values. 
+Each subject will have a separate list of topics compared to others. For any subjects that may exist for more than one qualification - the topics shown will only be relevant to the qualification that the user may have. These topics will appear in a dialogue modal box as a list for the user to select. At this point in development - there are no further interactions, however the plan is that the user can select a topic from this list and will be redirected to the question page, which will consist of a random selection of questions with random values. 
 \\\\\includegraphics[scale=0.3]{topics}
 \captionof{figure}{How the topics appear to the user on the frontend after selecting a subject}
 
@@ -535,9 +547,17 @@ For all subjects, topics and qualifications - it is possible to add them to the 
 \bibitem{DB_NEXTJS} Dinh Bui (2023),
 \emph{Next.JS For Front-End and Compatible Backend Solutions - \url{https://www.theseus.fi/bitstream/handle/10024/800535/Bui_Dinh.pdf?sequence=2}}
 
+\bibitem{BACKEND_FRAMEWORKS_BLOG} Kirill Karakhainko (2023),
+\emph{What are the best backend development frameworks? The ultimate comparison - \url{https://techwings.com/blog/backend-frameworks-ultimate-comparison}}
+
+\bibitem{BACKEND_FRAMEWORKS_REPORT} Jyoti Shetty, Deepika Dash, Akshaya Kumar Joise, Guruprasad C (2020),
+\emph{Review Paper on Web Frameworks, Databases and Web Stacks - \url{https://www.irjet.net/archives/V7/i4/IRJET-V7I41078.pdf}}
+
 \bibitem{SPRING} Yashsonker (@yashsonker1998) (2024),
 \emph{SpringBoot vs Node.js: Which Backend Framework Should You Learn in 2024? - \url{https://medium.com/@yashsonker1998/springboot-vs-node-js-which-backend-framework-should-you-learn-in-2024-1ed9f643a5d0}}
 
+\bibitem{SQL_COMPARE} Michael Gunnulfsen (2013),
+\emph{Scalable and Efficient Web Application Architectures : Thin-clients and SQL vs. Thick-clients and NoSQL - \url{https://www.duo.uio.no/handle/10852/37423}}
 
 \bibitem{SQL} Raif Deari, Xhemal Zenuni, Jaumin Ajdari, Florije Ismaili, Bujar Raufi (2018),
 \emph{Analysis And Comparision of Document-Based Databases with Relational Databases: MongoDB vs MySQL - \url{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8510719&tag=1}}
