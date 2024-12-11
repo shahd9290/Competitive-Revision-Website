@@ -507,14 +507,73 @@ There are many different approaches when it comes to Software Development. The W
 
 Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
 
-As a result, I have chosen to develop this application by following a combination of the Agile and Incremental Approaches. The Incremental Approach allows me to focus on developing one feature at a time - ensuring that it's working to the fullest before I move my focus onto the next feature in sequence. The Agile Approach here relates to the flexibility that I am giving myself; there is no dedicated client for this product, so I am able to develop features at my own pace and alternate between different features as I wish to. At the same time, I am then able to revisit features if I am required to make any additions following its completion - given the ongoing flexibility in requirements.
+As a result, I have chosen to develop this application by following a combination of the Agile and Incremental Approaches. The Incremental Approach allows me to focus on developing one feature at a time - ensuring that it's working to the fullest before I move my focus onto the next feature in sequence. The Agile Approach here relates to the flexibility that I am giving myself; there is no dedicated client for this product, so I am able to develop features at my own pace and alternate between different features as I wish to. At the same time, I am then able to revisit features if I am required to make any additions following its completion - given the ongoing flexibility in requirements. This can be referred to as similar vertical slicing - wherein the application is developed component by component - and ultimately expands from these components as a dependency.
 
 \section{Requirements Analysis}
 
+It is important to carry out a requirements analysis at the start of product development in order to gain an idea of the features which are to be developed. By following a vertical slicing approach, these requirements are constantly developing as the product is developed. Despite that, the original concept for this project stemmed from a design I had made several months ago for the question page, which contained a placeholder for a question image followed by four possible answers. 
 
-
+\includegraphics[scale=0.5]{question-concept}
 \section{UML Diagrams}
 \section{Testing}
+
+Prior to submission, the project has been thoroughly tested to ensure that all components are working as they should be in order to achieve the desired outcomes. For the backend, this is carried out using the MockMvc library - which sends mock REST API requests to the backend, and then checks whether the output is as expected.
+
+\begin{lstlisting}[language=Java, caption={A payload is made with the information that is to be sent to the backend, then the test simulates an API request to the Auth Controller. It checks to see if the status returns is OK (200), and that it contains the string "User logged in successfully" in order for it to pass.}]
+	// AuthControllerTest.java
+	@Test
+	public void loginSuccess() throws Exception {
+		payload = new HashMap<>();
+		payload.put("username", "user");
+		payload.put("password", "password");
+		
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+			.header("Authorization", "Bearer " + token)
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(payload)))
+		.andExpect(status().isOk())
+		.andExpect(content().string("User logged in successfully"));
+	}
+\end{lstlisting}
+
+Having applied these tests throughout the backend, the resultant coverages comes out to be 91\%. Some branches were not able to be tested as they cannot be tested directly - while others, I have not been able to write the tests for as of yet. The latter will be completed following the interim submission.
+
+\includegraphics[scale=0.55]{backend-coverage}
+\captionof{figure}{91\% coverage at the moment for the backend}
+
+For the frontend however this works slightly differently. These tests are carried out by using the JEST library, which checks to see if any defined elements are present in the page that has been rendered. It can also simulate user interactions with the web page as well, testing that the web page functions as intended.
+
+\begin{lstlisting}[language=JavaScript, caption={This test renders the page and checks that the necessary elements are present, before simulating a user entering their details and submitting them - causing the API request to be called.}]
+it('submits user details and redirects on success', async () => {
+	render(<Page />)
+	const user = userEvent.setup();
+	
+	(axios.post as jest.Mock).mockResolvedValueOnce({data : {success: true}});
+	
+	const usernameInput = screen.getByLabelText(/username/i);
+	const passwordInput = screen.getByLabelText(/password/i);
+	const signInButton = screen.getByRole('button', { name: /sign in/i });
+	
+	await user.type(usernameInput, 'user');
+	await user.type(passwordInput, 'password');
+	await user.click(signInButton);
+	
+	
+	expect(axios.post).toHaveBeenCalledWith(
+		'http://localhost:8080/api/auth/login',
+		{ username: 'user', password: 'password' },
+		{ withCredentials: true }
+	);
+	
+	expect(mockPush).toHaveBeenCalledWith('/dashboard');
+});
+\end{lstlisting}
+
+Having applied these tests to the frontend, the resultant coverage comes out to be 99.67\%. The discrepancy comes from an error that can be thrown in the sidebar component - which has not been used throughout the web pages. All of the other pages have been fully tested.
+
+\includegraphics[scale=0.3]{frontend-coverage}
+\captionof{figure}{99.67\% coverage at the moment for the frontend}
+
 \section{Documentation}
 
 \chapter{Reflection}
