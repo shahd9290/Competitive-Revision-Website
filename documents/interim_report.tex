@@ -109,9 +109,7 @@ Signature:
 
 \begin{abstract}
 
-This document serves as a layout and formatting template for your project report. It does not tell you how to write it, or what it should contain. It explains how it should be formatted and typeset. Please refer to your project booklet for information about report sizes, contents and rules.
-
-\textbf{\textit{NOTE: in your report, you should replace this with an appropriate Abstract for your project report.}}
+This interim report documents my journey thus far with regards to my Final Year Project aimed at developing a Competitive Revision Web Application. The report begins with discussing why I have chosen to develop this project, and what I aim to achieve from this. The report then explores different technologies that are available for Web Development, along with various design patterns that are applicable to this project. It then evaluates on what I have implemented so far for this interim submission, before examining the Software Engineering principles that I have employed during development. The report concludes with a section reflecting on what I have achieved this term, and what I have planned to complete before the final submission at the end of next term.
 
 \end{abstract}
 \newpage
@@ -137,18 +135,25 @@ User Stories allow me to gain an insight into what features need to be implement
 
 \subsection{Implemented User Stories}
 	\begin{itemize}
-		\item The student would like to have the option to select their qualification when creating their account
-		\item All users would like to log into the system and be greeted with a dashboard. Students would like to see recent attempts, their current total of marks at the very minimum
-		\item The student would like to have the option to select their subjects on a search screen at first, to facilitate revision across different exams.
-		\item For each subject, the student would like to see a list of topics that they can select to study.
+		\item As a student, I would like to choose my qualification when I create my account
+		\item As a student, I want to see a dashboard when I log into the system.
+		\item As a student, I want to see my recent attempts and how many marks I have at the very least.
+		\item As a student, I don't want to be redirected when I choose a subject, I just want to see the topics on the same page.
+		\item As a student, I want to see all of the topics I can choose to study for every subject there is.
+		
 	\end{itemize}
 \subsection{User Stories To Be Implemented}
 	\begin{itemize}
-		\item For each topic that the student wishes to study, there will be a group of questions for them to answer. 
-		\item The admin would like these questions to use random values every time they have been requested, with the added possibility of using a selection of questions each time rather than a dedicated set.
-		\item The admin would like to award marks to every student who answers a question correctly. He would like to award top marks for answering correctly on the first attempt, with marks decreasing for every subsequent attempt until a set minimum.
-		
+		\item As a student, I want to be asked questions about the topic I choose once I've clicked on it.
+		\item As an admin, I would like all questions asked to students to be randomised, this includes a random selection, as well as random constants.
+		\item As an admin, I would decrease the amount of available marks for every student until a suitable percentage, every time they get a question wrong.
+		\item As an admin, I would like to show all students on a leaderboard, with the amount of points that they have. This can reset after a certain interval.
+		\item As an admin, I would like to be able to add and remove subjects, topics and qualifications to the system.
+		\item As a student, I would like to have the option to stay anonymous on the leaderboard - so I can be part of the competition without others knowing its me
+		\item As a student, I would like to have the ability to practice questions without contributing to the leaderboard.
 	\end{itemize}
+	
+These user stories are not final, there may be more that will come to light as further features are considered.
 
 \chapter{Background Theory}
 
@@ -625,10 +630,10 @@ There are many more features that are still to be included into the project as d
 There are also several features which are still ideas, or have been suggested to me recently. Whether I am able to implement them or not will be dependent on the core features being completed. These include:
 
 \begin{itemize}
-	\item {Revision Materials} - Some resources to assist the student with revising core topics first before being assessed.
-	\item {Practice Questions} - Some additional questions that can be asked, but will not contribute to the overall leaderboard. If implemented these are more likely to have less marks.
-	\item {Tutor Profiles \& Classes} - To bring the competition from a national scale down to local - by having it based on a classroom setting. 
-	\item {Contests} - An extension from the points system, there could be regular contests for users to participate in where they could earn special rewards.
+	\item \textbf{Revision Materials} - Some resources to assist the student with revising core topics first before being assessed.
+	\item \textbf{Practice Questions} - Some additional questions that can be asked, but will not contribute to the overall leaderboard. If implemented these are more likely to have less marks.
+	\item \textbf{Tutor Profiles \& Classes} - To bring the competition from a national scale down to local - by having it based on a classroom setting. 
+	\item \textbf{Contests} - An extension from the points system, there could be regular contests for users to participate in where they could earn special rewards.
 \end{itemize}
 
 \begin{thebibliography}{99}
