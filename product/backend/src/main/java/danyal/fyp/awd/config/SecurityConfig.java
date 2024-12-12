@@ -28,7 +28,13 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new TokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/qualification/get-all").permitAll()
+                        .requestMatchers("/api/auth/**",
+                                "/api/qualification/get-all",
+                                // For Interim Submission Only
+                                "/api/subject/add",
+                                "/api/qualification/add",
+                                "/api/topic/add"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfig))
