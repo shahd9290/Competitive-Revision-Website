@@ -522,7 +522,7 @@ However, by following a vertical slicing approach it did not make sense for me t
 \section{UML Diagrams}
 \section{Testing}
 
-Prior to submission, the project has been thoroughly tested to ensure that all components are working as they should be in order to achieve the desired outcomes. For the backend, this is carried out using the MockMvc library - which sends mock REST API requests to the backend, and then checks whether the output is as expected.
+Prior to submission, the project has been thoroughly tested via unit testing to ensure that all components are working as they should be in order to achieve the desired outcomes. For the backend, this is carried out using the MockMvc library - which sends mock REST API requests to the backend, and then checks whether the output is as expected.
 
 \begin{lstlisting}[language=Java, caption={A payload is made with the information that is to be sent to the backend, then the test simulates an API request to the Auth Controller. It checks to see if the status returns is OK (200), and that it contains the string "User logged in successfully" in order for it to pass.}]
 	// AuthControllerTest.java
@@ -578,6 +578,8 @@ Having applied these tests to the frontend, the resultant coverage comes out to 
 
 \includegraphics[scale=0.3]{frontend-coverage}
 \captionof{figure}{99.67\% coverage at the moment for the frontend}
+
+Alongside the unit tests, I have also been sure to carry out integration and system for this application. For integration testing - this would be testing the API endpoints to ensure that the data being retrieved by the backend is correct, and that there are no discrepancies or irrelevant data present. With system testing, this would be after connecting the frontend to the backend - and ensuring that I am able to view the retrieved data on the frontend, such that they can be interacted with further by the user.
 
 \section{Documentation}
 
