@@ -503,17 +503,22 @@ For all subjects, topics and qualifications - it is possible to add them to the 
 \chapter{Software Engineering}
 
 \section{Methodology}
-There are many different approaches when it comes to Software Development. The Waterfall model for example focuses on completing phases of the project at a time, i.e. requirements first, then design and implementation etc. For me this approach is very strict - as it requires myself as the developer to consider the application as a whole from the very beginning, when the requirements of the product are continuously evolving as development ensues.\\
-
-Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
+There are many different approaches when it comes to Software Development. The Waterfall model for example focuses on completing phases of the project at a time, i.e. requirements first, then design and implementation etc. For me this approach is very strict - as it requires myself as the developer to consider the application as a whole from the very beginning, when the requirements of the product are continuously evolving as development ensues. Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
 
 As a result, I have chosen to develop this application by following a combination of the Agile and Incremental Approaches. The Incremental Approach allows me to focus on developing one feature at a time - ensuring that it's working to the fullest before I move my focus onto the next feature in sequence. The Agile Approach here relates to the flexibility that I am giving myself; there is no dedicated client for this product, so I am able to develop features at my own pace and alternate between different features as I wish to. At the same time, I am then able to revisit features if I am required to make any additions following its completion - given the ongoing flexibility in requirements. This can be referred to as similar vertical slicing - wherein the application is developed component by component - and ultimately expands from these components as a dependency.
 
 \section{Requirements Analysis}
 
-It is important to carry out a requirements analysis at the start of product development in order to gain an idea of the features which are to be developed. By following a vertical slicing approach, these requirements are constantly developing as the product is developed. Despite that, the original concept for this project stemmed from a design I had made several months ago for the question page, which contained a placeholder for a question image followed by four possible answers. 
+The Requirements Analysis is an ongoing phase - changing if required as the product evolves. Following this approach leaves me with the flexibility to revisit components if I am required to add a feature which I had not have included in the first place, unaware at the time of it's use. Despite that, this application has been an idea for several months, and I had drafted a design for how the questions could be presented to students.
 
-\includegraphics[scale=0.5]{question-concept}
+\begin{center}
+\includegraphics[scale=0.4]{question-concept}
+\captionof{figure}{The original design for the question screen did not include the background, this came at a later date when designing for the rest of the application began.}
+\end{center}
+
+However, by following a vertical slicing approach it did not make sense for me to begin with implementing the question screen in the beginning, as there were a multitude of other features that were to be added in the lead up to this. This led to me beginning with the user registration system, as it did not have any prior requirements. From there, subsequent features fell into place - based on how the user would interact with the system typically. This would be from account registration, to logging in, viewing their dashboard before searching for their subjects and later topics. 
+
+
 \section{UML Diagrams}
 \section{Testing}
 
