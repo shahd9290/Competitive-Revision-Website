@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Handles authentication-related REST API endpoints.
+ *
+ * @author Danyal Shah
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -21,6 +26,12 @@ public class AuthController {
     private final AuthenticationService authenticationService;
     private final CookieService cookieService;
 
+    /**
+     * Authenticates a user and sets cookies for the access token and session timer.
+     *
+     * @param authenticationRequestDto the user's login credentials.
+     * @return a success message with cookies or an error message for invalid credentials.
+     */
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
         try {

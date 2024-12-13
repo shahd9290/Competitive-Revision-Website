@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Handles REST API endpoints for managing subjects and topics.
+ *
+ * @author Danyal Shah
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/")
@@ -23,6 +28,13 @@ public class SubjectTopicController {
     private final SubjectTopicService subjectTopicService;
     private final QualificationService qualificationService;
 
+    /**
+     * Adds a subject or updates an existing subject with a new qualification.
+     *
+     * @param subjectDto the subject data to add or update.
+     * @return a success or error message.
+     * @throws QualificationException if the qualification is invalid.
+     */
     @PostMapping("/subject/add")
     public ResponseEntity<String> addSubject(@RequestBody final SubjectDto subjectDto) throws QualificationException {
 
@@ -57,6 +69,12 @@ public class SubjectTopicController {
         }
     }
 
+    /**
+     * Retrieves all subjects for a given qualification.
+     *
+     * @param qualification the qualification to filter subjects by.
+     * @return a list of subjects or an error message.
+     */
     @GetMapping("/subject/get-all")
     public ResponseEntity<Object> getAllSubjects(@RequestParam String qualification) {
         try {
@@ -67,6 +85,12 @@ public class SubjectTopicController {
         }
     }
 
+    /**
+     * Adds a topic for a subject.
+     *
+     * @param topicDto the topic data to add.
+     * @return a success or error message.
+     */
     @PostMapping("/topic/add")
     public ResponseEntity<String> addTopic(@RequestBody final TopicDto topicDto) {
         try {
@@ -78,6 +102,13 @@ public class SubjectTopicController {
 
     }
 
+    /**
+     * Retrieves all topics for a given subject and qualification.
+     *
+     * @param qualification the qualification to filter topics by.
+     * @param subject       the subject to filter topics by.
+     * @return a list of topics or an error message.
+     */
     @GetMapping("/topic/get-all")
     public ResponseEntity<Object> getAllTopics(@RequestParam String qualification, @RequestParam String subject) {
         try {

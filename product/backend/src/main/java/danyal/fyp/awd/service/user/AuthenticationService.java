@@ -9,6 +9,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for handling user authentication.
+ *
+ * @author Danyal Shah
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -21,6 +26,15 @@ public class AuthenticationService {
 
     private final RefreshTokenService refreshTokenService;
 
+    /**
+     * Authenticates a user and generates an access token.
+     *
+     * <p>If the user does not have a valid refresh token, a new one is created.</p>
+     *
+     * @param request the {@link AuthenticationRequestDto} containing the user's credentials.
+     * @return an {@link AuthenticationResponseDto} containing the generated access token.
+     * @throws UsernameNotFoundException if the user does not exist.
+     */
     public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request) {
         final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
         final var authentication = authenticationManager.authenticate(authToken);

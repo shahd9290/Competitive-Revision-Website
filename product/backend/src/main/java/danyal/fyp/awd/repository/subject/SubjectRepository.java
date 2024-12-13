@@ -9,12 +9,29 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for managing {@link Subject} entities.
+ *
+ * @author Danyal Shah
+ */
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
+    /**
+     * Retrieves a list of subjects associated with a specific qualification ID.
+     *
+     * @param qualificationId the ID of the qualification.
+     * @return a list of {@link Subject} entities associated with the given qualification ID.
+     */
     @Query("SELECT s FROM Subject s JOIN s.qualifications q WHERE q.id = :qualificationId")
     List<Subject> findSubjectsByQualificationId(@Param("qualificationId") Integer qualificationId);
 
+    /**
+     * Finds a subject by its name.
+     *
+     * @param name the name of the subject.
+     * @return an {@link Optional} containing the subject if found, or empty otherwise.
+     */
     @Query("SELECT s FROM Subject s WHERE s.name = :name")
     Optional<Subject> findByName(String name);
 }

@@ -11,6 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for handling user registration.
+ *
+ * @author Danyal Shah
+ */
 @Service
 @RequiredArgsConstructor
 public class UserRegistrationService {
@@ -19,13 +24,19 @@ public class UserRegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final QualificationService qualificationService;
 
+    /**
+     * Registers a new user in the system.
+     *
+     * @param request the {@link RegistrationRequestDto} containing user registration details.
+     * @return the registered {@link User}.
+     * @throws QualificationException if the specified qualification does not exist.
+     * @throws ValidationException if the username or email already exists.
+     */
     @Transactional
     public User registerUser(RegistrationRequestDto request) throws QualificationException {
         if (userRepository.existsByUsername(request.username()) ||
                 userRepository.existsByEmail(request.email())) {
-
-            throw new ValidationException(
-                    "Username or Email already exists");
+            throw new ValidationException("Username or Email already exists");
         }
 
         User user = new User();
@@ -36,6 +47,4 @@ public class UserRegistrationService {
 
         return userRepository.save(user);
     }
-
 }
-

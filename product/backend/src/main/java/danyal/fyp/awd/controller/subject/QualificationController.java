@@ -8,7 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Handles REST API endpoints for managing qualifications.
+ *
+ * @author Danyal Shah
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/qualification")
@@ -16,6 +20,12 @@ public class QualificationController {
 
     private final QualificationService qualificationService;
 
+    /**
+     * Adds a new qualification.
+     *
+     * @param qualificationDto the data for the qualification to add.
+     * @return a success message.
+     */
     @PostMapping("/add")
     public ResponseEntity<String> addQualification(@RequestBody final QualificationDto qualificationDto) {
         Qualification qualification = new Qualification();
@@ -24,6 +34,11 @@ public class QualificationController {
         return ResponseEntity.ok("Qualification Added Successfully");
     }
 
+    /**
+     * Retrieves all qualifications.
+     *
+     * @return a list of all qualifications.
+     */
     @GetMapping("/get-all")
     public ResponseEntity<List<Qualification>> getAllQualifications() {
         return ResponseEntity.ok(qualificationService.getAllQualifications());

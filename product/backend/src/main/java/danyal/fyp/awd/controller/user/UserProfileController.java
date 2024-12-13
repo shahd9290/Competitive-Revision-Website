@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Handles REST API endpoints for user profile management.
+ *
+ * @author Danyal Shah
+ */
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
@@ -17,6 +22,12 @@ public class UserProfileController {
 
     private final UserService userService;
 
+    /**
+     * Retrieves the profile information of the authenticated user.
+     *
+     * @param authentication the authentication object containing user details.
+     * @return the user's profile information.
+     */
     @GetMapping("/profile")
     public ResponseEntity<UserProfileDto> getUserProfile(final Authentication authentication) {
         final var user = userService.getUserByUsername(authentication.getName());
@@ -24,6 +35,12 @@ public class UserProfileController {
         return ResponseEntity.ok(new UserProfileDto(user.getEmail(), user.getUsername()));
     }
 
+    /**
+     * Retrieves the qualification of the authenticated user.
+     *
+     * @param authentication the authentication object containing user details.
+     * @return the user's qualification.
+     */
     @GetMapping("/get-qualification")
     public ResponseEntity<Qualification> getQualification(final Authentication authentication) {
         Qualification qualification = userService.getUserQualification(authentication.getName());

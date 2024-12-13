@@ -11,6 +11,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.GONE;
 
+/**
+ * Service class for managing user-related operations.
+ *
+ * @author Danyal Shah
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -18,11 +23,24 @@ public class UserService {
     private final UserRepository userRepository;
     private final QualificationService qualificationService;
 
+    /**
+     * Retrieves a user by their username.
+     *
+     * @param username the username of the user to retrieve.
+     * @return the {@link User} entity.
+     * @throws ResponseStatusException if the user account is deleted or deactivated.
+     */
     public User getUserByUsername(final String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(GONE, "The user account had been deleted or deactivated"));
     }
 
+    /**
+     * Retrieves the qualification associated with a user by their username.
+     *
+     * @param name the username of the user.
+     * @return the {@link Qualification} entity, or {@code null} if no qualification is found.
+     */
     public Qualification getUserQualification(String name) {
         try {
             int qualID = userRepository.findQualificationIdByUsername(name);

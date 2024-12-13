@@ -10,6 +10,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Represents a refresh token entity in the system.
+ *
+ * @author Danyal Shah
+ */
 @Entity
 @Table(name = "refresh_tokens")
 @Getter
@@ -18,19 +23,31 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public class RefreshToken {
 
+    /**
+     * The unique identifier for the refresh token.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
     private UUID id;
 
+    /**
+     * The user associated with the refresh token.
+     */
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * The creation timestamp of the refresh token.
+     */
     @Column(nullable = false, updatable = false)
     @CreatedDate
     private Instant createdAt;
 
+    /**
+     * The expiration timestamp of the refresh token.
+     */
     @Column(nullable = false)
     private Instant expiresAt;
 
