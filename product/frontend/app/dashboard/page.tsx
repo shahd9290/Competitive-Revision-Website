@@ -3,12 +3,19 @@ import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import { SidebarMenu } from '@/components/ui/SidebarMenu';
 
+/**
+ * A dashboard component displaying user information and statistics.
+ *
+ * @author Danyal Shah
+ */
 const Dashboard = () => {
 
     const [user, setUser] = useState([]);
 
     useEffect(() => {
-
+        /**
+         * Fetches the user's profile data on component load.
+         */
         const profile = async () => {
             const response = await axios.get("http://localhost:8080/api/user/profile", {withCredentials: true})
             return response.data;
@@ -45,6 +52,9 @@ const Dashboard = () => {
     );
 };
 
+/**
+ * A wrapper component for the Dashboard with a sidebar menu.
+ */
 const Page = () => {
 
     return (

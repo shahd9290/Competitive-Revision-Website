@@ -1,11 +1,23 @@
 import {NextRequest, NextResponse} from "next/server";
 import axios from "axios";
 
-// Store subdirectories here?
+/**
+ * Configuration for middleware matcher.
+ *
+ * Defines routes where this middleware should be applied.
+ */
 export const config = {
     matcher: ['/dashboard', '/subjects', '/logout']
 }
 
+/**
+ * Middleware for handling authentication and token expiration.
+ *
+ * Refreshes tokens when expired and redirects unauthenticated users to the login page.
+ *
+ * @param req - The incoming request object.
+ * @returns A modified response or a redirect response.
+ */
 export async function middleware(req: NextRequest) {
     console.log("Middleware Running");
 
@@ -50,6 +62,12 @@ export async function middleware(req: NextRequest) {
 
 }
 
+/**
+ * Checks if a token expiration timestamp has passed.
+ *
+ * @param expiry - The token expiration timestamp as a string.
+ * @returns True if the token has expired, false otherwise.
+ */
 function checkExpiration(expiry: string | undefined) {
     const now = Math.floor(Date.now() / 1000);
     return (Number(expiry) < now)

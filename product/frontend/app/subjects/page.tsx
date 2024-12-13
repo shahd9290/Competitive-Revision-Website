@@ -4,12 +4,21 @@ import {useEffect, useState} from "react";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import axios from "axios";
 
-export function Search() {
+/**
+ * Fetches the user's qualification and loads relevant subjects.
+ * Displays the subjects and topics in a grid layout.
+ *
+ * @author Danyal Shah
+ */
+const Search = () => {
 
     const [subjects, setSubjects] = useState([]);
     const [userQual, setUserQual] = useState("");
 
     useEffect(() => {
+        /**
+         * Fetches the user's qualification on component load.
+         */
         const qual = async () => {
             const response = await axios.get("http://localhost:8080/api/user/get-qualification", {withCredentials:true})
             return response.data;
@@ -21,6 +30,9 @@ export function Search() {
     },[])
 
     useEffect(() => {
+        /**
+         * Fetches subjects associated with the user's qualification.
+         */
         if (!userQual) return;
 
         const subjects = async () => {
@@ -43,6 +55,10 @@ export function Search() {
         </BentoGrid>
     );
 }
+
+/**
+ * A wrapper component for the `Search` component with a sidebar menu.
+ */
 const Page = () => {
 
     return (

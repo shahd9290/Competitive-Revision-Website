@@ -3,11 +3,21 @@ import axios from 'axios';
 import {useRouter} from 'next/navigation';
 import React, {useState} from 'react'
 
+/**
+ * Login page for authenticating users.
+ *
+ * @author Danyal Shah
+ */
 const page = () => {
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    /**
+     * Sends the username and password to the backend for login.
+     *
+     * @param event - The form submission event.
+     */
     const login = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 

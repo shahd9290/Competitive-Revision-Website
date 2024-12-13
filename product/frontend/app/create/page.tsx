@@ -2,7 +2,11 @@
 import React, {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import axios from "axios";
-
+/**
+ * Registration page for creating a new Study App account.
+ *
+ * @author Danyal Shah
+ */
 const page = () => {
     const router = useRouter();
     const [username, setUsername] = useState('');
@@ -12,6 +16,14 @@ const page = () => {
     const [qualificationInput, setQualificationInput] = useState('');
     const [qualifications, setQualifications] = useState([]);
 
+    /**
+     * Handles form submission for user registration.
+     *
+     * Validates email confirmation and qualification selection before sending
+     * registration data to the backend.
+     *
+     * @param event - The form submission event.
+     */
     const register = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
@@ -43,7 +55,11 @@ const page = () => {
 
     }
 
+
     useEffect(() => {
+        /**
+         * Fetches available qualifications from the backend on component load.
+         */
         const quals = async () => {
             const response = await axios.get("http://localhost:8080/api/qualification/get-all")
             return response.data;
