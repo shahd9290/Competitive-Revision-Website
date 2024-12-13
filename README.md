@@ -5,7 +5,7 @@ The frontend will require [Node.js](https://nodejs.org/en) to be installed.
 
 Ensure that the terminal is pointing to the `/frontend` directory. 
 
-Run `npm install` to install all required dependencies for Next.js to function.
+Run `npm install` to install all required dependencies for Next.js to function. Run `npm audit fix` if required.
 
 Run `npm run dev` to start the application. The application can then be found at `localhost:8080`
 
