@@ -527,6 +527,55 @@ This led to me beginning with the user registration system, as it did not have a
 
 
 \section{UML Diagrams}
+
+\subsection{Database Entity Relationship Diagram}
+
+Below is an Entity Relationship Diagram used to show how each of the tables are linked to each other in the database. From Left to right, bottom to top, it shows that \verb|refresh_tokens| is reliant on the users table for its \verb|user_id| field, \verb|users| is reliants on \verb|qualifications| for its \verb|id| field, there is a many-to-many relationship between \verb|qualifications| and \verb|subjects|, and that \verb*|topics| is dependent on \verb|subjects| and \verb*|qualifications| for the ids required.
+\begin{center}
+\includegraphics[scale=0.2]{ER-diagram}
+\end{center}
+\captionof{figure}{The Entity Relationship Diagram showing how the database tables are connected in the backend.}
+\subsection{UML Sequence Diagram}
+
+The UML Sequence Diagrams show the full flow from frontend to database, dictating the sequence of events that take place when a given API request is called. For each diagram, the client sends the request to API, which calls the service methods, calling the methods in the repository. The top to bottom flow dictates the series of events that would take place. Any flow to the right after a flow to the left simulates a branching effect (i.e. saveSubject() beneath `Qualification not found`)\\
+
+First is a condensed diagram for adding qualifications, subjects and topics. It shows the POST request being made contained the necessary values being sent straight to the Service layer - which saves the item to the repository. In the case of Subjects and Topics, it will return an error if the service was not able to find the corresponding Qualification or Subject (topics only) - which are otherwise required for the request to be completed.
+
+\begin{center}
+	\includegraphics[scale=0.4]{AddQualSubTopic.drawio}
+\end{center}
+\captionof{figure}{}
+
+Next dictates the registration flow. It shows the POST request being sent with the user's details. It checks to see if the user exists before saving the user. If it does a message is returned, and if it doesn't then the account is created.
+\begin{center}
+\includegraphics[scale=0.4]{RegisterSequence.drawio}
+\end{center}
+\captionof{figure}{}
+This sequence diagram dictates the login flow. It sends the users details in an API request, which are then forwarded to the service layer. The repository then checks if the user exists, and if it does not then an error is sent back to the client. If it does exists, the JSON Web Token is generated with the tokenExpiry time, and both are sent back with a redirect as cookies.
+\begin{center}
+	\includegraphics[scale=0.4]{LoginSequence.drawio}
+\end{center}
+\captionof{figure}{}
+This dictates the profile request flow. Using the Middleware it checks if the user has a valid token. If they do not, and the tokenExpiry cookie cannot be found then it logs them out - otherwise it refreshes the token first before continuing with the rest of the API request. In this case, it will get the user from the repository and return their details. There is no need to check if they exist, as this check would have been performed already when authenticating.
+
+\begin{center}
+	\includegraphics[scale=0.3]{ProfileSequence.drawio}
+\end{center}
+\captionof{figure}{}
+
+This final Sequence Diagram shows the events that take place when loading all subjects with topics for a user. As before, it checks that they have a valid token, and will refresh if applicable. It then fetches the user's qualification first, before using the same qualification in a second request to fetch the subjects list. In the backend, it retrieves the subjects first - and then appends the topics afterwards to prevent mixing unnecessary topics together. The final list is then returned to the client for rendering.
+\begin{center}
+	\includegraphics[scale=0.3]{SubjectsSequence.drawio}
+\end{center}
+\captionof{figure}{}
+\subsection{UML Class Diagram}
+
+Below is a UML Class Diagram that shows the core functionality of the backend. It displays how each of the classes are linked from the Controllers down to the Repositories. The frontend does not have a UML Class Diagram.
+
+\includegraphics[scale=0.125]{Backend-Class.drawio}
+\captionof{figure}{Classes used for configurations, exceptions, DTOs and HTTP Request modifications have been omitted to show core functionality.}
+
+
 \section{Testing}
 
 Prior to submission, the project has been thoroughly tested via unit testing to ensure that all components are working as they should be in order to achieve the desired outcomes. For the backend, this is carried out using the MockMvc library - which sends mock REST API requests to the backend, and then checks whether the output is as expected.
@@ -719,6 +768,9 @@ There are also several features which are still ideas, or have been suggested to
 \end{thebibliography}
 
 \chapter*{Appendix}
+
+All Diagrams that are present in Section 4.3 have been included as separate images for convenience.
+
 \addcontentsline{toc}{chapter}{Appendix}
 \section*{Diary}
 \addcontentsline{toc}{section}{Diary}
@@ -750,6 +802,8 @@ There are also several features which are still ideas, or have been suggested to
 \section*{Demo}
 \addcontentsline{toc}{section}{Demo}
 A video demonstration of the application at its current stage can be viewed here: \url{https://youtu.be/dFIjE3_42No}
+
+
 
 \end{document}
 
