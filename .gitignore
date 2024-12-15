@@ -95,3 +95,9 @@ documents/*.cb2
 documents/.*.lb
 documents/*.pdf
 documents/*.synctex.gz
+
+### Environment Variables + Backend Keys ###
+product/frontend/.env
+product/backend/src/main/resources/application.properties
+product/backend/src/main/resources/jwt/app.key
+product/backend/src/main/resources/jwt/app.pub

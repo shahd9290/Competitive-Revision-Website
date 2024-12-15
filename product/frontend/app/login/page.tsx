@@ -9,6 +9,7 @@ import React, {useState} from 'react'
  * @author Danyal Shah
  */
 const page = () => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -26,7 +27,7 @@ const page = () => {
         }
 
         try {
-            const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials: true});
+            const login_confirm = await axios.post(`${apiUrl}/api/auth/login`, payload, {withCredentials: true});
             router.push('/dashboard')
 
         } catch (error: any) {

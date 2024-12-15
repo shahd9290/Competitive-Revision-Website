@@ -11,7 +11,7 @@ import axios from "axios";
  * @author Danyal Shah
  */
 const Search = () => {
-
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [subjects, setSubjects] = useState([]);
     const [userQual, setUserQual] = useState("");
 
@@ -20,7 +20,7 @@ const Search = () => {
          * Fetches the user's qualification on component load.
          */
         const qual = async () => {
-            const response = await axios.get("http://localhost:8080/api/user/get-qualification", {withCredentials:true})
+            const response = await axios.get(`${apiUrl}/api/user/get-qualification`, {withCredentials:true})
             return response.data;
         }
 
@@ -36,7 +36,7 @@ const Search = () => {
         if (!userQual) return;
 
         const subjects = async () => {
-            const response = await axios.get(`http://localhost:8080/api/subject/get-all?qualification=${userQual}`, {withCredentials:true});
+            const response = await axios.get(`${apiUrl}/api/subject/get-all?qualification=${userQual}`, {withCredentials:true});
             setSubjects(response.data)
         }
 

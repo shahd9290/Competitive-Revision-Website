@@ -8,6 +8,7 @@ import axios from "axios";
  * @author Danyal Shah
  */
 const page = () => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -39,7 +40,7 @@ const page = () => {
             }
 
             try {
-                const response = await axios.post("http://localhost:8080/api/auth/register", payload);
+                const response = await axios.post(`${apiUrl}/api/auth/register`, payload);
                 alert("Account created successfully.");
                 router.push('/login')
 
@@ -61,7 +62,7 @@ const page = () => {
          * Fetches available qualifications from the backend on component load.
          */
         const quals = async () => {
-            const response = await axios.get("http://localhost:8080/api/qualification/get-all")
+            const response = await axios.get(`${apiUrl}/api/qualification/get-all`)
             return response.data;
         };
 

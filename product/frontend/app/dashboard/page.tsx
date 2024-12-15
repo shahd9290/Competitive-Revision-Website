@@ -9,7 +9,7 @@ import { SidebarMenu } from '@/components/ui/SidebarMenu';
  * @author Danyal Shah
  */
 const Dashboard = () => {
-
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [user, setUser] = useState([]);
 
     useEffect(() => {
@@ -17,7 +17,7 @@ const Dashboard = () => {
          * Fetches the user's profile data on component load.
          */
         const profile = async () => {
-            const response = await axios.get("http://localhost:8080/api/user/profile", {withCredentials: true})
+            const response = await axios.get(`${apiUrl}/api/user/profile`, {withCredentials: true})
             return response.data;
         };
 

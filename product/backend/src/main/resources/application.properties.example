@@ -1,10 +1,13 @@
 spring.application.name=Advanced Web Dev - Backend
 
+## Enter your database details here.
 spring.datasource.driver-class-name=org.postgresql.Driver
-spring.datasource.url=jdbc:postgresql://localhost:5432/fypdb
-spring.datasource.username=postgres
-## To be changed if ever deployed.
-spring.datasource.password=postgres
+# URl to your database : example - postgresql://localhost:5432/fypdb
+spring.datasource.url=jdbc:
+# Username for your database
+spring.datasource.username=
+# Password for your database
+spring.datasource.password=
 
 ##JPA config
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
@@ -15,7 +18,10 @@ spring.jpa.defer-datasource-initialization=true
 spring.sql.init.mode=always
 
 ##JWT config
+## Generate a public/private key pair and store them in the jwt/ folder
 jwt.private-key = classpath:jwt/app.key
 jwt.public-key = classpath:jwt/app.pub
+
+## Time to live for token and refresh token
 jwt.ttl = 15m
 jwt.refresh-token-ttl = 7d

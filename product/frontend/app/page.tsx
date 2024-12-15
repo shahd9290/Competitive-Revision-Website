@@ -3,6 +3,8 @@ import {useState} from "react";
 import axios from "axios";
 
 export default function Home() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
     const [qualification, setQualification] = useState('');
     const [subject, setSubject] = useState('');
     const [topic, setTopic] = useState('');
@@ -15,7 +17,7 @@ export default function Home() {
         }
 
         try {
-            await axios.post("http://localhost:8080/api/qualification/add", payload, {withCredentials:true}).then((response) => {alert(response.data)});
+            await axios.post(`${apiUrl}/api/qualification/add`, payload, {withCredentials:true}).then((response) => {alert(response.data)});
 
         }
         catch (error: any) {
@@ -36,7 +38,7 @@ export default function Home() {
         }
 
         try {
-            await axios.post("http://localhost:8080/api/subject/add", payload).then((response) => {alert(response.data)});
+            await axios.post(`${apiUrl}/api/subject/add`, payload).then((response) => {alert(response.data)});
 
         }
         catch (error: any) {
@@ -58,7 +60,7 @@ export default function Home() {
         }
 
         try {
-            await axios.post("http://localhost:8080/api/topic/add", payload).then((response) => {alert(response.data)});
+            await axios.post(`${apiUrl}/api/topic/add`, payload).then((response) => {alert(response.data)});
 
         }
         catch (error: any) {
