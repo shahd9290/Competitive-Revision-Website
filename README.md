@@ -7,20 +7,20 @@ Ensure that the terminal is pointing to the `/frontend` directory.
 
 Run `npm install` to install all required dependencies for Next.js to function. Run `npm audit fix` if required.
 
-Run `npm run dev` to start the application. The application can then be found at `localhost:8080`
+Rename `.env.example` to `.env` - Ensure the link within points to the url for the backend API, e.g. `http://localhost:8080`
+
+Run `npm run dev` to start the application. The application can then be found at `localhost:3000`
 
 ## Setting up Backend
 The Backend requires [PostgreSQL](https://www.postgresql.org/download/) and [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html) to be installed
 
-Create a database schema named `fypdb` in the PostgreSQL database.
+Create a dedicated schema for the project in the PostgreSQL database.
 
 Ensure that the terminal is pointing to the `/backend` directory.
 
-Ensure that the username and password in `backend/src/main/resources/application.properties` is correct for the Postgres database.
-The default is: 
+Generate a public/private key pair, and store in a new `jwt/` directory. These should be stored as `jwt/app.key` and `jwt/app.pub`
 
-    username = `postgres` 
-    password = `postgres`
+Rename `src/main/resources/application.properties.examples` to `src/main/resources/application.properties`, and enter the correct details for the Postgres database. These include the `Schema Name`, `Username`, `Password`
 
 Ensure that you have permissions to execute the `./gradlew` file
 
