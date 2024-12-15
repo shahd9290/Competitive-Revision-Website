@@ -18,8 +18,12 @@ Create a dedicated schema for the project in the PostgreSQL database.
 
 Ensure that the terminal is pointing to the `/backend` directory.
 
-Generate a public/private key pair, and store in a new `jwt/` directory. These should be stored as `jwt/app.key` and `jwt/app.pub`
-
+Use the following commands to generate a public/private key pair - used to sign the tokens
+```bash
+cd src/main/resources/jwt
+openssl genpkey -algorithm RSA -out app.key -outform PEM
+openssl rsa -pubout -in app.key -out app.pub
+```
 Rename `src/main/resources/application.properties.examples` to `src/main/resources/application.properties`, and enter the correct details for the Postgres database. These include the `Schema Name`, `Username`, `Password`
 
 Ensure that you have permissions to execute the `./gradlew` file
