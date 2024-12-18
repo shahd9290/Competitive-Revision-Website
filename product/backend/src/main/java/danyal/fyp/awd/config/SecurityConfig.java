@@ -44,11 +44,7 @@ public class SecurityConfig {
                 .addFilterBefore(new TokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**",
-                                "/api/qualification/get-all",
-                                // For Interim Submission Only
-                                "/api/subject/add",
-                                "/api/qualification/add",
-                                "/api/topic/add"
+                                "/api/qualification/get-all"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
