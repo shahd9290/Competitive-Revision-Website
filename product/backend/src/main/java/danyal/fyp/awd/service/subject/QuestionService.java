@@ -26,18 +26,8 @@ public class QuestionService {
         }
         Question question = new Question();
 
-        // Idea is to calculate the answer for mathematical equations before returning to user. Pending evaluation, this may not be possible.
-        // For other subjects the answer is required.
-        if (!topic.getSubject().getName().equals("Mathematics")){
-            if (!answer.isEmpty()){
-                question.setAnswer(answer);
-            }
-            else {
-                throw new QuestionException("Need an answer please!");
-            }
-        }
-
         question.setQuestion(questionString);
+        question.setAnswer(answer);
         question.setMarks(marks);
         question.setTopic(topic);
 
