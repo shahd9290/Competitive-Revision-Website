@@ -29,6 +29,6 @@ public class Question {
     @JsonBackReference
     private Topic topic;
 
-    @Column
+    @Column(nullable = false)
     private String answer;
 }

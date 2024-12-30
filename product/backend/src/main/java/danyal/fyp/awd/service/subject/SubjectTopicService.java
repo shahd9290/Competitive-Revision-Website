@@ -136,6 +136,10 @@ public class SubjectTopicService {
         return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
     }
 
+    public Topic getTopic(int topicId) {
+        return topicRepository.findById(topicId).orElse(null);
+    }
+
     /**
      * Retrieves all topics for a specific subject and qualification.
      *

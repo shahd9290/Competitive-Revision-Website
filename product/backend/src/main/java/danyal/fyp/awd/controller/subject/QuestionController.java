@@ -1,13 +1,13 @@
 package danyal.fyp.awd.controller.subject;
 
 import danyal.fyp.awd.dto.subject.QuestionAddDto;
+import danyal.fyp.awd.model.subject.Question;
 import danyal.fyp.awd.service.subject.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +21,17 @@ public class QuestionController {
             questionService.addQuestion(questionAddDto.question(), questionAddDto.answer(), questionAddDto.marks(), questionAddDto.topic(), questionAddDto.qualification());
             return ResponseEntity.ok("Question added");
         } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<Object> getQuestionByTopic(@RequestParam final int topicId) {
+        try {
+            List<Question> questions = questionService.getQuestions(topicId);
+            return ResponseEntity.ok(questions);
+        }
+        catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

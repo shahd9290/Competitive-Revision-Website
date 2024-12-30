@@ -9,6 +9,8 @@ import danyal.fyp.awd.repository.subject.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
@@ -32,5 +34,13 @@ public class QuestionService {
         question.setTopic(topic);
 
         questionRepository.save(question);
+    }
+
+    public List<Question> getQuestions(int topicId) {
+        Topic topic;
+        if ((topic = subjectTopicService.getTopic(topicId)) == null)
+            throw new TopicException("Topic not found");
+
+        return questionRepository.getQuestionByTopic(topic);
     }
 }
