@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Children } from "react";
 import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import Link from "next/link";
 
 // Bento Grid component made available for public use via Aceternity UI - https://ui.aceternity.com/components/bento-grid
 
@@ -58,7 +59,12 @@ export const BentoGridItem = ({
             <DialogContent>
                 <DialogTitle>{title}</DialogTitle>
                 {topics && topics.length > 0 ? (topics.map((topic, i) => (
-                    <DialogDescription key={i}>{topic.name}</DialogDescription>
+                    <DialogDescription key={i}>
+                        <Link href={{
+                            pathname: "/quiz",
+                            query: {id: topic.id},
+                        }}>{topic.name}</Link>
+                    </DialogDescription>
                 ))):(
                     <DialogDescription>No Topics Found!</DialogDescription>)
                 }
