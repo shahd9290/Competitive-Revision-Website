@@ -36,11 +36,16 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public List<Question> getQuestions(int topicId) {
+    public List<Question> getQuestions(int topicId) throws Exception {
         Topic topic;
         if ((topic = subjectTopicService.getTopic(topicId)) == null)
             throw new TopicException("Topic not found");
 
-        return questionRepository.getQuestionByTopic(topic);
+        List<Question> questions = questionRepository.getQuestionByTopic(topic);
+
+        if (questions.isEmpty())
+            throw new QuestionException("No Questions for this topic!");
+
+        return questions;
     }
 }
