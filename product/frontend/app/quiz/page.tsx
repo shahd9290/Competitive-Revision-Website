@@ -1,18 +1,27 @@
 'use client'
 import {SidebarMenu} from "@/components/ui/SidebarMenu";
 import {useRouter} from "next/navigation";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 interface SearchParams {
     id?: string;
 }
 
 const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const [questions, setQuestions] = useState([]);
+    const router = useRouter();
     const {id} = searchParams;
     useEffect(() => {
-        if (id) {
-            console.log(`Received id: ${id}`);
+        if (!id) {
+            router.push("/subjects");
         }
+        const getQuestions = async () => {
+            const response = await axios.get(`${apiUrl}/api/question/get?topicId=${id}`, {withCredentials:true});
+            setQuestions(response.data);
+        }
+        getQuestions();
     }, []);
 
     return(
