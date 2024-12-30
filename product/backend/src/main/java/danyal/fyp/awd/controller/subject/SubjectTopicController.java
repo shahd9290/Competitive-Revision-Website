@@ -118,5 +118,19 @@ public class SubjectTopicController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    /**
+     * Retrieves a topics for a given id.
+     *
+     * @param topicId the id of the topic to find.
+     * @return the topic or an error message.
+     */
+    @GetMapping("/topic/get")
+    public ResponseEntity<Object> getTopic(@RequestParam int topicId) {
+        try {
+            return ResponseEntity.ok(subjectTopicService.getTopic(topicId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }

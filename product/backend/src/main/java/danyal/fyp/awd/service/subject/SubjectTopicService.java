@@ -130,14 +130,28 @@ public class SubjectTopicService {
      *
      * @param topicName       the name of the topic.
      * @param qualificationId the ID of the qualification.
-     * @return the {@link Topic} if found, or {@code null} otherwise.
+     * @return the {@link Topic} if found
+     * @throws TopicException if the topic was not found.
      */
     public Topic getTopic(String topicName, int qualificationId) {
-        return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
+        Topic topic;
+        if ((topic = topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null)) == null)
+            throw new TopicException("Topic does not exist");
+        return topic;
     }
 
+    /**
+     * Retrieves a topic by its name and qualification ID.
+     *
+     * @param topicId       the id of the topic.
+     * @return the {@link Topic} if found
+     * @throws TopicException if the topic was not found.
+     */
     public Topic getTopic(int topicId) {
-        return topicRepository.findById(topicId).orElse(null);
+        Topic topic;
+        if ((topic = topicRepository.findById(topicId).orElse(null)) == null)
+            throw new TopicException("Topic does not exist");
+        return topic;
     }
 
     /**
