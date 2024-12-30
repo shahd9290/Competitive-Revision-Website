@@ -7,7 +7,7 @@ import axios from "axios";
  * Defines routes where this middleware should be applied.
  */
 export const config = {
-    matcher: ['/dashboard', '/subjects', '/logout', '/']
+    matcher: [ '/', '/dashboard', '/subjects', '/logout', '/quiz']
 }
 
 /**
