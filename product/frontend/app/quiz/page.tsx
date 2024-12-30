@@ -15,6 +15,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswer, setUserAnswer] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
+    const router = useRouter();
     const {id} = searchParams;
 
     useEffect(() => {
@@ -22,7 +23,6 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
             try {
                 const response = await axios.get(`${apiUrl}/api/topic/get?topicId=${id}`, {withCredentials: true});
                 setTopic(response.data);
-                console.log(response.data);
             }
             catch (error:any){
                 setTopic(null);
@@ -40,8 +40,8 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                 setQuestions(response.data);
             }
             catch (error:any){
-                console.log(error.response.data);
-                // router.push('/subjects');
+                alert(error.response.data);
+                router.push('/subjects');
             }
         }
 
