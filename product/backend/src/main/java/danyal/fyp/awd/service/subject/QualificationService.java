@@ -24,7 +24,9 @@ public class QualificationService {
      *
      * @param qualification the qualification to save.
      */
-    public void saveQualification(Qualification qualification) {
+    public void saveQualification(Qualification qualification) throws QualificationException {
+        if (qualificationRepository.findByName(qualification.getName()).isPresent())
+            throw new QualificationException("Qualification Already Exists.");
         qualificationRepository.save(qualification);
     }
 

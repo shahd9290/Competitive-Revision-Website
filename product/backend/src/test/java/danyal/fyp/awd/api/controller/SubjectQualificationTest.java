@@ -43,7 +43,6 @@ public class SubjectQualificationTest {
     }
 
     @Test
-
     public void addQualification() throws Exception {
         tokenCookie = new Cookie("token", token);
 
@@ -57,6 +56,24 @@ public class SubjectQualificationTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Qualification Added Successfully"));
+
+    }
+
+    @Test
+    @AfterAll
+    public void addQualificationExists() throws Exception {
+        tokenCookie = new Cookie("token", token);
+
+        payload = new HashMap<>();
+        payload.put("qualification","GCSEs");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/qualification/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Qualification Already Exists."));
 
     }
 

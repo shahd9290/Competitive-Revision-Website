@@ -30,8 +30,13 @@ public class QualificationController {
     public ResponseEntity<String> addQualification(@RequestBody final QualificationDto qualificationDto) {
         Qualification qualification = new Qualification();
         qualification.setName(qualificationDto.qualification());
-        qualificationService.saveQualification(qualification);
-        return ResponseEntity.ok("Qualification Added Successfully");
+        try {
+            qualificationService.saveQualification(qualification);
+            return ResponseEntity.ok("Qualification Added Successfully");
+        }
+        catch (Exception e) {
+            return  ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     /**
