@@ -22,6 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final QualificationService qualificationService;
+    private final JwtService jwtService;
 
     /**
      * Retrieves a user by their username.
@@ -50,5 +51,12 @@ public class UserService {
             // This may only be an issue if a qualification were deleted, however this won't be the case if users exist under that qualification.
             return null;
         }
+    }
+
+    public void updateMarks(String token, int marks) {
+        String name = jwtService.extractUsernameFromToken(token);
+        User user = getUserByUsername(name);
+        user.setMarks(marks);
+        userRepository.save(user);
     }
 }

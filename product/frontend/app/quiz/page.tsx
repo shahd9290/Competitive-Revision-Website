@@ -59,6 +59,18 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
     }, [currentQuestion]);
 
     if (isCompleted) {
+
+        const saveMarks = async () => {
+            const payload = {
+                "marks": totalMarks,
+            }
+
+             await axios.post(`${apiUrl}/api/user/save-marks`, payload, {withCredentials:true});
+
+        }
+
+        saveMarks();
+
         return (
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-[#D9D9D9] py-10 rounded-3xl drop-shadow-2xl">

@@ -1,14 +1,13 @@
 package danyal.fyp.awd.controller.user;
 
+import danyal.fyp.awd.dto.user.MarksDto;
 import danyal.fyp.awd.dto.user.UserProfileDto;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Handles REST API endpoints for user profile management.
@@ -45,6 +44,12 @@ public class UserProfileController {
     public ResponseEntity<Qualification> getQualification(final Authentication authentication) {
         Qualification qualification = userService.getUserQualification(authentication.getName());
         return ResponseEntity.ok(qualification);
+    }
+
+    @PostMapping("/save-marks")
+    public ResponseEntity<String> saveMarks(@CookieValue(name="token") String accessToken, @RequestBody MarksDto marksDto) {
+        userService.updateMarks(accessToken, marksDto.marks());
+        return ResponseEntity.ok("Updated Successfully");
     }
 
 }
