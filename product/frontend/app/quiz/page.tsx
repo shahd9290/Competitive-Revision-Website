@@ -92,7 +92,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
 
         const currentQuestion = questions[currentQuestionIndex];
         if (userAnswer.trim() === currentQuestion.answer) {
-            setTotalMarks(totalMarks + questionMarks);
+            setTotalMarks(Math.floor(totalMarks + questionMarks));
             if (currentQuestionIndex < questions.length - 1) {
                 // Store marks in a variable for later.
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -140,7 +140,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                         />
                         <div className="text-center text-md text-gray-800 font-bold mb-4">
                             {currentQuestion ? (
-                                `Marks Available: ${questionMarks}`
+                                `Marks Available: ${Math.floor(questionMarks)}`
                             ) : (
                                 "Loading marks..."
                             )}
