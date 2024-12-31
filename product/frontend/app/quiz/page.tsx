@@ -92,11 +92,11 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
 
         const currentQuestion = questions[currentQuestionIndex];
         if (userAnswer.trim() === currentQuestion.answer) {
+            setTotalMarks(totalMarks + questionMarks);
             if (currentQuestionIndex < questions.length - 1) {
                 // Store marks in a variable for later.
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
                 setUserAnswer('');
-                setTotalMarks(totalMarks + questionMarks);
             } else {
                 setIsCompleted(true);
             }
