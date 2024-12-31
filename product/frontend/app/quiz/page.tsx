@@ -3,6 +3,7 @@ import {SidebarMenu} from "@/components/ui/SidebarMenu";
 import {useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import Link from "next/link";
 
 interface SearchParams {
     id?: string;
@@ -15,6 +16,8 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswer, setUserAnswer] = useState('');
     const [isCompleted, setIsCompleted] = useState(false);
+    const [questionMarks, setQuestionMarks] = useState(0);
+    const [totalMarks, setTotalMarks] = useState(0);
     const router = useRouter();
     const {id} = searchParams;
 
@@ -48,11 +51,24 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         getQuestions();
     }, [topic]);
 
+    const currentQuestion = questions[currentQuestionIndex];
+    useEffect(() => {
+        if (currentQuestion) {
+            setQuestionMarks(currentQuestion.marks);
+        }
+    }, [currentQuestion]);
+
     if (isCompleted) {
         return (
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-[#D9D9D9] py-10 rounded-3xl drop-shadow-2xl">
-                    <h1 className="text-center text-2xl font-bold text-gray-900">Quiz Completed!</h1>
+                    <h1 className="text-center text-2xl font-bold text-gray-900 pb-4">Quiz Completed!</h1>
+                    <h2 className="text-center">Marks Earned: {totalMarks}</h2>
+                    <h2 className="text-center">Your Total Marks: 0</h2>
+                    <Link
+                        href="/subjects"
+                        className="pt-4 align-middle justify-center items-center flex underline font-bold"
+                    >Return to Subjects Page</Link>
                 </div>
             </div>
         );
@@ -65,17 +81,21 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         const currentQuestion = questions[currentQuestionIndex];
         if (userAnswer.trim() === currentQuestion.answer) {
             if (currentQuestionIndex < questions.length - 1) {
+                // Store marks in a variable for later.
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
                 setUserAnswer('');
+                setTotalMarks(totalMarks + questionMarks);
             } else {
                 setIsCompleted(true);
             }
         } else {
+            if (currentQuestion.marks * 0.81 != questionMarks) {
+                setQuestionMarks(questionMarks * 0.9);
+            }
             alert('Incorrect answer, please try again.');
+            // Decrease marks
         }
     };
-
-    const currentQuestion = questions[currentQuestionIndex];
 
     return(
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -108,7 +128,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                         />
                         <div className="text-center text-md text-gray-800 font-bold mb-4">
                             {currentQuestion ? (
-                                `Marks Available: ${currentQuestion.marks}`
+                                `Marks Available: ${questionMarks}`
                             ) : (
                                 "Loading marks..."
                             )}
