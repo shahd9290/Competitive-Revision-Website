@@ -43,6 +43,7 @@ public class UserRegistrationService {
         user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setMarks(0);
         user.setQualificationId(qualificationService.getIdByName(request.qualification()));
 
         return userRepository.save(user);

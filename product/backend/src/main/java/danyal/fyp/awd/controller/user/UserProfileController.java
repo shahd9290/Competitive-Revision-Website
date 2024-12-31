@@ -32,7 +32,7 @@ public class UserProfileController {
     public ResponseEntity<UserProfileDto> getUserProfile(final Authentication authentication) {
         final var user = userService.getUserByUsername(authentication.getName());
 
-        return ResponseEntity.ok(new UserProfileDto(user.getEmail(), user.getUsername()));
+        return ResponseEntity.ok(new UserProfileDto(user.getEmail(), user.getUsername(), user.getMarks()));
     }
 
     /**

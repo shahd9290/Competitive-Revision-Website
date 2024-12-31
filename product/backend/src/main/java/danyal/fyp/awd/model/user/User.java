@@ -55,6 +55,12 @@ public class User {
     private String password;
 
     /**
+     * The number of marks the user may have.
+     */
+    @Column(nullable = false)
+    private int marks;
+
+    /**
      * The timestamp of when the user was created.
      */
     @Column(name = "created_at", nullable = false, updatable = false)

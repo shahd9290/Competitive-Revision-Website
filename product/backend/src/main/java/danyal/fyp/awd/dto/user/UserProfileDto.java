@@ -5,7 +5,8 @@ package danyal.fyp.awd.dto.user;
  *
  * @param email    the email address of the user.
  * @param username the username of the user.
+ * @param marks the marks that the user has.
  * @author Danyal Shah
  */
-public record UserProfileDto(String email, String username) {
+public record UserProfileDto(String email, String username, int marks) {
 }
