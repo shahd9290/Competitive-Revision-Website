@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Link from "next/link";
+import {Progress} from "@/components/ui/progress";
 
 interface SearchParams {
     id?: string;
@@ -113,12 +114,13 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className=" sm:mx-auto sm:w-full sm:max-w-lg bg-[#D9D9D9] py-10 rounded-3xl drop-shadow-2xl">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h1 className="mb-10 text-center text-2xl font-bold leading-9 underline text-gray-900">
+                    <h1 className="text-center text-2xl font-bold leading-9 underline text-gray-900">
                         {topic != null ? topic.name : "Quiz Page"}
                     </h1>
                     <form
                         className="w-full flex flex-col items-center lg:items-stretch"
                     >
+                        <Progress className="my-5" value={(currentQuestionIndex+1/questions.length)*100} />
                         <div
                             className="w-3/4 lg:w-full text-center text-3xl py-10 bg-white font-medium text-gray-800 mb-6">
                             {currentQuestion ? (
