@@ -87,20 +87,31 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         );
     }
 
+    const nextQuestion = (marks = questionMarks) => {
+        setTotalMarks(Math.floor(totalMarks + marks));
+        if (currentQuestionIndex < questions.length - 1) {
+            // Store marks in a variable for later.
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
+            setUserAnswer('');
+        } else {
+            setIsCompleted(true);
+        }
+    }
+
+    const handleSkip = (event: {preventDefault: () => void}) => {
+        event.preventDefault();
+        nextQuestion(0);
+    }
+
     const handleAnswerSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
         if (questions.length === 0) return;
 
+        if (userAnswer === '') {alert('Please enter an answer'); return;}
+
         const currentQuestion = questions[currentQuestionIndex];
         if (userAnswer.trim() === currentQuestion.answer) {
-            setTotalMarks(Math.floor(totalMarks + questionMarks));
-            if (currentQuestionIndex < questions.length - 1) {
-                // Store marks in a variable for later.
-                setCurrentQuestionIndex(currentQuestionIndex + 1);
-                setUserAnswer('');
-            } else {
-                setIsCompleted(true);
-            }
+            nextQuestion();
         } else {
             if (currentQuestion.marks * 0.81 != questionMarks) {
                 setQuestionMarks(questionMarks * 0.9);
@@ -120,9 +131,9 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                     <form
                         className="w-full flex flex-col items-center lg:items-stretch"
                     >
-                        <Progress className="my-5" value={(currentQuestionIndex+1/questions.length)*100} />
+                        <Progress className="my-5" value={(currentQuestionIndex/questions.length)*100} />
                         <div
-                            className="w-3/4 lg:w-full text-center text-3xl py-10 bg-white font-medium text-gray-800 mb-6">
+                            className="w-3/4 lg:w-full text-center text-3xl py-10 bg-white font-medium text-gray-800 mb-6 select-none">
                             {currentQuestion ? (
                                 <h2>
                                     {currentQuestion.question}
@@ -140,7 +151,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                             className="w-3/4 lg:w-full p-3 rounded-md border border-gray-300"
                             placeholder="Enter your answer"
                         />
-                        <div className="text-center text-md text-gray-800 font-bold mb-4">
+                        <div className="text-center text-md text-gray-800 font-bold mb-4 select-none">
                             {currentQuestion ? (
                                 `Marks Available: ${Math.floor(questionMarks)}`
                             ) : (
@@ -153,6 +164,18 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                         >
                             Submit Answer
                         </button>
+                        {currentQuestion && questionMarks==currentQuestion.marks ? (
+                            <div className="w-3/4 lg:w-full bg-blue-300 text-white py-2 mt-2 rounded-md select-none">
+                                <p className={"text-center"}>Skip Question</p>
+                            </div>
+                        ): (
+                            <button
+                                onClick={handleSkip}
+                                className="text-center w-3/4 lg:w-full bg-blue-500 text-white py-2 mt-2 rounded-md hover:bg-blue-600"
+                            >
+                                Skip Question
+                            </button>
+                        )}
                     </form>
                 </div>
             </div>
@@ -168,7 +191,7 @@ const Page = ({searchParams}: { searchParams: SearchParams }) => {
 
     return (
         <div>
-            <SidebarMenu>
+        <SidebarMenu>
                 <Quiz searchParams={searchParams}/>
             </SidebarMenu>
         </div>
