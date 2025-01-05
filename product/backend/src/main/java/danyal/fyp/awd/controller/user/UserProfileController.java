@@ -47,9 +47,8 @@ public class UserProfileController {
     }
 
     @PostMapping("/save-marks")
-    public ResponseEntity<String> saveMarks(@CookieValue(name="token") String accessToken, @RequestBody MarksDto marksDto) {
-        userService.updateMarks(accessToken, marksDto.marks());
-        return ResponseEntity.ok("Updated Successfully");
+    public ResponseEntity<Integer> saveMarks(@CookieValue(name="token") String accessToken, @RequestBody MarksDto marksDto) {
+        return ResponseEntity.ok(userService.updateMarks(accessToken, marksDto.marks()));
     }
 
 }

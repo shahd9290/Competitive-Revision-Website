@@ -10,7 +10,7 @@ interface SearchParams {
     id?: string;
 }
 
-const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
+const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [questions, setQuestions] = useState([]);
     const [topic, setTopic] = useState(null);
@@ -19,6 +19,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
     const [isCompleted, setIsCompleted] = useState(false);
     const [questionMarks, setQuestionMarks] = useState(0);
     const [totalMarks, setTotalMarks] = useState(0);
+    const [userMarks, setUserMarks] = useState(0);
     const router = useRouter();
     const {id} = searchParams;
 
@@ -27,8 +28,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
             try {
                 const response = await axios.get(`${apiUrl}/api/topic/get?topicId=${id}`, {withCredentials: true});
                 setTopic(response.data);
-            }
-            catch (error:any){
+            } catch (error: any) {
                 setTopic(null);
             }
         }
@@ -42,8 +42,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
             try {
                 const response = await axios.get(`${apiUrl}/api/question/get?topicId=${id}`, {withCredentials: true});
                 setQuestions(response.data);
-            }
-            catch (error:any){
+            } catch (error: any) {
                 alert(error.response.data);
                 router.push('/subjects');
             }
@@ -59,25 +58,27 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         }
     }, [currentQuestion]);
 
-    if (isCompleted) {
+    useEffect(() => {
+        if (isCompleted) {
 
-        const saveMarks = async () => {
-            const payload = {
-                "marks": totalMarks,
+            const saveMarks = async () => {
+                const payload = {"marks": totalMarks,}
+                await axios.post(`${apiUrl}/api/user/save-marks`, payload, {withCredentials: true}).then((response) => {
+                    setUserMarks(response.data);
+                });
             }
 
-             await axios.post(`${apiUrl}/api/user/save-marks`, payload, {withCredentials:true});
-
+            saveMarks();
         }
+    }, [isCompleted, totalMarks]);
 
-        saveMarks();
-
+    if (isCompleted) {
         return (
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-[#D9D9D9] py-10 rounded-3xl drop-shadow-2xl">
                     <h1 className="text-center text-2xl font-bold text-gray-900 pb-4">Quiz Completed!</h1>
                     <h2 className="text-center">Marks Earned: {totalMarks}</h2>
-                    <h2 className="text-center">Your Total Marks: 0</h2>
+                    <h2 className="text-center">Your Total Marks: {userMarks}</h2>
                     <Link
                         href="/subjects"
                         className="pt-4 align-middle justify-center items-center flex underline font-bold"
@@ -86,6 +87,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
             </div>
         );
     }
+
 
     const nextQuestion = (marks = questionMarks) => {
         setTotalMarks(Math.floor(totalMarks + marks));
@@ -98,7 +100,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         }
     }
 
-    const handleSkip = (event: {preventDefault: () => void}) => {
+    const handleSkip = (event: { preventDefault: () => void }) => {
         event.preventDefault();
         nextQuestion(0);
     }
@@ -107,7 +109,10 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         event.preventDefault();
         if (questions.length === 0) return;
 
-        if (userAnswer === '') {alert('Please enter an answer'); return;}
+        if (userAnswer === '') {
+            alert('Please enter an answer');
+            return;
+        }
 
         const currentQuestion = questions[currentQuestionIndex];
         if (userAnswer.trim() === currentQuestion.answer) {
@@ -121,7 +126,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
         }
     };
 
-    return(
+    return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className=" sm:mx-auto sm:w-full sm:max-w-lg bg-[#D9D9D9] py-10 rounded-3xl drop-shadow-2xl">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -131,7 +136,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                     <form
                         className="w-full flex flex-col items-center lg:items-stretch"
                     >
-                        <Progress className="my-5" value={(currentQuestionIndex/questions.length)*100} />
+                        <Progress className="my-5" value={(currentQuestionIndex / questions.length) * 100}/>
                         <div
                             className="w-3/4 lg:w-full text-center text-3xl py-10 bg-white font-medium text-gray-800 mb-6 select-none">
                             {currentQuestion ? (
@@ -164,11 +169,11 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
                         >
                             Submit Answer
                         </button>
-                        {currentQuestion && questionMarks==currentQuestion.marks ? (
+                        {currentQuestion && questionMarks == currentQuestion.marks ? (
                             <div className="w-3/4 lg:w-full bg-blue-300 text-white py-2 mt-2 rounded-md select-none">
                                 <p className={"text-center"}>Skip Question</p>
                             </div>
-                        ): (
+                        ) : (
                             <button
                                 onClick={handleSkip}
                                 className="text-center w-3/4 lg:w-full bg-blue-500 text-white py-2 mt-2 rounded-md hover:bg-blue-600"
@@ -191,7 +196,7 @@ const Page = ({searchParams}: { searchParams: SearchParams }) => {
 
     return (
         <div>
-        <SidebarMenu>
+            <SidebarMenu>
                 <Quiz searchParams={searchParams}/>
             </SidebarMenu>
         </div>
