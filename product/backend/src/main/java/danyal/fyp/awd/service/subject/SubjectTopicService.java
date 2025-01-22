@@ -135,8 +135,7 @@ public class SubjectTopicService {
      */
     public Topic getTopic(String topicName, int qualificationId) {
         Topic topic;
-        if ((topic = topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null)) == null)
-            throw new TopicException("Topic does not exist");
+        topic = topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
         return topic;
     }
 

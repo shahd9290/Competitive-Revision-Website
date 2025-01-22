@@ -48,7 +48,8 @@ public class QuestionService {
             throw new QuestionException("No Questions for this topic!");
 
         Collections.shuffle(questions);
-
-        return questions.subList(0, 10);
+        if (questions.size() > 10)
+            return questions.subList(0, 10);
+        return questions;
     }
 }
