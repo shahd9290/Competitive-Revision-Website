@@ -62,7 +62,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
         if (isCompleted) {
 
             const saveMarks = async () => {
-                const payload = {"marks": totalMarks,}
+                const payload = {"marks": totalMarks,"topicId": id}
                 await axios.post(`${apiUrl}/api/user/save-marks`, payload, {withCredentials: true}).then((response) => {
                     setUserMarks(response.data);
                 });

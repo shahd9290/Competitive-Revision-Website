@@ -3,6 +3,7 @@ package danyal.fyp.awd.controller.user;
 import danyal.fyp.awd.dto.user.MarksDto;
 import danyal.fyp.awd.dto.user.UserProfileDto;
 import danyal.fyp.awd.model.subject.Qualification;
+import danyal.fyp.awd.service.user.UserAttemptsService;
 import danyal.fyp.awd.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserProfileController {
 
     private final UserService userService;
+    private final UserAttemptsService userAttemptsService;
 
     /**
      * Retrieves the profile information of the authenticated user.
@@ -47,8 +49,10 @@ public class UserProfileController {
     }
 
     @PostMapping("/save-marks")
-    public ResponseEntity<Integer> saveMarks(@CookieValue(name="token") String accessToken, @RequestBody MarksDto marksDto) {
-        return ResponseEntity.ok(userService.updateMarks(accessToken, marksDto.marks()));
+    public ResponseEntity<Integer> saveMarks(@CookieValue(name = "token") String accessToken, @RequestBody MarksDto marksDto) {
+        int marks = userService.updateMarks(accessToken, marksDto.marks());
+        userAttemptsService.addAttempt(accessToken, marksDto.topicId());
+        return ResponseEntity.ok(marks);
     }
 
 }

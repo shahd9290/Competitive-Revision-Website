@@ -1,5 +1,7 @@
 package danyal.fyp.awd.model.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import danyal.fyp.awd.model.subject.Topic;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents a user entity in the system.
