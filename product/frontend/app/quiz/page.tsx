@@ -20,6 +20,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
     const [questionMarks, setQuestionMarks] = useState(0);
     const [totalMarks, setTotalMarks] = useState(0);
     const [userMarks, setUserMarks] = useState(0);
+    const [questionTotal, setQuestionTotal] = useState(0);
     const router = useRouter();
     const {id} = searchParams;
 
@@ -41,7 +42,8 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
         const getQuestions = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/api/question/get?topicId=${id}`, {withCredentials: true});
-                setQuestions(response.data);
+                setQuestions(response.data.questions);
+                setQuestionTotal(response.data.totalMarks);
             } catch (error: any) {
                 alert(error.response.data);
                 router.push('/subjects');
@@ -62,7 +64,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
         if (isCompleted) {
 
             const saveMarks = async () => {
-                const payload = {"marks": totalMarks,"topicId": id}
+                const payload = {"marks": totalMarks,"topicId": id, "proportion": totalMarks/questionTotal}
                 await axios.post(`${apiUrl}/api/user/save-marks`, payload, {withCredentials: true}).then((response) => {
                     setUserMarks(response.data);
                 });
