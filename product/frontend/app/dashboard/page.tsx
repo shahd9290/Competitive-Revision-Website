@@ -44,7 +44,16 @@ const Dashboard = () => {
 
                     {/* Bottom section - recent attempts? */}
                     <div className="col-span-3 bg-gray-200 h-96 rounded-lg shadow-lg">
-
+                        {user.attempts && user.attempts.map((attempt: any) => (
+                            // {
+                            //     "topicName": "Arithmetic",
+                            //     "time": 1738009079,
+                            //     "proportion": 1.0
+                            // },
+                            <div>
+                                {attempt.proportion*100}%
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

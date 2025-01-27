@@ -1,5 +1,6 @@
 package danyal.fyp.awd.service.user;
 
+import danyal.fyp.awd.dto.user.UserAttemptDto;
 import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.model.user.AttemptId;
 import danyal.fyp.awd.model.user.User;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,7 +40,19 @@ public class UserAttemptsService {
         userAttemptsRepository.save(attempts);
     }
 
-    public List<UserAttempts> getLatestAttempts(User user) {
-        return userAttemptsRepository.findRecentAttempts(user);
+    public List<UserAttemptDto> getLatestAttempts(User user) {
+//        topicname
+//        date - epoch?
+//        proportion
+        List<UserAttempts> attempts = userAttemptsRepository.findRecentAttempts(user);
+        List<UserAttemptDto> filteredAttempts = new ArrayList<>();
+        
+        for (UserAttempts attempt : attempts) {
+            String topicName = attempt.getTopic().getName();
+            long date = attempt.getId().getDate().getEpochSecond();
+            double proportion = attempt.getProportion();
+            filteredAttempts.add(new UserAttemptDto(topicName, date, proportion));
+        }
+        return filteredAttempts;
     }
 }

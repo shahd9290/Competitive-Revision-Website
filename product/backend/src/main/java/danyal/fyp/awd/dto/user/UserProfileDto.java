@@ -1,7 +1,5 @@
 package danyal.fyp.awd.dto.user;
 
-import danyal.fyp.awd.model.user.UserAttempts;
-
 import java.util.List;
 
 /**
@@ -12,5 +10,5 @@ import java.util.List;
  * @param attempts the user's recent quiz attempts.
  * @author Danyal Shah
  */
-public record UserProfileDto(String username, int marks, List<UserAttempts> attempts) {
+public record UserProfileDto(String username, int marks, List<UserAttemptDto> attempts) {
 }

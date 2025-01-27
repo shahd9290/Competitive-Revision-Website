@@ -1,6 +1,7 @@
 package danyal.fyp.awd.controller.user;
 
 import danyal.fyp.awd.dto.user.MarksDto;
+import danyal.fyp.awd.dto.user.UserAttemptDto;
 import danyal.fyp.awd.dto.user.UserProfileDto;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.user.User;
@@ -36,7 +37,7 @@ public class UserProfileController {
     @GetMapping("/profile")
     public ResponseEntity<UserProfileDto> getUserProfile(final Authentication authentication) {
         User user = userService.getUserByUsername(authentication.getName());
-        List<UserAttempts> attempts = userAttemptsService.getLatestAttempts(user);
+        List<UserAttemptDto> attempts = userAttemptsService.getLatestAttempts(user);
         return ResponseEntity.ok(new UserProfileDto(user.getUsername(), user.getMarks(), attempts));
     }
 
