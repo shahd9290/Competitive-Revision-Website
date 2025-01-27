@@ -1,6 +1,7 @@
 package danyal.fyp.awd.controller.subject;
 
 import danyal.fyp.awd.dto.subject.QuestionAddDto;
+import danyal.fyp.awd.dto.subject.QuestionGetDto;
 import danyal.fyp.awd.model.subject.Question;
 import danyal.fyp.awd.service.subject.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class QuestionController {
     @GetMapping("/get")
     public ResponseEntity<Object> getQuestionByTopic(@RequestParam final int topicId) {
         try {
-            List<Question> questions = questionService.getQuestions(topicId);
+            QuestionGetDto questions = questionService.getQuestions(topicId);
             return ResponseEntity.ok(questions);
         }
         catch (Exception e) {

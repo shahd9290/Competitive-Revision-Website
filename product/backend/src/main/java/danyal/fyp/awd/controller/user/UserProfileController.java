@@ -51,7 +51,7 @@ public class UserProfileController {
     @PostMapping("/save-marks")
     public ResponseEntity<Integer> saveMarks(@CookieValue(name = "token") String accessToken, @RequestBody MarksDto marksDto) {
         int marks = userService.updateMarks(accessToken, marksDto.marks());
-        userAttemptsService.addAttempt(accessToken, marksDto.topicId());
+        userAttemptsService.addAttempt(accessToken, marksDto.topicId(), marksDto.proportion());
         return ResponseEntity.ok(marks);
     }
 

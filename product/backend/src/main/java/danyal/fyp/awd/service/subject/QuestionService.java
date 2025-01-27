@@ -1,5 +1,6 @@
 package danyal.fyp.awd.service.subject;
 
+import danyal.fyp.awd.dto.subject.QuestionGetDto;
 import danyal.fyp.awd.exception.QuestionException;
 import danyal.fyp.awd.exception.TopicException;
 import danyal.fyp.awd.model.subject.Qualification;
@@ -37,7 +38,7 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public List<Question> getQuestions(int topicId) throws Exception {
+    public QuestionGetDto getQuestions(int topicId) throws Exception {
         Topic topic;
         if ((topic = subjectTopicService.getTopic(topicId)) == null)
             throw new TopicException("Topic not found");
@@ -49,7 +50,13 @@ public class QuestionService {
 
         Collections.shuffle(questions);
         if (questions.size() > 10)
-            return questions.subList(0, 10);
-        return questions;
+            questions = questions.subList(0, 10);
+
+        int totalMarks = 0;
+        for (Question question : questions) {
+            totalMarks += question.getMarks();
+        }
+
+        return new QuestionGetDto(questions, totalMarks);
     }
 }

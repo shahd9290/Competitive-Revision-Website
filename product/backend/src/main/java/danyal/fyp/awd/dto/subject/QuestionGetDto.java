@@ -1,4 +1,8 @@
 package danyal.fyp.awd.dto.subject;
 
-public record QuestionGetDto() {
+import danyal.fyp.awd.model.subject.Question;
+
+import java.util.List;
+
+public record QuestionGetDto(List<Question> questions, int totalMarks) {
 }

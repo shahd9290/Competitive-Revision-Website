@@ -20,7 +20,7 @@ public class UserAttemptsService {
     private final SubjectTopicService subjectTopicService;
     private final UserAttemptsRepository userAttemptsRepository;
 
-    public void addAttempt(String accessToken, int topicId) {
+    public void addAttempt(String accessToken, int topicId, double proportion) {
         String username = jwtService.extractUsernameFromToken(accessToken);
 
         User user = userService.getUserByUsername(username);
@@ -32,6 +32,7 @@ public class UserAttemptsService {
         attempts.setId(attemptId);
         attempts.setUser(user);
         attempts.setTopic(topic);
+        attempts.setProportion(proportion);
 
         userAttemptsRepository.save(attempts);
     }
