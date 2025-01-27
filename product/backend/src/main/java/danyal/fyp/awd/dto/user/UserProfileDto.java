@@ -1,12 +1,16 @@
 package danyal.fyp.awd.dto.user;
 
+import danyal.fyp.awd.model.user.UserAttempts;
+
+import java.util.List;
+
 /**
  * A DTO representing a user's profile information.
  *
- * @param email    the email address of the user.
  * @param username the username of the user.
  * @param marks the marks that the user has.
+ * @param attempts the user's recent quiz attempts.
  * @author Danyal Shah
  */
-public record UserProfileDto(String email, String username, int marks) {
+public record UserProfileDto(String username, int marks, List<UserAttempts> attempts) {
 }

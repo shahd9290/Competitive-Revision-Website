@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -35,5 +36,9 @@ public class UserAttemptsService {
         attempts.setProportion(proportion);
 
         userAttemptsRepository.save(attempts);
+    }
+
+    public List<UserAttempts> getLatestAttempts(User user) {
+        return userAttemptsRepository.findRecentAttempts(user);
     }
 }
