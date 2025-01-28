@@ -2,6 +2,8 @@
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import { SidebarMenu } from '@/components/ui/SidebarMenu';
+import {AttemptsTable} from "@/components/ui/AttemptsTable";
+import {columns} from "@/components/columns";
 
 /**
  * A dashboard component displaying user information and statistics.
@@ -46,16 +48,13 @@ const Dashboard = () => {
                     <div className="col-span-3 bg-gray-200 h-96 rounded-lg shadow-lg">
                         <h1 className="flex items-center justify-center align-middle text-4xl p-6">Recent Attempts</h1>
                         {/* Could use Shadcn data table here */}
-                        {user.attempts && user.attempts.map((attempt: any) => (
-                            // {
-                            //     "topicName": "Arithmetic",
-                            //     "date": "January 28, 2025 10:18",
-                            //     "proportion": 1.0
-                            // },
-                            <div className="flex items-center justify-center align-middle text-xl p-3">
-                                {attempt.date} | {attempt.topicName} | {attempt.proportion*100}%
+                        {user.attempts && user.attempts.length > 0 ? (
+                            <div className="container mx-auto py-10">
+                                <AttemptsTable columns={columns} data={user.attempts}/>
                             </div>
-                        ))}
+                        ) : (
+                            <div className="flex justify-center items-center align-middle text-center">No recent attempts found.</div>
+                        )}
                     </div>
                 </div>
             </div>

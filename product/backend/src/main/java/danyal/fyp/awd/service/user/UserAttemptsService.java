@@ -56,7 +56,7 @@ public class UserAttemptsService {
             String topicName = attempt.getTopic().getName();
             LocalDateTime date = attempt.getId().getDate().atZone(ZoneId.systemDefault()).toLocalDateTime();
             String dateString = date.format(formatter);
-            double proportion = attempt.getProportion();
+            String proportion = String.valueOf(attempt.getProportion()*100) + "%";
             filteredAttempts.add(new UserAttemptDto(topicName, dateString, proportion));
         }
         return filteredAttempts;
