@@ -44,14 +44,16 @@ const Dashboard = () => {
 
                     {/* Bottom section - recent attempts? */}
                     <div className="col-span-3 bg-gray-200 h-96 rounded-lg shadow-lg">
+                        <h1 className="flex items-center justify-center align-middle text-4xl p-6">Recent Attempts</h1>
+                        {/* Could use Shadcn data table here */}
                         {user.attempts && user.attempts.map((attempt: any) => (
                             // {
                             //     "topicName": "Arithmetic",
-                            //     "time": 1738009079,
+                            //     "date": "January 28, 2025 10:18",
                             //     "proportion": 1.0
                             // },
-                            <div>
-                                {attempt.proportion*100}%
+                            <div className="flex items-center justify-center align-middle text-xl p-3">
+                                {attempt.date} | {attempt.topicName} | {attempt.proportion*100}%
                             </div>
                         ))}
                     </div>

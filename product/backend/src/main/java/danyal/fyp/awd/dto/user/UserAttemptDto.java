@@ -1,4 +1,4 @@
 package danyal.fyp.awd.dto.user;
 
-public record UserAttemptDto (String topicName, long time, double proportion){
+public record UserAttemptDto(String topicName, String date, double proportion) {
 }

@@ -10,7 +10,10 @@ import danyal.fyp.awd.service.subject.SubjectTopicService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +49,15 @@ public class UserAttemptsService {
 //        proportion
         List<UserAttempts> attempts = userAttemptsRepository.findRecentAttempts(user);
         List<UserAttemptDto> filteredAttempts = new ArrayList<>();
-        
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy HH:mm");
+
         for (UserAttempts attempt : attempts) {
             String topicName = attempt.getTopic().getName();
-            long date = attempt.getId().getDate().getEpochSecond();
+            LocalDateTime date = attempt.getId().getDate().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            String dateString = date.format(formatter);
             double proportion = attempt.getProportion();
-            filteredAttempts.add(new UserAttemptDto(topicName, date, proportion));
+            filteredAttempts.add(new UserAttemptDto(topicName, dateString, proportion));
         }
         return filteredAttempts;
     }
