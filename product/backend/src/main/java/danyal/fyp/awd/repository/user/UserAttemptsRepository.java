@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface UserAttemptsRepository extends JpaRepository<UserAttempts, AttemptId> {
 
-    @Query("SELECT ua FROM UserAttempts ua WHERE ua.user = :user ORDER BY ua.id.date DESC LIMIT 3")
+    @Query("SELECT ua FROM UserAttempts ua WHERE ua.user = :user ORDER BY ua.id.date DESC LIMIT 4")
     List<UserAttempts> findRecentAttempts(@Param("user") User user);
 
 }

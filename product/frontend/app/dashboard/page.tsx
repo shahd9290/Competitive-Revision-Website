@@ -45,11 +45,11 @@ const Dashboard = () => {
                     </div>
 
                     {/* Bottom section - recent attempts? */}
-                    <div className="col-span-3 bg-gray-200 h-96 rounded-lg shadow-lg">
+                    <div className="col-span-3 bg-gray-200 h-96 rounded-lg shadow-lg px-7">
                         <h1 className="flex items-center justify-center align-middle text-4xl p-6">Recent Attempts</h1>
                         {/* Could use Shadcn data table here */}
                         {user.attempts && user.attempts.length > 0 ? (
-                            <div className="container mx-auto py-10">
+                            <div className="container mx-auto">
                                 <AttemptsTable columns={columns} data={user.attempts}/>
                             </div>
                         ) : (
