@@ -3,6 +3,8 @@ package danyal.fyp.awd.service.user;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -39,6 +43,21 @@ public class JwtService {
                 .subject(username)
                 .issuer(issuer)
                 .expiresAt(Instant.now().plus(ttl))
+                //.claim("role", roles.get(0))
+                .build();
+
+        return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet))
+                .getTokenValue();
+    }
+
+    public String generateToken(final Authentication authentication) {
+        JpaUserDetails userDetails = (JpaUserDetails) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        final var claimsSet = JwtClaimsSet.builder()
+                .subject(authentication.getName())
+                .issuer(issuer)
+                .expiresAt(Instant.now().plus(ttl))
+                .claim("role", roles.get(0))
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet))
@@ -51,7 +70,7 @@ public class JwtService {
      * @param token the JWT token to decode.
      * @return the username (subject) contained in the token.
      */
-    public String extractUsernameFromToken(String token) {
+    public String getUserNameFromJwtToken(String token) {
         // If we get to this function - the token should already be authenticated as it's called via the /api/refresh/ path - which requires authentication.
         DecodedJWT decodedJWT = JWT.decode(token);
         return decodedJWT.getSubject();
@@ -63,8 +82,9 @@ public class JwtService {
      * @param token the JWT token to validate.
      * @return {@code true} if the token has expired; {@code false} otherwise.
      */
-    public boolean isExpired(String token) {
+    public boolean validateJwtToken(String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getExpiresAt().before(new Date());
+        return decodedJWT.getExpiresAt().after(new Date());
     }
+
 }

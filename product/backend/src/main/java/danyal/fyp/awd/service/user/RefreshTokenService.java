@@ -50,7 +50,7 @@ public class RefreshTokenService {
      * @return an {@link AuthenticationResponseDto} containing the new access token.
      */
     public AuthenticationResponseDto refreshToken(String accessToken) {
-        User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
+        User user = userService.getUserByUsername(jwtService.getUserNameFromJwtToken(accessToken));
         // Checks expiry data is valid.
         if (hasInvalidRefreshToken(user))
             // No token found? Somehow? Brand new one then

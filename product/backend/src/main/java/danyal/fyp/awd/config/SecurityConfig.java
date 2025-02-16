@@ -1,13 +1,17 @@
 package danyal.fyp.awd.config;
 
+import danyal.fyp.awd.filter.AuthFilter;
 import danyal.fyp.awd.filter.TokenFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,10 +28,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @author Danyal Shah
  */
 @Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    CorsConfig corsConfig;
+    private final CorsConfig corsConfig;
+
+    private final AuthFilter authFilter;
 
     /**
      * Configures the {@link SecurityFilterChain} to define security rules and apply filters.
@@ -42,6 +50,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new TokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**",
                                 "/api/qualification/get-all"

@@ -5,6 +5,7 @@ import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
 import danyal.fyp.awd.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
 
     private final RefreshTokenService refreshTokenService;
+    private final DefaultAuthenticationEventPublisher authenticationEventPublisher;
 
     /**
      * Authenticates a user and generates an access token.
@@ -39,7 +41,7 @@ public class AuthenticationService {
         final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
         final var authentication = authenticationManager.authenticate(authToken);
 
-        final var accessToken = jwtService.generateToken(request.username());
+        final var accessToken = jwtService.generateToken(authentication);
 
         final var user = userRepository.findByUsername(request.username()).orElse(null);
         // Check if valid refresh token is in database.

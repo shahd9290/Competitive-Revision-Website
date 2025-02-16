@@ -54,7 +54,7 @@ public class UserService {
     }
 
     public int updateMarks(String token, int marks) {
-        String name = jwtService.extractUsernameFromToken(token);
+        String name = jwtService.getUserNameFromJwtToken(token);
         User user = getUserByUsername(name);
         user.setMarks(user.getMarks() + marks);
         userRepository.save(user);

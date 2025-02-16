@@ -27,7 +27,7 @@ public class UserAttemptsService {
     private final UserAttemptsRepository userAttemptsRepository;
 
     public void addAttempt(String accessToken, int topicId, double proportion) {
-        String username = jwtService.extractUsernameFromToken(accessToken);
+        String username = jwtService.getUserNameFromJwtToken(accessToken);
 
         User user = userService.getUserByUsername(username);
         Topic topic = subjectTopicService.getTopic(topicId);
