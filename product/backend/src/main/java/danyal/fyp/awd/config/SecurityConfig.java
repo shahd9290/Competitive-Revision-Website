@@ -3,11 +3,9 @@ package danyal.fyp.awd.config;
 import danyal.fyp.awd.filter.AuthFilter;
 import danyal.fyp.awd.filter.TokenFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,8 +14,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
-import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -40,7 +36,6 @@ public class SecurityConfig {
     /**
      * Configures the {@link SecurityFilterChain} to define security rules and apply filters.
      *
-     *
      * @param http the {@link HttpSecurity} object to configure security features.
      * @return the configured {@link SecurityFilterChain}.
      * @throws Exception if an error occurs while configuring security settings.
@@ -55,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**",
                                 "/api/qualification/get-all"
                         ).permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .cors(c -> c.configurationSource(corsConfig))
