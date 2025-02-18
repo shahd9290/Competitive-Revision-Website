@@ -21,25 +21,6 @@ public class QualificationController {
     private final QualificationService qualificationService;
 
     /**
-     * Adds a new qualification.
-     *
-     * @param qualificationDto the data for the qualification to add.
-     * @return a success message.
-     */
-    @PostMapping("/add")
-    public ResponseEntity<String> addQualification(@RequestBody final QualificationDto qualificationDto) {
-        Qualification qualification = new Qualification();
-        qualification.setName(qualificationDto.qualification());
-        try {
-            qualificationService.saveQualification(qualification);
-            return ResponseEntity.ok("Qualification Added Successfully");
-        }
-        catch (Exception e) {
-            return  ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    /**
      * Retrieves all qualifications.
      *
      * @return a list of all qualifications.
@@ -48,6 +29,7 @@ public class QualificationController {
     public ResponseEntity<List<Qualification>> getAllQualifications() {
         return ResponseEntity.ok(qualificationService.getAllQualifications());
     }
+
 
 
 }

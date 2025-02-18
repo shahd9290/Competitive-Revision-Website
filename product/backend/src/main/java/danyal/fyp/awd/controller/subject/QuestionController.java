@@ -16,16 +16,6 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addQuestion(@RequestBody QuestionAddDto questionAddDto) {
-        try {
-            questionService.addQuestion(questionAddDto.question(), questionAddDto.answer(), questionAddDto.marks(), questionAddDto.topic(), questionAddDto.qualification());
-            return ResponseEntity.ok("Question added");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     @GetMapping("/get")
     public ResponseEntity<Object> getQuestionByTopic(@RequestParam final int topicId) {
         try {
