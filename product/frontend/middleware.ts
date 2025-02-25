@@ -23,15 +23,16 @@ export async function middleware(req: NextRequest) {
     console.log("Middleware Running");
 
     const tokenExpiry = req.cookies.get("tokenExpiry")?.value;
-    const response = NextResponse.next()
+    let response = NextResponse.next()
 
 
 
     // not found?
     if (req.url.endsWith('/logout')) {
+        response = NextResponse.redirect(new URL("/login", req.url))
         response.cookies.set("tokenExpiry", "0", {httpOnly: true, expires: new Date(0)});
         response.cookies.set("token", "", {httpOnly:true, expires: new Date(0)})
-
+        return response;
     }
     else if (req.nextUrl.pathname === "/admin/login" || req.nextUrl.pathname === "/login") {
         return response
