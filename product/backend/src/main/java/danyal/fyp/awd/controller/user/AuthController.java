@@ -37,26 +37,16 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
         try {
-            AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto, "ROLE_USER");
-            return loggedin(response);
-        } catch (Exception e) {
+            AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
+            ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
+            ResponseCookie cookieExpire = cookieService.createTimerCookie();
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully.");
+        }
+        catch (AdminException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.badRequest().body("Username or password is incorrect.");
         }
-    }
-
-    @PostMapping("/loginAdmin")
-    public ResponseEntity<String> authenticateAdmin(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
-        try {
-            AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto, "ROLE_ADMIN");
-            return loggedin(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Username or password is incorrect.");
-        }
-    }
-
-    private ResponseEntity<String> loggedin(AuthenticationResponseDto response) {
-        ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
-        ResponseCookie cookieExpire = cookieService.createTimerCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully.");
     }
 }

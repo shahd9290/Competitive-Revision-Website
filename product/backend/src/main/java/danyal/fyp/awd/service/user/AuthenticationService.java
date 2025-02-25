@@ -45,7 +45,7 @@ public class AuthenticationService {
      * @return an {@link AuthenticationResponseDto} containing the generated access token.
      * @throws UsernameNotFoundException if the user does not exist.
      */
-    public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request, String role) throws AdminException {
+    public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request) throws AdminException {
         final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
         final var authentication = authenticationManager.authenticate(authToken);
 
@@ -53,8 +53,8 @@ public class AuthenticationService {
 
         final var user = userRepository.findByUsername(request.username()).orElse(null);
 
-        if (!user.getRoles().stream().findFirst().get().getName().equals(role))
-            throw new AdminException("User does not have role: %s".formatted(role));
+        if (!user.getRoles().stream().findFirst().get().getName().equals(request.role()))
+            throw new AdminException("User does not have role: %s".formatted(request.role()));
         // Check if valid refresh token is in database.
         // If not (expired or non-existent) then create one
         // Otherwise ignore and continue

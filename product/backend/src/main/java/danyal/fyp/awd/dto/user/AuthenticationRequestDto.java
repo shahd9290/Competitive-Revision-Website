@@ -7,5 +7,5 @@ package danyal.fyp.awd.dto.user;
  * @param password the password for authentication.
  * @author Danyal Shah
  */
-public record AuthenticationRequestDto(String username, String password) {
+public record AuthenticationRequestDto(String username, String password, String role) {
 }
