@@ -198,7 +198,7 @@ const Page = ({searchParams}: { searchParams: SearchParams }) => {
 
     return (
         <div>
-            <SidebarMenu>
+            <SidebarMenu role="ROLE_USER">
                 <Quiz searchParams={searchParams}/>
             </SidebarMenu>
         </div>

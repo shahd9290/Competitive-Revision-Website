@@ -63,7 +63,7 @@ const Page = () => {
 
     return (
         <div>
-            <SidebarMenu>
+            <SidebarMenu role="ROLE_USER">
                 <Search/>
             </SidebarMenu>
         </div>

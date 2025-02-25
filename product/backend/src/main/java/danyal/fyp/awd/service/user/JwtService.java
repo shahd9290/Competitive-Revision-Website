@@ -2,6 +2,7 @@ package danyal.fyp.awd.service.user;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import danyal.fyp.awd.model.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,18 +44,16 @@ public class JwtService {
                 .subject(username)
                 .issuer(issuer)
                 .expiresAt(Instant.now().plus(ttl))
-                //.claim("role", roles.get(0))
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet))
                 .getTokenValue();
     }
 
-    public String generateToken(final Authentication authentication) {
-        JpaUserDetails userDetails = (JpaUserDetails) authentication.getPrincipal();
+    public String generateToken(final JpaUserDetails userDetails) {
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         final var claimsSet = JwtClaimsSet.builder()
-                .subject(authentication.getName())
+                .subject(userDetails.getUsername())
                 .issuer(issuer)
                 .expiresAt(Instant.now().plus(ttl))
                 .claim("role", roles.get(0))

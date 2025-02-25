@@ -57,8 +57,7 @@ public class RefreshTokenService {
             // No token found? Somehow? Brand new one then
             createToken(user);
 
-        final var newAccessToken = jwtService.generateToken(user.getUsername());
-        Role role = user.getRoles().stream().findFirst().get();
+        final var newAccessToken = jwtService.generateToken(user.toJpaUserDetails());
 
         return new AuthenticationResponseDto(newAccessToken);
     }

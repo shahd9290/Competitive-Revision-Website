@@ -49,7 +49,7 @@ public class AuthenticationService {
         final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
         final var authentication = authenticationManager.authenticate(authToken);
 
-        final var accessToken = jwtService.generateToken(authentication);
+        final var accessToken = jwtService.generateToken((JpaUserDetails) authentication.getPrincipal());
 
         final var user = userRepository.findByUsername(request.username()).orElse(null);
 

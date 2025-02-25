@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 /**
  * Configuration for middleware matcher.
@@ -7,7 +8,7 @@ import axios from "axios";
  * Defines routes where this middleware should be applied.
  */
 export const config = {
-    matcher: [ '/', '/dashboard', '/subjects', '/logout', '/quiz']
+    matcher: [ '/', '/dashboard', '/subjects', '/logout', '/quiz', '/admin/:path*']
 }
 
 /**
@@ -24,14 +25,33 @@ export async function middleware(req: NextRequest) {
     const tokenExpiry = req.cookies.get("tokenExpiry")?.value;
     const response = NextResponse.next()
 
+
+
     // not found?
     if (req.url.endsWith('/logout')) {
         response.cookies.set("tokenExpiry", "0", {httpOnly: true, expires: new Date(0)});
         response.cookies.set("token", "", {httpOnly:true, expires: new Date(0)})
 
     }
-    else if (tokenExpiry !== undefined && !req.url.endsWith('/')) {
+    else if (req.nextUrl.pathname === "/admin/login" || req.nextUrl.pathname === "/login") {
+        return response
+    }
+    else if (tokenExpiry) {
+        const token = req.cookies.get("token")?.value;
+        const decoded: {role?:string; exp?:number;} = jwtDecode(token);
 
+        if (decoded.role !== "ROLE_ADMIN" && req.nextUrl.pathname.startsWith("/admin")) {
+            return new Response(null, {status: 403});
+        }
+        else if (decoded.role !== "ROLE_USER" && config.matcher.some(path=>!req.nextUrl.pathname.startsWith("/admin"))) {
+            return new Response(null, {status: 403});
+        }
+        else {
+            return response;
+        }
+    }
+    else if (tokenExpiry !== undefined && !req.url.endsWith('/')) {
+        console.log("Checking token!")
         const isExpired = checkExpiration(tokenExpiry);
         // time is up?
         if (isExpired) {
