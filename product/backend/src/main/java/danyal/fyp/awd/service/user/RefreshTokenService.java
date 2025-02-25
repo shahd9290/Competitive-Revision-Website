@@ -2,6 +2,7 @@ package danyal.fyp.awd.service.user;
 
 import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
 import danyal.fyp.awd.model.user.RefreshToken;
+import danyal.fyp.awd.model.user.Role;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,8 @@ public class RefreshTokenService {
             createToken(user);
 
         final var newAccessToken = jwtService.generateToken(user.getUsername());
+        Role role = user.getRoles().stream().findFirst().get();
+
         return new AuthenticationResponseDto(newAccessToken);
     }
 

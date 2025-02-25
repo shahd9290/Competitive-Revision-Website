@@ -2,12 +2,14 @@ package danyal.fyp.awd.controller.user;
 
 import danyal.fyp.awd.dto.user.AuthenticationRequestDto;
 import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.exception.AdminException;
 import danyal.fyp.awd.service.user.AuthenticationService;
 import danyal.fyp.awd.service.user.CookieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,13 +37,26 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
         try {
-            AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
-            ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
-            ResponseCookie cookieExpire = cookieService.createTimerCookie();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
+            AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto, "ROLE_USER");
+            return loggedin(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Username or password is incorrect.");
         }
     }
 
+    @PostMapping("/loginAdmin")
+    public ResponseEntity<String> authenticateAdmin(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
+        try {
+            AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto, "ROLE_ADMIN");
+            return loggedin(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Username or password is incorrect.");
+        }
+    }
+
+    private ResponseEntity<String> loggedin(AuthenticationResponseDto response) {
+        ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
+        ResponseCookie cookieExpire = cookieService.createTimerCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully.");
+    }
 }
