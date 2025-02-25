@@ -23,7 +23,7 @@ const page = () => {
         event.preventDefault();
 
         const payload = {
-            "username": username, "password": password
+            "username": username, "password": password, "role": "ROLE_USER"
         }
 
         try {
