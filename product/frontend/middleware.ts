@@ -36,8 +36,12 @@ export async function middleware(req: NextRequest) {
     else if (req.nextUrl.pathname === "/admin/login" || req.nextUrl.pathname === "/login") {
         return response
     }
-    else if (tokenExpiry) {
+    else if (tokenExpiry !== undefined && !req.url.endsWith('/')) {
+        console.log("Checking token!")
+        const isExpired = checkExpiration(tokenExpiry);
         const token = req.cookies.get("token")?.value;
+        // time is up?
+
         const decoded: {role?:string; exp?:number;} = jwtDecode(token);
 
         if (decoded.role !== "ROLE_ADMIN" && req.nextUrl.pathname.startsWith("/admin")) {
@@ -46,17 +50,9 @@ export async function middleware(req: NextRequest) {
         else if (decoded.role !== "ROLE_USER" && config.matcher.some(path=>!req.nextUrl.pathname.startsWith("/admin"))) {
             return new Response(null, {status: 403});
         }
-        else {
-            return response;
-        }
-    }
-    else if (tokenExpiry !== undefined && !req.url.endsWith('/')) {
-        console.log("Checking token!")
-        const isExpired = checkExpiration(tokenExpiry);
-        // time is up?
+
         if (isExpired) {
             console.log("Token Expired!")
-            const token = req.cookies.get("token")?.value;
             await axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
                 headers: {
                     'Cookie': `token=${token}`,
