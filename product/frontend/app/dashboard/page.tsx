@@ -69,7 +69,7 @@ const Page = () => {
 
     return (
         <div>
-            <SidebarMenu>
+            <SidebarMenu role="ROLE_USER">
                 <Dashboard/>
             </SidebarMenu>
         </div>

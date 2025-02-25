@@ -28,7 +28,7 @@ const page = () => {
 
         try {
             const login_confirm = await axios.post(`${apiUrl}/api/auth/login`, payload, {withCredentials: true});
-            router.push('/dashboard')
+            router.push('/admin/dashboard')
 
         } catch (error: any) {
             if (error.response && error.response.data) {
