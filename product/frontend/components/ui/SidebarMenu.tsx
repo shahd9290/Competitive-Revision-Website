@@ -8,7 +8,7 @@ import {cn} from "@/lib/utils";
 import {adminLinks, userLinks} from "@/components/ui/SidebarLinks";
 
 /* This Sidebar component was made free for use in web development by Manu Arora at Aceternity UI - https://ui.aceternity.com/components/sidebar*/
-
+// @ts-ignore
 export function SidebarMenu(content) {
     const [open, setOpen] = useState(false);
     return (

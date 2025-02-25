@@ -43,6 +43,7 @@ export async function middleware(req: NextRequest) {
         const token = req.cookies.get("token")?.value;
         // time is up?
 
+        // @ts-ignore
         const decoded: {role?:string; exp?:number;} = jwtDecode(token);
 
         if (decoded.role !== "ROLE_ADMIN" && req.nextUrl.pathname.startsWith("/admin")) {
@@ -75,6 +76,8 @@ export async function middleware(req: NextRequest) {
 
         return response
     }
+    if (req.nextUrl.pathname.startsWith("/admin"))
+        return NextResponse.redirect(new URL("/admin/login", req.url));
     return NextResponse.redirect(new URL('/login', req.url));
 
 }
