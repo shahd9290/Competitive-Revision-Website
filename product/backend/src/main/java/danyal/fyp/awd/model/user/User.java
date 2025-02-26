@@ -81,7 +81,7 @@ public class User {
     /**
      * The ID of the qualification associated with the user.
      */
-    @JoinColumn(name = "qualification_id", table = "qualifications", nullable = false)
+    @JoinColumn(name = "qualification_id", table = "qualifications", nullable = true)
     private int qualificationId;
 
     /**

@@ -1,13 +1,22 @@
 package danyal.fyp.awd.service.user;
 
+import danyal.fyp.awd.dto.admin.UserDataDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
+import danyal.fyp.awd.model.user.Role;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
 import danyal.fyp.awd.service.subject.QualificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.GONE;
 
@@ -59,5 +68,28 @@ public class UserService {
         user.setMarks(user.getMarks() + marks);
         userRepository.save(user);
         return user.getMarks();
+    }
+
+    public List<UserDataDto> getAllUsers() {
+        List<User> userList = userRepository.findAll();
+        List<UserDataDto> userDataDtoList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy HH:mm");
+        for (User user : userList) {
+            Role role = user.getRoles().stream().findFirst().get();
+            Qualification qual = getUserQualification(user.getUsername());
+            LocalDateTime date = user.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            String dateString = date.format(formatter);
+
+            userDataDtoList.add(new UserDataDto(user.getUsername(), user.getEmail(), getRoleLabel(role.getName()), dateString, qual.getName()));
+        }
+        return userDataDtoList;
+    }
+
+    private String getRoleLabel(String role) {
+        return switch (role) {
+            case "ROLE_ADMIN" -> "Admin";
+            case "ROLE_USER" -> "User";
+            default -> role;
+        };
     }
 }
