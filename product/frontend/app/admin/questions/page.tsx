@@ -2,8 +2,8 @@
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import { SidebarMenu } from '@/components/ui/SidebarMenu';
-import {AttemptsTable} from "@/components/ui/AttemptsTable";
-import {columns} from "@/components/columns";
+import {DataTable} from "@/components/ui/DataTable";
+import {attemptColumns} from "@/components/TableColumns";
 
 /**
  * A dashboard component displaying user information and statistics.

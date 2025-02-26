@@ -2,8 +2,8 @@
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import { SidebarMenu } from '@/components/ui/SidebarMenu';
-import {AttemptsTable} from "@/components/ui/AttemptsTable";
-import {columns} from "@/components/columns";
+import {DataTable} from "@/components/ui/DataTable";
+import {attemptColumns} from "@/components/TableColumns";
 
 /**
  * A dashboard component displaying user information and statistics.
@@ -50,7 +50,7 @@ const Dashboard = () => {
                         {/* Could use Shadcn data table here */}
                         {user.attempts && user.attempts.length > 0 ? (
                             <div className="container mx-auto">
-                                <AttemptsTable columns={columns} data={user.attempts}/>
+                                <DataTable columns={attemptColumns} data={user.attempts}/>
                             </div>
                         ) : (
                             <div className="flex justify-center items-center align-middle text-center">No recent attempts found.</div>

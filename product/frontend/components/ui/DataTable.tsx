@@ -26,7 +26,7 @@ export type Attempt = {
     proportion: number
 }
 
-export function AttemptsTable<TData, TValue>({
+export function DataTable<TData, TValue>({
     data,
     columns,
  }: DataTableProps<TData, TValue>) {
