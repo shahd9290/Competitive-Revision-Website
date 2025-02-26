@@ -10,7 +10,7 @@ import {columns} from "@/components/columns";
  *
  * @author Danyal Shah
  */
-const Dashboard = () => {
+const QualificationsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     return (
@@ -23,14 +23,14 @@ const Dashboard = () => {
 };
 
 /**
- * A wrapper component for the Dashboard with a sidebar menu.
+ * A wrapper component for the QualificationsDash with a sidebar menu.
  */
 const Page = () => {
 
     return (
         <div>
             <SidebarMenu role="ROLE_ADMIN">
-                <Dashboard/>
+                <QualificationsDash/>
             </SidebarMenu>
         </div>
     )
