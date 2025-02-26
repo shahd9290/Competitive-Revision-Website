@@ -30,7 +30,21 @@ export function SidebarMenu(content) {
                             </div>
                         ) : (
                             <div className="mt-8 flex flex-col gap-2">
-                                {adminLinks.map((link, idx) => (
+                                {adminLinks.slice(0, 1).map((link, idx) => (
+                                    <SidebarLink key={idx} link={link}/>
+                                ))}
+
+                                {/* Divider before Questions - Users */}
+                                <div className="border-b border-neutral-700 my-2"></div>
+
+                                {adminLinks.slice(1, 6).map((link, idx) => (
+                                    <SidebarLink key={idx} link={link}/>
+                                ))}
+
+                                {/* Divider after Questions - Users */}
+                                <div className="border-b border-neutral-700 my-2"></div>
+
+                                {adminLinks.slice(6).map((link, idx) => (
                                     <SidebarLink key={idx} link={link}/>
                                 ))}
                             </div>

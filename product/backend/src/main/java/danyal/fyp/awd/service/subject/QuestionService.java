@@ -59,4 +59,7 @@ public class QuestionService {
 
         return new QuestionGetDto(questions, totalMarks);
     }
+
+    public  getAllQuestions() {
+    }
 }
