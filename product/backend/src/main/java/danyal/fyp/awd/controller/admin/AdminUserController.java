@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
-public class AdminUserContoller {
+public class AdminUserController {
 
     private final UserService userService;
 
@@ -22,7 +22,7 @@ public class AdminUserContoller {
             return ResponseEntity.ok(userService.getAllUsers());
         }
         catch (Exception e){
-            return ResponseEntity.badRequest().body("An error occured when fetching data");
+            return ResponseEntity.badRequest().body("An error occurred when fetching data");
         }
     }
 
