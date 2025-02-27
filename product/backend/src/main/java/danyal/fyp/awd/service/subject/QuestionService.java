@@ -63,14 +63,6 @@ public class QuestionService {
     }
 
     public List<QuestionDataDto> getAllQuestions() {
-        List<Question> questionList = questionRepository.findAll();
-        List<QuestionDataDto> questionDataDtoList = new ArrayList<>();
-
-        for (Question question : questionList) {
-            Topic t = question.getTopic();
-            questionDataDtoList.add(new QuestionDataDto(question.getQuestion(), question.getAnswer(), question.getMarks(), t.getSubject().getName(), t.getName()));
-        }
-        
-        return questionDataDtoList;
+        return questionRepository.getQuestionData();
     }
 }
