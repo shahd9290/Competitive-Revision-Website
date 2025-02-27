@@ -1,5 +1,6 @@
 package danyal.fyp.awd.service.subject;
 
+import danyal.fyp.awd.dto.admin.QuestionDataDto;
 import danyal.fyp.awd.dto.subject.QuestionGetDto;
 import danyal.fyp.awd.exception.QuestionException;
 import danyal.fyp.awd.exception.TopicException;
@@ -10,6 +11,7 @@ import danyal.fyp.awd.repository.subject.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,6 +62,15 @@ public class QuestionService {
         return new QuestionGetDto(questions, totalMarks);
     }
 
-    public  getAllQuestions() {
+    public List<QuestionDataDto> getAllQuestions() {
+        List<Question> questionList = questionRepository.findAll();
+        List<QuestionDataDto> questionDataDtoList = new ArrayList<>();
+
+        for (Question question : questionList) {
+            Topic t = question.getTopic();
+            questionDataDtoList.add(new QuestionDataDto(question.getQuestion(), question.getAnswer(), question.getMarks(), t.getSubject().getName(), t.getName()));
+        }
+        
+        return questionDataDtoList;
     }
 }

@@ -17,7 +17,7 @@ public class AdminSubjectTopicController {
     // TODO: Add endpoint to create Admin profile
 
     @GetMapping("/subjects/get")
-    public ResponseEntity<Object> getUsers() {
+    public ResponseEntity<Object> getSubjects() {
         try {
             return ResponseEntity.ok(subjectTopicService.getAllSubjectsAdmin());
         }
@@ -27,7 +27,7 @@ public class AdminSubjectTopicController {
     }
 
     @GetMapping("/topics/get")
-    public ResponseEntity<Object> getUsers() {
+    public ResponseEntity<Object> getTopics() {
         try {
             return ResponseEntity.ok(subjectTopicService.getAllTopics());
         }

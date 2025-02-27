@@ -27,7 +27,7 @@ const SubjectsDash = () => {
     }, []);
     return (
         <div className="flex items-center justify-center min-h-screen ">
-            <div className="w-full max-w-7xl p-6 rounded-lg bg-white h-96">
+            <div className="w-full max-w-7xl p-6 rounded-lg bg-white">
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Subjects</h1>
                 {subjects && subjects.length > 0 ? (
                     <div className="container mx-auto">

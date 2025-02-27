@@ -1,5 +1,7 @@
 package danyal.fyp.awd.service.subject;
 
+import danyal.fyp.awd.dto.admin.SubjectDataDto;
+import danyal.fyp.awd.dto.admin.TopicDataDto;
 import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
 import danyal.fyp.awd.dto.subject.TopicDto;
 import danyal.fyp.awd.exception.SubjectException;
@@ -134,9 +136,7 @@ public class SubjectTopicService {
      * @throws TopicException if the topic was not found.
      */
     public Topic getTopic(String topicName, int qualificationId) {
-        Topic topic;
-        topic = topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
-        return topic;
+        return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
     }
 
     /**
@@ -166,5 +166,13 @@ public class SubjectTopicService {
         Subject subject = getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
 
         return topicRepository.findAllBySubjectIdAndQualificationId(subject.getId(), qualification.getId());
+    }
+
+    public List<SubjectDataDto> getAllSubjectsAdmin() {
+        return null;
+    }
+
+    public List<TopicDataDto> getAllTopics() {
+        return null;
     }
 }
