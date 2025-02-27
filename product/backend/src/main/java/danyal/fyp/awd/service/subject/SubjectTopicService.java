@@ -169,7 +169,7 @@ public class SubjectTopicService {
     }
 
     public List<SubjectDataDto> getAllSubjectsAdmin() {
-        return null;
+        return subjectRepository.findAllDetails();
     }
 
     public List<TopicDataDto> getAllTopics() {
