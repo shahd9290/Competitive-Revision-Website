@@ -37,6 +37,11 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
     @Query("SELECT s FROM Subject s WHERE s.name = :name")
     Optional<Subject> findByName(String name);
 
-    @Query("SELECT new danyal.fyp.awd.dto.admin.SubjectDataDto(s.name, cast(count(t.name) as int), q.name) from Subject s join s.topics t join t.qualification q group by s.name, q.name")
+    @Query("SELECT new danyal.fyp.awd.dto.admin.SubjectDataDto(" +
+            "s.name, cast(count(t) as int), q.name) " +
+            "from Subject s " +
+            "left join s.qualifications q " +
+            "left join s.topics t on t.qualification = q " +
+            "group by s.name, q.name")
     List<SubjectDataDto> findAllDetails();
 }
