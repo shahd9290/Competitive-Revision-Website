@@ -16,8 +16,7 @@ public record UserDataDto (String username, String email, String role, String cr
         return date.format(formatter);
     }
 
-    private static
-    String getRoleLabel(String role) {
+    private static String getRoleLabel(String role) {
         return switch (role) {
             case "ROLE_ADMIN" -> "Admin";
             case "ROLE_USER" -> "User";
