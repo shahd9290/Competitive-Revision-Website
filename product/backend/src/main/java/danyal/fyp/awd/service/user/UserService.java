@@ -71,18 +71,7 @@ public class UserService {
     }
 
     public List<UserDataDto> getAllUsers() {
-        List<User> userList = userRepository.findAll();
-        List<UserDataDto> userDataDtoList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy HH:mm");
-        for (User user : userList) {
-            Role role = user.getRoles().stream().findFirst().get();
-            Qualification qual = getUserQualification(user.getUsername());
-            LocalDateTime date = user.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDateTime();
-            String dateString = date.format(formatter);
-
-            userDataDtoList.add(new UserDataDto(user.getUsername(), user.getEmail(), getRoleLabel(role.getName()), dateString, qual.getName()));
-        }
-        return userDataDtoList;
+        return userRepository.getUserData();
     }
 
     private String getRoleLabel(String role) {
