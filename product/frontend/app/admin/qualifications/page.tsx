@@ -16,7 +16,7 @@ const QualificationsDash = () => {
     useEffect(() => {
         const topicsReq = async() => {
             try {
-                const response = await axios.get(`${apiUrl}/api/admin/qualifications/get`, {withCredentials: true});
+                const response = await axios.get(`${apiUrl}/api/admin/qualification/get`, {withCredentials: true});
                 setQualifications(response.data);
             }
             catch (error:any) {

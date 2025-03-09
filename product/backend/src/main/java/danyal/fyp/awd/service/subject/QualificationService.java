@@ -75,6 +75,6 @@ public class QualificationService {
     }
 
     public List<QualificationDataDto> getAllQualificationsAdmin() {
-        return null;
+        return qualificationRepository.getAllData();
     }
 }
