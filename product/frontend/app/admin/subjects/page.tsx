@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from "axios";
 import { SidebarMenu } from '@/components/ui/SidebarMenu';
-import {DataTable} from "@/components/ui/DataTable";
+import {DataTable} from "@/components/DataTable";
 import {subjectColumns} from "@/components/TableColumns";
 
 /**

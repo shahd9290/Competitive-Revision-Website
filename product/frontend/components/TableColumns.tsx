@@ -1,5 +1,5 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {Attempt} from "@/components/ui/DataTable";
+import {Attempt} from "@/components/DataTable";
 
 export const attemptColumns: ColumnDef<Attempt>[] = [
     {
