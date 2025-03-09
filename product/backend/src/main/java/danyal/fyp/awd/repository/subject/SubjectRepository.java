@@ -42,6 +42,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
             "from Subject s " +
             "left join s.qualifications q " +
             "left join s.topics t on t.qualification = q " +
-            "group by s.name, q.name")
+            "group by s.name, q.name " +
+            "order by s.name asc")
     List<SubjectDataDto> findAllDetails();
 }
