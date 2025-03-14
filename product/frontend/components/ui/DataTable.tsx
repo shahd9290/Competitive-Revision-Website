@@ -25,7 +25,35 @@ export type Attempt = {
     date: string,
     proportion: number
 }
-
+export type User = {
+    username: string,
+    email: string,
+    role: string,
+    createdAt: string,
+    qualification: string
+}
+export type Topic = {
+    topicName: string,
+    subjectName: string,
+    qualificationName: string
+}
+export type Subject = {
+    subject: string,
+    topicNum: number,
+    qualification: string
+}
+export type Question = {
+    question: string,
+    answer: string,
+    marks: number,
+    subject: string,
+    topic: string,
+}
+export type Qualification = {
+    qualification: string,
+    subjectsNum: number,
+    usersNum: number
+}
 export function DataTable<TData, TValue>({
     data,
     columns,

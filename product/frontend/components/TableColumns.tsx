@@ -1,6 +1,16 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {Attempt} from "@/components/ui/DataTable";
+import {Attempt, Qualification, Question, Subject, Topic, User} from "@/components/ui/DataTable";
+import { MoreHorizontal } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 export const attemptColumns: ColumnDef<Attempt>[] = [
     {
         accessorKey:"topicName",
@@ -15,7 +25,7 @@ export const attemptColumns: ColumnDef<Attempt>[] = [
         header:"Score",
     },
 ]
-export const usersColumns: ColumnDef<Attempt>[] = [
+export const usersColumns: ColumnDef<User>[] = [
     {
         accessorKey:"username",
         header: "Username",
@@ -35,9 +45,37 @@ export const usersColumns: ColumnDef<Attempt>[] = [
     {
         accessorKey:"qualification",
         header: "Qualification",
+    },
+    {
+        id:"actions",
+        cell: ({row}) => {
+            const user = row.original
+
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem
+                            onClick={() => navigator.clipboard.writeText(user.id)}
+                        >
+                            Copy payment ID
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>View customer</DropdownMenuItem>
+                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
+        }
     }
 ]
-export const topicColumns: ColumnDef<Attempt>[] = [
+export const topicColumns: ColumnDef<Topic>[] = [
     {
         accessorKey:"topicName",
         header: "Topic Name",
@@ -51,7 +89,7 @@ export const topicColumns: ColumnDef<Attempt>[] = [
         header: "Qualification",
     }
 ]
-export const subjectColumns: ColumnDef<Attempt>[] = [
+export const subjectColumns: ColumnDef<Subject>[] = [
     {
         accessorKey:"subject",
         header: "Subject Name",
@@ -65,7 +103,7 @@ export const subjectColumns: ColumnDef<Attempt>[] = [
         header: "Qualification",
     }
 ]
-export const questionColumns: ColumnDef<Attempt>[] = [
+export const questionColumns: ColumnDef<Question>[] = [
     {
         accessorKey:"question",
         header: "Question",
@@ -87,7 +125,7 @@ export const questionColumns: ColumnDef<Attempt>[] = [
         header: "Topic",
     }
 ]
-export const qualificationsColumns: ColumnDef<Attempt>[] = [
+export const qualificationsColumns: ColumnDef<Qualification>[] = [
     {
         accessorKey:"qualification",
         header: "Qualification"
