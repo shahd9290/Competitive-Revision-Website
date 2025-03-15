@@ -1,5 +1,5 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {Attempt, Qualification, Question, Subject, Topic, User} from "@/components/ui/DataTable";
+import {Attempt, Qualification, Question, Subject, Topic, User} from "@/components/DataTable";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
