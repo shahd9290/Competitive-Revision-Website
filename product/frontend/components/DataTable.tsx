@@ -90,6 +90,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
+            {/* Filtering */}
             <div className="flex items-center py-4">
                 <Input
                     placeholder="Filter..."
@@ -100,6 +101,7 @@ export function DataTable<TData, TValue>({
                     className="max-w-sm"
                 />
             </div>
+            {/* Table Container */}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -144,23 +146,45 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Previous
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Next
-                </Button>
+            {/* Pagination */}
+            <div className="flex items-center justify-between space-x-2 py-4">
+                <span className="text-sm text-gray-500">
+                    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                </span>
+                <div className="space-x-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.firstPage()} // Jump to First Page
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        « First
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Next
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.lastPage()} // Jump to Last Page
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Last »
+                    </Button>
+                </div>
             </div>
         </div>
     )
