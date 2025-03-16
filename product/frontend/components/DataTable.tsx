@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input"
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    name: string
 }
 export type Attempt = {
     topicName: string,
@@ -65,6 +66,7 @@ export type Qualification = {
 export function DataTable<TData, TValue>({
     data,
     columns,
+    name
  }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [globalFilter, setGlobalFilter] = React.useState("")
@@ -91,7 +93,7 @@ export function DataTable<TData, TValue>({
     return (
         <div>
             {/* Filtering */}
-            <div className="flex items-center py-4">
+            <div className="flex items-center justify-between py-4">
                 <Input
                     placeholder="Filter..."
                     value={globalFilter}
@@ -100,6 +102,7 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
+                <Button>Add {name}</Button>
             </div>
             {/* Table Container */}
             <div className="rounded-md border">

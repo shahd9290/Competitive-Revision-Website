@@ -4,6 +4,7 @@ import axios from "axios";
 import { SidebarMenu } from '@/components/ui/SidebarMenu';
 import {DataTable} from "@/components/DataTable";
 import {usersColumns} from "@/components/TableColumns";
+import {Button} from "@/components/ui/button";
 
 /**
  * A dashboard component displaying user information and statistics.
@@ -33,7 +34,7 @@ const UsersDash = () => {
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Users</h1>
                 {users && users.length > 0 ? (
                     <div className="container mx-auto">
-                        <DataTable columns={usersColumns} data={users}/>
+                        <DataTable columns={usersColumns} data={users} name={"User"}/>
                     </div>
                 ) : (
                     <div className="flex justify-center items-center align-middle text-center">

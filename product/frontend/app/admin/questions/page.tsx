@@ -31,7 +31,7 @@ const QuestionsDash = () => {
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Questions</h1>
                 {questions && questions.length > 0 ? (
                     <div className="container mx-auto">
-                        <DataTable columns={questionColumns} data={questions}/>
+                        <DataTable columns={questionColumns} data={questions} name={"Question"}/>
                     </div>
                 ) : (
                     <div className="flex justify-center items-center align-middle text-center">
