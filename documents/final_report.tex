@@ -1,0 +1,263 @@
+\documentclass[]{final_report}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[font=small,labelfont=bf]{caption}
+
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\graphicspath{{./images/}}
+
+
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, const, switch, var, if, in, while, do, else, case, break, try, alert},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{Java}{
+	keywords={public, private, new, true, false, catch, throws, return, null, switch, var, if, in, while, do, else, case, break, try, alert},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+
+\lstset{
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Input project details
+\def\studentname{Danyal Shah}
+\def\reportyear{2024}
+\def\projecttitle{Advanced Web Development}
+\def\supervisorname{Christos Dexiades}
+\def\degree{BSc Computer Science (Software Engineering)}
+\def\fullOrHalfUnit{Full Unit} % indicate if you are doing the project as a Full Unit or Half Unit
+\def\finalOrInterim{Final Report} % indicate if this document is your Final Report or Interim Report
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Declaration
+
+\chapter*{Declaration}
+
+This report has been prepared on the basis of my own work. Where other published and unpublished source materials have been used, these have been acknowledged.
+
+\vskip3em
+
+Word Count: 
+
+\vskip3em
+
+Student Name: \studentname
+
+\vskip3em
+
+Date of Submission: 
+
+\vskip3em
+
+Signature: Danyal
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Table of Contents
+\tableofcontents\pdfbookmark[0]{Table of Contents}{toc}\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Your Abstract here
+
+\begin{abstract}
+	content...
+\end{abstract}
+
+\chapter{Introduction}
+\section{Introduction \& Motivation}
+\section{Literature Review}
+\section{Objective}
+
+\chapter{Background Theory}
+\section{State-of-the-art Web Development}
+\section{Architectural Paradigms \& Design Patterns}
+
+\chapter{Software Engineering}
+\section{Methodology}
+\section{Requirements Analysis}
+\section{UML Diagrams}
+\section{Testing}
+\section{Documentation}
+\section{Version Control}
+
+\chapter{The Application}
+\section{User Stories \& Use Cases}
+\section{Implementation}
+
+\chapter{Reflection}
+\section{Achievements}
+\section{Difficulties}
+\section{Future Improvements}
+
+\chapter{Professional Issues}
+
+
+\begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibitem{TBL_WWW} Tim Berners-Lee (1990),
+\emph{Information Management: A Proposal - \url{https://www.w3.org/History/1989/proposal.html}}.
+
+\bibitem{MODERN_WEB} Kyle Brown, Roland Barcia, Karl Bishop, Matthew Perrins (2014),
+\emph{Modern Web Development with IBM® WebSphere®: Developing, Deploying, and Managing Mobile and Multi-Platform Apps; Chapter 1 - \url{https://learning.oreilly.com/library/view/modern-web-development/9780133067064/ch01.html}}
+
+\bibitem{INTERNET_USERS} Ofcom (2023),
+\emph{Children and Parents: Media Use and Attitudes, Page 1 - \url{https://www.ofcom.org.uk/siteassets/resources/documents/research-and-data/media-literacy-research/children/childrens-media-use-and-attitudes-2023/childrens-media-use-and-attitudes-report-2023.pdf?v=329412}}.
+
+\bibitem{DEVICE_REPORT} Kaspersky (2021),
+\emph{Raising the smartphone generation - \url{https://www.kaspersky.com/blog/digital-habits-report-2021/}}
+
+\bibitem{LAYTON} Level-5, Nintendo (2007),
+\emph{ Professor Layton Series [Video Game]}
+
+\bibitem{LEETCODE} LeetCode LLC (2011),
+\emph{LeetCode - \url{https://leetcode.com/}}
+
+%%%%%%%%%%%%%% WEB TECHNOLOGIES %%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibitem{NEXUS} Tim Berners-Lee (2008),
+\emph{The WorldWideWeb Browser - \url{https://www.w3.org/People/Berners-Lee/WorldWideWeb.html}}
+
+\bibitem{FRAMEWORKS} Tamir Dresher, Amir Zuker, Shay Friedman (2018),
+\emph{Hands-on full stack web development with ASP.NET Core : learn end-to-end web development with leading frontend frameworks, such as Angular, React, and Vue - \url{https://learning.oreilly.com/library/view/hands-on-full-stack-web/9781788622882/98c5f517-66a6-444a-9e45-54853e1a8cb8.xhtml}}
+
+\bibitem{FRAMEWORKS_COMPARE} Sam (@learnwithakshay) (2024),
+\emph{React vs. Angular vs. Vue.js - What to Choose in 2024? - \url{https://medium.com/@learnwithakshay/react-vs-angular-vs-vue-js-what-to-choose-in-2024-87bf9ed38a80}}
+
+\bibitem{DB_NEXTJS} Dinh Bui (2023),
+\emph{Next.JS For Front-End and Compatible Backend Solutions - \url{https://www.theseus.fi/bitstream/handle/10024/800535/Bui_Dinh.pdf?sequence=2}}
+
+\bibitem{BACKEND_FRAMEWORKS_BLOG} Kirill Karakhainko (2023),
+\emph{What are the best backend development frameworks? The ultimate comparison - \url{https://techwings.com/blog/backend-frameworks-ultimate-comparison}}
+
+\bibitem{BACKEND_FRAMEWORKS_REPORT} Jyoti Shetty, Deepika Dash, Akshaya Kumar Joise, Guruprasad C (2020),
+\emph{Review Paper on Web Frameworks, Databases and Web Stacks - \url{https://www.irjet.net/archives/V7/i4/IRJET-V7I41078.pdf}}
+
+\bibitem{SPRING} Yashsonker (@yashsonker1998) (2024),
+\emph{SpringBoot vs Node.js: Which Backend Framework Should You Learn in 2024? - \url{https://medium.com/@yashsonker1998/springboot-vs-node-js-which-backend-framework-should-you-learn-in-2024-1ed9f643a5d0}}
+
+\bibitem{SQL_COMPARE} Michael Gunnulfsen (2013),
+\emph{Scalable and Efficient Web Application Architectures : Thin-clients and SQL vs. Thick-clients and NoSQL - \url{https://www.duo.uio.no/handle/10852/37423}}
+
+\bibitem{SQL} Raif Deari, Xhemal Zenuni, Jaumin Ajdari, Florije Ismaili, Bujar Raufi (2018),
+\emph{Analysis And Comparision of Document-Based Databases with Relational Databases: MongoDB vs MySQL - \url{https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8510719&tag=1}}
+
+
+%%%%%%%%%%%%%% ARCHITECTURE PARADIGMS %%%%%%%%%%%%%%%%%%%%%%
+
+\bibitem{GPOUR_COMPONENT} Gilda Pour (1998),
+\emph{Component-Based Software Development Approach: Is It the Next Silver Bullet? - \url{https://ieeexplore.ieee.org/document/711055}}
+
+
+\bibitem{CSA} Edward Lile (1993),
+\emph{Client/Server Architecture: A Brief Overview - \url{https://www.proquest.com/openview/6f660e1578ee4f9741d31bf0bb2aef3f/1?pq-origsite=gscholar&cbl=40682}}
+
+
+\bibitem{API} Kinza Yasar (2024),
+\emph{What is an API endpoint? - \url{https://www.techtarget.com/searchapparchitecture/definition/API-endpoint}}
+
+\bibitem{WEB_SEC} Malcolm McDonald (2024),
+\emph{Grokking Web Application Security - \url{https://learning.oreilly.com/library/view/grokking-web-application/9781633438262/OEBPS/Text/06.html}}
+
+\bibitem{JWT} Omkar Hiremath (2024),
+\emph{How To Properly Secure Your JWTs - \url{https://www.softwaresecured.com/post/how-to-properly-secure-your-jwts}}
+
+\bibitem{XSS_REACT} React.JS (2024),
+\emph{Introducing JSX - \url{https://legacy.reactjs.org/docs/introducing-jsx.html}}
+
+\bibitem{SQL_PARAM} Mkyong (2010),
+\emph{Hibernate Parameter Binding Examples - \url{https://mkyong.com/hibernate/hibernate-parameter-binding-examples/}}
+
+\bibitem{GDPR} Data Protection Commission (2019),
+\emph{Quick Guide to the Principles of Data Protection - \url{https://www.dataprotection.ie/sites/default/files/uploads/2019-11/Guidance\%20on\%20the\%20Principles\%20of\%20Data\%20Protection_Oct19.pdf}}
+
+\end{thebibliography}
+
+\chapter*{Appendix}
+
+All Diagrams that are present in Section 4.3 have been included as separate images for convenience.
+
+\addcontentsline{toc}{chapter}{Appendix}
+\section*{Diary}
+\addcontentsline{toc}{section}{Diary}
+
+\textbf{30/09/24 - 06/10/24:} Composed Abstract for Project Plan\\
+
+\textbf{07/10/24 - 10/10/24}: Completed Project Plan\\
+
+\textbf{11/10/24:} Begin designing key components for the software, import base project for frontend and backend.\\
+
+\textbf{12/10/24 - 13/10/24:} Created initial versions for login/registration screens. Backend functionality still to be implemented. \\
+
+\textbf{14/10/24 - 20/10/24:} Implemented backend functionality for user authentication and refresh tokens. Linked to frontend. Implemented semi-automated token refreshing (Relies on user to load a new page at the moment).\\
+
+\textbf{20/10/24 - 03/11/24:} No work took place due to burnout and work on other assignments.\\
+
+\textbf{04/11/24 - 08/11/24:} Begin work on Question Bank\\
+
+\textbf{12/11/24 - 16/11/24:} Created Subject and Qualification models. Qualifications embedded into the system. Subject Search functionality to be implemented.\\
+
+\textbf{23/11/24 - 24/11/24:} Implemented Topics \& Begin search implementation to frontend.\\
+
+\textbf{27/11/24 - 03/12/24:} Integrated Modal into search - with topics for the subject in each dialog box.\\
+
+\textbf{03/12/24 - 08/12/24:} Completed Tests for all components \& worked on interim report.\\
+
+\textbf{08/12/24 - 13/12/24:} Continued to work on and complete Interim Report.\\
+
+\section*{Demo}
+\addcontentsline{toc}{section}{Demo}
+A video demonstration of the application at its current stage can be viewed here: \url{https://youtu.be/dFIjE3_42No}
+
+
+
+\end{document}
+
+\end{article}
