@@ -65,123 +65,112 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
     };
 
     return (
-        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Add Question</DialogTitle>
-                    <DialogDescription>
-                        Fill in the fields to add a question to the topic of choice. Ensure the correct fields are selected before adding your question.
-                    </DialogDescription>
-                </DialogHeader>
-
+            <form onSubmit={handleSubmit} className="grid gap-4 py-4">
                 {/* Show Error Message if Any */}
                 {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
-                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                    {/* Question */}
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Question</Label>
-                        <Input className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)} required />
-                    </div>
+                {/* Question */}
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Question</Label>
+                    <Input className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)} required />
+                </div>
 
-                    {/* Answer */}
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Answer</Label>
-                        <Input className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)} required />
-                    </div>
+                {/* Answer */}
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Answer</Label>
+                    <Input className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)} required />
+                </div>
 
-                    {/* Marks */}
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Marks</Label>
-                        <Input className="col-span-3" type="number" value={marks} onChange={(e) => setMarks(e.target.value)} required />
-                    </div>
+                {/* Marks */}
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Marks</Label>
+                    <Input className="col-span-3" type="number" value={marks} onChange={(e) => setMarks(e.target.value)} required />
+                </div>
 
-                    {/* Qualification Dropdown */}
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Qualification</Label>
-                        <Select
-                            onValueChange={(value) => {
-                                setSelectedQualification(value);
-                                setSelectedSubject(""); // Reset Subject
-                                setSelectedTopic(""); // Reset Topic
-                            }}
-                        >
-                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                                <SelectValue placeholder="Select Qualification" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {qualifications.map((q) => (
-                                    <SelectItem key={q.id || q.name} value={q.name}>
-                                        {q.name}
+                {/* Qualification Dropdown */}
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Qualification</Label>
+                    <Select
+                        onValueChange={(value) => {
+                            setSelectedQualification(value);
+                            setSelectedSubject(""); // Reset Subject
+                            setSelectedTopic(""); // Reset Topic
+                        }}
+                    >
+                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectValue placeholder="Select Qualification" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {qualifications.map((q) => (
+                                <SelectItem key={q.id || q.name} value={q.name}>
+                                    {q.name}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                {/* Subject Dropdown */}
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Subject</Label>
+                    <Select
+                        onValueChange={(value) => {
+                            setSelectedSubject(value);
+                            setSelectedTopic(""); // Reset Topic
+                        }}
+                        disabled={!selectedQualification || filteredSubjects.length === 0}
+                    >
+                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectValue placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {filteredSubjects.length > 0 ? (
+                                filteredSubjects.map((s) => (
+                                    <SelectItem key={s.id || s.name} value={s.name}>
+                                        {s.name}
                                     </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+                                ))
+                            ) : (
+                                <SelectItem key="no-subjects" disabled/>
+                            )}
+                        </SelectContent>
+                    </Select>
+                </div>
 
-                    {/* Subject Dropdown */}
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Subject</Label>
-                        <Select
-                            onValueChange={(value) => {
-                                setSelectedSubject(value);
-                                setSelectedTopic(""); // Reset Topic
-                            }}
-                            disabled={!selectedQualification || filteredSubjects.length === 0}
-                        >
-                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                                <SelectValue placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {filteredSubjects.length > 0 ? (
-                                    filteredSubjects.map((s) => (
-                                        <SelectItem key={s.id || s.name} value={s.name}>
-                                            {s.name}
-                                        </SelectItem>
-                                    ))
-                                ) : (
-                                    <SelectItem key="no-subjects" disabled/>
-                                )}
-                            </SelectContent>
-                        </Select>
-                    </div>
+                {/* Topic Dropdown */}
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Topic</Label>
+                    <Select
+                        onValueChange={setSelectedTopic}
+                        disabled={!selectedSubject || filteredTopics.length === 0}
+                    >
+                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectValue placeholder={filteredTopics.length ? "Select Topic" : "No topics available"} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {filteredTopics.length > 0 ? (
+                                filteredTopics.map((t) => (
+                                    <SelectItem key={t.id || t.name} value={t.name}>
+                                        {t.name}
+                                    </SelectItem>
+                                ))
+                            ) : (
+                                <SelectItem key="no-topics" disabled/>
+                            )}
+                        </SelectContent>
+                    </Select>
+                </div>
 
-                    {/* Topic Dropdown */}
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Topic</Label>
-                        <Select
-                            onValueChange={setSelectedTopic}
-                            disabled={!selectedSubject || filteredTopics.length === 0}
-                        >
-                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                                <SelectValue placeholder={filteredTopics.length ? "Select Topic" : "No topics available"} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {filteredTopics.length > 0 ? (
-                                    filteredTopics.map((t) => (
-                                        <SelectItem key={t.id || t.name} value={t.name}>
-                                            {t.name}
-                                        </SelectItem>
-                                    ))
-                                ) : (
-                                    <SelectItem key="no-topics" disabled/>
-                                )}
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    {/* Footer Buttons */}
-                    <DialogFooter>
-                        <Button type="button" onClick={() => setOpenDialog(false)}>
-                            Cancel
-                        </Button>
-                        <Button type="submit" disabled={loading}>
-                            {loading ? "Submitting..." : "Confirm"}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
+                {/* Footer Buttons */}
+                <DialogFooter>
+                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" disabled={loading}>
+                        {loading ? "Submitting..." : "Confirm"}
+                    </Button>
+                </DialogFooter>
+            </form>
     );
 }
 
