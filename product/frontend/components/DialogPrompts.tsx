@@ -280,9 +280,82 @@ export function TopicDialog({ openDialog, setOpenDialog, qualifications, subject
         </form>
     )
 }
-export function SubjectDialog({ openDialog, setOpenDialog }) {
+
+export function SubjectDialog({ openDialog, setOpenDialog, qualifications }) {
+    const [subject, setSubject] = useState("");
+    const [selectedQualification, setSelectedQualification] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (!subject || !selectedQualification ) {
+            setErrorMessage("Please fill out all fields before submitting.");
+            return;
+        }
+
+        setLoading(true);
+        setErrorMessage("");
+
+        const payload = {
+            name: subject,
+            qualification: selectedQualification,
+        };
+
+        try {
+            await axios.post(`${apiUrl}/api/admin/subject/add`, payload, {
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" },
+            });
+
+            setOpenDialog(false); // Close the dialog on success
+        } catch (error) {
+            console.error("Error submitting question:", error);
+            setErrorMessage("Failed to submit the question. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <div>Subject</div>
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+            {/* Topic */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Subject</Label>
+                <Input className="col-span-3"  onChange={(e) => setSubject(e.target.value)} required />
+            </div>
+
+            {/* Qualification Dropdown */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Qualification</Label>
+                <Select
+                    onValueChange={(value) => {
+                        setSelectedQualification(value);
+                    }}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue placeholder="Select Qualification" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {qualifications.map((q) => (
+                            <SelectItem key={q.id || q.name} value={q.name}>
+                                {q.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+             <DialogFooter>
+                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" disabled={loading}>
+                        {loading ? "Submitting..." : "Confirm"}
+                    </Button>
+            </DialogFooter>
+        </form>
     )
 }
 export function QualificationDialog({ openDialog, setOpenDialog }) {
@@ -290,7 +363,7 @@ export function QualificationDialog({ openDialog, setOpenDialog }) {
         <div>Qualification</div>
     )
 }
-export function UserDialog({ openDialog, setOpenDialog }) {
+export function UserDialog({ openDialog, setOpenDialog, qualifications }) {
     return (
         <div>User</div>
     )

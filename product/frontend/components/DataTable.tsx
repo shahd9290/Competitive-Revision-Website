@@ -141,6 +141,7 @@ export function DataTable<TData, TValue>({
                  return <SubjectDialog
                      openDialog={openDialog}
                      setOpenDialog={setOpenDialog}
+                     qualifications={qualifications}
                  />
             case "Qualification":
                  return <QualificationDialog
@@ -151,6 +152,7 @@ export function DataTable<TData, TValue>({
                  return <UserDialog
                      openDialog={openDialog}
                      setOpenDialog={setOpenDialog}
+                     qualifications={qualifications}
                  />
             default:
                 console.log("This shouldn't have happened!");
