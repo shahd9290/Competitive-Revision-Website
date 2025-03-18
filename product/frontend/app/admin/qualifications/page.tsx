@@ -14,7 +14,7 @@ const QualificationsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [qualifications, setQualifications] = useState([]);
     useEffect(() => {
-        const topicsReq = async() => {
+        const qualsReq = async() => {
             try {
                 const response = await axios.get(`${apiUrl}/api/admin/qualification/get`, {withCredentials: true});
                 setQualifications(response.data);
@@ -23,7 +23,7 @@ const QualificationsDash = () => {
                 setQualifications([]);
             }
         }
-        topicsReq();
+        qualsReq();
     }, []);
     return (
         <div className="flex items-center justify-center min-h-screen ">

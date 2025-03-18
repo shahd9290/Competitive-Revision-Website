@@ -205,7 +205,7 @@ export const topicColumns: ColumnDef<Topic>[] = [
 ]
 export const subjectColumns: ColumnDef<Subject>[] = [
     {
-        accessorKey:"subject",
+        accessorKey:"name",
         header: ({ column }) => {
             return (
                 <Button
@@ -363,7 +363,7 @@ export const questionColumns: ColumnDef<Question>[] = [
 ]
 export const qualificationsColumns: ColumnDef<Qualification>[] = [
     {
-        accessorKey:"qualification",
+        accessorKey:"name",
         header: ({ column }) => {
             return (
                 <Button
