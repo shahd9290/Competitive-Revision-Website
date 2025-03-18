@@ -23,6 +23,9 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {Label} from "@/components/ui/label";
+import {QuestionDialog} from "@/components/DialogPrompts";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -70,6 +73,8 @@ export function DataTable<TData, TValue>({
  }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [globalFilter, setGlobalFilter] = React.useState("")
+    const [openDialog, setOpenDialog] = React.useState(false)
+
     const table = useReactTable({
         data,
         columns,
@@ -90,6 +95,34 @@ export function DataTable<TData, TValue>({
         }
     })
 
+    const renderDialogContent = () => {
+        switch (name) {
+            case "Question":
+                return QuestionDialog({openDialog, setOpenDialog})
+            case "Topic":
+                return (
+                    <div>Topic</div>
+                )
+            case "Subject":
+                return (
+                    <div>Subject</div>
+                )
+            case "Qualification":
+                return (
+                    <div>Qualification</div>
+                )
+            case "User":
+                return (
+                    <div>User</div>
+                )
+            default:
+                return (
+                    <div>You shouldn't be seeing me!</div>
+                )
+        }
+
+    }
+
     return (
         <div>
             {/* Filtering */}
@@ -102,7 +135,18 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
-                <Button>Add {name}</Button>
+                <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                    <DialogTrigger asChild>
+                        <Button>Add {name}</Button>
+                    </DialogTrigger>
+
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Add {name}</DialogTitle>
+                        </DialogHeader>
+                        {renderDialogContent()}
+                    </DialogContent>
+                </Dialog>
             </div>
             {/* Table Container */}
             <div className="rounded-md border">
