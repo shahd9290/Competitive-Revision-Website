@@ -130,7 +130,7 @@ export const usersColumns: ColumnDef<User>[] = [
 ]
 export const topicColumns: ColumnDef<Topic>[] = [
     {
-        accessorKey:"topic",
+        accessorKey:"name",
         header: ({ column }) => {
             return (
                 <Button
