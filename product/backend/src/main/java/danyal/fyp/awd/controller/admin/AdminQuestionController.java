@@ -1,11 +1,10 @@
 package danyal.fyp.awd.controller.admin;
 
+import danyal.fyp.awd.dto.subject.QuestionAddDto;
 import danyal.fyp.awd.service.subject.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/questions")
@@ -14,7 +13,15 @@ public class AdminQuestionController {
 
     private final QuestionService questionService;
 
-    // TODO: Add endpoint to create Admin profile
+    @PostMapping("/add")
+    public ResponseEntity<String> addQuestion(@RequestBody QuestionAddDto questionAddDto) {
+        try {
+            questionService.addQuestion(questionAddDto.question(), questionAddDto.answer(), questionAddDto.marks(), questionAddDto.topic(), questionAddDto.qualification());
+            return ResponseEntity.ok("Question added");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping("/get")
     public ResponseEntity<Object> getUsers() {

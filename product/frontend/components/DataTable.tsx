@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
     const fetchData = async () => {
         try {
             const [qualRes, subjRes, topRes] = await Promise.all([
-                axios.get(`${apiUrl}/api/admin/qualification/get`, {withCredentials: true}),
+                axios.get(`${apiUrl}/api/admin/qualifications/get`, {withCredentials: true}),
                 axios.get(`${apiUrl}/api/admin/subjects/get`, {withCredentials: true}),
                 axios.get(`${apiUrl}/api/admin/topics/get`, {withCredentials: true})
             ]);

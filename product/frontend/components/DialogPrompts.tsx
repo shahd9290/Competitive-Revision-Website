@@ -50,7 +50,7 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
         };
 
         try {
-            await axios.post(`${apiUrl}/api/admin/question/add`, payload, {
+            await axios.post(`${apiUrl}/api/admin/questions/add`, payload, {
                 withCredentials: true,
                 headers: { "Content-Type": "application/json" },
             });
@@ -200,7 +200,7 @@ export function TopicDialog({ openDialog, setOpenDialog, qualifications, subject
         };
 
         try {
-            await axios.post(`${apiUrl}/api/admin/topic/add`, payload, {
+            await axios.post(`${apiUrl}/api/admin/topics/add`, payload, {
                 withCredentials: true,
                 headers: { "Content-Type": "application/json" },
             });
@@ -304,7 +304,7 @@ export function SubjectDialog({ openDialog, setOpenDialog, qualifications }) {
         };
 
         try {
-            await axios.post(`${apiUrl}/api/admin/subject/add`, payload, {
+            await axios.post(`${apiUrl}/api/admin/subjects/add`, payload, {
                 withCredentials: true,
                 headers: { "Content-Type": "application/json" },
             });
@@ -380,7 +380,7 @@ export function QualificationDialog({ openDialog, setOpenDialog }) {
         };
 
         try {
-            await axios.post(`${apiUrl}/api/admin/qualification/add`, payload, {
+            await axios.post(`${apiUrl}/api/admin/qualifications/add`, payload, {
                 withCredentials: true,
                 headers: { "Content-Type": "application/json" },
             });

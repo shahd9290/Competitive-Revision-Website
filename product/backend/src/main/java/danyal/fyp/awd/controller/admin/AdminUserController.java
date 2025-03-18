@@ -14,8 +14,6 @@ public class AdminUserController {
 
     private final UserService userService;
 
-    // TODO: Add endpoint to create Admin profile
-
     @GetMapping("/get")
     public ResponseEntity<Object> getUsers() {
         try {

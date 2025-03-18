@@ -1,20 +1,37 @@
 package danyal.fyp.awd.controller.admin;
 
+import danyal.fyp.awd.dto.subject.QualificationDto;
+import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.service.subject.QualificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/qualification")
+@RequestMapping("/api/admin/qualifications")
 @RequiredArgsConstructor
 public class AdminQualificationController {
 
     private final QualificationService qualificationService;
 
-    // TODO: Add endpoint to create Admin profile
+    /**
+     * Adds a new qualification.
+     *
+     * @param qualificationDto the data for the qualification to add.
+     * @return a success message.
+     */
+    @PostMapping("/add")
+    public ResponseEntity<String> addQualification(@RequestBody final QualificationDto qualificationDto) {
+        Qualification qualification = new Qualification();
+        qualification.setName(qualificationDto.qualification());
+        try {
+            qualificationService.saveQualification(qualification);
+            return ResponseEntity.ok("Qualification Added Successfully");
+        }
+        catch (Exception e) {
+            return  ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping("/get")
     public ResponseEntity<Object> getUsers() {
