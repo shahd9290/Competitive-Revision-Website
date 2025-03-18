@@ -208,7 +208,7 @@ export function TopicDialog({ openDialog, setOpenDialog, qualifications, subject
             setOpenDialog(false); // Close the dialog on success
         } catch (error) {
             console.error("Error submitting question:", error);
-            setErrorMessage("Failed to submit the question. Please try again.");
+            setErrorMessage("Failed to submit the topic. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -312,7 +312,7 @@ export function SubjectDialog({ openDialog, setOpenDialog, qualifications }) {
             setOpenDialog(false); // Close the dialog on success
         } catch (error) {
             console.error("Error submitting question:", error);
-            setErrorMessage("Failed to submit the question. Please try again.");
+            setErrorMessage("Failed to submit the subject. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -358,9 +358,59 @@ export function SubjectDialog({ openDialog, setOpenDialog, qualifications }) {
         </form>
     )
 }
+
 export function QualificationDialog({ openDialog, setOpenDialog }) {
+    const [qualification, setQualification] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (!qualification) {
+            setErrorMessage("Please fill out all fields before submitting.");
+            return;
+        }
+
+        setLoading(true);
+        setErrorMessage("");
+
+        const payload = {
+            qualification: qualification,
+        };
+
+        try {
+            await axios.post(`${apiUrl}/api/admin/qualification/add`, payload, {
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" },
+            });
+
+            setOpenDialog(false); // Close the dialog on success
+        } catch (error) {
+            console.error("Error submitting qualification:", error);
+            setErrorMessage("Failed to submit the qualification. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <div>Qualification</div>
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+            {/* Topic */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Qualification</Label>
+                <Input className="col-span-3"  onChange={(e) => setQualification(e.target.value)} required />
+            </div>
+
+             <DialogFooter>
+                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" disabled={loading}>
+                        {loading ? "Submitting..." : "Confirm"}
+                    </Button>
+            </DialogFooter>
+        </form>
     )
 }
 export function UserDialog({ openDialog, setOpenDialog, qualifications }) {
