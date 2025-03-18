@@ -1,9 +1,8 @@
 "use client"
 
-import * as React from "react"
+import {useState, useEffect} from "react"
 import {
     ColumnDef,
-    ColumnFiltersState,
     SortingState,
     flexRender,
     getCoreRowModel,
@@ -24,8 +23,10 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
-import {Label} from "@/components/ui/label";
-import {QuestionDialog} from "@/components/DialogPrompts";
+import {QualificationDialog, QuestionDialog, SubjectDialog, TopicDialog, UserDialog} from "@/components/DialogPrompts";
+import axios from "axios";
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -71,9 +72,33 @@ export function DataTable<TData, TValue>({
     columns,
     name
  }: DataTableProps<TData, TValue>) {
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [globalFilter, setGlobalFilter] = React.useState("")
-    const [openDialog, setOpenDialog] = React.useState(false)
+    const [sorting, setSorting] = useState<SortingState>([])
+    const [globalFilter, setGlobalFilter] = useState("")
+    const [openDialog, setOpenDialog] = useState(false)
+
+    const [qualifications, setQualifications] = useState([])
+    const [subjects, setSubjects] = useState([])
+    const [topics, setTopics] = useState([])
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const [qualRes, subjRes, topRes] = await Promise.all([
+                axios.get(`${apiUrl}/api/admin/qualification/get`, {withCredentials: true}),
+                axios.get(`${apiUrl}/api/admin/subjects/get`, {withCredentials: true}),
+                axios.get(`${apiUrl}/api/admin/topics/get`, {withCredentials: true})
+            ]);
+
+            setQualifications(qualRes.data);
+            setSubjects(subjRes.data);
+            setTopics(topRes.data);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     const table = useReactTable({
         data,
@@ -98,27 +123,35 @@ export function DataTable<TData, TValue>({
     const renderDialogContent = () => {
         switch (name) {
             case "Question":
-                return QuestionDialog({openDialog, setOpenDialog})
+                return <QuestionDialog
+                    openDialog={openDialog}
+                    setOpenDialog={setOpenDialog}
+                    qualifications={qualifications}
+                    subjects={subjects}
+                    topics={topics}
+                />
             case "Topic":
-                return (
-                    <div>Topic</div>
-                )
+                 return <TopicDialog
+                     openDialog={openDialog}
+                     setOpenDialog={setOpenDialog}
+                 />
             case "Subject":
-                return (
-                    <div>Subject</div>
-                )
+                 return <SubjectDialog
+                     openDialog={openDialog}
+                     setOpenDialog={setOpenDialog}
+                 />
             case "Qualification":
-                return (
-                    <div>Qualification</div>
-                )
+                 return <QualificationDialog
+                     openDialog={openDialog}
+                     setOpenDialog={setOpenDialog}
+                 />
             case "User":
-                return (
-                    <div>User</div>
-                )
+                 return <UserDialog
+                     openDialog={openDialog}
+                     setOpenDialog={setOpenDialog}
+                 />
             default:
-                return (
-                    <div>You shouldn't be seeing me!</div>
-                )
+                console.log("This shouldn't have happened!");
         }
 
     }

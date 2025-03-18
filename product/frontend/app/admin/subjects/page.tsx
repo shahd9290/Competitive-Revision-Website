@@ -14,7 +14,7 @@ const SubjectsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [subjects, setSubjects] = useState([]);
     useEffect(() => {
-        const topicsReq = async() => {
+        const subjectsReq = async() => {
             try {
                 const response = await axios.get(`${apiUrl}/api/admin/subjects/get`, {withCredentials: true});
                 setSubjects(response.data);
@@ -23,7 +23,7 @@ const SubjectsDash = () => {
                 setSubjects([]);
             }
         }
-        topicsReq();
+        subjectsReq();
     }, []);
     return (
         <div className="flex items-center justify-center min-h-screen ">

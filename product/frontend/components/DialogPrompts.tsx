@@ -14,30 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// Mock Data for Qualifications, Subjects, and Topics
-const qualifications = [
-    { name: "Mathematics" },
-    { name: "Science" },
-    { name: "History" },
-];
-
-const subjects = [
-    { name: "Algebra", qualification: "Mathematics" },
-    { name: "Geometry", qualification: "Mathematics" },
-    { name: "Physics", qualification: "Science" },
-    { name: "Chemistry", qualification: "Science" },
-    { name: "World History", qualification: "History" },
-];
-
-const topics = [
-    { name: "Quadratic Equations", subject: "Algebra" },
-    { name: "Pythagoras Theorem", subject: "Geometry" },
-    { name: "Newton's Laws", subject: "Physics" },
-    { name: "Periodic Table", subject: "Chemistry" },
-    { name: "Ancient Civilizations", subject: "World History" },
-];
-
-export function QuestionDialog({ openDialog, setOpenDialog }) {
+export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subjects, topics }) {
     const [selectedQualification, setSelectedQualification] = React.useState("");
     const [selectedSubject, setSelectedSubject] = React.useState("");
     const [selectedTopic, setSelectedTopic] = React.useState("");
@@ -161,3 +138,26 @@ export function QuestionDialog({ openDialog, setOpenDialog }) {
         </Dialog>
     );
 }
+
+export function TopicDialog({ openDialog, setOpenDialog }) {
+    return (
+        <div>Topic</div>
+    )
+}
+export function SubjectDialog({ openDialog, setOpenDialog }) {
+    return (
+        <div>Subject</div>
+    )
+}
+export function QualificationDialog({ openDialog, setOpenDialog }) {
+    return (
+        <div>Qualification</div>
+    )
+}
+export function UserDialog({ openDialog, setOpenDialog }) {
+    return (
+        <div>User</div>
+    )
+}
+
+
