@@ -99,5 +99,9 @@ public class User {
         List<GrantedAuthority> authorities = getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
         return new JpaUserDetails(getUsername(), getPassword(), authorities);
     }
+
+    public void setRole(Role role) {
+        roles.add(role);
+    }
 }
 

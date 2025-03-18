@@ -413,10 +413,122 @@ export function QualificationDialog({ openDialog, setOpenDialog }) {
         </form>
     )
 }
+
 export function UserDialog({ openDialog, setOpenDialog, qualifications }) {
+    const [selectedQualification, setSelectedQualification] = useState("");
+    const [username, setQuestion] = useState("");
+    const [email, setAnswer] = useState("");
+    const [password, setMarks] = useState("");
+    const [role, setRole] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (!username || !email || !password || !role || !selectedQualification) {
+            setErrorMessage("Please fill out all fields before submitting.");
+            return;
+        }
+
+        setLoading(true);
+        setErrorMessage("");
+
+        const payload = {
+            username,
+            email,
+            password,
+            role,
+            qualification: selectedQualification,
+        };
+
+        try {
+            await axios.post(`${apiUrl}/api/auth/register`, payload, {
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" },
+            });
+
+            setOpenDialog(false); // Close the dialog on success
+        } catch (error) {
+            console.error("Error registering user:", error);
+            setErrorMessage("Failed to register the user. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <div>User</div>
-    )
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+            {/* Show Error Message if Any */}
+            {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+
+            {/* Question */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Username</Label>
+                <Input className="col-span-3" onChange={(e) => setQuestion(e.target.value)} required/>
+            </div>
+
+            {/* Answer */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Email</Label>
+                <Input className="col-span-3" type={"email"} onChange={(e) => setAnswer(e.target.value)} required/>
+            </div>
+
+            {/* Marks */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Password</Label>
+                <Input className="col-span-3" type={"password"} onChange={(e) => setMarks(e.target.value)} required/>
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Role</Label>
+                <Select
+                    onValueChange={(value) => {
+                        setRole(value);
+                    }}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue placeholder="Select Role"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value={"ROLE_ADMIN"}>Admin</SelectItem>
+                        <SelectItem value={"ROLE_USER"}>User</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Qualification Dropdown */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Qualification</Label>
+                <Select
+                    onValueChange={(value) => {
+                        setSelectedQualification(value);
+                    }}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue placeholder="Select Qualification"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        {qualifications.map((q) => (
+                            <SelectItem key={q.id || q.name} value={q.name}>
+                                {q.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Footer Buttons */}
+            <DialogFooter>
+                <Button type="button" onClick={() => setOpenDialog(false)}>
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={loading}>
+                    {loading ? "Submitting..." : "Confirm"}
+                </Button>
+            </DialogFooter>
+        </form>
+    );
 }
 
 

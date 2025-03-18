@@ -33,16 +33,10 @@ public class RegistrationController {
      * @return the registered user details or an error message if validation fails.
      */
     @PostMapping("/register")
-    public ResponseEntity<Object> registerUser(
-            @Valid @RequestBody final RegistrationRequestDto registrationDTO) {
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody final RegistrationRequestDto registrationDTO) {
         try {
-
-            final var registeredUser = userRegistrationService
-                    .registerUser(registrationDTO);
-
-            return ResponseEntity.ok(
-                    toRegistrationResponseDto(registeredUser)
-            );
+            final var registeredUser = userRegistrationService.registerUser(registrationDTO);
+            return ResponseEntity.ok(toRegistrationResponseDto(registeredUser));
         } catch (ValidationException | QualificationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -54,11 +48,8 @@ public class RegistrationController {
      * @param user the registered user entity.
      * @return the registration response DTO.
      */
-    private RegistrationResponseDto toRegistrationResponseDto(
-            final User user) {
-
-        return new RegistrationResponseDto(
-                user.getUsername(), user.getEmail(), user.getQualificationId());
+    private RegistrationResponseDto toRegistrationResponseDto(final User user) {
+        return new RegistrationResponseDto(user.getUsername(), user.getEmail(), user.getQualificationId());
     }
 
 }

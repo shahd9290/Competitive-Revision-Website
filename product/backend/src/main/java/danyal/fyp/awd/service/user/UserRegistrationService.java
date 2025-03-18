@@ -2,6 +2,7 @@ package danyal.fyp.awd.service.user;
 
 import danyal.fyp.awd.dto.user.RegistrationRequestDto;
 import danyal.fyp.awd.exception.QualificationException;
+import danyal.fyp.awd.model.user.Role;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
 import danyal.fyp.awd.service.subject.QualificationService;
@@ -23,6 +24,7 @@ public class UserRegistrationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final QualificationService qualificationService;
+    private final RoleService roleService;
 
     /**
      * Registers a new user in the system.
@@ -34,8 +36,7 @@ public class UserRegistrationService {
      */
     @Transactional
     public User registerUser(RegistrationRequestDto request) throws QualificationException {
-        if (userRepository.existsByUsername(request.username()) ||
-                userRepository.existsByEmail(request.email())) {
+        if (userRepository.existsByUsername(request.username()) || userRepository.existsByEmail(request.email())) {
             throw new ValidationException("Username or Email already exists");
         }
 
@@ -45,7 +46,7 @@ public class UserRegistrationService {
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setMarks(0);
         user.setQualificationId(qualificationService.getIdByName(request.qualification()));
-
+        user.setRole(roleService.getRole(request.role()));
         return userRepository.save(user);
     }
 }

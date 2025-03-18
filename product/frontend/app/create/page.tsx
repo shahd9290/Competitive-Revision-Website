@@ -36,7 +36,7 @@ const page = () => {
         }
         else {
             const payload = {
-                "username": username, "email": email, "password": password, "qualification": qualificationInput
+                "username": username, "email": email, "password": password, "qualification": qualificationInput, "role":"ROLE_USER"
             }
 
             try {

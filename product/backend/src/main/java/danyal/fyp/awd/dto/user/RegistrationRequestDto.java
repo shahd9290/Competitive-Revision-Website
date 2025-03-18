@@ -7,7 +7,8 @@ package danyal.fyp.awd.dto.user;
  * @param email         the email address for the new user.
  * @param password      the password for the new user.
  * @param qualification the qualification associated with the new user.
+ * @param role          the role of the new user
  * @author Danyal Shah
  */
-public record RegistrationRequestDto(String username, String email, String password, String qualification) {
+public record RegistrationRequestDto(String username, String email, String role, String password, String qualification) {
 }
