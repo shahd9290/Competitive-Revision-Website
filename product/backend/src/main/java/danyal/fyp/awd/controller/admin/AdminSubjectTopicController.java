@@ -29,7 +29,7 @@ public class AdminSubjectTopicController {
     @GetMapping("/topics/get")
     public ResponseEntity<Object> getTopics() {
         try {
-            return ResponseEntity.ok(subjectTopicService.getAllTopics());
+            return ResponseEntity.ok(subjectTopicService.getAllTopicsAdmin());
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body("An error occurred when fetching data");

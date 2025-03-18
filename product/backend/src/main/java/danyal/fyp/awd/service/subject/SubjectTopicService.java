@@ -89,6 +89,10 @@ public class SubjectTopicService {
         return subjectAllResultDtos;
     }
 
+    public List<Subject> getAllSubjects() {
+        return subjectRepository.findAll();
+    }
+
     /**
      * Adds a qualification to an existing subject.
      *
@@ -168,11 +172,14 @@ public class SubjectTopicService {
         return topicRepository.findAllBySubjectIdAndQualificationId(subject.getId(), qualification.getId());
     }
 
+    public List<Topic> getAllTopics() {
+        return topicRepository.findAll();
+    }
     public List<SubjectDataDto> getAllSubjectsAdmin() {
         return subjectRepository.findAllDetails();
     }
 
-    public List<TopicDataDto> getAllTopics() {
+    public List<TopicDataDto> getAllTopicsAdmin() {
         return topicRepository.findTopicDetails();
     }
 }

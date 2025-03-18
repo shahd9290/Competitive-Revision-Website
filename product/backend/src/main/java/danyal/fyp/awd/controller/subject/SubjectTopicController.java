@@ -37,10 +37,15 @@ public class SubjectTopicController {
      * @return a list of subjects or an error message.
      */
     @GetMapping("/subject/get-all")
-    public ResponseEntity<Object> getAllSubjects(@RequestParam String qualification) {
+    public ResponseEntity<Object> getAllSubjects(@RequestParam(required = false) String qualification) {
         try {
-            List<SubjectAllResultDto> subjects = subjectTopicService.getAllSubjects(qualification);
-            return ResponseEntity.ok(subjects);
+            if (qualification != null && !qualification.isEmpty()) {
+                List<SubjectAllResultDto> subjects = subjectTopicService.getAllSubjects(qualification);
+                return ResponseEntity.ok(subjects);
+            }
+            else {
+                return ResponseEntity.ok(subjectTopicService.getAllSubjects());
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -54,10 +59,15 @@ public class SubjectTopicController {
      * @return a list of topics or an error message.
      */
     @GetMapping("/topic/get-all")
-    public ResponseEntity<Object> getAllTopics(@RequestParam String qualification, @RequestParam String subject) {
+    public ResponseEntity<Object> getAllTopics(@RequestParam(required = false) String qualification, @RequestParam(required = false) String subject) {
         try {
-            List<Topic> topics = subjectTopicService.getAllForSubQual(qualification, subject);
-            return ResponseEntity.ok(topics);
+            if (qualification != null && subject != null && !qualification.isEmpty() && !subject.isEmpty()) {
+                List<Topic> topics = subjectTopicService.getAllForSubQual(qualification, subject);
+                return ResponseEntity.ok(topics);
+            }
+            else {
+                return ResponseEntity.ok(subjectTopicService.getAllTopicsAdmin());
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
