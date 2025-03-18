@@ -3,7 +3,7 @@
 import * as React from "react";
 import {
     Dialog,
-    DialogContent,
+    DialogContent, DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -34,7 +34,7 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
                 <DialogHeader>
                     <DialogTitle>Add Question</DialogTitle>
                 </DialogHeader>
-
+                <DialogDescription>Fill in the fields to add a question to the topic of choice. Ensure the correct fields are selected before adding your question.</DialogDescription>
                 <div className="grid gap-4 py-4">
                     {/* Question */}
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -62,7 +62,7 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
                             setSelectedSubject(""); // Reset Subject
                             setSelectedTopic(""); // Reset Topic
                         }}>
-                            <SelectTrigger className="col-span-3">
+                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                                 <SelectValue placeholder="Select Qualification" />
                             </SelectTrigger>
                             <SelectContent>
@@ -83,10 +83,10 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
                                 setSelectedSubject(value);
                                 setSelectedTopic(""); // Reset Topic
                             }}
-                            disabled={!selectedQualification}
+                            disabled={!selectedQualification || filteredSubjects.length === 0}
                         >
-                            <SelectTrigger className="col-span-3">
-                                <SelectValue placeholder="Select Subject" />
+                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                                <SelectValue placeholder={filteredSubjects.length > 0 ? "Select Subject" : "No subjects available"} />
                             </SelectTrigger>
                             <SelectContent>
                                 {filteredSubjects.length ? (
@@ -96,7 +96,7 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
                                         </SelectItem>
                                     ))
                                 ) : (
-                                    <SelectItem disabled>No subjects available</SelectItem>
+                                    <SelectItem disabled/>
                                 )}
                             </SelectContent>
                         </Select>
@@ -107,10 +107,10 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
                         <Label className="text-right">Topic</Label>
                         <Select
                             onValueChange={setSelectedTopic}
-                            disabled={!selectedSubject}
+                            disabled={!selectedSubject || filteredTopics.length === 0}
                         >
-                            <SelectTrigger className="col-span-3">
-                                <SelectValue placeholder="Select Topic" />
+                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                                <SelectValue placeholder={filteredTopics.length > 0 ? "Select Topic" : "No topics available"} />
                             </SelectTrigger>
                             <SelectContent>
                                 {filteredTopics.length ? (
@@ -120,7 +120,7 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
                                         </SelectItem>
                                     ))
                                 ) : (
-                                    <SelectItem disabled>No topics available</SelectItem>
+                                    <SelectItem disabled/>
                                 )}
                             </SelectContent>
                         </Select>
