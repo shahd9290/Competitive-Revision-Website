@@ -174,9 +174,110 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
     );
 }
 
-export function TopicDialog({ openDialog, setOpenDialog }) {
+export function TopicDialog({ openDialog, setOpenDialog, qualifications, subjects }) {
+    const [topic, setTopic] = useState("");
+    const [selectedQualification, setSelectedQualification] = useState("");
+    const [selectedSubject, setSelectedSubject] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const filteredSubjects = subjects.filter((subject) => subject.qualification === selectedQualification);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (!topic || !selectedQualification || !selectedSubject) {
+            setErrorMessage("Please fill out all fields before submitting.");
+            return;
+        }
+
+        setLoading(true);
+        setErrorMessage("");
+
+        const payload = {
+            name: topic,
+            subject: selectedSubject,
+            qualification: selectedQualification,
+        };
+
+        try {
+            await axios.post(`${apiUrl}/api/admin/topic/add`, payload, {
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" },
+            });
+
+            setOpenDialog(false); // Close the dialog on success
+        } catch (error) {
+            console.error("Error submitting question:", error);
+            setErrorMessage("Failed to submit the question. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <div>Topic</div>
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+            {/* Topic */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Topic</Label>
+                <Input className="col-span-3"  onChange={(e) => setTopic(e.target.value)} required />
+            </div>
+
+            {/* Qualification Dropdown */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Qualification</Label>
+                <Select
+                    onValueChange={(value) => {
+                        setSelectedQualification(value);
+                        setSelectedSubject(""); // Reset Subject
+                    }}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue placeholder="Select Qualification" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {qualifications.map((q) => (
+                            <SelectItem key={q.id || q.name} value={q.name}>
+                                {q.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Subject Dropdown */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Subject</Label>
+                <Select
+                    onValueChange={(value) => {
+                        setSelectedSubject(value);
+                    }}
+                    disabled={!selectedQualification || filteredSubjects.length === 0}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {filteredSubjects.length > 0 ? (
+                            filteredSubjects.map((s) => (
+                                <SelectItem key={s.id || s.name} value={s.name}>
+                                    {s.name}
+                                </SelectItem>
+                            ))
+                        ) : (
+                            <SelectItem key="no-subjects" disabled/>
+                        )}
+                    </SelectContent>
+                </Select>
+            </div>
+             <DialogFooter>
+                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" disabled={loading}>
+                        {loading ? "Submitting..." : "Confirm"}
+                    </Button>
+            </DialogFooter>
+        </form>
     )
 }
 export function SubjectDialog({ openDialog, setOpenDialog }) {

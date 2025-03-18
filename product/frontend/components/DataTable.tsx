@@ -134,6 +134,8 @@ export function DataTable<TData, TValue>({
                  return <TopicDialog
                      openDialog={openDialog}
                      setOpenDialog={setOpenDialog}
+                     qualifications={qualifications}
+                     subjects={subjects}
                  />
             case "Subject":
                  return <SubjectDialog
