@@ -77,4 +77,9 @@ public class QualificationService {
     public List<QualificationDataDto> getAllQualificationsAdmin() {
         return qualificationRepository.getAllData();
     }
+
+    public void delete(String name) throws QualificationException {
+        Qualification qual = qualificationRepository.findByName(name).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
+        qualificationRepository.delete(qual);
+    }
 }

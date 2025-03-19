@@ -43,4 +43,14 @@ public class AdminQualificationController {
         }
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deleteQualification(@RequestBody final QualificationDto qualificationDto) {
+        try {
+            qualificationService.delete(qualificationDto.qualification());
+            return ResponseEntity.ok("Qualification Deleted Successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Qualification could not be deleted");
+        }
+    }
+
 }

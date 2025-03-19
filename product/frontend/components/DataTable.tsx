@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input"
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 import {QualificationDialog, QuestionDialog, SubjectDialog, TopicDialog, UserDialog} from "@/components/DialogPrompts";
 import axios from "axios";
+import {UUID} from "node:crypto";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -34,11 +35,13 @@ interface DataTableProps<TData, TValue> {
     name: string
 }
 export type Attempt = {
+    id: number
     topicName: string,
     date: string,
     proportion: number
 }
 export type User = {
+    id: UUID
     username: string,
     email: string,
     role: string,
@@ -46,16 +49,19 @@ export type User = {
     qualification: string
 }
 export type Topic = {
+    id: number
     topicName: string,
     subjectName: string,
     qualificationName: string
 }
 export type Subject = {
+    id: number
     subject: string,
     topicNum: number,
     qualification: string
 }
 export type Question = {
+    id: number
     question: string,
     answer: string,
     marks: number,
@@ -63,7 +69,8 @@ export type Question = {
     topic: string,
 }
 export type Qualification = {
-    qualification: string,
+    id: number
+    name: string,
     subjectsNum: number,
     usersNum: number
 }

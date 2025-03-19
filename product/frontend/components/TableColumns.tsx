@@ -11,6 +11,21 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {useState} from "react";
+import axios from "axios";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
 export const attemptColumns: ColumnDef<Attempt>[] = [
     {
         accessorKey:"topicName",
@@ -188,12 +203,12 @@ export const topicColumns: ColumnDef<Topic>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
+                            // onClick={() => navigator.clipboard.writeText(user.id)}
                         >
                             Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
+                            // onClick={() => navigator.clipboard.writeText(user.id)}
                         >
                             Delete
                         </DropdownMenuItem>
@@ -263,12 +278,12 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
+                            // onClick={() => navigator.clipboard.writeText(user.id)}
                         >
                             Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
+                            // onClick={() => navigator.clipboard.writeText(user.id)}
                         >
                             Delete
                         </DropdownMenuItem>
@@ -332,7 +347,7 @@ export const questionColumns: ColumnDef<Question>[] = [
     {
         id:"actions",
         cell: ({row}) => {
-            const user = row.original
+            const question = row.original
 
             return (
                 <DropdownMenu>
@@ -346,12 +361,12 @@ export const questionColumns: ColumnDef<Question>[] = [
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
+                            // onClick={() => navigator.clipboard.writeText(user.id)}
                         >
                             Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
+                            // onClick={() => navigator.clipboard.writeText(user.id)}
                         >
                             Delete
                         </DropdownMenuItem>
@@ -405,34 +420,91 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
         },
     },
     {
-        id:"actions",
-        cell: ({row}) => {
-            const user = row.original
+        id: "actions",
+        cell: ({ row }) => {
+            const qualification = row.original;
+            const [dialogOpen, setDialogOpen] = useState(false);
+
+            const handleDelete = async () => {
+                if (qualification.subjectsNum > 0 || qualification.usersNum > 0) {
+                    alert("Qualification cannot be deleted when used.")
+                    return
+                }
+
+                let payload = { qualification: qualification.name };
+                try {
+                    await axios.delete(`${apiUrl}/api/admin/qualifications/delete`, {
+                        data: payload,
+                        withCredentials: true,
+                    });
+                    setDialogOpen(false);
+                    alert(`Qualification "${qualification.name}" deleted successfully.`);
+                } catch (error) {
+                    console.error("Error deleting qualification:", error);
+                    alert("Failed to delete qualification.");
+                }
+            };
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator/>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
-                        >
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
-                        >
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
-        }
-    }
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(String(qualification.id))}
+                            >
+                                Edit
+                            </DropdownMenuItem>
+                            {/* Open dialog when clicking Delete */}
+                            <DropdownMenuItem
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent Dropdown from closing
+                                    setDialogOpen(true);
+                                }}
+                            >
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {/* Confirmation Dialog */}
+                    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                        <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
+                            <AlertDialogHeader>
+                                <AlertDialogTitle className="text-lg font-bold text-gray-900">
+                                    Confirm Deletion
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="text-gray-700 text-sm mt-2">
+                                    Are you sure you want to delete the qualification
+                                    <span className="font-semibold text-gray-900"> "{qualification.name}"</span>?
+                                    This action cannot be undone.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter className="flex justify-end space-x-2 mt-4">
+                                <AlertDialogCancel
+                                    onClick={() => setDialogOpen(false)}
+                                    className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
+                                >
+                                    Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleDelete}
+                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
+                                >
+                                    Confirm Delete
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </>
+            );
+        },
+    },
 ]
