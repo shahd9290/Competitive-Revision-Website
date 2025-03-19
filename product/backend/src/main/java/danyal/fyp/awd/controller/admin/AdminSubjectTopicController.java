@@ -1,5 +1,6 @@
 package danyal.fyp.awd.controller.admin;
 
+import danyal.fyp.awd.dto.admin.DeleteDto;
 import danyal.fyp.awd.dto.subject.SubjectDto;
 import danyal.fyp.awd.dto.subject.TopicDto;
 import danyal.fyp.awd.exception.QualificationException;
@@ -8,6 +9,7 @@ import danyal.fyp.awd.model.subject.Subject;
 import danyal.fyp.awd.service.subject.QualificationService;
 import danyal.fyp.awd.service.subject.SubjectTopicService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,6 +72,16 @@ public class AdminSubjectTopicController {
         }
     }
 
+    @DeleteMapping("/subjects/delete")
+    public ResponseEntity<Object> deleteSubject(@RequestBody final DeleteDto deleteDto) {
+        try {
+            subjectTopicService.deleteSubject(deleteDto.id());
+            return ResponseEntity.ok("Subject Deleted Successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed To Delete Subject");
+        }
+    }
+
     /**
      * Adds a topic for a subject.
      *
@@ -97,4 +109,13 @@ public class AdminSubjectTopicController {
         }
     }
 
+    @DeleteMapping("/topics/delete")
+    public ResponseEntity<Object> deleteTopic(@RequestBody final DeleteDto deleteDto) {
+        try {
+            subjectTopicService.deleteSubject(deleteDto.id());
+            return ResponseEntity.ok("Topic Deleted Successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed To Delete Topic");
+        }
+    }
 }

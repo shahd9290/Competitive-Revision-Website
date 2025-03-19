@@ -49,7 +49,7 @@ public class AdminQualificationController {
             qualificationService.delete(qualificationDto.qualification());
             return ResponseEntity.ok("Qualification Deleted Successfully");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Qualification could not be deleted");
+            return ResponseEntity.badRequest().body("Failed To Delete Qualification");
         }
     }
 

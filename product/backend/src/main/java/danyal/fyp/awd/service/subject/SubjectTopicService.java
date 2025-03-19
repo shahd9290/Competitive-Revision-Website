@@ -175,11 +175,20 @@ public class SubjectTopicService {
     public List<Topic> getAllTopics() {
         return topicRepository.findAll();
     }
+
     public List<SubjectDataDto> getAllSubjectsAdmin() {
         return subjectRepository.findAllDetails();
     }
 
     public List<TopicDataDto> getAllTopicsAdmin() {
         return topicRepository.findTopicDetails();
+    }
+
+    public void deleteSubject(int id) {
+        subjectRepository.deleteById(id);
+    }
+
+    public void deleteTopic(int id) {
+        topicRepository.deleteById(id);
     }
 }

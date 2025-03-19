@@ -274,15 +274,15 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                 }
                 let payload = { id: subject.id };
                 try {
-                    await axios.delete(`${apiUrl}/api/admin/questions/delete`, {
+                    await axios.delete(`${apiUrl}/api/admin/subjects/delete`, {
                         data: payload,
                         withCredentials: true,
                     });
                     setDialogOpen(false);
-                    alert(`Question deleted successfully.`);
+                    alert(`Subject deleted successfully.`);
                 } catch (error) {
-                    console.error("Error deleting Question:", error);
-                    alert("Failed to delete Question.");
+                    console.error("Error deleting Subject:", error);
+                    alert("Failed to delete Subject.");
                 }
             };
 
@@ -323,8 +323,8 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                                     Confirm Deletion
                                 </AlertDialogTitle>
                                 <AlertDialogDescription className="text-gray-700 text-sm mt-2">
-                                    Are you sure you want to delete the question
-                                    <span className="font-semibold text-gray-900"> "{subject.question}"</span> and it's associated data?
+                                    Are you sure you want to delete the Subject
+                                    <span className="font-semibold text-gray-900"> "{subject.name}"</span>?
                                     This action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
@@ -555,7 +555,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
             };
 
             return (
-                <>
+                <div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -612,7 +612,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
-                </>
+                </div>
             );
         },
     },
