@@ -38,11 +38,11 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
     Optional<Subject> findByName(String name);
 
     @Query("SELECT new danyal.fyp.awd.dto.admin.SubjectDataDto(" +
-            "s.name, cast(count(t) as int), q.name) " +
+            "s.id, s.name, cast(count(t) as int), q.name) " +
             "from Subject s " +
             "left join s.qualifications q " +
             "left join s.topics t on t.qualification = q " +
-            "group by s.name, q.name " +
+            "group by s.id, s.name, q.name " +
             "order by s.name asc")
     List<SubjectDataDto> findAllDetails();
 }

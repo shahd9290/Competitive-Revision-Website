@@ -1,4 +1,4 @@
 package danyal.fyp.awd.dto.admin;
 
-public record QuestionDataDto(String question, String answer, int marks, String subject, String topic) {
+public record QuestionDataDto(int id, String question, String answer, int marks, String subject, String topic) {
 }

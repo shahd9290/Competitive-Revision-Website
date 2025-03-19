@@ -53,7 +53,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     int findQualificationIdByUsername(@Param("username") String username);
 
     @Query("SELECT new danyal.fyp.awd.dto.admin.UserDataDto(" +
-            "u.username, u.email, r.name, u.createdAt, q.name)" +
+            "u.id, u.username, u.email, r.name, u.createdAt, q.name)" +
             "FROM User u " +
             "LEFT JOIN Role r on r MEMBER OF u.roles " +
             "LEFT JOIN Qualification q ON u.qualificationId = q.id " +

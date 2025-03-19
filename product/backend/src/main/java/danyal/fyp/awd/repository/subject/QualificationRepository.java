@@ -34,11 +34,11 @@ public interface QualificationRepository extends JpaRepository<Qualification, In
     Optional<Qualification> findByName(String name);
 
     @Query("SELECT new danyal.fyp.awd.dto.admin.QualificationDataDto(" +
-            "q.name, CAST(COUNT(DISTINCT s) AS int), CAST(COUNT(DISTINCT u) AS int))" +
+            "q.id, q.name, CAST(COUNT(DISTINCT s) AS int), CAST(COUNT(DISTINCT u) AS int))" +
             "FROM Qualification q " +
             "LEFT JOIN Subject s ON q MEMBER OF s.qualifications " +
             "LEFT JOIN User u ON u.qualificationId = q.id " +
-            "GROUP BY q.name " +
+            "GROUP BY q.id, q.name " +
             "ORDER BY q.name ASC")
     List<QualificationDataDto> getAllData();
 }

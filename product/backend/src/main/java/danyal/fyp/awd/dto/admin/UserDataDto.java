@@ -4,10 +4,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
-public record UserDataDto (String username, String email, String role, String createdAt, String qualification) {
-    public UserDataDto (String username, String email, String role, Instant createdAt, String qualification) {
-        this(username, email, getRoleLabel(role), formatDate(createdAt), qualification);
+public record UserDataDto (UUID id, String username, String email, String role, String createdAt, String qualification) {
+    public UserDataDto (UUID id, String username, String email, String role, Instant createdAt, String qualification) {
+        this(id, username, email, getRoleLabel(role), formatDate(createdAt), qualification);
     }
 
     private static String formatDate (Instant instant) {
