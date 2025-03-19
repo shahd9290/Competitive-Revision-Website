@@ -156,10 +156,10 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
 
                 {/* Footer Buttons */}
                 <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                         {loading ? "Submitting..." : "Confirm"}
                     </Button>
                 </DialogFooter>
@@ -263,10 +263,10 @@ export function TopicDialog({ openDialog, setOpenDialog, qualifications, subject
                 </Select>
             </div>
              <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                         {loading ? "Submitting..." : "Confirm"}
                     </Button>
             </DialogFooter>
@@ -341,10 +341,10 @@ export function SubjectDialog({ openDialog, setOpenDialog, qualifications }) {
             </div>
 
              <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                         {loading ? "Submitting..." : "Confirm"}
                     </Button>
             </DialogFooter>
@@ -396,10 +396,10 @@ export function QualificationDialog({ openDialog, setOpenDialog }) {
             </div>
 
              <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)}>
+                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                         {loading ? "Submitting..." : "Confirm"}
                     </Button>
             </DialogFooter>
@@ -513,10 +513,10 @@ export function UserDialog({ openDialog, setOpenDialog, qualifications }) {
 
             {/* Footer Buttons */}
             <DialogFooter>
-                <Button type="button" onClick={() => setOpenDialog(false)}>
+                <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
             </DialogFooter>

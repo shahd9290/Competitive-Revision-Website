@@ -184,7 +184,7 @@ export function DataTable<TData, TValue>({
                         <Button>Add {name}</Button>
                     </DialogTrigger>
 
-                    <DialogContent>
+                    <DialogContent className="bg-white rounded-lg shadow-lg p-6">
                         <DialogHeader>
                             <DialogTitle>Add {name}</DialogTitle>
                         </DialogHeader>

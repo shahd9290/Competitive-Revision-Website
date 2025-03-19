@@ -56,7 +56,7 @@ export const BentoGridItem = ({
                     </div>
                 </button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-white rounded-lg shadow-lg p-6">
                 <DialogTitle>{title}</DialogTitle>
                 {topics && topics.length > 0 ? (topics.map((topic, i) => (
                     <DialogDescription key={i}>
