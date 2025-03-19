@@ -112,7 +112,7 @@ public class AdminSubjectTopicController {
     @DeleteMapping("/topics/delete")
     public ResponseEntity<Object> deleteTopic(@RequestBody final DeleteDto deleteDto) {
         try {
-            subjectTopicService.deleteSubject(deleteDto.id());
+            subjectTopicService.deleteTopic(deleteDto.id());
             return ResponseEntity.ok("Topic Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete Topic");
