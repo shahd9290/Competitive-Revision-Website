@@ -36,10 +36,12 @@ public interface TopicRepository extends JpaRepository<Topic, Integer> {
     Optional<Topic> findByNameAndQualificationId(String name, Integer qualificationId);
 
     @Query("select new danyal.fyp.awd.dto.admin.TopicDataDto(" +
-            "t.id, t.name, s.name, q.name) " +
+            "t.id, t.name, s.name, q.name, cast(count(qu.id) as int)) " +
             "from Topic t " +
             "left join t.subject s " +
-            "left join t.qualification q")
+            "left join t.qualification q " +
+            "left join Question qu on qu.topic = t " +
+            "group by t.id, t.name, s.name, q.name ")
     List<TopicDataDto> findTopicDetails();
 
 }

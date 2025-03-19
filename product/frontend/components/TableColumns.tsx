@@ -240,6 +240,20 @@ export const topicColumns: ColumnDef<Topic>[] = [
         },
     },
     {
+        accessorKey:"questionCount",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Number of Questions
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             const topic = row.original;
@@ -247,10 +261,10 @@ export const topicColumns: ColumnDef<Topic>[] = [
 
             const handleDelete = async () => {
                 // Get Question Count.
-                // if (topic.topicNum > 0) {
-                //     alert("Topic cannot be deleted when Topics are present.")
-                //     return
-                // }
+                if (topic.questionCount > 0) {
+                    alert("Topic cannot be deleted when Questions are present.")
+                    return
+                }
                 let payload = { id: topic.id };
                 try {
                     await axios.delete(`${apiUrl}/api/admin/topics/delete`, {

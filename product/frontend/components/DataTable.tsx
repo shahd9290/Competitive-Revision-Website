@@ -52,7 +52,8 @@ export type Topic = {
     id: number
     topicName: string,
     subjectName: string,
-    qualificationName: string
+    qualificationName: string,
+    questionCount: number
 }
 export type Subject = {
     id: number
