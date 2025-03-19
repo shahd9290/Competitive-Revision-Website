@@ -65,4 +65,8 @@ public class QuestionService {
     public List<QuestionDataDto> getAllQuestions() {
         return questionRepository.getQuestionData();
     }
+
+    public void deleteQuestion(int id) {
+        questionRepository.deleteById(id);
+    }
 }

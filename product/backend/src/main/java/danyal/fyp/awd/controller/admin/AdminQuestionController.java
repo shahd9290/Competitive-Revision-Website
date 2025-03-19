@@ -1,5 +1,6 @@
 package danyal.fyp.awd.controller.admin;
 
+import danyal.fyp.awd.dto.admin.DeleteDto;
 import danyal.fyp.awd.dto.subject.QuestionAddDto;
 import danyal.fyp.awd.service.subject.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,22 @@ public class AdminQuestionController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Object> getUsers() {
+    public ResponseEntity<Object> getQuestions() {
         try {
             return ResponseEntity.ok(questionService.getAllQuestions());
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body("An error occurred when fetching data");
+        }
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deleteQuestion(@RequestBody DeleteDto deleteDto) {
+        try {
+            questionService.deleteQuestion(deleteDto.id());
+            return ResponseEntity.ok("Question Deleted Successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed To Delete Question");
         }
     }
 
