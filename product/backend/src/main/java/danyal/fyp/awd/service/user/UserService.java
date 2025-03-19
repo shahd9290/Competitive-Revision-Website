@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.GONE;
 
@@ -80,5 +81,9 @@ public class UserService {
             case "ROLE_USER" -> "User";
             default -> role;
         };
+    }
+
+    public void deleteUser(UUID id) {
+        userRepository.deleteById(id);
     }
 }

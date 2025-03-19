@@ -112,36 +112,89 @@ export const usersColumns: ColumnDef<User>[] = [
         },
     },
     {
-        id:"actions",
-        cell: ({row}) => {
-            const user = row.original
+        id: "actions",
+        cell: ({ row }) => {
+            const user = row.original;
+            const [dialogOpen, setDialogOpen] = useState(false);
+
+            const handleDelete = async () => {
+                // Check if user is currently logged in?
+                let payload = { id: user.id };
+                try {
+                    await axios.delete(`${apiUrl}/api/admin/users/delete`, {
+                        data: payload,
+                        withCredentials: true,
+                    });
+                    setDialogOpen(false);
+                    alert(`User deleted successfully.`);
+                } catch (error) {
+                    console.error("Error deleting User:", error);
+                    alert("Failed to delete User.");
+                }
+            };
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator/>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
-                        >
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
-                        >
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            )
-        }
-    }
+                <div>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(String(user.id))}
+                            >
+                                Edit
+                            </DropdownMenuItem>
+                            {/* Open dialog when clicking Delete */}
+                            <DropdownMenuItem
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent Dropdown from closing
+                                    setDialogOpen(true);
+                                }}
+                            >
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {/* Confirmation Dialog */}
+                    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                        <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
+                            <AlertDialogHeader>
+                                <AlertDialogTitle className="text-lg font-bold text-gray-900">
+                                    Confirm Deletion
+                                </AlertDialogTitle>
+                                <AlertDialogDescription className="text-gray-700 text-sm mt-2">
+                                    Are you sure you want to delete the User
+                                    <span className="font-semibold text-gray-900"> "{user.username}"</span>?
+                                    This action cannot be undone.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter className="flex justify-end space-x-2 mt-4">
+                                <AlertDialogCancel
+                                    onClick={() => setDialogOpen(false)}
+                                    className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
+                                >
+                                    Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleDelete}
+                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
+                                >
+                                    Confirm Delete
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </div>
+            );
+        },
+    },
 ]
 export const topicColumns: ColumnDef<Topic>[] = [
     {
