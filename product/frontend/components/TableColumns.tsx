@@ -396,7 +396,7 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                     alert("Subject cannot be deleted when Topics are present.")
                     return
                 }
-                let payload = { id: subject.id };
+                let payload = { id: subject.id, qualification: subject.qualification };
                 try {
                     await axios.delete(`${apiUrl}/api/admin/subjects/delete`, {
                         data: payload,

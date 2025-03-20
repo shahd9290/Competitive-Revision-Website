@@ -4,6 +4,7 @@ import danyal.fyp.awd.dto.admin.SubjectDataDto;
 import danyal.fyp.awd.dto.admin.TopicDataDto;
 import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
 import danyal.fyp.awd.dto.subject.TopicDto;
+import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.exception.SubjectException;
 import danyal.fyp.awd.exception.TopicException;
 import danyal.fyp.awd.model.subject.Qualification;
@@ -184,8 +185,16 @@ public class SubjectTopicService {
         return topicRepository.findTopicDetails();
     }
 
-    public void deleteSubject(int id) {
-        subjectRepository.deleteById(id);
+    public void deleteSubject(int id, String qualification) throws QualificationException {
+        Subject sub = subjectRepository.findById(id).get();
+        if (sub.getQualifications().size() == 1) {
+            subjectRepository.deleteById(id);
+        }
+        else {
+            Qualification qual = qualificationService.getQualification(qualification);
+            sub.removeQual(qual);
+            subjectRepository.save(sub);
+        }
     }
 
     public void deleteTopic(int id) {

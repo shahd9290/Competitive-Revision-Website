@@ -61,4 +61,7 @@ public class Subject {
         qualifications.add(qualification);
     }
 
+    public void removeQual(Qualification qualification) {
+        qualifications.remove(qualification);
+    }
 }
