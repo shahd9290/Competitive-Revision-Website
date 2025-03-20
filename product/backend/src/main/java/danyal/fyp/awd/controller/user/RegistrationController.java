@@ -35,21 +35,11 @@ public class RegistrationController {
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody final RegistrationRequestDto registrationDTO) {
         try {
-            final var registeredUser = userRegistrationService.registerUser(registrationDTO);
-            return ResponseEntity.ok(toRegistrationResponseDto(registeredUser));
+            userRegistrationService.registerUser(registrationDTO);
+            return ResponseEntity.ok("User Registered Successfully");
         } catch (ValidationException | QualificationException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    /**
-     * Converts a {@link User} object to a {@link RegistrationResponseDto}.
-     *
-     * @param user the registered user entity.
-     * @return the registration response DTO.
-     */
-    private RegistrationResponseDto toRegistrationResponseDto(final User user) {
-        return new RegistrationResponseDto(user.getUsername(), user.getEmail(), user.getQualificationId());
     }
 
 }

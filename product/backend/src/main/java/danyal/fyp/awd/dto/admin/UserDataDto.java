@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record UserDataDto (UUID id, String username, String email, String role, String createdAt, String qualification) {
     public UserDataDto (UUID id, String username, String email, String role, Instant createdAt, String qualification) {
-        this(id, username, email, getRoleLabel(role), formatDate(createdAt), qualification);
+        this(id, username, email, getRoleLabel(role), formatDate(createdAt), qualification != null ? qualification : "N/A");
     }
 
     private static String formatDate (Instant instant) {

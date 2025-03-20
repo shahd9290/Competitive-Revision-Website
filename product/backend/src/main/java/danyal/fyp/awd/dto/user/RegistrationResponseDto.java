@@ -1,5 +1,7 @@
 package danyal.fyp.awd.dto.user;
 
+import danyal.fyp.awd.model.user.Role;
+
 /**
  * A DTO representing a user registration response.
  *
@@ -8,5 +10,5 @@ package danyal.fyp.awd.dto.user;
  * @param qualification the qualification ID associated with the registered user.
  * @author Danyal Shah
  */
-public record RegistrationResponseDto(String username, String email, int qualification) {
+public record RegistrationResponseDto(String username, String email, Role qualification) {
 }

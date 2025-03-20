@@ -419,7 +419,7 @@ export function UserDialog({ openDialog, setOpenDialog, qualifications }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!username || !email || !password || !role || !selectedQualification) {
+        if (!username || !email || !password || !role || role === "ROLE_USER" && !selectedQualification) {
             setErrorMessage("Please fill out all fields before submitting.");
             return;
         }

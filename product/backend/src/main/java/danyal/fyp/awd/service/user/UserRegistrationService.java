@@ -45,7 +45,8 @@ public class UserRegistrationService {
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setMarks(0);
-        user.setQualificationId(qualificationService.getIdByName(request.qualification()));
+        if (request.role().equals("ROLE_USER"))
+            user.setQualificationId(qualificationService.getIdByName(request.qualification()));
         user.setRole(roleService.getRole(request.role()));
         return userRepository.save(user);
     }

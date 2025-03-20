@@ -82,7 +82,7 @@ public class User {
      * The ID of the qualification associated with the user.
      */
     @JoinColumn(name = "qualification_id", table = "qualifications", nullable = true)
-    private int qualificationId;
+    private Integer qualificationId;
 
     /**
      * The list of refresh tokens associated with the user.
@@ -96,12 +96,16 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     public JpaUserDetails toJpaUserDetails() {
-        List<GrantedAuthority> authorities = getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        List<GrantedAuthority> authorities = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
         return new JpaUserDetails(getUsername(), getPassword(), authorities);
     }
 
     public void setRole(Role role) {
         roles.add(role);
+    }
+
+    public Role getRole() {
+        return roles.stream().findFirst().get();
     }
 }
 
