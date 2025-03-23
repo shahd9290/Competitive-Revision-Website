@@ -116,9 +116,11 @@ export const usersColumns: ColumnDef<User>[] = [
         cell: ({ row }) => {
             const user = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
                 // Check if user is currently logged in?
+                setLoading(true);
                 let payload = { id: user.id };
                 try {
                     await axios.delete(`${apiUrl}/api/admin/users/delete`, {
@@ -126,10 +128,12 @@ export const usersColumns: ColumnDef<User>[] = [
                         withCredentials: true,
                     });
                     setDialogOpen(false);
-                    alert(`User deleted successfully.`);
                 } catch (error) {
                     console.error("Error deleting User:", error);
                     alert("Failed to delete User.");
+                } finally {
+                    setLoading(false);
+                    window.location.reload();
                 }
             };
 
@@ -185,8 +189,9 @@ export const usersColumns: ColumnDef<User>[] = [
                                 <AlertDialogAction
                                     onClick={handleDelete}
                                     className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
+                                    disabled={loading}
                                 >
-                                    Confirm Delete
+                                    {loading ? "Deleting..." : "Confirm Delete"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -258,6 +263,7 @@ export const topicColumns: ColumnDef<Topic>[] = [
         cell: ({ row }) => {
             const topic = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
                 // Get Question Count.
@@ -265,6 +271,8 @@ export const topicColumns: ColumnDef<Topic>[] = [
                     alert("Topic cannot be deleted when Questions are present.")
                     return
                 }
+                setLoading(true);
+
                 let payload = { id: topic.id };
                 try {
                     await axios.delete(`${apiUrl}/api/admin/topics/delete`, {
@@ -272,10 +280,12 @@ export const topicColumns: ColumnDef<Topic>[] = [
                         withCredentials: true,
                     });
                     setDialogOpen(false);
-                    alert(`Topic deleted successfully.`);
                 } catch (error) {
                     console.error("Error deleting Topic:", error);
                     alert("Failed to delete Topic.");
+                } finally {
+                    setLoading(false);
+                    window.location.reload();
                 }
             };
 
@@ -331,8 +341,9 @@ export const topicColumns: ColumnDef<Topic>[] = [
                                 <AlertDialogAction
                                     onClick={handleDelete}
                                     className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
+                                    disabled={loading}
                                 >
-                                    Confirm Delete
+                                    {loading ? "Deleting..." : "Confirm Delete"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -390,12 +401,14 @@ export const subjectColumns: ColumnDef<Subject>[] = [
         cell: ({ row }) => {
             const subject = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
                 if (subject.topicNum > 0) {
                     alert("Subject cannot be deleted when Topics are present.")
                     return
                 }
+                setLoading(true);
                 let payload = { id: subject.id, qualification: subject.qualification };
                 try {
                     await axios.delete(`${apiUrl}/api/admin/subjects/delete`, {
@@ -403,10 +416,12 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                         withCredentials: true,
                     });
                     setDialogOpen(false);
-                    alert(`Subject deleted successfully.`);
                 } catch (error) {
                     console.error("Error deleting Subject:", error);
                     alert("Failed to delete Subject.");
+                } finally {
+                    setLoading(false);
+                    window.location.reload();
                 }
             };
 
@@ -462,8 +477,9 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                                 <AlertDialogAction
                                     onClick={handleDelete}
                                     className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
+                                    disabled={loading}
                                 >
-                                    Confirm Delete
+                                    {loading ? "Deleting..." : "Confirm Delete"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -529,9 +545,10 @@ export const questionColumns: ColumnDef<Question>[] = [
         cell: ({ row }) => {
             const question = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
-
+                setLoading(true);
                 let payload = { id: question.id };
                 try {
                     await axios.delete(`${apiUrl}/api/admin/questions/delete`, {
@@ -539,10 +556,12 @@ export const questionColumns: ColumnDef<Question>[] = [
                         withCredentials: true,
                     });
                     setDialogOpen(false);
-                    alert(`Question deleted successfully.`);
                 } catch (error) {
                     console.error("Error deleting Question:", error);
                     alert("Failed to delete Question.");
+                } finally {
+                    setLoading(false);
+                    window.location.reload();
                 }
             };
 
@@ -598,8 +617,9 @@ export const questionColumns: ColumnDef<Question>[] = [
                                 <AlertDialogAction
                                     onClick={handleDelete}
                                     className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
+                                    disabled={loading}
                                 >
-                                    Confirm Delete
+                                    {loading ? "Deleting..." : "Confirm Delete"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -657,13 +677,14 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
         cell: ({ row }) => {
             const qualification = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
                 if (qualification.subjectsNum > 0 || qualification.usersNum > 0) {
                     alert("Qualification cannot be deleted when Subjects and Users are present.")
                     return
                 }
-
+                setLoading(true);
                 let payload = { qualification: qualification.name };
                 try {
                     await axios.delete(`${apiUrl}/api/admin/qualifications/delete`, {
@@ -671,10 +692,12 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                         withCredentials: true,
                     });
                     setDialogOpen(false);
-                    alert(`Qualification "${qualification.name}" deleted successfully.`);
                 } catch (error) {
                     console.error("Error deleting qualification:", error);
                     alert("Failed to delete qualification.");
+                } finally {
+                    setLoading(false);
+                    window.location.reload();
                 }
             };
 
@@ -730,8 +753,9 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                                 <AlertDialogAction
                                     onClick={handleDelete}
                                     className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
+                                    disabled={loading}
                                 >
-                                    Confirm Delete
+                                    {loading ? "Deleting..." : "Confirm Delete"}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>

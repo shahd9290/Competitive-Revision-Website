@@ -54,6 +54,7 @@ export function QuestionDialog({ openDialog, setOpenDialog, qualifications, subj
             setErrorMessage("Failed to submit the question. Please try again.");
         } finally {
             setLoading(false);
+            window.location.reload();
         }
     };
 
@@ -204,6 +205,7 @@ export function TopicDialog({ openDialog, setOpenDialog, qualifications, subject
             setErrorMessage("Failed to submit the topic. Please try again.");
         } finally {
             setLoading(false);
+            window.location.reload();
         }
     };
 
@@ -308,6 +310,7 @@ export function SubjectDialog({ openDialog, setOpenDialog, qualifications }) {
             setErrorMessage("Failed to submit the subject. Please try again.");
         } finally {
             setLoading(false);
+            window.location.reload();
         }
     };
 
@@ -384,6 +387,7 @@ export function QualificationDialog({ openDialog, setOpenDialog }) {
             setErrorMessage("Failed to submit the qualification. Please try again.");
         } finally {
             setLoading(false);
+            window.location.reload();
         }
     };
 
@@ -447,6 +451,7 @@ export function UserDialog({ openDialog, setOpenDialog, qualifications }) {
             setErrorMessage("Failed to register the user. Please try again.");
         } finally {
             setLoading(false);
+            window.location.reload();
         }
     };
 
