@@ -1,119 +1,102 @@
 import {ColumnDef} from "@tanstack/react-table";
 import {Attempt, Qualification, Question, Subject, Topic, User} from "@/components/DataTable";
-import { MoreHorizontal, ArrowUpDown } from "lucide-react"
+import {ArrowUpDown} from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import {Button} from "@/components/ui/button"
 import {useState} from "react";
 import axios from "axios";
-import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogCancel,
-    AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 export const attemptColumns: ColumnDef<Attempt>[] = [
     {
-        accessorKey:"topicName",
+        accessorKey: "topicName",
         header: "Topic",
     },
     {
-        accessorKey:"date",
+        accessorKey: "date",
         header: "Date",
     },
     {
-        accessorKey:"proportion",
-        header:"Score",
+        accessorKey: "proportion",
+        header: "Score",
     },
 ]
 export const usersColumns: ColumnDef<User>[] = [
     {
-        accessorKey:"username",
-        header: ({ column }) => {
+        accessorKey: "username",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Username
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"email",
-        header: ({ column }) => {
+        accessorKey: "email",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Email
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"role",
-        header: ({ column }) => {
+        accessorKey: "role",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Role
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"createdAt",
-        header: ({ column }) => {
+        accessorKey: "createdAt",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Date Created
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"qualification",
-        header: ({ column }) => {
+        accessorKey: "qualification",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Qualification
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const user = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
             const [loading, setLoading] = useState(false);
@@ -121,7 +104,7 @@ export const usersColumns: ColumnDef<User>[] = [
             const handleDelete = async () => {
                 // Check if user is currently logged in?
                 setLoading(true);
-                let payload = { id: user.id };
+                let payload = {id: user.id};
                 try {
                     await axios.delete(`${apiUrl}/api/admin/users/delete`, {
                         data: payload,
@@ -139,63 +122,18 @@ export const usersColumns: ColumnDef<User>[] = [
 
             return (
                 <div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(String(user.id))}
-                            >
-                                Edit
-                            </DropdownMenuItem>
-                            {/* Open dialog when clicking Delete */}
-                            <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.preventDefault(); // Prevent Dropdown from closing
-                                    setDialogOpen(true);
-                                }}
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <TableDropDown
+                        setDialogOpen={setDialogOpen}
+                    />
 
                     {/* Confirmation Dialog */}
-                    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                        <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-lg font-bold text-gray-900">
-                                    Confirm Deletion
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-gray-700 text-sm mt-2">
-                                    Are you sure you want to delete the User
-                                    <span className="font-semibold text-gray-900"> "{user.username}"</span>?
-                                    This action cannot be undone.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="flex justify-end space-x-2 mt-4">
-                                <AlertDialogCancel
-                                    onClick={() => setDialogOpen(false)}
-                                    className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
-                                >
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDelete}
-                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Deleting..." : "Confirm Delete"}
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <DeleteDialog
+                        open={dialogOpen}
+                        setOpen={setDialogOpen}
+                        handleDelete={handleDelete}
+                        loading={loading}
+                        name={user.username}
+                    />
                 </div>
             );
         },
@@ -203,64 +141,64 @@ export const usersColumns: ColumnDef<User>[] = [
 ]
 export const topicColumns: ColumnDef<Topic>[] = [
     {
-        accessorKey:"name",
-        header: ({ column }) => {
+        accessorKey: "name",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Topic Name
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"subject",
-        header: ({ column }) => {
+        accessorKey: "subject",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Subject
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"qualification",
-        header: ({ column }) => {
+        accessorKey: "qualification",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Qualification
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"questionCount",
-        header: ({ column }) => {
+        accessorKey: "questionCount",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Number of Questions
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const topic = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
             const [loading, setLoading] = useState(false);
@@ -273,7 +211,7 @@ export const topicColumns: ColumnDef<Topic>[] = [
                 }
                 setLoading(true);
 
-                let payload = { id: topic.id };
+                let payload = {id: topic.id};
                 try {
                     await axios.delete(`${apiUrl}/api/admin/topics/delete`, {
                         data: payload,
@@ -291,63 +229,18 @@ export const topicColumns: ColumnDef<Topic>[] = [
 
             return (
                 <div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(String(topic.id))}
-                            >
-                                Edit
-                            </DropdownMenuItem>
-                            {/* Open dialog when clicking Delete */}
-                            <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.preventDefault(); // Prevent Dropdown from closing
-                                    setDialogOpen(true);
-                                }}
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <TableDropDown
+                        setDialogOpen={setDialogOpen}
+                    />
 
                     {/* Confirmation Dialog */}
-                    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                        <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-lg font-bold text-gray-900">
-                                    Confirm Deletion
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-gray-700 text-sm mt-2">
-                                    Are you sure you want to delete the Topic
-                                    <span className="font-semibold text-gray-900"> "{topic.name}"</span>?
-                                    This action cannot be undone.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="flex justify-end space-x-2 mt-4">
-                                <AlertDialogCancel
-                                    onClick={() => setDialogOpen(false)}
-                                    className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
-                                >
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDelete}
-                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Deleting..." : "Confirm Delete"}
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <DeleteDialog
+                        open={dialogOpen}
+                        setOpen={setDialogOpen}
+                        handleDelete={handleDelete}
+                        loading={loading}
+                        name={topic.name}
+                    />
                 </div>
             );
         },
@@ -355,50 +248,50 @@ export const topicColumns: ColumnDef<Topic>[] = [
 ]
 export const subjectColumns: ColumnDef<Subject>[] = [
     {
-        accessorKey:"name",
-        header: ({ column }) => {
+        accessorKey: "name",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Subject
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"topicNum",
-        header: ({ column }) => {
+        accessorKey: "topicNum",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Number of Topics
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"qualification",
-        header: ({ column }) => {
+        accessorKey: "qualification",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Qualification
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const subject = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
             const [loading, setLoading] = useState(false);
@@ -409,7 +302,7 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                     return
                 }
                 setLoading(true);
-                let payload = { id: subject.id, qualification: subject.qualification };
+                let payload = {id: subject.id, qualification: subject.qualification};
                 try {
                     await axios.delete(`${apiUrl}/api/admin/subjects/delete`, {
                         data: payload,
@@ -427,63 +320,18 @@ export const subjectColumns: ColumnDef<Subject>[] = [
 
             return (
                 <div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(String(subject.id))}
-                            >
-                                Edit
-                            </DropdownMenuItem>
-                            {/* Open dialog when clicking Delete */}
-                            <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.preventDefault(); // Prevent Dropdown from closing
-                                    setDialogOpen(true);
-                                }}
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <TableDropDown
+                        setDialogOpen={setDialogOpen}
+                    />
 
                     {/* Confirmation Dialog */}
-                    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                        <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-lg font-bold text-gray-900">
-                                    Confirm Deletion
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-gray-700 text-sm mt-2">
-                                    Are you sure you want to delete the Subject
-                                    <span className="font-semibold text-gray-900"> "{subject.name}"</span>?
-                                    This action cannot be undone.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="flex justify-end space-x-2 mt-4">
-                                <AlertDialogCancel
-                                    onClick={() => setDialogOpen(false)}
-                                    className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
-                                >
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDelete}
-                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Deleting..." : "Confirm Delete"}
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <DeleteDialog
+                        open={dialogOpen}
+                        setOpen={setDialogOpen}
+                        handleDelete={handleDelete}
+                        loading={loading}
+                        name={subject.name}
+                    />
                 </div>
             );
         },
@@ -491,65 +339,65 @@ export const subjectColumns: ColumnDef<Subject>[] = [
 ]
 export const questionColumns: ColumnDef<Question>[] = [
     {
-        accessorKey:"subject",
-        header: ({ column }) => {
+        accessorKey: "subject",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Subject
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"topic",
-        header: ({ column }) => {
+        accessorKey: "topic",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Topic
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     }
-    ,{
-        accessorKey:"question",
+    , {
+        accessorKey: "question",
         header: "Question",
     },
     {
-        accessorKey:"answer",
+        accessorKey: "answer",
         header: "Answer",
     },
     {
-        accessorKey:"marks",
-        header: ({ column }) => {
+        accessorKey: "marks",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Marks
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const question = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
             const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
                 setLoading(true);
-                let payload = { id: question.id };
+                let payload = {id: question.id};
                 try {
                     await axios.delete(`${apiUrl}/api/admin/questions/delete`, {
                         data: payload,
@@ -567,63 +415,18 @@ export const questionColumns: ColumnDef<Question>[] = [
 
             return (
                 <div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(String(question.id))}
-                            >
-                                Edit
-                            </DropdownMenuItem>
-                            {/* Open dialog when clicking Delete */}
-                            <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.preventDefault(); // Prevent Dropdown from closing
-                                    setDialogOpen(true);
-                                }}
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <TableDropDown
+                        setDialogOpen={setDialogOpen}
+                    />
 
                     {/* Confirmation Dialog */}
-                    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                        <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-lg font-bold text-gray-900">
-                                    Confirm Deletion
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-gray-700 text-sm mt-2">
-                                    Are you sure you want to delete the question
-                                    <span className="font-semibold text-gray-900"> "{question.question}"</span> and it's associated data?
-                                    This action cannot be undone.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="flex justify-end space-x-2 mt-4">
-                                <AlertDialogCancel
-                                    onClick={() => setDialogOpen(false)}
-                                    className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
-                                >
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDelete}
-                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Deleting..." : "Confirm Delete"}
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <DeleteDialog
+                        open={dialogOpen}
+                        setOpen={setDialogOpen}
+                        handleDelete={handleDelete}
+                        loading={loading}
+                        name={question.question}
+                    />
                 </div>
             );
         },
@@ -631,50 +434,50 @@ export const questionColumns: ColumnDef<Question>[] = [
 ]
 export const qualificationsColumns: ColumnDef<Qualification>[] = [
     {
-        accessorKey:"name",
-        header: ({ column }) => {
+        accessorKey: "name",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Qualification
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"subjectsNum",
-        header: ({ column }) => {
+        accessorKey: "subjectsNum",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Number of Subjects
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
-        accessorKey:"usersNum",
-        header: ({ column }) => {
+        accessorKey: "usersNum",
+        header: ({column}) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Number of Users
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                 </Button>
             )
         },
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({row}) => {
             const qualification = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
             const [loading, setLoading] = useState(false);
@@ -685,7 +488,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                     return
                 }
                 setLoading(true);
-                let payload = { qualification: qualification.name };
+                let payload = {qualification: qualification.name};
                 try {
                     await axios.delete(`${apiUrl}/api/admin/qualifications/delete`, {
                         data: payload,
@@ -703,63 +506,17 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
 
             return (
                 <div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(String(qualification.id))}
-                            >
-                                Edit
-                            </DropdownMenuItem>
-                            {/* Open dialog when clicking Delete */}
-                            <DropdownMenuItem
-                                onClick={(e) => {
-                                    e.preventDefault(); // Prevent Dropdown from closing
-                                    setDialogOpen(true);
-                                }}
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <TableDropDown
+                        setDialogOpen={setDialogOpen}
+                    />
 
-                    {/* Confirmation Dialog */}
-                    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                        <AlertDialogContent className="bg-white rounded-lg shadow-lg p-6">
-                            <AlertDialogHeader>
-                                <AlertDialogTitle className="text-lg font-bold text-gray-900">
-                                    Confirm Deletion
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-gray-700 text-sm mt-2">
-                                    Are you sure you want to delete the qualification
-                                    <span className="font-semibold text-gray-900"> "{qualification.name}"</span>?
-                                    This action cannot be undone.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="flex justify-end space-x-2 mt-4">
-                                <AlertDialogCancel
-                                    onClick={() => setDialogOpen(false)}
-                                    className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
-                                >
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDelete}
-                                    className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Deleting..." : "Confirm Delete"}
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <DeleteDialog
+                        open={dialogOpen}
+                        setOpen={setDialogOpen}
+                        handleDelete={handleDelete}
+                        loading={loading}
+                        name={qualification.name}
+                    />
                 </div>
             );
         },
