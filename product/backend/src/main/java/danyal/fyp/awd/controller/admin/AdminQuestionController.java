@@ -1,6 +1,7 @@
 package danyal.fyp.awd.controller.admin;
 
 import danyal.fyp.awd.dto.admin.DeleteDto;
+import danyal.fyp.awd.dto.admin.QuestionEditDto;
 import danyal.fyp.awd.dto.subject.QuestionAddDto;
 import danyal.fyp.awd.service.subject.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,16 @@ public class AdminQuestionController {
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body("An error occurred when fetching data");
+        }
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<String> editQuestion(@RequestBody QuestionEditDto questionEditDto) {
+        try {
+            questionService.editQuestion(questionEditDto.id(), questionEditDto.question(), questionEditDto.answer(), questionEditDto.marks());
+            return ResponseEntity.ok("Question added");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

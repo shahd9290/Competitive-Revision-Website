@@ -6,6 +6,7 @@ import {Button} from "@/components/ui/button"
 import {useState} from "react";
 import axios from "axios";
 import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
+import {EditQuestion} from "@/components/EditDialogPrompts";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -393,6 +394,7 @@ export const questionColumns: ColumnDef<Question>[] = [
         cell: ({row}) => {
             const question = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
@@ -417,6 +419,7 @@ export const questionColumns: ColumnDef<Question>[] = [
                 <div>
                     <TableDropDown
                         setDialogOpen={setDialogOpen}
+                        setEditOpen={setEditOpen}
                     />
 
                     {/* Confirmation Dialog */}
@@ -427,6 +430,13 @@ export const questionColumns: ColumnDef<Question>[] = [
                         loading={loading}
                         name={question.question}
                     />
+
+                    <EditQuestion
+                        open={editOpen}
+                        setOpen={setEditOpen}
+                        row={row.original}
+                    />
+
                 </div>
             );
         },

@@ -69,4 +69,12 @@ public class QuestionService {
     public void deleteQuestion(int id) {
         questionRepository.deleteById(id);
     }
+
+    public void editQuestion(int id, String question, String answer, Integer marks) {
+        Question question_ = questionRepository.findById(id).get();
+        question_.setQuestion(question);
+        question_.setAnswer(answer);
+        question_.setMarks(marks);
+        questionRepository.save(question_);
+    }
 }
