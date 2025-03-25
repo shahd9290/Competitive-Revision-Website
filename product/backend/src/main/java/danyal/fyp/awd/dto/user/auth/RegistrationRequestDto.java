@@ -1,4 +1,4 @@
-package danyal.fyp.awd.dto.user;
+package danyal.fyp.awd.dto.user.auth;
 
 /**
  * A DTO representing a user registration request.

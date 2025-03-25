@@ -1,4 +1,4 @@
-package danyal.fyp.awd.dto.user;
+package danyal.fyp.awd.dto.user.auth;
 
 import danyal.fyp.awd.model.user.Role;
 

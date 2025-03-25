@@ -1,9 +1,8 @@
 package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.admin.UserDataDto;
+import danyal.fyp.awd.dto.admin.user.UserDataDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
-import danyal.fyp.awd.model.user.Role;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
 import danyal.fyp.awd.service.subject.QualificationService;
@@ -11,11 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

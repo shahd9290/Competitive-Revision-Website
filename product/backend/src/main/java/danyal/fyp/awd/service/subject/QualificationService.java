@@ -1,6 +1,6 @@
 package danyal.fyp.awd.service.subject;
 
-import danyal.fyp.awd.dto.admin.QualificationDataDto;
+import danyal.fyp.awd.dto.admin.qualification.QualificationDataDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.repository.subject.QualificationRepository;

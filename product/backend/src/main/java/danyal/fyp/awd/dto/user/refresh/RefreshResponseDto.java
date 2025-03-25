@@ -1,4 +1,4 @@
-package danyal.fyp.awd.dto.user;
+package danyal.fyp.awd.dto.user.refresh;
 
 /**
  * A DTO representing a refresh token response.

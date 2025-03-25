@@ -1,8 +1,8 @@
 package danyal.fyp.awd.controller.admin;
 
 import danyal.fyp.awd.dto.admin.DeleteDto;
-import danyal.fyp.awd.dto.admin.QuestionEditDto;
-import danyal.fyp.awd.dto.subject.QuestionAddDto;
+import danyal.fyp.awd.dto.admin.question.QuestionEditDto;
+import danyal.fyp.awd.dto.admin.question.QuestionAddDto;
 import danyal.fyp.awd.service.subject.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

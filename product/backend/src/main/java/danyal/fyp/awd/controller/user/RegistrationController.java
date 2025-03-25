@@ -1,9 +1,7 @@
 package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.user.RegistrationRequestDto;
-import danyal.fyp.awd.dto.user.RegistrationResponseDto;
+import danyal.fyp.awd.dto.user.auth.RegistrationRequestDto;
 import danyal.fyp.awd.exception.QualificationException;
-import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.service.user.UserRegistrationService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;

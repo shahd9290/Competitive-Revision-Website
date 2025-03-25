@@ -1,16 +1,15 @@
 package danyal.fyp.awd.controller.admin;
 
 import danyal.fyp.awd.dto.admin.DeleteDto;
-import danyal.fyp.awd.dto.admin.DeleteSubjectDto;
-import danyal.fyp.awd.dto.subject.SubjectDto;
-import danyal.fyp.awd.dto.subject.TopicDto;
+import danyal.fyp.awd.dto.admin.subject.DeleteSubjectDto;
+import danyal.fyp.awd.dto.admin.subject.SubjectDto;
+import danyal.fyp.awd.dto.admin.topic.TopicDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
 import danyal.fyp.awd.service.subject.QualificationService;
 import danyal.fyp.awd.service.subject.SubjectTopicService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

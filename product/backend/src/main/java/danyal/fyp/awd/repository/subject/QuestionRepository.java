@@ -1,6 +1,6 @@
 package danyal.fyp.awd.repository.subject;
 
-import danyal.fyp.awd.dto.admin.QuestionDataDto;
+import danyal.fyp.awd.dto.admin.question.QuestionDataDto;
 import danyal.fyp.awd.model.subject.Question;
 import danyal.fyp.awd.model.subject.Topic;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +14,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
     List<Question> getQuestionByTopic(Topic topic);
 
-    @Query("select new danyal.fyp.awd.dto.admin.QuestionDataDto(" +
+    @Query("select new danyal.fyp.awd.dto.admin.question.QuestionDataDto(" +
             "q.id, q.question, q.answer, q.marks, s.name, t.name) " +
             "from Question q " +
             "left join q.topic t " +

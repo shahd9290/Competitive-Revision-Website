@@ -1,11 +1,10 @@
 package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.user.MarksDto;
-import danyal.fyp.awd.dto.user.UserAttemptDto;
-import danyal.fyp.awd.dto.user.UserProfileDto;
+import danyal.fyp.awd.dto.user.profile.MarksDto;
+import danyal.fyp.awd.dto.user.profile.UserAttemptDto;
+import danyal.fyp.awd.dto.user.profile.UserProfileDto;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.user.User;
-import danyal.fyp.awd.model.user.UserAttempts;
 import danyal.fyp.awd.service.user.UserAttemptsService;
 import danyal.fyp.awd.service.user.UserService;
 import lombok.RequiredArgsConstructor;

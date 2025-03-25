@@ -1,7 +1,6 @@
 package danyal.fyp.awd.controller.admin;
 
-import danyal.fyp.awd.dto.admin.DeleteDto;
-import danyal.fyp.awd.dto.admin.DeleteUserDto;
+import danyal.fyp.awd.dto.admin.user.DeleteUserDto;
 import danyal.fyp.awd.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

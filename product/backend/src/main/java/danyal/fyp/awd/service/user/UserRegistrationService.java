@@ -1,8 +1,7 @@
 package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.user.RegistrationRequestDto;
+import danyal.fyp.awd.dto.user.auth.RegistrationRequestDto;
 import danyal.fyp.awd.exception.QualificationException;
-import danyal.fyp.awd.model.user.Role;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
 import danyal.fyp.awd.service.subject.QualificationService;

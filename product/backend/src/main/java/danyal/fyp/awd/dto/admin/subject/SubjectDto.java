@@ -1,4 +1,4 @@
-package danyal.fyp.awd.dto.subject;
+package danyal.fyp.awd.dto.admin.subject;
 
 /**
  * A DTO representing a subject and its associated qualification.

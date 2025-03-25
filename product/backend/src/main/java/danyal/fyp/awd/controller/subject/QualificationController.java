@@ -1,6 +1,5 @@
 package danyal.fyp.awd.controller.subject;
 
-import danyal.fyp.awd.dto.subject.QualificationDto;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.service.subject.QualificationService;
 import lombok.RequiredArgsConstructor;

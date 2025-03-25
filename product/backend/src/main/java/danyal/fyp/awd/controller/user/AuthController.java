@@ -1,7 +1,7 @@
 package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.user.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationRequestDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationResponseDto;
 import danyal.fyp.awd.exception.AdminException;
 import danyal.fyp.awd.service.user.AuthenticationService;
 import danyal.fyp.awd.service.user.CookieService;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

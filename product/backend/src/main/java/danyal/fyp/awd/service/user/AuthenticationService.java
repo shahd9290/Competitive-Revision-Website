@@ -1,17 +1,14 @@
 package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.user.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationRequestDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationResponseDto;
 import danyal.fyp.awd.exception.AdminException;
-import danyal.fyp.awd.model.user.Role;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 

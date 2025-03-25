@@ -1,6 +1,6 @@
 package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.user.UserAttemptDto;
+import danyal.fyp.awd.dto.user.profile.UserAttemptDto;
 import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.model.user.AttemptId;
 import danyal.fyp.awd.model.user.User;

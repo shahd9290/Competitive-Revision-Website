@@ -1,7 +1,7 @@
 package danyal.fyp.awd.controller.admin;
 
-import danyal.fyp.awd.dto.admin.QualificationEditDto;
-import danyal.fyp.awd.dto.subject.QualificationDto;
+import danyal.fyp.awd.dto.admin.qualification.QualificationEditDto;
+import danyal.fyp.awd.dto.admin.qualification.QualificationDto;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.service.subject.QualificationService;
 import lombok.RequiredArgsConstructor;

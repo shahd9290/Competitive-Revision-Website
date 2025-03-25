@@ -1,6 +1,6 @@
 package danyal.fyp.awd.service.subject;
 
-import danyal.fyp.awd.dto.admin.QuestionDataDto;
+import danyal.fyp.awd.dto.admin.question.QuestionDataDto;
 import danyal.fyp.awd.dto.subject.QuestionGetDto;
 import danyal.fyp.awd.exception.QuestionException;
 import danyal.fyp.awd.exception.TopicException;
@@ -11,7 +11,6 @@ import danyal.fyp.awd.repository.subject.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

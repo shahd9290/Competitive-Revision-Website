@@ -1,4 +1,4 @@
-package danyal.fyp.awd.dto.admin;
+package danyal.fyp.awd.dto.admin.user;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
