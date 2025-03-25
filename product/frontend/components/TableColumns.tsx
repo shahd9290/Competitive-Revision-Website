@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button"
 import {useState} from "react";
 import axios from "axios";
 import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
-import {EditQuestion} from "@/components/EditDialogPrompts";
+import {EditQualification, EditQuestion} from "@/components/EditDialogPrompts";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -444,7 +444,7 @@ export const questionColumns: ColumnDef<Question>[] = [
 ]
 export const qualificationsColumns: ColumnDef<Qualification>[] = [
     {
-        accessorKey: "name",
+        accessorKey: "qualification",
         header: ({column}) => {
             return (
                 <Button
@@ -490,6 +490,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
         cell: ({row}) => {
             const qualification = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
@@ -518,6 +519,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                 <div>
                     <TableDropDown
                         setDialogOpen={setDialogOpen}
+                        setEditOpen={setEditOpen}
                     />
 
                     <DeleteDialog
@@ -526,6 +528,12 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                         handleDelete={handleDelete}
                         loading={loading}
                         name={qualification.name}
+                    />
+
+                    <EditQualification
+                        open={editOpen}
+                        setOpen={setEditOpen}
+                        row={row.original}
                     />
                 </div>
             );

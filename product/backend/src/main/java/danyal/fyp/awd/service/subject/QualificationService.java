@@ -82,4 +82,10 @@ public class QualificationService {
         Qualification qual = qualificationRepository.findByName(name).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
         qualificationRepository.delete(qual);
     }
+
+    public void editQualification(int id, String qualification) {
+        Qualification qual = qualificationRepository.findById(id).get();
+        qual.setName(qualification);
+        qualificationRepository.save(qual);
+    }
 }

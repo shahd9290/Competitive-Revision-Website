@@ -71,7 +71,7 @@ export type Question = {
 }
 export type Qualification = {
     id: number
-    name: string,
+    qualification: string,
     subjectsNum: number,
     usersNum: number
 }

@@ -1,5 +1,6 @@
 package danyal.fyp.awd.controller.admin;
 
+import danyal.fyp.awd.dto.admin.QualificationEditDto;
 import danyal.fyp.awd.dto.subject.QualificationDto;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.service.subject.QualificationService;
@@ -40,6 +41,17 @@ public class AdminQualificationController {
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body("An error occurred when fetching data");
+        }
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<String> editQualification(@RequestBody final QualificationEditDto qualificationEditDto) {
+        try {
+            qualificationService.editQualification(qualificationEditDto.id(), qualificationEditDto.qualification());
+            return ResponseEntity.ok("Qualification Edited Successfully");
+        }
+        catch (Exception e) {
+            return  ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

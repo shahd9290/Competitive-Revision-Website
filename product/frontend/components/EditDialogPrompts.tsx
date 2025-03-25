@@ -30,11 +30,7 @@ export function EditQuestion({open, setOpen, row}) {
 
     useEffect(() => {
         if (!row) return;
-        if (
-            question !== row.question ||
-            answer !== row.answer ||
-            marks !== row.marks
-        ) {
+        if (question !== row.question || answer !== row.answer || marks !== row.marks) {
             setDirty(true);
         } else {
             setDirty(false);
@@ -111,6 +107,106 @@ export function EditQuestion({open, setOpen, row}) {
 
                     <h1>The Topic, Subject and Qualification cannot be edited here. Please create a new question if you
                         wish to change these.</h1>
+
+                    {/* Footer Buttons */}
+                    <DialogFooter>
+                        <Button type="button" onClick={handleCancel}
+                                className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                            Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading || !dirty}
+                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                            {loading ? "Submitting..." : "Confirm"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+
+                <CancelUnsavedDialog
+                    open={showCancelDialog}
+                    setOpen={setShowCancelDialog}
+                    setEdit={setOpen}
+                />
+            </DialogContent>
+        </Dialog>
+
+    )
+}
+
+export function EditQualification({open, setOpen, row}) {
+    const [id, setId] = useState(0);
+    const [qualification, setQualification] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
+
+    useEffect(() => {
+        if (row && open) {
+            setId(row.id || "");
+            setQualification(row.qualification || "");
+            setDirty(false); // Reset dirty state when opening
+        }
+    }, [row, open]);
+
+    useEffect(() => {
+        if (!row) return;
+        if (qualification !== row.qualification) {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [qualification, row]);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (dirty) {
+            setLoading(true);
+            const payload = {
+                id: id,
+                qualification: qualification,
+            }
+
+            try {
+                await axios.post(`${apiUrl}/api/admin/qualifications/edit`, payload, {
+                    withCredentials: true,
+                    headers: {"Content-Type": "application/json"},
+                });
+
+                setOpen(false); // Close the dialog on success
+            } catch (error) {
+                console.error("Error editing qualification:", error);
+                setErrorMessage("Failed to edit the qualification. Please try again.");
+            } finally {
+                setLoading(false);
+                window.location.reload();
+            }
+        }
+    }
+
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpen(false);
+        }
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent className="bg-white rounded-lg shadow-lg p-6">
+                <DialogHeader className="text-lg font-bold text-gray-900">
+                    <DialogTitle>Editing Qualification</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+                    {/* Show Error Message if Any */}
+                    {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+
+                    {/* Question */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Qualification</Label>
+                        <Input className="col-span-3" value={qualification} onChange={(e) => setQualification(e.target.value)}
+                               required/>
+                    </div>
 
                     {/* Footer Buttons */}
                     <DialogFooter>
