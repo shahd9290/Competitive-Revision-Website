@@ -1,0 +1,11 @@
+Background Theory: The report on the state of the art in web development needs to be a bit more detailed. This can be achieved by expanding the section on frontend technologies as the options considered for the frontend could each be described more. Similarly, the second report could explain other architectural paradigms (e.g. N-tier architecture). You could have included some diagrams to illustrate the architectural paradigms and design patterns. You provided a good explanation of the security and privacy aspects. Background theory is demonstrated through the explanation of proof of concept programs in Chapter 3, with screenshots of the web application and code snippets included. Although more features could be fully implemented, you have demonstrated independent thought with regards to the use of background theory about web security. 
+
+Project Diary: You have provided a nice reflection of the progress made and challenges faced in Term 1. However, you could have stated whether the challenges you faced impacted your progress and, if so, included a revised timeline for Term 2. The diary itself could be more reflective (e.g. for example, each entry should state what the next steps are and, if you have diverged from the planned timeline or had any challenges, this should be mentioned). 
+
+Quality of Writing: This report is very well-written, appropriately structured, and nicely laid out. 
+
+Software Engineering: You have only a small number of user stories and they did not follow the formal structure of "As an [actor] I want to [do something] so that I can [benefit]". Each user story should have a priority associated with it. You covered a good range of topics in the software engineering chapters but you were also expected to have a section describing your use of version control systems. Note that your sequence diagrams have a minor issue with the notation: messages being returned from operations should be represented with dashed lines and open arrowheads. 
+
+Bibliography: You have an excellent number of references, although a higher proportion could be books or academic literature. 
+
+Demo Video: Your demo video was good but it would have been nice to see more features implemented.

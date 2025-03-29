@@ -118,21 +118,524 @@ Signature: Danyal
 
 \chapter{Background Theory}
 \section{State-of-the-art Web Development}
-\section{Architectural Paradigms \& Design Patterns}
+
+% A report describing the state-of-the-art of Web development, including technologies/frameworks/platforms and their comparison as described above. The report will also explain the concrete choices made and the respective rationale/justification from a software engineering perspective (i.e. a justification merely based on a skills learning perspective will not suffice)
+
+\textbf{The report on the state of the art in web development needs to be a bit more detailed. This can be achieved by expanding the section on frontend technologies as the options considered for the frontend could each be described more.}
+
+For the development of this project, I will follow a full stack development approach - requiring me to manage both a frontend and a backend framework for this project.
+
+\subsection{Frontend Technologies}
+
+In order to utilise the World Wide Web that he had invented in 1990, Tim Berners-Lee had created WorldWideWeb, later Nexus~\cite{NEXUS}, the first web browser - which served as an inspiration for many subsequent browsers. These browsers were designed to load HyperText Markup Language (HTML) files, which later evolved into different web pages for consumer use as the Web had developed. Combined with Cascading Style Sheets (CSS) and JavaScript, they form the base framework used to create webpages ever since the dawn of the internet - with HTML files serving as the base, CSS files beautifying the styles, and JavaScript adding functionality to the webpages.
+
+While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: React, Angular and Vue.js, though there are many others written in different programming languages.
+
+When it comes to the differences between the three of them, there are some notable differences. For starters, Angular is known to have a steeper learning curve - given that it uses TypeScript as opposed to JavaScript, along with the extensive features that it provides. React has an easier learning curve as it revolves around the idea of reusable components, while Vue is the easiest to learn - given that the syntax is similar to HTML. Alongside this, Vue and React are best used for smaller applications, while Angular is the first choice for large enterprise applications~\cite{FRAMEWORKS_COMPARE}. 
+
+However, for the frontend of this project I will be using a combination of Next.JS with TailwindCSS. Next.js is based on the React framework, and is designed to overcome React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS} such as better Search-Engine Optimisation and Routing, both of which would be required for the web application to gain traction in the future.
+
+\subsection {Backend Technologies}
+
+Similarly to the frontend, there are a number of backend frameworks in existence that are widely used for different web applications. These frameworks are designed to act as the core of any client-server based system, as they process majority of the application logic, and facilitate communication with database systems. Many of these frameworks are widely used, including - but not limited to Node.js and Spring Boot.
+
+Node.js is based on JavaScript, and is known for its high performance and scalability. It is an event-drive runtime environment designed to build scalable network applications, where callbacks are triggered for each connection. Unfortunately, these features can also be seen as disadvantages of the system, wherein the code for callbacks can be increasingly difficult to manage in complex applications - while the event-driven architecture won't be beneficial for tasks that may be more CPU-intensive~\cite{BACKEND_FRAMEWORKS_BLOG}~\cite{BACKEND_FRAMEWORKS_REPORT}~\cite{SPRING}.
+
+Spring Boot is part of the Spring framework, and is known for its security and integration capabilities. It uses a three-tiered architecture which include layers acting as Controllers, Services and Data Repositories - forming microservices as part of the overall backend system. Compared with Node.js, Spring Boot would be more preferable for security with the many libraries that it uses for it, as well as the fact that it has a larger support community - allowing for ease of development during this project~\cite{SPRING}. Furthermore, the benefit of Spring Boot will be that it will allow for seamless integration with the database system required - allowing me to focus on developing the endpoints required for the product. As a result I have chosen to use this framework for backend development.
+
+\subsection {Database Management Systems}
+
+There are two major types of databases that are widely used across different applications, SQL and NoSQL. SQL (Structured Query Languages) have been the most popular form of storing data since the beginning of web application history, and this is largely due to the durability factor. This stems from the ACID properties that relational databases follow - which ensures that database transactions are full, and that data is kept intact and consistent. NoSQL databases on the other hand do not follow the idea of having a relational structure. These are typically customized to fit the needs of a particular application, and it is unlikely that one example of a NoSQL database can be used for many different types of applications~\cite{SQL_COMPARE}.
+
+The biggest difference that NoSQL databases have in common is the use of BASE properties over ACID. BASE (Basically Available, Soft state with Eventual consistency) has been a critical discussion point when the two types of databases have been compared in the past - and are typically used in applications where inconsistent data can be tolerated~\cite{SQL}. This is not the case for my application - especially given that user details are required to be stored securely, so it is imperative that I make use of a database system that follows ACID properties.
+
+There are still many databases to choose from that follow ACID properties. Two of the biggest database management systems include PostgreSQL and MySQL - which appear very similar on the surface however there are some key differences which make them stand out from each other. The biggest is that PostgreSQL is an Object-Relational Database Management System, providing the facilities of a standard Relational DBMS with additional Object Oriented concepts. This is beneficial for integration with Spring Boot, as it allows me to define entities that can be translated to database tables - allowing me to manipulate the system via the use of the Repository level in the backend. As a result, I have opted to use PostgreSQL to serve as my database.
+
+\newpage\section{Architectural Paradigms \& Design Patterns}
+
+% A report on Web development architectural paradigms and applicable design patterns, including an initial discussion of security, privacy and key-operational aspects and considerations (e.g. cloud deployments and DevOps aspects)
+
+\textbf{Similarly, the second report could explain other architectural paradigms (e.g. N-tier architecture). You could have included some diagrams to illustrate the architectural paradigms and design patterns. You provided a good explanation of the security and privacy aspects.}
+
+Many design patterns have been considered throughout the development of the product thus far. This section will break down how and why some have been used in this project.
+\subsection{Dependency Injection}
+Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through autowiring. In this project however, I am using the Lombok plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
+
+\begin{lstlisting}[language=java, caption={An example of a Spring Boot Component with the Lombok Plugin.}]
+	// UserProfileController.java
+	@RestController
+	@RequestMapping("/api/user")
+	@RequiredArgsConstructor
+	public class UserProfileController {
+		private final UserService userService;
+		...
+	}
+\end{lstlisting}
+
+In the provided example, the use of the @RequiredArgsConstructor annotation is what generates the constructor for this class. As the controller requires use of a UserService object, Spring will instantiate that and pass it through this constructor to be used for any requests made via this endpoint. This way - I would not be required to manually autowire each of the components that make up a class throughout my backend, in comparison to a regular Spring class such as that provided below.
+
+\begin{lstlisting}[language=Java, caption={An example of a Spring Boot Component without the Lombok Plugin. Use of the plugin prevents the need for boilerplate code such as this.}]
+	@Service
+	public class AssetService {
+		
+		private final AssetRepository assetsRepo;
+		
+		@Autowired
+		public AssetService(AssetRepository assetsRepo) {
+			this.assetsRepo = assetsRepo;
+		}
+	}
+\end{lstlisting}
+
+\subsection{Controller-Service-Repository Pattern}
+
+Usage of Spring Boot for the backend has helped introduce a pattern similar to a Model-View-Controller Pattern. This is done by grouping the individual components into separate packages: Controller, Service and Repository; each of which have their own roles when it comes to organising the code.
+
+The Controller is used to receive the RestAPI endpoint request. This does not contain much logic - rather it instead acts as a protective layer to separate the external endpoint and the core application logic, as well as builds the final ResponseEntity to be sent back to the frontend. 
+
+The Service is where the core application logic is kept. Given that it is not directly exposed to external sources, it is safer to handle business logic and processing requests here - as this is what will be accessing the repositories used to perform operations on the system's database.  
+
+The Repository is used as the bridge between the backend and the database. Any entities that have been saved to the repository are translated into a record for the database table that the repository represents. At the same time, these repository classes can have different types of functions designed specifically to retrieve certain pieces of data from the database, to then use in the service layer.
+
+\subsection{Component Based Approach}
+
+The Component Based Software Development Approach refers to the idea that a system can be developed via the use of off-the-shelf components, assembled with well defined software architecture~\cite{GPOUR_COMPONENT}. Based on React, Next.JS uses this by allowing developers to make use of reusable components, that contain logic and styling specific to it. This allows for a more organised codebase, making it easier to identify where any potential issues may lie should they appear.
+
+Given this, I have made sure to use different components within my project. A key component that will be present on majority of my webpages would be the Sidebar. By containing this into its own module it has been possible to pass the webpage content as a child component that is wrapped around by the Sidebar.
+\begin{lstlisting}[language=JavaScript, caption={The SidebarMenu represents the sidebar, while the Dashboard represents the actual page being rendered.}]
+	const Page = () => {
+		
+		return (
+		<div>
+			<SidebarMenu>
+				<Dashboard/>
+			</SidebarMenu>
+		</div>
+		)
+	}
+	
+	export default Page
+\end{lstlisting}
+\includegraphics[scale=0.3]{sidebar-outline}
+\captionof{figure}{The result of surrounding the Dashboard with the SidebarMenu component tags.}
+
+\subsection{Client-Server Architecture}
+
+Client/Server Architecture relates to the idea that two separate applications communicate with each other as part of a wider product. The Client would ask for and receive services that the Server would provide~\cite{CSA}. This is the case in my product, wherein the backend is responsible for managing any information that is to be stored and retrieved from the database, and the frontend requests this for for the end user to interact with.\\
+
+Communication is facilitated through the use of API endpoints. These endpoints are URLs within a web application which point towards the different functionalities that an application provides. On the server side of the connection, the server would process the information required, whereas the requests for each function are called on the client side~\cite{API}.\\
+
+An example of how this is setup in my application can be with how we view the list of qualifications that the user sees when they sign up to the application. When the create page is loaded, an API request is sent to the backend to fetch all of the qualification, the result of which will be stored as a constant to be used in the registration form itself.
+
+\begin{lstlisting}[language=JavaScript, caption={When the page is loaded, axios sends an API request to get all the qualifications.}]
+	// create/page.tsx
+	useEffect(() => {
+		const quals = async () => {
+			const response = await axios.get("http://localhost:8080/api/qualification/get-all")
+			return response.data;
+		};
+		
+		quals().then(data => {
+			setQualifications(data);
+		})
+	}, [])
+\end{lstlisting}
+
+\verb|localhost:8080| refers to the Spring Boot backend, while \verb|/api/qualification/get-all| refers to the specific endpoint mapped to the function that returns all of the qualifications in the system.
+
+\begin{lstlisting}[language=Java, caption={The other side of the endpoint. The mapping /api/qualification points to the class, while /get-all points to the function}]
+	// QualificationController.java
+	...
+	@RequestMapping("/api/qualification")
+	public class QualificationController {
+		
+		private final QualificationService qualificationService;
+		...
+		@GetMapping("/get-all")
+		public ResponseEntity<List<Qualification>> getAllQualifications() {
+			return ResponseEntity.ok(qualificationService.getAllQualifications());
+		}
+	}
+\end{lstlisting}
+
+The ResponseEntity object would then contain the necessary data that was requested, and is then returned to the frontend's calling function. In this case, it contains all of the qualifications that were requested for the frontend to receive.
+
+\subsection{Security Detail}
+
+Being a web application that handles a user's private data, is is imperative that I secure the product, by minimising possible weaknesses that can be exploited. Out of all software available, the web browser is one that will run code provided from untrusted sources whenever presented\cite{WEB_SEC} despite being used to submit and receive private information across the world. With that in mind, it was important that I research adequate methods to protect the JSON Web Token that it used to prove the user's authenticity.\\
+
+There are many ways that people may choose to store JWTs, be it in memory or even in the browser's session storage. However, research has shown that these are not as viable compared to the use of cookies. Storing the token in memory leaves the risk of it disappearing when the browser is closed or reset. On the other hand, storing it in Session Storage leaves the token vulnerable to Cross-Site Scripting (XSS) attacks. With cookies, by settings the HTTPOnly, Secure and SameSite flags to be true - there is added protection which prevents these cookies from ebing identified by external JavaScript, protecting them from XSS attacks~\cite{JWT}.
+
+\includegraphics[scale=0.465]{cookies-outline}
+\captionof{figure}{The HttpOnly and Secure flags are set to true, and the SameSite flag has been set to "Strict"}
+
+This is not the only point of concern when it comes to security. It is also crucial to sanitise inputs as a means of removing any possible control characters - so as to not inject any malicious code into the system. This is a benefit of React, and therefore Next.JS, as all inputs are sanitised before being used within the frontend application. This is achieved by converting everything to a string before being rendered or used, adding further prevention to XSS attacks~\cite{XSS_REACT}. Where SQL injections are concerned, there are two types of queries that have been written for the backend. One type refers to the default functions that come with a JpaRepository, representing standard queries - while the other type relates to custom queries that I have had to write for the system. These custom queries are written with the use of named parameters, reducing the user's input only to valid arguments to complement them~\cite{SQL_PARAM}. The query is therefore built through the code, instead of being completed by the code.
+
+\subsection{Privacy}
+
+The United Kingdom has a General Data Protection Regulation Act that has been imposed to set out the legislation behind usage of personal data in a variety of applications. The following principles are set out in the act~\cite{GDPR}:
+
+\begin{itemize}
+	\item Lawfulness, Fairness and Transparency - Refers to the idea that businesses and organisations must be open about how they use data, and that it should only be used for necessary or legitimate reasons.
+	\item Purpose Limitation - Should not be used more than it has been collected for.
+	\item Data Minimisation - Should only be limited to what is required for the intended purpose
+	\item Accuracy - Should be kept accurate and up to date
+	\item Storage Limitation - Should be stored for as long as have been required
+	\item Integrity and Confidentiality - Data must be kept secure, and protected against unauthorized misuse or amendments.
+	\item Accountability - Organisations are required to comply with the other principles of the act.
+\end{itemize}
+
+In this application, the user is required to enter their username, password, email and qualification when they sign up to the service. The qualification is required for the system, so the user can see information that is relevant to their studies. The username and password are required for authentication, while the email is used for verification purposes - though this has not been implemented into the system as of yet. There are no further uses for the email at this time, and there are currently no concrete plans for this.\\
+
+The password, however, is required to be kept securely. This is achieved through the use of Bcrypt Hashing. Created in 1999, Bcrypt has become a widely adopted hashing algorithm to encode passwords, and keep them protected without needed to decode them. To authenticate, the password input is encoded, and the hashes are then compared against each other before authentication is granted to the user. 
 
 \chapter{Literature Review}
 
 \chapter{Software Engineering}
 \section{Methodology}
+There are many different approaches when it comes to Software Development. The Waterfall model for example focuses on completing phases of the project at a time, i.e. requirements first, then design and implementation etc. For me this approach is very strict - as it requires myself as the developer to consider the application as a whole from the very beginning, when the requirements of the product are continuously evolving as development ensues. Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
+
+As a result, I have chosen to develop this application by following a combination of the Agile and Incremental Approaches. The Incremental Approach allows me to focus on developing one feature at a time - ensuring that it's working to the fullest before I move my focus onto the next feature in sequence. The Agile Approach here relates to the flexibility that I am giving myself; there is no dedicated client for this product, so I am able to develop features at my own pace and alternate between different features as I wish to. At the same time, I am then able to revisit features if I am required to make any additions following its completion - given the ongoing flexibility in requirements. This can be referred to as similar vertical slicing - wherein the application is developed component by component - and ultimately expands from these components as a dependency.
 \section{Requirements Analysis}
+
+The Requirements Analysis is an ongoing phase - changing if required as the product evolves. Following this approach leaves me with the flexibility to revisit components if I am required to add a feature which I had not have included in the first place, unaware at the time of it's use. Despite this, there were still some core features that I had to research, which led to me researching how a variety of different revision websites function, based on both past experience, as well as new websites that have caught my attention. These include the likes of MathsWatch, Quizlet, as well as my employer's system used for assessments. This allowed me to gain an idea of some of the core features needed to be implemented, such as focusing on individual subjects - and grouping by qualification. \\
+
+This project had been an idea for a considerable amount of time - and began with a concept I had designed for the actual Question UI itself. However, by following a vertical slicing approach it did not make sense for me to begin with implementing the question screen in the beginning, as there were a multitude of other features that were to be added in the lead up to this.
+
+\begin{center}
+	\includegraphics[scale=0.4]{question-concept}
+	\captionof{figure}{The original design for the question screen did not include the background, this came at a later date when designing for the rest of the application began.}
+\end{center}
+
+This led to me beginning with the user registration system, as it did not have any prior requirements. From there, subsequent features fell into place - based on how the user would interact with the system typically. This would be from account registration, to logging in, viewing their dashboard before searching for their subjects and later topics. 
+
 \section{UML Diagrams}
+
+\subsection{Database Entity Relationship Diagram}
+
+Below is an Entity Relationship Diagram used to show how each of the tables are linked to each other in the database. From Left to right, bottom to top, it shows that \verb|refresh_tokens| is reliant on the users table for its \verb|user_id| field, \verb|users| is reliants on \verb|qualifications| for its \verb|id| field, there is a many-to-many relationship between \verb|qualifications| and \verb|subjects|, and that \verb*|topics| is dependent on \verb|subjects| and \verb*|qualifications| for the ids required.
+\begin{center}
+	\includegraphics[scale=0.2]{ER-diagram}
+\end{center}
+\captionof{figure}{The Entity Relationship Diagram showing how the database tables are connected in the backend.}
+\subsection{UML Sequence Diagram}
+
+\textbf{Note that your sequence diagrams have a minor issue with the notation: messages being returned from operations should be represented with dashed lines and open arrowheads. }
+
+The UML Sequence Diagrams show the full flow from frontend to database, dictating the sequence of events that take place when a given API request is called. For each diagram, the client sends the request to API, which calls the service methods, calling the methods in the repository. The top to bottom flow dictates the series of events that would take place. Any flow to the right after a flow to the left simulates a branching effect (i.e. saveSubject() beneath `Qualification not found`)\\
+
+First is a condensed diagram for adding qualifications, subjects and topics. It shows the POST request being made contained the necessary values being sent straight to the Service layer - which saves the item to the repository. In the case of Subjects and Topics, it will return an error if the service was not able to find the corresponding Qualification or Subject (topics only) - which are otherwise required for the request to be completed.
+
+\begin{center}
+	\includegraphics[scale=0.4]{AddQualSubTopic.drawio}
+\end{center}
+\captionof{figure}{}
+
+Next dictates the registration flow. It shows the POST request being sent with the user's details. It checks to see if the user exists before saving the user. If it does a message is returned, and if it doesn't then the account is created.
+\begin{center}
+	\includegraphics[scale=0.4]{RegisterSequence.drawio}
+\end{center}
+\captionof{figure}{}
+This sequence diagram dictates the login flow. It sends the users details in an API request, which are then forwarded to the service layer. The repository then checks if the user exists, and if it does not then an error is sent back to the client. If it does exists, the JSON Web Token is generated with the tokenExpiry time, and both are sent back with a redirect as cookies.
+\begin{center}
+	\includegraphics[scale=0.4]{LoginSequence.drawio}
+\end{center}
+\captionof{figure}{}
+This dictates the profile request flow. Using the Middleware it checks if the user has a valid token. If they do not, and the tokenExpiry cookie cannot be found then it logs them out - otherwise it refreshes the token first before continuing with the rest of the API request. In this case, it will get the user from the repository and return their details. There is no need to check if they exist, as this check would have been performed already when authenticating.
+
+\begin{center}
+	\includegraphics[scale=0.3]{ProfileSequence.drawio}
+\end{center}
+\captionof{figure}{}
+
+This final Sequence Diagram shows the events that take place when loading all subjects with topics for a user. As before, it checks that they have a valid token, and will refresh if applicable. It then fetches the user's qualification first, before using the same qualification in a second request to fetch the subjects list. In the backend, it retrieves the subjects first - and then appends the topics afterwards to prevent mixing unnecessary topics together. The final list is then returned to the client for rendering.
+\begin{center}
+	\includegraphics[scale=0.3]{SubjectsSequence.drawio}
+\end{center}
+\captionof{figure}{}
+\subsection{UML Class Diagram}
+
+Below is a UML Class Diagram that shows the core functionality of the backend. It displays how each of the classes are linked from the Controllers down to the Repositories. The frontend does not have a UML Class Diagram.
+
+\includegraphics[scale=0.125]{Backend-Class.drawio}
+\captionof{figure}{Classes used for configurations, exceptions, DTOs and HTTP Request modifications have been omitted to show core functionality.}
+
 \section{Testing}
+\textbf{Update to reflect final submission}
+
+Prior to submission, the project has been thoroughly tested via unit testing to ensure that all components are working as they should be in order to achieve the desired outcomes. For the backend, this is carried out using the MockMvc library - which sends mock REST API requests to the backend, and then checks whether the output is as expected.
+
+\begin{lstlisting}[language=Java, caption={A payload is made with the information that is to be sent to the backend, then the test simulates an API request to the Auth Controller. It checks to see if the status returns is OK (200), and that it contains the string "User logged in successfully" in order for it to pass.}]
+	// AuthControllerTest.java
+	@Test
+	public void loginSuccess() throws Exception {
+		payload = new HashMap<>();
+		payload.put("username", "user");
+		payload.put("password", "password");
+		
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+		.header("Authorization", "Bearer " + token)
+		.contentType(MediaType.APPLICATION_JSON)
+		.content(objectMapper.writeValueAsString(payload)))
+		.andExpect(status().isOk())
+		.andExpect(content().string("User logged in successfully"));
+	}
+\end{lstlisting}
+
+Having applied these tests throughout the backend, the resultant coverages comes out to be 91\%. Some branches were not able to be tested as they cannot be tested directly - while others, I have not been able to write the tests for as of yet. The latter will be completed following the interim submission.
+
+\includegraphics[scale=0.55]{backend-coverage}
+\captionof{figure}{91\% coverage at the moment for the backend}
+
+For the frontend however this works slightly differently. These tests are carried out by using the JEST library, which checks to see if any defined elements are present in the page that has been rendered. It can also simulate user interactions with the web page as well, testing that the web page functions as intended.
+
+\begin{lstlisting}[language=JavaScript, caption={This test renders the page and checks that the necessary elements are present, before simulating a user entering their details and submitting them - causing the API request to be called.}]
+	it('submits user details and redirects on success', async () => {
+		render(<Page />)
+		const user = userEvent.setup();
+		
+		(axios.post as jest.Mock).mockResolvedValueOnce({data : {success: true}});
+		
+		const usernameInput = screen.getByLabelText(/username/i);
+		const passwordInput = screen.getByLabelText(/password/i);
+		const signInButton = screen.getByRole('button', { name: /sign in/i });
+		
+		await user.type(usernameInput, 'user');
+		await user.type(passwordInput, 'password');
+		await user.click(signInButton);
+		
+		
+		expect(axios.post).toHaveBeenCalledWith(
+		'http://localhost:8080/api/auth/login',
+		{ username: 'user', password: 'password' },
+		{ withCredentials: true }
+		);
+		
+		expect(mockPush).toHaveBeenCalledWith('/dashboard');
+	});
+\end{lstlisting}
+
+Having applied these tests to the frontend, the resultant coverage comes out to be 99.67\%. The discrepancy comes from an error that can be thrown in the sidebar component - which has not been used throughout the web pages. All of the other pages have been fully tested.
+
+\includegraphics[scale=0.3]{frontend-coverage}
+\captionof{figure}{99.67\% coverage at the moment for the frontend}
+
+Alongside the unit tests, I have also been sure to carry out integration and system for this application. For integration testing - this would be testing the API endpoints to ensure that the data being retrieved by the backend is correct, and that there are no discrepancies or irrelevant data present. With system testing, this would be after connecting the frontend to the backend - and ensuring that I am able to view the retrieved data on the frontend, such that they can be interacted with further by the user.
 \section{Documentation}
+\textbf{Update to reflect final submission}
+
+
+I have made sure to add sufficient documentation for each class and method that is involved with providing the current stage of the application, across both the frontend and backend.\\
+
+For the backend I will be using Javadoc to draft my documentation. Each method will be described in detail about how it contributes to the overall application, and the class will summarise how the methods are grouped together. For the frontend I will be using TSdocs for drafting documentation. These will dictate what the page is supposed to show, as well as what components are in use - and which components have been made available for public use with sources. \\
+
+For the interim submission I will not be writing documentation for the components that I have sourced from public resources online as I am not the original author - and I am not fully certain how each part of the component operates at the moment. This is something I will be changing for the final submission.
 \section{Version Control}
 
 \chapter{The Application}
 \section{User Stories \& Use Cases}
+\textbf{You have only a small number of user stories and they did not follow the formal structure of "As an [actor] I want to [do something] so that I can [benefit]". Each user story should have a priority associated with it.}
+
+User Stories allow me to gain an insight into what features need to be implemented into the system, and to who they should be made available. At this interim stage of development I have the following user stories:
+
+\subsection{Implemented User Stories}
+\begin{itemize}
+	\item As a student, I would like to choose my qualification when I create my account
+	\item As a student, I want to see a dashboard when I log into the system.
+	\item As a student, I want to see my recent attempts and how many marks I have at the very least.
+	\item As a student, I don't want to be redirected when I choose a subject, I just want to see the topics on the same page.
+	\item As a student, I want to see all of the topics I can choose to study for every subject there is.
+	
+\end{itemize}
+\subsection{User Stories To Be Implemented}
+\begin{itemize}
+	\item As a student, I want to be asked questions about the topic I choose once I've clicked on it.
+	\item As an admin, I would like all questions asked to students to be randomised, this includes a random selection, as well as random constants.
+	\item As an admin, I would decrease the amount of available marks for every student until a suitable percentage, every time they get a question wrong.
+	\item As an admin, I would like to show all students on a leaderboard, with the amount of points that they have. This can reset after a certain interval.
+	\item As an admin, I would like to be able to add and remove subjects, topics and qualifications to the system.
+	\item As a student, I would like to have the option to stay anonymous on the leaderboard - so I can be part of the competition without others knowing its me
+	\item As a student, I would like to have the ability to practice questions without contributing to the leaderboard.
+\end{itemize}
+
+These user stories are not final, there may be more that will come to light as further features are considered.
 \section{Implementation}
+
+\subsection{User Registration}
+The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
+\\\\\includegraphics[scale=0.3]{create}
+\captionof{figure}{The Account Creation Page}
+
+When submitted, the frontend will check to make sure that the email and email confirmation match. Following that, it also checks if the qualification has a valid input. If neither of these is the case, an alert would show on the screen to inform the user - and nothing would happen.
+\\\\\includegraphics[scale=0.3]{create-alerts}
+\captionof{figure}{The alert thrown when the emails do not match.}
+
+\newpage % for formatting
+\begin{lstlisting}[language=JavaScript, caption={An excerpt from the frontend code where the conditions are checked for the alerts to be thrown.}]
+	// create/page.tsx
+	if (email !== emailConfirm) {
+		alert("Please ensure you have entered the correct email address in both sections!");
+	}
+	else if (qualificationInput === "") {
+		alert("Please select a qualification");
+	}
+\end{lstlisting}
+
+When both of these are satisfied, the frontend will collect the variables together into a JSON body to be submitted with the API POST request to the backend. The frontend then waits for a response from the backend before redirecting the user to the homepage. If any issues were to occur at this stage, an exception would be caught and stop the user from being redirected - instead presenting them with an alert informing them of the error.
+
+\begin{lstlisting}[language=JavaScript, caption={The variables are put together into a JSON array, and are then supplied to axios to be send in a request to the backend. Any exceptions that are thrown are caught and handled appropriately.}]
+	// create/page.tsx
+	const payload = {
+		"username": username, "email": email, "password": password, "qualification": qualificationInput
+	}
+	
+	try {
+		const response = await axios.post("http://localhost:8080/api/auth/register", payload);
+		alert("Account created successfully.");
+		router.push('/login')
+		
+	}
+	// Error Handling 
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption={An except from the backend logic creating a User object and saving it to the database.}]
+	// RegistrationService.java
+	@Transactional
+	public User registerUser(RegistrationRequestDto request) throws QualificationException {
+		if (userRepository.existsByUsername(request.username()) ||
+		userRepository.existsByEmail(request.email())) {
+			
+			throw new ValidationException(
+			"Username or Email already exists");
+		}
+		
+		User user = new User();
+		user.setUsername(request.username());
+		user.setEmail(request.email());
+		user.setPassword(passwordEncoder.encode(request.password()));
+		user.setQualificationId(qualificationService.getIdByName(request.qualification()));
+		
+		return userRepository.save(user);
+	}
+\end{lstlisting}
+
+\subsection{User Login}
+Once the user has created their account, they will be redirected to the login page where they are able to enter their details. Through this, they will be able to access the application to then carry out their revision tasks.
+\\\\\includegraphics[scale=0.3]{login}
+
+When submitted, the username and password are packaged into a JSON body to be sent via an axios request to the backend. The user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window.
+
+\begin{lstlisting}[language=JavaScript, caption={The username and password are added to a payload, and sent as the request body to the backend}]
+	// login/page.tsx
+	const login = async (event: { preventDefault: () => void; }) => {
+		event.preventDefault();
+		const payload = {
+			"username": username, "password": password
+		}
+		try {
+			const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials: true});
+			router.push('/dashboard')
+		}
+		// Error Handling
+	}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption={The controller code showing the steps required to authenticate the user.}]
+	// AuthController.java
+	@PostMapping("/login")
+	public ResponseEntity<String> authenticate(@RequestBody final AuthenticationRequestDto authenticationRequestDto) {
+		try {
+			AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
+			ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
+			ResponseCookie cookieExpire = cookieService.createTimerCookie();
+			return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
+		} 
+		// Error Handling
+	}
+\end{lstlisting}
+
+Both cookies have been designed to be as secure as possible.This includes setting the HTTP-Only and Secure flags to true, so that they are not detected by any external JavaScript - as well as ensuring that the sameSite flag is set to Strict. This way these cookies can only be used within the application itself, and not anywhere else.
+\\\\\includegraphics[scale=0.725]{cookies}
+\captionof{figure}{Example cookies as they appear in browser's cookies tab.}
+\begin{lstlisting}[language=Java, caption={The code used to create the token cookie. For the tokenExpiry the only difference would be the value of the cookie instead.}]
+	// CookieService.java
+	public ResponseCookie createTokenCookie(String token) {
+		
+		return ResponseCookie.from("token", token)
+		.httpOnly(true)
+		.sameSite("Strict")
+		.secure(true)
+		.path("/")
+		.maxAge(ttl.getSeconds())
+		.build();
+	}
+	
+\end{lstlisting}
+\subsection{Refresh Tokens}
+
+The tokens used to verify the user's authenticity have been designed to expire after 15 minutes, for situations where the token is stolen by an attacker. However, users will want to utilise the system for a period longer than 15 minutes - so to accommodate I have introduced a Refresh Token system. This I have achieved with the introduction of middleware. 
+
+The middleware will take the tokenExpiry cookie that was previously generated when the user logs in, as shown in Section 3.2. This cookie contains a timestamp that represents two minutes before the token cookie itself is due to expire. The middleware will check to see if the time is within those two minutes, and if that is the case it will send an API request to generate a new token. The token is generated and sent back to the middleware, where it's converted to a cookie and then sent with the original request response to the frontend.
+
+\begin{lstlisting}[language=JavaScript, caption={If we have entered that expiry window, then the request is sent for a new token. The values are then unpacked and converted to cookies for the next response to the frontend.}]
+	// middleware.ts
+	const isExpired = checkExpiration(tokenExpiry);
+	// time is up?
+	if (isExpired) {
+		console.log("Token Expired!")
+		const token = req.cookies.get("token")?.value;
+		await axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
+			headers: {
+				'Cookie': `token=${token}`,
+				
+			},
+			withCredentials: true}).then((resp) => {
+			// Apply new values to the cookies
+			const newToken = resp.data.token;
+			const newExpiry = resp.data.tokenExpiry;
+			// Calculate cookie expiry time
+			const cookieExpiry = Number(newExpiry) + 120;
+			const newExpiryDate = new Date(0).setUTCSeconds(cookieExpiry);
+			// Apply to new cookies
+			response.cookies.set("token", newToken, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
+			response.cookies.set("tokenExpiry", newExpiry, {expires:newExpiryDate, httpOnly:true, secure:true, sameSite:"strict"});
+			console.log("Token Refreshed!");
+		});
+	}
+\end{lstlisting}
+In the backend, the API request will gets the user from the database and check to see if they have a valid refresh token. It is unlikely that they won't have one - given that a valid one would generate when they log in should one be expired - however if this is not the case then they would have a new one generated. After this, with the refresh token confirmed - a new JWT is generated using the user's username as the payload.
+\begin{lstlisting}[language=Java, caption={The backend checks if the token is valid, before generating a new JWT}]
+	// RefreshTokenService.java
+	public AuthenticationResponseDto refreshToken(String accessToken) {
+		User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
+		// Checks expiry data is valid.
+		if (hasInvalidRefreshToken(user))
+		// No token found? Somehow? Brand new one then
+		createToken(user);
+		
+		final var newAccessToken = jwtService.generateToken(user.getUsername());
+		return new AuthenticationResponseDto(newAccessToken);
+	}
+\end{lstlisting}
+\subsection{Dashboard}
+
+The dashboard is the first screen that the user will see upon successfully logging in. The dashboard is separated into three sections, of which only one has information at the moment. This will greet the user, and show the amount of points which they currently have. This could change to their position in the leaderboard in the future when implemented. The section at the bottom I plan to allow students to use that to view their recent attempts, while I am not so certain about how I can use the section in the top right at this stage of development. It is likely it will be related to the competition side of the product.
+\\\\\includegraphics[scale=0.3]{dashboard1}
+\captionof{figure}{The view that the user is presented when they log into the application, at this current stage in development.}
+All pages from here will also include a Sidebar. By default the sidebar is collapsed, however it will expand to show what each of the buttons represent in further details - when the user's cursor hovers over it. At the moment, there are only buttons to take the user to the dashboard and search page, as well as to log out of the system.
+\\\\\includegraphics[scale=0.3]{dashboard2}
+\captionof{figure}{The same view with the sidebar expanded. Each icon has text next to it showing the user where to go.}
+
+\subsection{Subject Search \& Topics}
+When the user wants to choose the subject which they would like to study, they would visit this screen at first. A request is made which will fetch all of the subjects that are suitable for the user's qualification. For every subject, they will appear in a grid to be displayed to the user.
+\\\\\includegraphics[scale=0.3]{search}
+\captionof{figure}{How the subjects appear to the user on the frontend}
+
+Each subject will have a separate list of topics compared to others. For any subjects that may exist for more than one qualification - the topics shown will only be relevant to the qualification that the user may have. These topics will appear in a dialogue modal box as a list for the user to select. At this point in development - there are no further interactions, however the plan is that the user can select a topic from this list and will be redirected to the question page, which will consist of a random selection of questions with random values. 
+\\\\\includegraphics[scale=0.3]{topics}
+\captionof{figure}{How the topics appear to the user on the frontend after selecting a subject}
+
+For all subjects, topics and qualifications - it is possible to add them to the system via the use of a dedicated endpoint. At the moment I have not developed a frontend counterpart to them, however this will be a feature for the admin profiles in the future. 
 
 \chapter{Professional Issues}
 
