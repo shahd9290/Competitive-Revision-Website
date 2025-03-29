@@ -299,7 +299,12 @@ In this application, the user is required to enter their username, password, ema
 The password, however, is required to be kept securely. This is achieved through the use of Bcrypt Hashing. Created in 1999, Bcrypt has become a widely adopted hashing algorithm to encode passwords, and keep them protected without needed to decode them. To authenticate, the password input is encoded, and the hashes are then compared against each other before authentication is granted to the user. 
 
 \chapter{Literature Review}
-
+\begin{itemize}
+	\item Critical Review over Sources
+	\item Section for each report
+	\item Each source summarised and analysed
+	\item Accurate, up to date, biased, relevant.
+ \end{itemize}
 \chapter{Software Engineering}
 \section{Methodology}
 There are many different approaches when it comes to Software Development. The Waterfall model for example focuses on completing phases of the project at a time, i.e. requirements first, then design and implementation etc. For me this approach is very strict - as it requires myself as the developer to consider the application as a whole from the very beginning, when the requirements of the product are continuously evolving as development ensues. Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
@@ -321,7 +326,7 @@ This led to me beginning with the user registration system, as it did not have a
 \section{UML Diagrams}
 
 \subsection{Database Entity Relationship Diagram}
-
+\textbf{Update to reflect final submission}
 Below is an Entity Relationship Diagram used to show how each of the tables are linked to each other in the database. From Left to right, bottom to top, it shows that \verb|refresh_tokens| is reliant on the users table for its \verb|user_id| field, \verb|users| is reliants on \verb|qualifications| for its \verb|id| field, there is a many-to-many relationship between \verb|qualifications| and \verb|subjects|, and that \verb*|topics| is dependent on \verb|subjects| and \verb*|qualifications| for the ids required.
 \begin{center}
 	\includegraphics[scale=0.2]{ER-diagram}
@@ -440,7 +445,8 @@ For the backend I will be using Javadoc to draft my documentation. Each method w
 
 For the interim submission I will not be writing documentation for the components that I have sourced from public resources online as I am not the original author - and I am not fully certain how each part of the component operates at the moment. This is something I will be changing for the final submission.
 \section{Version Control}
-
+\section{Scalability}
+\section{Deployment}
 \chapter{The Application}
 \section{User Stories \& Use Cases}
 \textbf{You have only a small number of user stories and they did not follow the formal structure of "As an [actor] I want to [do something] so that I can [benefit]". Each user story should have a priority associated with it.}
@@ -469,7 +475,7 @@ User Stories allow me to gain an insight into what features need to be implement
 
 These user stories are not final, there may be more that will come to light as further features are considered.
 \section{Implementation}
-
+\textbf{Complete by adding new features developed after interim submission}
 \subsection{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
 \\\\\includegraphics[scale=0.3]{create}
@@ -648,13 +654,26 @@ For all subjects, topics and qualifications - it is possible to add them to the 
 
 \chapter{Professional Issues}
 
+Professional Issues occur wherever computing meets society. As such they are always concerned with how people interact with computers and software. This is a very wide area and you may well choose a topic not listed below but these are given as guidelines to help you. \url {https://moodle.royalholloway.ac.uk/mod/page/view.php?id=744455}
+\begin{itemize}
+\item Usability - accessibility, replacing humans, artificial intelligence.
+
+\item Plagiarism - correct citation, using code with acknowledgement.
+
+\item Licensing - shareware, open source, copyright, patenting, reverse engineering.
+
+\item Safety - reliability, economic impact, trust, provided "as is" clauses.
+
+\item Privacy - web privacy, legal issues, data usage.
+
+\item Monopoly - proprietary formats, tie-ins, cartels, DRM, Google, Amazon, Microsoft, Apple.
+
+\item Management - appropriate costing of time and resources at the start of a project. Revision during project. Consultation with stakeholders.
+\end{itemize}
 \chapter{Reflection}
 \section{Achievements}
 \section{Difficulties}
 \section{Future Improvements}
-
-
-
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
@@ -737,6 +756,8 @@ For all subjects, topics and qualifications - it is possible to add them to the 
 \end{thebibliography}
 
 \chapter*{Appendix}
+\textbf{New Diary, new demo, etc}
+
 
 All Diagrams that are present in Section 4.3 have been included as separate images for convenience.
 
