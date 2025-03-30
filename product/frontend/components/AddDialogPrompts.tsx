@@ -412,9 +412,9 @@ export function QualificationDialog({setOpenDialog }) {
 
 export function UserDialog({setOpenDialog, qualifications }) {
     const [selectedQualification, setSelectedQualification] = useState("");
-    const [username, setQuestion] = useState("");
-    const [email, setAnswer] = useState("");
-    const [password, setMarks] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
@@ -462,19 +462,19 @@ export function UserDialog({setOpenDialog, qualifications }) {
             {/* Question */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Username</Label>
-                <Input className="col-span-3" onChange={(e) => setQuestion(e.target.value)} required/>
+                <Input className="col-span-3" onChange={(e) => setUsername(e.target.value)} required/>
             </div>
 
             {/* Answer */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Email</Label>
-                <Input className="col-span-3" type={"email"} onChange={(e) => setAnswer(e.target.value)} required/>
+                <Input className="col-span-3" type={"email"} onChange={(e) => setEmail(e.target.value)} required/>
             </div>
 
             {/* Marks */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Password</Label>
-                <Input className="col-span-3" type={"password"} onChange={(e) => setMarks(e.target.value)} required/>
+                <Input className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)} required/>
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">

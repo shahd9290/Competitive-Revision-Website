@@ -1,12 +1,12 @@
 import {ColumnDef} from "@tanstack/react-table";
-import {Attempt, Qualification, Question, Subject, Topic, User} from "@/components/DataTable";
+import {Attempt, Qualification, Question, Subject, Topic, User} from "@/components/DataTypes";
 import {ArrowUpDown} from "lucide-react"
 
 import {Button} from "@/components/ui/button"
 import {useState} from "react";
 import axios from "axios";
 import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
-import {EditQualification, EditQuestion} from "@/components/EditDialogPrompts";
+import {EditQualification, EditQuestion, EditUser} from "@/components/EditDialogPrompts";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -100,6 +100,7 @@ export const usersColumns: ColumnDef<User>[] = [
         cell: ({row}) => {
             const user = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
@@ -120,11 +121,11 @@ export const usersColumns: ColumnDef<User>[] = [
                     window.location.reload();
                 }
             };
-
             return (
                 <div>
                     <TableDropDown
                         setDialogOpen={setDialogOpen}
+                        setEditOpen={setEditOpen}
                     />
 
                     {/* Confirmation Dialog */}
@@ -134,6 +135,12 @@ export const usersColumns: ColumnDef<User>[] = [
                         handleDelete={handleDelete}
                         loading={loading}
                         name={user.username}
+                    />
+
+                    <EditUser
+                        open={editOpen}
+                        setOpen={setEditOpen}
+                        row={row.original}
                     />
                 </div>
             );

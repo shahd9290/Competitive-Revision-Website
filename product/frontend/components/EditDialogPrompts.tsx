@@ -6,6 +6,7 @@ import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
 import {CancelUnsavedDialog} from "@/components/DialogPrompts";
 import axios from "axios";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export function EditQuestion({open, setOpen, row}) {
@@ -207,6 +208,165 @@ export function EditQualification({open, setOpen, row}) {
                         <Input className="col-span-3" value={qualification} onChange={(e) => setQualification(e.target.value)}
                                required/>
                     </div>
+
+                    {/* Footer Buttons */}
+                    <DialogFooter>
+                        <Button type="button" onClick={handleCancel}
+                                className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                            Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading || !dirty}
+                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                            {loading ? "Submitting..." : "Confirm"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+
+                <CancelUnsavedDialog
+                    open={showCancelDialog}
+                    setOpen={setShowCancelDialog}
+                    setEdit={setOpen}
+                />
+            </DialogContent>
+        </Dialog>
+
+    )
+}
+
+export function EditUser({open, setOpen, row}) {
+    const [id, setId] = useState(0);
+    const [qualification, setQualification] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
+
+    useEffect(() => {
+        if (row && open) {
+            setId(row.id || "");
+            setQualification(row.qualification || "");
+            setUsername(row.username || "")
+            setEmail(row.email || "")
+            setPassword(row.password || "")
+            setRole(row.role || "")
+            setDirty(false); // Reset dirty state when opening
+        }
+    }, [row, open]);
+
+    useEffect(() => {
+        if (!row) return;
+        if (qualification !== row.qualification ||
+            username !== row.username ||
+            email !== row.email ||
+            password !== row.password ||
+            role !== row.role) {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [qualification, row]);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (dirty) {
+            setLoading(true);
+            const payload = {
+                id: id,
+                username : username,
+                email : email,
+                password : password,
+                role : role,
+                qualification: qualification
+            }
+
+            try {
+                await axios.post(`${apiUrl}/api/admin/users/edit`, payload, {
+                    withCredentials: true,
+                    headers: {"Content-Type": "application/json"},
+                });
+
+                setOpen(false); // Close the dialog on success
+            } catch (error) {
+                console.error("Error editing qualification:", error);
+                setErrorMessage("Failed to edit the qualification. Please try again.");
+            } finally {
+                setLoading(false);
+                window.location.reload();
+            }
+        }
+    }
+
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpen(false);
+        }
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent className="bg-white rounded-lg shadow-lg p-6">
+                <DialogHeader className="text-lg font-bold text-gray-900">
+                    <DialogTitle>Editing Qualification</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+                    {/* Show Error Message if Any */}
+                    {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+
+                    {/* Username */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Username</Label>
+                        <Input className="col-span-3" value={username} onChange={(e) => setUsername(e.target.value)}
+                               required/>
+                    </div>
+
+                    {/* Email */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Email</Label>
+                        <Input className="col-span-3" type={"email"} value={email} onChange={(e) => setEmail(e.target.value)}
+                               required/>
+                    </div>
+
+                    {/* Password */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Password</Label>
+                        <Input className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)}
+                               required/>
+                    </div>
+
+                    {/* Role */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Role</Label>
+                        <Select
+                            onValueChange={(value) => {
+                                setRole(value);
+                            }}
+                        >
+                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                                <SelectValue placeholder="Select Role"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={"ROLE_ADMIN"}>Admin</SelectItem>
+                                <SelectItem value={"ROLE_USER"}>User</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Qualification */}
+                    {role === "ROLE_USER" ? (
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label className="text-right">Qualification</Label>
+                            <Input className="col-span-3" value={qualification}
+                                   onChange={(e) => setQualification(e.target.value)}
+                                   required/>
+                        </div>) : (
+                        <></>
+                    )}
 
                     {/* Footer Buttons */}
                     <DialogFooter>
