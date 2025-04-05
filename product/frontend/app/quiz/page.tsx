@@ -77,7 +77,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
     if (isCompleted) {
         return (
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-[#D9D9D9] py-10 rounded-3xl drop-shadow-2xl">
+                <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-white py-10 rounded-3xl drop-shadow-2xl">
                     <h1 className="text-center text-2xl font-bold text-gray-900 pb-4">Quiz Completed!</h1>
                     <h2 className="text-center">Marks Earned: {totalMarks}</h2>
                     <h2 className="text-center">Your Total Marks: {userMarks}</h2>
@@ -130,7 +130,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
 
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className=" sm:mx-auto sm:w-full sm:max-w-lg bg-[#D9D9D9] py-10 rounded-3xl drop-shadow-2xl">
+            <div className=" sm:mx-auto sm:w-full sm:max-w-lg bg-white py-10 rounded-3xl drop-shadow-2xl">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h1 className="text-center text-2xl font-bold leading-9 underline text-gray-900">
                         {topic != null ? topic.name : "Quiz Page"}
@@ -140,7 +140,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
                     >
                         <Progress className="my-5" value={(currentQuestionIndex / questions.length) * 100}/>
                         <div
-                            className="w-3/4 lg:w-full text-center text-3xl py-10 bg-white font-medium text-gray-800 mb-6 select-none">
+                            className="w-3/4 lg:w-full text-center text-3xl py-10 bg-white font-medium text-gray-800 mb-6 select-none border-4 border-black border-opacity-25">
                             {currentQuestion ? (
                                 <h2>
                                     {currentQuestion.question}
@@ -158,7 +158,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
                             className="w-3/4 lg:w-full p-3 rounded-md border border-gray-300"
                             placeholder="Enter your answer"
                         />
-                        <div className="text-center text-md text-gray-800 font-bold mb-4 select-none">
+                        <div className="text-center text-md text-gray-800 font-bold m-4 select-none">
                             {currentQuestion ? (
                                 `Marks Available: ${Math.floor(questionMarks)}`
                             ) : (

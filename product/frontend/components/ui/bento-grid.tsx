@@ -43,7 +43,7 @@ export const BentoGridItem = ({
                 <button
                     className={cn(
                         "aspect-square rounded-xl group/bento hover:shadow-xl transition-all duration-200 shadow-input p-4 " +
-                        "bg-[#D9D9D9] border border-transparent justify-center items-center flex flex-col space-y-4",
+                        "bg-white border border-transparent justify-center items-center flex flex-col space-y-4",
                         "w-[8rem] h-[8rem] md:w-[10rem] md:h-[10rem]",
                         className
                     )}

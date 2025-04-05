@@ -34,18 +34,18 @@ const Dashboard = () => {
 
                 <div className="grid gap-4 md:grid-cols-3">
                     {/* Top Left */}
-                    <div className=" bg-gray-200 h-96 rounded-lg shadow-lg">
+                    <div className=" bg-white h-96 rounded-lg shadow-lg">
                         <h1 className="pt-36 text-center text-5xl">Hello, {user.username}!</h1>
                         <h1 className="pt-4 text-center text-5xl">Your Points: {user.marks}</h1>
                     </div>
 
                     {/* Top right box - not sure what could go here at the moment, but definitely something */}
-                    <div className="col-span-2 bg-gray-200 h-96 rounded-lg shadow-lg">
+                    <div className="col-span-2 bg-white h-96 rounded-lg shadow-lg">
 
                     </div>
 
                     {/* Bottom section - recent attempts? */}
-                    <div className="col-span-3 bg-gray-200 h-96 rounded-lg shadow-lg px-7">
+                    <div className="col-span-3 bg-white h-96 rounded-lg shadow-lg px-7">
                         <h1 className="flex items-center justify-center align-middle text-4xl p-6">Recent Attempts</h1>
                         {/* Could use Shadcn data table here */}
                         {user.attempts && user.attempts.length > 0 ? (
