@@ -5,6 +5,7 @@ import danyal.fyp.awd.dto.admin.subject.SubjectDeleteDto;
 import danyal.fyp.awd.dto.admin.subject.SubjectDto;
 import danyal.fyp.awd.dto.admin.subject.SubjectEditDto;
 import danyal.fyp.awd.dto.admin.topic.TopicDto;
+import danyal.fyp.awd.dto.admin.topic.TopicEditDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
@@ -89,7 +90,7 @@ public class AdminSubjectTopicController {
             subjectTopicService.editSubject(subjectEditDto.id(), subjectEditDto.subject(), subjectEditDto.qualification());
             return ResponseEntity.ok("Subject Deleted Successfully");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Failed To Delete Subject");
+            return ResponseEntity.badRequest().body("Failed To Edit Subject");
         }
     }
 
@@ -127,6 +128,16 @@ public class AdminSubjectTopicController {
             return ResponseEntity.ok("Topic Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete Topic");
+        }
+    }
+
+    @PostMapping("/topics/edit")
+    public ResponseEntity<Object> editTopic(@RequestBody final TopicEditDto topicEditDto) {
+        try {
+            subjectTopicService.editTopic(topicEditDto.id(), topicEditDto.topic(), topicEditDto.subject(), topicEditDto.qualification());
+            return ResponseEntity.ok("Topic Edited Successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed To Edit Topic");
         }
     }
 }

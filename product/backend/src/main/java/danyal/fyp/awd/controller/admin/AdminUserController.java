@@ -25,7 +25,7 @@ public class AdminUserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteTopic(@RequestBody final UserDeleteDto deleteDto) {
+    public ResponseEntity<Object> deleteUser(@RequestBody final UserDeleteDto deleteDto) {
         try {
             userService.deleteUser(deleteDto.id());
             return ResponseEntity.ok("User Deleted Successfully");
@@ -35,13 +35,13 @@ public class AdminUserController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<String> editQualification(@RequestBody final UserEditDto userEditDto) {
+    public ResponseEntity<String> editUser(@RequestBody final UserEditDto userEditDto) {
         try {
             userService.editUser(userEditDto.id(), userEditDto.username(), userEditDto.email(), userEditDto.password(), userEditDto.role(), userEditDto.qualification());
             return ResponseEntity.ok("Qualification Edited Successfully");
         }
         catch (Exception e) {
-            return  ResponseEntity.badRequest().body(e.getMessage());
+            return  ResponseEntity.badRequest().body("Failed To Edit User");
         }
     }
 

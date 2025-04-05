@@ -29,6 +29,7 @@ interface TableDropDownProps {
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setQualifications?: React.Dispatch<React.SetStateAction<any[]>>;
+  setSubjects?: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export function DeleteDialog({open, setOpen, handleDelete, loading, name}) {
@@ -100,7 +101,7 @@ export function CancelUnsavedDialog({open, setOpen, setEdit}) {
     )
 }
 
-export function TableDropDown ({setDialogOpen, setEditOpen, setQualifications} : TableDropDownProps) {
+export function TableDropDown ({setDialogOpen, setEditOpen, setQualifications, setSubjects} : TableDropDownProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -118,6 +119,10 @@ export function TableDropDown ({setDialogOpen, setEditOpen, setQualifications} :
                         if (setQualifications) {
                             let qs = await axios.get(`${apiUrl}/api/admin/qualifications/get`, {withCredentials: true})
                             setQualifications(qs.data);
+                        }
+                        if (setSubjects) {
+                            let subs = await axios.get(`${apiUrl}/api/admin/subjects/get`, {withCredentials: true})
+                            setSubjects(subs.data);
                         }
                         setEditOpen(true);
                     }}

@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button"
 import {useState} from "react";
 import axios from "axios";
 import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
-import {EditQualification, EditQuestion, EditSubject, EditUser} from "@/components/EditDialogPrompts";
+import {EditQualification, EditQuestion, EditSubject, EditTopic, EditUser} from "@/components/EditDialogPrompts";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -210,7 +210,10 @@ export const topicColumns: ColumnDef<Topic>[] = [
         id: "actions",
         cell: ({row}) => {
             const topic = row.original;
+            const [qualifications, setQualifications] = useState<any[]>([]);
+            const [subjects, setSubjects] = useState<any[]>([]);
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
 
             const handleDelete = async () => {
@@ -241,6 +244,9 @@ export const topicColumns: ColumnDef<Topic>[] = [
                 <div>
                     <TableDropDown
                         setDialogOpen={setDialogOpen}
+                        setEditOpen={setEditOpen}
+                        setQualifications={setQualifications}
+                        setSubjects={setSubjects}
                     />
 
                     {/* Confirmation Dialog */}
@@ -249,7 +255,15 @@ export const topicColumns: ColumnDef<Topic>[] = [
                         setOpen={setDialogOpen}
                         handleDelete={handleDelete}
                         loading={loading}
-                        name={topic.name}
+                        name={topic.topicName}
+                    />
+
+                    <EditTopic
+                        open={editOpen}
+                        setOpen={setEditOpen}
+                        row={topic}
+                        qualifications={qualifications}
+                        subjects={subjects}
                     />
                 </div>
             );

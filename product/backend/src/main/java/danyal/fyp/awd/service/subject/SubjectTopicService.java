@@ -208,4 +208,14 @@ public class SubjectTopicService {
             sub.setQualification(qualificationService.getQualification(qualification));
         subjectRepository.save(sub);
     }
+
+    public void editTopic(int id, String topic, String subject, String qualification) throws QualificationException {
+        Topic t = topicRepository.findById(id).get();
+        t.setName(topic);
+        if (!subject.equals(""))
+            t.setSubject(getSubject(subject).get());
+        if (!qualification.equals(""))
+            t.setQualification(qualificationService.getQualification(qualification));
+        topicRepository.save(t);
+    }
 }

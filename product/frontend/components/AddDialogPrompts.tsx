@@ -230,8 +230,8 @@ export function TopicDialog({setOpenDialog, qualifications, subjects }) {
                     </SelectTrigger>
                     <SelectContent>
                         {qualifications.map((q) => (
-                            <SelectItem key={q.id || q.name} value={q.name}>
-                                {q.name}
+                            <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                                {q.qualification}
                             </SelectItem>
                         ))}
                     </SelectContent>
