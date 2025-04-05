@@ -35,6 +35,7 @@ public class UserRegistrationService {
      */
     @Transactional
     public User registerUser(RegistrationRequestDto request) throws QualificationException {
+
         if (userRepository.existsByUsername(request.username()) || userRepository.existsByEmail(request.email())) {
             throw new ValidationException("Username or Email already exists");
         }

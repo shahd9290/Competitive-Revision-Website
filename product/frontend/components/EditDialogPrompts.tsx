@@ -233,7 +233,7 @@ export function EditQualification({open, setOpen, row}) {
     )
 }
 
-export function EditUser({open, setOpen, row}) {
+export function EditUser({open, setOpen, row, qualifications}) {
     const [id, setId] = useState(0);
     const [qualification, setQualification] = useState("");
     const [username, setUsername] = useState("");
@@ -312,7 +312,7 @@ export function EditUser({open, setOpen, row}) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="bg-white rounded-lg shadow-lg p-6">
                 <DialogHeader className="text-lg font-bold text-gray-900">
-                    <DialogTitle>Editing Qualification</DialogTitle>
+                    <DialogTitle>Editing User</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="grid gap-4 py-4">
                     {/* Show Error Message if Any */}
@@ -335,8 +335,7 @@ export function EditUser({open, setOpen, row}) {
                     {/* Password */}
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label className="text-right">Password</Label>
-                        <Input className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)}
-                               required/>
+                        <Input className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)}/>
                     </div>
 
                     {/* Role */}
@@ -361,9 +360,23 @@ export function EditUser({open, setOpen, row}) {
                     {role === "ROLE_USER" ? (
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label className="text-right">Qualification</Label>
-                            <Input className="col-span-3" value={qualification}
-                                   onChange={(e) => setQualification(e.target.value)}
-                                   required/>
+                            <Select
+                                onValueChange={(value) => {
+                                    setQualification(value);
+                                }}
+                            >
+                                <SelectTrigger
+                                    className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                                    <SelectValue placeholder="Select Qualification"/>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {qualifications.map((q) => (
+                                        <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                                            {q.qualification}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>) : (
                         <></>
                     )}

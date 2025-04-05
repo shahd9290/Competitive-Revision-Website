@@ -2,5 +2,5 @@ package danyal.fyp.awd.dto.admin.user;
 
 import java.util.UUID;
 
-public record DeleteUserDto(UUID id) {
+public record UserDeleteDto(UUID id) {
 }

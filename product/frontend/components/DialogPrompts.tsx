@@ -25,6 +25,12 @@ import {MoreHorizontal} from "lucide-react";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+interface TableDropDownProps {
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setQualifications?: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
 export function DeleteDialog({open, setOpen, handleDelete, loading, name}) {
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
@@ -94,7 +100,7 @@ export function CancelUnsavedDialog({open, setOpen, setEdit}) {
     )
 }
 
-export function TableDropDown ({setDialogOpen, setEditOpen}) {
+export function TableDropDown ({setDialogOpen, setEditOpen, setQualifications} : TableDropDownProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -107,8 +113,12 @@ export function TableDropDown ({setDialogOpen, setEditOpen}) {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem
-                    onClick={(e) =>{
+                    onClick={async (e) => {
                         e.preventDefault();
+                        if (setQualifications) {
+                            let qs = await axios.get(`${apiUrl}/api/admin/qualifications/get`, {withCredentials: true})
+                            setQualifications(qs.data);
+                        }
                         setEditOpen(true);
                     }}
                 >

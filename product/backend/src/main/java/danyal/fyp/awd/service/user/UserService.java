@@ -3,10 +3,12 @@ package danyal.fyp.awd.service.user;
 import danyal.fyp.awd.dto.admin.user.UserDataDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
+import danyal.fyp.awd.model.subject.Question;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
 import danyal.fyp.awd.service.subject.QualificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,6 +29,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final QualificationService qualificationService;
     private final JwtService jwtService;
+    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Retrieves a user by their username.
@@ -80,4 +84,24 @@ public class UserService {
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }
+
+    public void editUser(UUID id, String username, String email, String password, String role, String qualification) throws QualificationException {
+       User user = userRepository.findById(id).get();
+       user.setUsername(username);
+       user.setEmail(email);
+       if (!password.equals(""))
+           user.setPassword(passwordEncoder.encode(password));
+       user.setRole(roleService.getRole(role));
+       if (!qualification.equals(""))
+           user.setQualificationId(qualificationService.getIdByName(qualification));
+       userRepository.save(user);
+    }
+
+//        public void editQuestion(int id, String question, String answer, Integer marks) {
+//        Question question_ = questionRepository.findById(id).get();
+//        question_.setQuestion(question);
+//        question_.setAnswer(answer);
+//        question_.setMarks(marks);
+//        questionRepository.save(question_);
+//    }
 }

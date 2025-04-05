@@ -102,7 +102,7 @@ export const usersColumns: ColumnDef<User>[] = [
             const [dialogOpen, setDialogOpen] = useState(false);
             const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
-
+            const [qualifications, setQualifications] = useState<any[]>([]);
             const handleDelete = async () => {
                 // Check if user is currently logged in?
                 setLoading(true);
@@ -126,6 +126,7 @@ export const usersColumns: ColumnDef<User>[] = [
                     <TableDropDown
                         setDialogOpen={setDialogOpen}
                         setEditOpen={setEditOpen}
+                        setQualifications={setQualifications}
                     />
 
                     {/* Confirmation Dialog */}
@@ -141,6 +142,7 @@ export const usersColumns: ColumnDef<User>[] = [
                         open={editOpen}
                         setOpen={setEditOpen}
                         row={row.original}
+                        qualifications={qualifications}
                     />
                 </div>
             );

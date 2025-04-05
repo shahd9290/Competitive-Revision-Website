@@ -101,6 +101,9 @@ public class User {
     }
 
     public void setRole(Role role) {
+        if (!roles.isEmpty()) { // Overwrite existing role
+            roles.remove(roles.iterator().next());
+        }
         roles.add(role);
     }
 
