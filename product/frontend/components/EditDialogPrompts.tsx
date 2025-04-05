@@ -404,3 +404,122 @@ export function EditUser({open, setOpen, row, qualifications}) {
 
     )
 }
+
+export function EditSubject({open, setOpen, row, qualifications }) {
+    const [id, setId] = useState(0);
+    const [subject, setSubject] = useState("");
+    const [qualification, setQualification] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
+
+    useEffect(() => {
+        if (row && open) {
+            setId(row.id || 0);
+            setSubject(row.name || "");
+            setQualification(row.qualification || "");
+            setDirty(false); // Reset dirty state when opening
+        }
+    }, [row, open]);
+
+    useEffect(() => {
+        if (!row) return;
+        if (subject !== row.name || qualification !== row.qualification) {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [subject, qualification, row]);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (dirty) {
+            setLoading(true);
+            const payload = {
+                id: id,
+                subject: subject,
+                qualification: qualification,
+            }
+
+            try {
+                await axios.post(`${apiUrl}/api/admin/subjects/edit`, payload, {
+                    withCredentials: true,
+                    headers: {"Content-Type": "application/json"},
+                });
+
+                setOpen(false); // Close the dialog on success
+            } catch (error) {
+                console.error("Error editing subject:", error);
+                setErrorMessage("Failed to edit the subject. Please try again.");
+            } finally {
+                setLoading(false);
+                window.location.reload();
+            }
+        }
+    }
+
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpen(false);
+        }
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent className="bg-white rounded-lg shadow-lg p-6">
+                <DialogHeader className="text-lg font-bold text-gray-900">
+                    <DialogTitle>Editing Subject</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+                    {/* Topic */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Subject</Label>
+                        <Input className="col-span-3"  value={subject} onChange={(e) => setSubject(e.target.value)}
+                               required />
+                    </div>
+
+                    {/* Qualification Dropdown */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right">Qualification</Label>
+                        <Select
+                            onValueChange={(value) => {
+                                setQualification(value);
+                            }}
+                            value={qualification}
+                        >
+                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                                <SelectValue placeholder="Select Qualification" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {qualifications.map((q) => (
+                                    <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                                        {q.qualification}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                     <DialogFooter>
+                        <Button type="button" onClick={handleCancel}
+                                className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                            Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading || !dirty}
+                                className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                            {loading ? "Submitting..." : "Confirm"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+                <CancelUnsavedDialog
+                    open={showCancelDialog}
+                    setOpen={setShowCancelDialog}
+                    setEdit={setOpen}
+                />
+            </DialogContent>
+        </Dialog>
+    )
+}

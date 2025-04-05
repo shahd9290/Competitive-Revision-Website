@@ -97,11 +97,4 @@ public class UserService {
        userRepository.save(user);
     }
 
-//        public void editQuestion(int id, String question, String answer, Integer marks) {
-//        Question question_ = questionRepository.findById(id).get();
-//        question_.setQuestion(question);
-//        question_.setAnswer(answer);
-//        question_.setMarks(marks);
-//        questionRepository.save(question_);
-//    }
 }

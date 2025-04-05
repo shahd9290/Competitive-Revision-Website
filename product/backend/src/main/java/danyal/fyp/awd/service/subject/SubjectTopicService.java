@@ -200,4 +200,12 @@ public class SubjectTopicService {
     public void deleteTopic(int id) {
         topicRepository.deleteById(id);
     }
+
+    public void editSubject(int id, String subject, String qualification) throws QualificationException {
+        Subject sub = subjectRepository.findById(id).get();
+        sub.setName(subject);
+        if (!qualification.equals(""))
+            sub.setQualification(qualificationService.getQualification(qualification));
+        subjectRepository.save(sub);
+    }
 }

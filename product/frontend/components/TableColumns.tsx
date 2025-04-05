@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button"
 import {useState} from "react";
 import axios from "axios";
 import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
-import {EditQualification, EditQuestion, EditUser} from "@/components/EditDialogPrompts";
+import {EditQualification, EditQuestion, EditSubject, EditUser} from "@/components/EditDialogPrompts";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -304,8 +304,9 @@ export const subjectColumns: ColumnDef<Subject>[] = [
         cell: ({row}) => {
             const subject = row.original;
             const [dialogOpen, setDialogOpen] = useState(false);
+            const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
-
+            const [qualifications, setQualifications] = useState<any[]>([]);
             const handleDelete = async () => {
                 if (subject.topicNum > 0) {
                     alert("Subject cannot be deleted when Topics are present.")
@@ -332,6 +333,8 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                 <div>
                     <TableDropDown
                         setDialogOpen={setDialogOpen}
+                        setEditOpen={setEditOpen}
+                        setQualifications={setQualifications}
                     />
 
                     {/* Confirmation Dialog */}
@@ -340,7 +343,14 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                         setOpen={setDialogOpen}
                         handleDelete={handleDelete}
                         loading={loading}
-                        name={subject.name}
+                        name={subject.subject}
+                    />
+
+                    <EditSubject
+                        open={editOpen}
+                        setOpen={setEditOpen}
+                        row = {row.original}
+                        qualifications={qualifications}
                     />
                 </div>
             );

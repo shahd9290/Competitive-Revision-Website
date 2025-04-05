@@ -1,8 +1,9 @@
 package danyal.fyp.awd.controller.admin;
 
 import danyal.fyp.awd.dto.admin.DeleteDto;
-import danyal.fyp.awd.dto.admin.subject.DeleteSubjectDto;
+import danyal.fyp.awd.dto.admin.subject.SubjectDeleteDto;
 import danyal.fyp.awd.dto.admin.subject.SubjectDto;
+import danyal.fyp.awd.dto.admin.subject.SubjectEditDto;
 import danyal.fyp.awd.dto.admin.topic.TopicDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
@@ -73,9 +74,19 @@ public class AdminSubjectTopicController {
     }
 
     @DeleteMapping("/subjects/delete")
-    public ResponseEntity<Object> deleteSubject(@RequestBody final DeleteSubjectDto deleteDto) {
+    public ResponseEntity<Object> deleteSubject(@RequestBody final SubjectDeleteDto deleteDto) {
         try {
             subjectTopicService.deleteSubject(deleteDto.id(), deleteDto.qualification());
+            return ResponseEntity.ok("Subject Deleted Successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed To Delete Subject");
+        }
+    }
+
+    @PostMapping("/subjects/edit")
+    public ResponseEntity<Object> editSubject (@RequestBody final SubjectEditDto subjectEditDto) {
+         try {
+            subjectTopicService.editSubject(subjectEditDto.id(), subjectEditDto.subject(), subjectEditDto.qualification());
             return ResponseEntity.ok("Subject Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete Subject");
