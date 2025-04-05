@@ -1,6 +1,7 @@
 package danyal.fyp.awd.controller.subject;
 
 import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
+import danyal.fyp.awd.dto.subject.TopicCountDto;
 import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.service.subject.QualificationService;
 import danyal.fyp.awd.service.subject.SubjectTopicService;
@@ -57,7 +58,7 @@ public class SubjectTopicController {
     public ResponseEntity<Object> getAllTopics(@RequestParam(required = false) String qualification, @RequestParam(required = false) String subject) {
         try {
             if (qualification != null && subject != null && !qualification.isEmpty() && !subject.isEmpty()) {
-                List<Topic> topics = subjectTopicService.getAllForSubQual(qualification, subject);
+                List<TopicCountDto> topics = subjectTopicService.getAllForSubQual(qualification, subject);
                 return ResponseEntity.ok(topics);
             }
             else {

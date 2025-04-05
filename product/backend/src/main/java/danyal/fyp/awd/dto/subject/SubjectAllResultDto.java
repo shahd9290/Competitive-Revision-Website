@@ -12,5 +12,5 @@ import java.util.List;
  * @param topics the list of associated topics for the subject.
  * @author Danyal Shah
  */
-public record SubjectAllResultDto(int id, String name, List<Topic> topics) {
+public record SubjectAllResultDto(int id, String name, List<TopicCountDto> topics) {
 }

@@ -4,6 +4,7 @@ import danyal.fyp.awd.dto.admin.subject.SubjectDataDto;
 import danyal.fyp.awd.dto.admin.topic.TopicDataDto;
 import danyal.fyp.awd.dto.subject.SubjectAllResultDto;
 import danyal.fyp.awd.dto.admin.topic.TopicDto;
+import danyal.fyp.awd.dto.subject.TopicCountDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.exception.SubjectException;
 import danyal.fyp.awd.exception.TopicException;
@@ -14,6 +15,7 @@ import danyal.fyp.awd.repository.subject.SubjectRepository;
 import danyal.fyp.awd.repository.subject.TopicRepository;
 import danyal.fyp.awd.service.user.UserAttemptsService;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -83,7 +85,7 @@ public class SubjectTopicService {
 
         // Get the topics specifically for the given qualification. This way there is no clashes.
         for (Subject subject : subjectResults) {
-            List<Topic> topics = getAllForSubQual(qualification.getName(), subject.getName());
+            List<TopicCountDto> topics = getAllForSubQual(qualification.getName(), subject.getName());
             SubjectAllResultDto subjectAllResultDto = new SubjectAllResultDto(subject.getId(), subject.getName(), topics);
             subjectAllResultDtos.add(subjectAllResultDto);
         }
@@ -167,11 +169,10 @@ public class SubjectTopicService {
      * @return a list of topics associated with the subject and qualification.
      * @throws Exception if the qualification or subject does not exist.
      */
-    public List<Topic> getAllForSubQual(String qualName, String subName) throws Exception {
+    public List<TopicCountDto> getAllForSubQual(String qualName, String subName) throws Exception {
         Qualification qualification = qualificationService.getQualification(qualName);
         Subject subject = getSubject(subName).orElseThrow(() -> new SubjectException("Subject Does Not Exist"));
-
-        return topicRepository.findAllBySubjectIdAndQualificationId(subject.getId(), qualification.getId());
+        return topicRepository.findAllBySubjectIdAndQualificationId(subject, qualification);
     }
 
     public List<Topic> getAllTopics() {

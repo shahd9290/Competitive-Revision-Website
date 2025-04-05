@@ -60,12 +60,20 @@ export const BentoGridItem = ({
                 <DialogTitle>{title}</DialogTitle>
                 {topics && topics.length > 0 ? (topics.map((topic, i) => (
                     <DialogDescription key={i}>
-                        <Link href={{
-                            pathname: "/quiz",
-                            query: {id: topic.id},
-                        }}>{topic.name}</Link>
+                      <div className="flex justify-between items-center mb-2">
+                        {topic.questionCount > 0 ? (
+                          <Link href={{ pathname: "/quiz", query: { id: topic.id } }} className="hover:underline">
+                            {topic.name}
+                          </Link>
+                        ) : (
+                          <span>{topic.name}</span>
+                        )}
+                        <span className="text-gray-500 text-sm">
+                          {topic.questionCount} Possible {topic.questionCount == 1 ? "Question" : "Questions"}
+                        </span>
+                      </div>
                     </DialogDescription>
-                ))):(
+            ))):(
                     <DialogDescription>No Topics Found!</DialogDescription>)
                 }
             </DialogContent>
