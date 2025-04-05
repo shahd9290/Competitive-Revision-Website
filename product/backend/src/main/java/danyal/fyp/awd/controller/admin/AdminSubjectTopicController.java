@@ -11,6 +11,7 @@ import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Subject;
 import danyal.fyp.awd.service.subject.QualificationService;
 import danyal.fyp.awd.service.subject.SubjectTopicService;
+import danyal.fyp.awd.service.user.UserAttemptsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AdminSubjectTopicController {
 
     private final SubjectTopicService subjectTopicService;
     private final QualificationService qualificationService;
-
+    private final UserAttemptsService userAttemptsService;
      /**
      * Adds a subject or updates an existing subject with a new qualification.
      *
@@ -124,6 +125,7 @@ public class AdminSubjectTopicController {
     @DeleteMapping("/topics/delete")
     public ResponseEntity<Object> deleteTopic(@RequestBody final DeleteDto deleteDto) {
         try {
+            userAttemptsService.deleteAttempts(deleteDto.id());
             subjectTopicService.deleteTopic(deleteDto.id());
             return ResponseEntity.ok("Topic Deleted Successfully");
         } catch (Exception e) {

@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -44,9 +45,6 @@ public class UserAttemptsService {
     }
 
     public List<UserAttemptDto> getLatestAttempts(User user) {
-//        topicname
-//        date - epoch?
-//        proportion
         List<UserAttempts> attempts = userAttemptsRepository.findRecentAttempts(user);
         List<UserAttemptDto> filteredAttempts = new ArrayList<>();
 
@@ -60,5 +58,15 @@ public class UserAttemptsService {
             filteredAttempts.add(new UserAttemptDto(topicName, dateString, proportion));
         }
         return filteredAttempts;
+    }
+
+    public void deleteAttempts(UUID userId) {
+        User user = userService.getUserById(userId);
+        userAttemptsRepository.deleteByIdUserId(user);
+    }
+
+    public void deleteAttempts(int topicId) {
+        Topic topic = subjectTopicService.getTopic(topicId);
+        userAttemptsRepository.deleteByIdTopicId(topic);
     }
 }

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * Service class for handling user registration.
  *
@@ -24,7 +26,6 @@ public class UserRegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final QualificationService qualificationService;
     private final RoleService roleService;
-
     /**
      * Registers a new user in the system.
      *
@@ -49,5 +50,21 @@ public class UserRegistrationService {
             user.setQualificationId(qualificationService.getIdByName(request.qualification()));
         user.setRole(roleService.getRole(request.role()));
         return userRepository.save(user);
+    }
+
+    public void editUser(UUID id, String username, String email, String password, String role, String qualification) throws QualificationException {
+       User user = userRepository.findById(id).get();
+       user.setUsername(username);
+       user.setEmail(email);
+       if (!password.equals(""))
+           user.setPassword(passwordEncoder.encode(password));
+       user.setRole(roleService.getRole(role));
+       if (!qualification.equals(""))
+           user.setQualificationId(qualificationService.getIdByName(qualification));
+       userRepository.save(user);
+    }
+
+    public void deleteUser(UUID id) {
+        userRepository.deleteById(id);
     }
 }

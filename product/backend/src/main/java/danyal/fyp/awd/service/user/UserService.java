@@ -5,6 +5,7 @@ import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.model.subject.Question;
 import danyal.fyp.awd.model.user.User;
+import danyal.fyp.awd.repository.user.UserAttemptsRepository;
 import danyal.fyp.awd.repository.user.UserRepository;
 import danyal.fyp.awd.service.subject.QualificationService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final QualificationService qualificationService;
     private final JwtService jwtService;
-    private final RoleService roleService;
-    private final PasswordEncoder passwordEncoder;
 
     /**
      * Retrieves a user by their username.
@@ -73,28 +72,7 @@ public class UserService {
         return userRepository.getUserData();
     }
 
-    private String getRoleLabel(String role) {
-        return switch (role) {
-            case "ROLE_ADMIN" -> "Admin";
-            case "ROLE_USER" -> "User";
-            default -> role;
-        };
+    public User getUserById(UUID userId) {
+        return userRepository.findById(userId).get();
     }
-
-    public void deleteUser(UUID id) {
-        userRepository.deleteById(id);
-    }
-
-    public void editUser(UUID id, String username, String email, String password, String role, String qualification) throws QualificationException {
-       User user = userRepository.findById(id).get();
-       user.setUsername(username);
-       user.setEmail(email);
-       if (!password.equals(""))
-           user.setPassword(passwordEncoder.encode(password));
-       user.setRole(roleService.getRole(role));
-       if (!qualification.equals(""))
-           user.setQualificationId(qualificationService.getIdByName(qualification));
-       userRepository.save(user);
-    }
-
 }

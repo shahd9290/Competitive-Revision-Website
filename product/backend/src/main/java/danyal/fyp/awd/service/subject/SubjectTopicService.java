@@ -12,6 +12,7 @@ import danyal.fyp.awd.model.subject.Subject;
 import danyal.fyp.awd.model.subject.Topic;
 import danyal.fyp.awd.repository.subject.SubjectRepository;
 import danyal.fyp.awd.repository.subject.TopicRepository;
+import danyal.fyp.awd.service.user.UserAttemptsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +28,8 @@ import java.util.*;
 public class SubjectTopicService {
 
     private final SubjectRepository subjectRepository;
-    private final QualificationService qualificationService;
     private final TopicRepository topicRepository;
+    private final QualificationService qualificationService;
 
     /**
      * Adds a new subject with an associated qualification.

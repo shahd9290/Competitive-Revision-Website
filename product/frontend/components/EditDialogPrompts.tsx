@@ -345,25 +345,27 @@ export function EditUser({open, setOpen, row, qualifications}) {
                             onValueChange={(value) => {
                                 setRole(value);
                             }}
+                            value={role}
                         >
                             <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                                 <SelectValue placeholder="Select Role"/>
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={"ROLE_ADMIN"}>Admin</SelectItem>
-                                <SelectItem value={"ROLE_USER"}>User</SelectItem>
+                                <SelectItem value={"Admin"}>Admin</SelectItem>
+                                <SelectItem value={"User"}>User</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
                     {/* Qualification */}
-                    {role === "ROLE_USER" ? (
+                    {role === "User" ? (
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label className="text-right">Qualification</Label>
                             <Select
                                 onValueChange={(value) => {
                                     setQualification(value);
                                 }}
+                                value={qualification !== "N/A" ? qualification : ""}
                             >
                                 <SelectTrigger
                                     className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">

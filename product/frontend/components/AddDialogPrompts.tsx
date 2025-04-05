@@ -95,8 +95,8 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics 
                         </SelectTrigger>
                         <SelectContent>
                             {qualifications.map((q) => (
-                                <SelectItem key={q.id || q.name} value={q.name}>
-                                    {q.name}
+                                <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                                    {q.qualification}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -334,8 +334,8 @@ export function SubjectDialog({setOpenDialog, qualifications }) {
                     </SelectTrigger>
                     <SelectContent>
                         {qualifications.map((q) => (
-                            <SelectItem key={q.id || q.name} value={q.name}>
-                                {q.name}
+                            <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                                {q.qualification}
                             </SelectItem>
                         ))}
                     </SelectContent>
@@ -495,25 +495,27 @@ export function UserDialog({setOpenDialog, qualifications }) {
             </div>
 
             {/* Qualification Dropdown */}
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Qualification</Label>
-                <Select
-                    onValueChange={(value) => {
-                        setSelectedQualification(value);
-                    }}
-                >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                        <SelectValue placeholder="Select Qualification"/>
-                    </SelectTrigger>
-                    <SelectContent>
-                        {qualifications.map((q) => (
-                            <SelectItem key={q.id || q.name} value={q.name}>
-                                {q.name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
+            {role === "ROLE_USER" ? (
+                <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">Qualification</Label>
+                    <Select
+                        onValueChange={(value) => {
+                            setSelectedQualification(value);
+                        }}
+                    >
+                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectValue placeholder="Select Qualification"/>
+                        </SelectTrigger>
+                        <SelectContent>
+                            {qualifications.map((q) => (
+                                <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                                    {q.qualification}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+            ) : null}
 
             {/* Footer Buttons */}
             <DialogFooter>

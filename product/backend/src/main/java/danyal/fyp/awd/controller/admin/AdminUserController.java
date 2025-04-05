@@ -2,6 +2,8 @@ package danyal.fyp.awd.controller.admin;
 
 import danyal.fyp.awd.dto.admin.user.UserDeleteDto;
 import danyal.fyp.awd.dto.admin.user.UserEditDto;
+import danyal.fyp.awd.service.user.UserAttemptsService;
+import danyal.fyp.awd.service.user.UserRegistrationService;
 import danyal.fyp.awd.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 public class AdminUserController {
 
     private final UserService userService;
+    private final UserRegistrationService userRegistrationService;
+    private final UserAttemptsService userAttemptsService;
 
     @GetMapping("/get")
     public ResponseEntity<Object> getUsers() {
@@ -27,7 +31,8 @@ public class AdminUserController {
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deleteUser(@RequestBody final UserDeleteDto deleteDto) {
         try {
-            userService.deleteUser(deleteDto.id());
+            userAttemptsService.deleteAttempts(deleteDto.id());
+            userRegistrationService.deleteUser(deleteDto.id());
             return ResponseEntity.ok("User Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete User");
@@ -37,7 +42,7 @@ public class AdminUserController {
     @PostMapping("/edit")
     public ResponseEntity<String> editUser(@RequestBody final UserEditDto userEditDto) {
         try {
-            userService.editUser(userEditDto.id(), userEditDto.username(), userEditDto.email(), userEditDto.password(), userEditDto.role(), userEditDto.qualification());
+            userRegistrationService.editUser(userEditDto.id(), userEditDto.username(), userEditDto.email(), userEditDto.password(), userEditDto.role(), userEditDto.qualification());
             return ResponseEntity.ok("Qualification Edited Successfully");
         }
         catch (Exception e) {

@@ -255,7 +255,7 @@ export const topicColumns: ColumnDef<Topic>[] = [
                         setOpen={setDialogOpen}
                         handleDelete={handleDelete}
                         loading={loading}
-                        name={topic.topicName}
+                        name={topic.name}
                     />
 
                     <EditTopic
@@ -532,7 +532,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                     return
                 }
                 setLoading(true);
-                let payload = {qualification: qualification.name};
+                let payload = {qualification: qualification.qualification};
                 try {
                     await axios.delete(`${apiUrl}/api/admin/qualifications/delete`, {
                         data: payload,
