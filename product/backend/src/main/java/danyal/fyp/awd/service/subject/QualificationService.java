@@ -1,9 +1,12 @@
 package danyal.fyp.awd.service.subject;
 
 import danyal.fyp.awd.dto.admin.qualification.QualificationDataDto;
+import danyal.fyp.awd.dto.admin.qualification.QualificationDto;
+import danyal.fyp.awd.dto.admin.qualification.QualificationEditDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
 import danyal.fyp.awd.repository.subject.QualificationRepository;
+import danyal.fyp.awd.service.admin.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +22,25 @@ import java.util.List;
 public class QualificationService {
 
     private final QualificationRepository qualificationRepository;
+    private final LogService logService;
+
+    private final String ADD_QUALIFICATION = "Created New Qualification %s";
+    private final String EDIT_QUALIFICATION = "Edited Qualification %s: %s -> %s";
+    private final String DELETE_QUALIFICATION = "Deleted Qualification %s";
+
 
     /**
      * Saves a qualification entity to the database.
      *
      * @param qualification the qualification to save.
      */
-    public void saveQualification(Qualification qualification) throws QualificationException {
-        if (qualificationRepository.findByName(qualification.getName()).isPresent())
+    public void saveQualification(QualificationDto qualification, String token) throws QualificationException {
+        if (qualificationRepository.findByName(qualification.qualification()).isPresent())
             throw new QualificationException("Qualification Already Exists.");
-        qualificationRepository.save(qualification);
+        Qualification q = new Qualification();
+        q.setName(qualification.qualification());
+        qualificationRepository.save(q);
+        logService.addLog(token, ADD_QUALIFICATION.formatted(qualification.qualification()));
     }
 
     /**
@@ -78,15 +90,18 @@ public class QualificationService {
         return qualificationRepository.getAllData();
     }
 
-    public void delete(String name) throws QualificationException {
+    public void delete(String name, String token) throws QualificationException {
         Qualification qual = qualificationRepository.findByName(name).orElseThrow(() -> new QualificationException("Qualification Does Not Exist"));
         qualificationRepository.delete(qual);
+        logService.addLog(token, DELETE_QUALIFICATION.formatted(name));
     }
 
-    public void editQualification(int id, String qualification) {
-        Qualification qual = qualificationRepository.findById(id).get();
-        qual.setName(qualification);
+    public void editQualification(QualificationEditDto qualificationEditDto, String token) {
+        Qualification qual = qualificationRepository.findById(qualificationEditDto.id()).get();
+        String oldName = qual.getName();
+        qual.setName(qualificationEditDto.qualification());
         qualificationRepository.save(qual);
+        logService.addLog(token, EDIT_QUALIFICATION.formatted(oldName, oldName, qualificationEditDto.qualification()));
     }
 
     public int countQualifications() {

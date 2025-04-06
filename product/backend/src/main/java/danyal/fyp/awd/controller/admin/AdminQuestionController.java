@@ -16,9 +16,9 @@ public class AdminQuestionController {
     private final QuestionService questionService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addQuestion(@RequestBody QuestionAddDto questionAddDto) {
+    public ResponseEntity<String> addQuestion(@CookieValue("token") String token, @RequestBody QuestionAddDto questionAddDto) {
         try {
-            questionService.addQuestion(questionAddDto.question(), questionAddDto.answer(), questionAddDto.marks(), questionAddDto.topic(), questionAddDto.qualification());
+            questionService.addQuestion(questionAddDto, token);
             return ResponseEntity.ok("Question added");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -36,9 +36,9 @@ public class AdminQuestionController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<String> editQuestion(@RequestBody QuestionEditDto questionEditDto) {
+    public ResponseEntity<String> editQuestion(@CookieValue("token") String token, @RequestBody QuestionEditDto questionEditDto) {
         try {
-            questionService.editQuestion(questionEditDto.id(), questionEditDto.question(), questionEditDto.answer(), questionEditDto.marks());
+            questionService.editQuestion(questionEditDto, token);
             return ResponseEntity.ok("Question added");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -46,9 +46,9 @@ public class AdminQuestionController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteQuestion(@RequestBody DeleteDto deleteDto) {
+    public ResponseEntity<Object> deleteQuestion(@CookieValue("token") String token, @RequestBody DeleteDto deleteDto) {
         try {
-            questionService.deleteQuestion(deleteDto.id());
+            questionService.deleteQuestion(deleteDto.id(), token);
             return ResponseEntity.ok("Question Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete Question");

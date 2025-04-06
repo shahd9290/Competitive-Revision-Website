@@ -1,9 +1,11 @@
 package danyal.fyp.awd.service.user;
 
+import danyal.fyp.awd.dto.admin.user.UserEditDto;
 import danyal.fyp.awd.dto.user.auth.RegistrationRequestDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
+import danyal.fyp.awd.service.admin.LogService;
 import danyal.fyp.awd.service.subject.QualificationService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ValidationException;
@@ -26,6 +28,12 @@ public class UserRegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final QualificationService qualificationService;
     private final RoleService roleService;
+    private final LogService logService;
+
+    private final String ADD_USER = "Created new %s: Username: %s, Email: %s";
+    private final String EDIT_USER = "Edited User %s: Username: %s, Email: %s, Role: %s, Qualification: %s";
+    private final String DELETE_USER = "Delete User %s";
+
     /**
      * Registers a new user in the system.
      *
@@ -35,7 +43,7 @@ public class UserRegistrationService {
      * @throws ValidationException if the username or email already exists.
      */
     @Transactional
-    public User registerUser(RegistrationRequestDto request) throws QualificationException {
+    public void registerUser(RegistrationRequestDto request) throws QualificationException {
 
         if (userRepository.existsByUsername(request.username()) || userRepository.existsByEmail(request.email())) {
             throw new ValidationException("Username or Email already exists");
@@ -49,22 +57,44 @@ public class UserRegistrationService {
         if (request.role().equals("ROLE_USER"))
             user.setQualificationId(qualificationService.getIdByName(request.qualification()));
         user.setRole(roleService.getRole(request.role()));
-        return userRepository.save(user);
+        userRepository.save(user);
+        String roleName = request.role();
+        logService.addLog(user, ADD_USER.formatted(
+                roleName.equals("ROLE_ADMIN") ? "Admin" : "User",
+                user.getUsername(),
+                user.getEmail()
+        ));
     }
 
-    public void editUser(UUID id, String username, String email, String password, String role, String qualification) throws QualificationException {
-       User user = userRepository.findById(id).get();
-       user.setUsername(username);
-       user.setEmail(email);
-       if (!password.equals(""))
-           user.setPassword(passwordEncoder.encode(password));
-       user.setRole(roleService.getRole(role));
-       if (!qualification.equals(""))
-           user.setQualificationId(qualificationService.getIdByName(qualification));
+    public void editUser(UserEditDto userEditDto, String token) throws QualificationException {
+        // NEW EDIT MESSAGE NEXT
+       User user = userRepository.findById(userEditDto.id()).get();
+
+       String oldUsername = user.getUsername();
+       String oldEmail = user.getEmail();
+       String oldRole = user.getRole().getName();
+       String oldQual = qualificationService.getQualification(user.getQualificationId()).getName();
+
+       user.setUsername(userEditDto.username());
+       user.setEmail(userEditDto.email());
+       if (!userEditDto.password().equals(""))
+           user.setPassword(passwordEncoder.encode(userEditDto.password()));
+       user.setRole(roleService.getRole(userEditDto.role()));
+       if (!userEditDto.qualification().equals(""))
+           user.setQualificationId(qualificationService.getIdByName(userEditDto.qualification()));
        userRepository.save(user);
+       logService.addLog(token, EDIT_USER.formatted(oldUsername,
+               "%s -> %s".format(oldUsername, user.getUsername()),
+               "%s -> %s".format(oldEmail, user.getEmail()),
+               "%s -> %s".format(oldRole, user.getRole().getName()),
+               user.getRole().getName().equals("ROLE_USER") ? "%s -> %s".format(oldQual, userEditDto.qualification()) : "Admin"
+       ));
     }
 
-    public void deleteUser(UUID id) {
+    public void deleteUser(UUID id, String token) {
+        User user = userRepository.findById(id).get();
+        logService.deleteUserLogs(user);
         userRepository.deleteById(id);
+        logService.addLog(token, DELETE_USER.formatted(user.getUsername()));
     }
 }

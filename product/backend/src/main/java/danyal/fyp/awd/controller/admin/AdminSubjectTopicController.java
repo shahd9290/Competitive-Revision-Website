@@ -32,7 +32,7 @@ public class AdminSubjectTopicController {
      * @throws QualificationException if the qualification is invalid.
      */
     @PostMapping("/subjects/add")
-    public ResponseEntity<String> addSubject(@RequestBody final SubjectDto subjectDto) throws QualificationException {
+    public ResponseEntity<String> addSubject(@CookieValue("token") String token, @RequestBody final SubjectDto subjectDto) throws QualificationException {
 
 
         String subjectName = subjectDto.name();
@@ -50,13 +50,13 @@ public class AdminSubjectTopicController {
                 }
                 // It doesn't, needs to be updated.
                 else {
-                    subjectTopicService.addQualification(subject, qualification);
+                    subjectTopicService.addQualification(subject, qualification, token);
                     return ResponseEntity.ok("Updated Existing Subject with new qualification");
                 }
             }
             // Subject does not exist. Qualification does so we can create a new one with it.
             else {
-                subjectTopicService.addSubject(subjectName, qualification);
+                subjectTopicService.addSubject(subjectName, qualification, token);
                 return ResponseEntity.ok("Created new subject");
             }
         }
@@ -76,9 +76,9 @@ public class AdminSubjectTopicController {
     }
 
     @DeleteMapping("/subjects/delete")
-    public ResponseEntity<Object> deleteSubject(@RequestBody final SubjectDeleteDto deleteDto) {
+    public ResponseEntity<Object> deleteSubject(@CookieValue("token") String token, @RequestBody final SubjectDeleteDto deleteDto) {
         try {
-            subjectTopicService.deleteSubject(deleteDto.id(), deleteDto.qualification());
+            subjectTopicService.deleteSubject(deleteDto, token);
             return ResponseEntity.ok("Subject Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete Subject");
@@ -86,10 +86,10 @@ public class AdminSubjectTopicController {
     }
 
     @PostMapping("/subjects/edit")
-    public ResponseEntity<Object> editSubject (@RequestBody final SubjectEditDto subjectEditDto) {
+    public ResponseEntity<Object> editSubject (@CookieValue("token") String token, @RequestBody final SubjectEditDto subjectEditDto) {
          try {
-            subjectTopicService.editSubject(subjectEditDto.id(), subjectEditDto.subject(), subjectEditDto.qualification());
-            return ResponseEntity.ok("Subject Deleted Successfully");
+            subjectTopicService.editSubject(subjectEditDto, token);
+            return ResponseEntity.ok("Subject Edited Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Edit Subject");
         }
@@ -102,9 +102,9 @@ public class AdminSubjectTopicController {
      * @return a success or error message.
      */
     @PostMapping("/topics/add")
-    public ResponseEntity<String> addTopic(@RequestBody final TopicDto topicDto) {
+    public ResponseEntity<String> addTopic(@CookieValue("token") String token, @RequestBody final TopicDto topicDto) {
         try {
-            subjectTopicService.saveTopic(topicDto);
+            subjectTopicService.saveTopic(topicDto, token);
             return ResponseEntity.ok("Topic saved successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -123,10 +123,10 @@ public class AdminSubjectTopicController {
     }
 
     @DeleteMapping("/topics/delete")
-    public ResponseEntity<Object> deleteTopic(@RequestBody final DeleteDto deleteDto) {
+    public ResponseEntity<Object> deleteTopic(@CookieValue("token") String token, @RequestBody final DeleteDto deleteDto) {
         try {
             userAttemptsService.deleteAttempts(deleteDto.id());
-            subjectTopicService.deleteTopic(deleteDto.id());
+            subjectTopicService.deleteTopic(deleteDto.id(), token);
             return ResponseEntity.ok("Topic Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete Topic");
@@ -134,9 +134,9 @@ public class AdminSubjectTopicController {
     }
 
     @PostMapping("/topics/edit")
-    public ResponseEntity<Object> editTopic(@RequestBody final TopicEditDto topicEditDto) {
+    public ResponseEntity<Object> editTopic(@CookieValue("token") String token, @RequestBody final TopicEditDto topicEditDto) {
         try {
-            subjectTopicService.editTopic(topicEditDto.id(), topicEditDto.topic(), topicEditDto.subject(), topicEditDto.qualification());
+            subjectTopicService.editTopic(topicEditDto, token);
             return ResponseEntity.ok("Topic Edited Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Edit Topic");

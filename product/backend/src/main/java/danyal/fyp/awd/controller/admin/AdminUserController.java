@@ -29,10 +29,10 @@ public class AdminUserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteUser(@RequestBody final UserDeleteDto deleteDto) {
+    public ResponseEntity<Object> deleteUser(@CookieValue("token") String token, @RequestBody final UserDeleteDto deleteDto) {
         try {
             userAttemptsService.deleteAttempts(deleteDto.id());
-            userRegistrationService.deleteUser(deleteDto.id());
+            userRegistrationService.deleteUser(deleteDto.id(), token);
             return ResponseEntity.ok("User Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete User");
@@ -40,9 +40,9 @@ public class AdminUserController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<String> editUser(@RequestBody final UserEditDto userEditDto) {
+    public ResponseEntity<String> editUser(@CookieValue("token") String token, @RequestBody final UserEditDto userEditDto) {
         try {
-            userRegistrationService.editUser(userEditDto.id(), userEditDto.username(), userEditDto.email(), userEditDto.password(), userEditDto.role(), userEditDto.qualification());
+            userRegistrationService.editUser(userEditDto, token);
             return ResponseEntity.ok("Qualification Edited Successfully");
         }
         catch (Exception e) {

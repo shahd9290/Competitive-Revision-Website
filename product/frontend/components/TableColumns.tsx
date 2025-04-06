@@ -357,7 +357,7 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                         setOpen={setDialogOpen}
                         handleDelete={handleDelete}
                         loading={loading}
-                        name={subject.subject}
+                        name={subject.name}
                     />
 
                     <EditSubject
@@ -560,7 +560,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                         setOpen={setDialogOpen}
                         handleDelete={handleDelete}
                         loading={loading}
-                        name={qualification.name}
+                        name={qualification.qualification}
                     />
 
                     <EditQualification

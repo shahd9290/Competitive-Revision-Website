@@ -71,4 +71,8 @@ public class Subject {
         }
         qualifications.add(qualification);
     }
+
+    public Qualification getQualification() {
+        return qualifications.iterator().next();
+    }
 }

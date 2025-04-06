@@ -22,11 +22,9 @@ public class AdminQualificationController {
      * @return a success message.
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addQualification(@RequestBody final QualificationDto qualificationDto) {
-        Qualification qualification = new Qualification();
-        qualification.setName(qualificationDto.qualification());
+    public ResponseEntity<String> addQualification(@CookieValue("token") String token, @RequestBody final QualificationDto qualificationDto) {
         try {
-            qualificationService.saveQualification(qualification);
+            qualificationService.saveQualification(qualificationDto, token);
             return ResponseEntity.ok("Qualification Added Successfully");
         }
         catch (Exception e) {
@@ -45,9 +43,9 @@ public class AdminQualificationController {
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<String> editQualification(@RequestBody final QualificationEditDto qualificationEditDto) {
+    public ResponseEntity<String> editQualification(@CookieValue("token") String token, @RequestBody final QualificationEditDto qualificationEditDto) {
         try {
-            qualificationService.editQualification(qualificationEditDto.id(), qualificationEditDto.qualification());
+            qualificationService.editQualification(qualificationEditDto, token);
             return ResponseEntity.ok("Qualification Edited Successfully");
         }
         catch (Exception e) {
@@ -56,9 +54,9 @@ public class AdminQualificationController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteQualification(@RequestBody final QualificationDto qualificationDto) {
+    public ResponseEntity<Object> deleteQualification(@CookieValue("token") String token, @RequestBody final QualificationDto qualificationDto) {
         try {
-            qualificationService.delete(qualificationDto.qualification());
+            qualificationService.delete(qualificationDto.qualification(), token);
             return ResponseEntity.ok("Qualification Deleted Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed To Delete Qualification");
