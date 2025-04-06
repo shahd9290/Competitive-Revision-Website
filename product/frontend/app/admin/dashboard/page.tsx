@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { SidebarMenu } from "@/components/ui/SidebarMenu"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { BarChart, PieChart } from "@/components/ui/charts"
 import { BookOpen, Users, GraduationCap, FileQuestion, ArrowRight, Layers, CheckCircle2 } from "lucide-react"
 import axios from "axios";
 import Link from "next/link";

@@ -30,7 +30,7 @@ public class UserRegistrationService {
     private final RoleService roleService;
     private final LogService logService;
 
-    private final String ADD_USER = "Created new %s: Username: %s, Email: %s";
+    private final String ADD_USER = "Created New %s: Username: %s, Email: %s";
     private final String EDIT_USER = "Edited User %s: Username: %s, Email: %s, Role: %s, Qualification: %s";
     private final String DELETE_USER = "Delete User: %s";
 

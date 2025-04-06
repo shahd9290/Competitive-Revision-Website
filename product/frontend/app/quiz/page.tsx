@@ -120,7 +120,7 @@ const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
         if (userAnswer.trim() === currentQuestion.answer) {
             nextQuestion();
         } else {
-            if (currentQuestion.marks * 0.81 != questionMarks) {
+            if (Math.abs(currentQuestion.marks * 0.81 - questionMarks) > 0.0001) {
                 setQuestionMarks(questionMarks * 0.9);
             }
             alert('Incorrect answer, please try again.');
