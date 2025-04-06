@@ -76,7 +76,7 @@ const Dashboard = () => {
                 <BookOpen className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Subjects</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Subjects</p>
                 <h3 className="text-2xl font-bold">{loading ? "Loading..." : stats.totalSubjects}</h3>
               </div>
             </div>
@@ -89,7 +89,7 @@ const Dashboard = () => {
                 <GraduationCap className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Qualifications</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Qualifications</p>
                 <h3 className="text-2xl font-bold">{loading ? "Loading..." : stats.totalQualifications}</h3>
               </div>
             </div>
@@ -102,7 +102,7 @@ const Dashboard = () => {
                 <Users className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Active Users</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Users</p>
                 <h3 className="text-2xl font-bold">{loading ? "Loading..." : stats.totalUsers}</h3>
               </div>
             </div>
@@ -111,10 +111,12 @@ const Dashboard = () => {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-                <Card>
-          <CardHeader>
-            <CardTitle>Activity Log</CardTitle>
-            <CardDescription>Recent changes made to the system</CardDescription>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Activity Log</CardTitle>
+              <CardDescription>Recent changes made to the system</CardDescription>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -131,11 +133,6 @@ const Dashboard = () => {
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex justify-end">
-              <Button variant="outline" size="sm" className="gap-1">
-                View All <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -145,9 +142,6 @@ const Dashboard = () => {
               <CardTitle>Recent Attempts</CardTitle>
               <CardDescription>Latest question attempts by users</CardDescription>
             </div>
-            <Button variant="ghost" size="sm" className="gap-1">
-              View All <ArrowRight className="h-4 w-4" />
-            </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
