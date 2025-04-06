@@ -1,193 +1,235 @@
-'use client'
-import {SidebarMenu} from "@/components/ui/SidebarMenu";
-import {useRouter} from "next/navigation";
-import React, {useEffect, useState} from "react";
-import axios from "axios";
-import Link from "next/link";
-import {Progress} from "@/components/ui/progress";
+"use client"
+import { SidebarMenu } from "@/components/ui/SidebarMenu"
+import { useRouter } from "next/navigation"
+import type React from "react"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import Link from "next/link"
+import { Progress } from "@/components/ui/progress"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { AlertCircle, CheckCircle, SkipForward } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 interface SearchParams {
     id?: string;
 }
 
-const Quiz = ({searchParams}: { searchParams: SearchParams }) => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const [questions, setQuestions] = useState([]);
-    const [topic, setTopic] = useState(null);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [userAnswer, setUserAnswer] = useState('');
-    const [isCompleted, setIsCompleted] = useState(false);
-    const [questionMarks, setQuestionMarks] = useState(0);
-    const [totalMarks, setTotalMarks] = useState(0);
-    const [userMarks, setUserMarks] = useState(0);
-    const [questionTotal, setQuestionTotal] = useState(0);
-    const router = useRouter();
-    const {id} = searchParams;
+const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [topic, setTopic] = useState<Topic | null>(null)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [userAnswer, setUserAnswer] = useState("")
+  const [isCompleted, setIsCompleted] = useState(false)
+  const [questionMarks, setQuestionMarks] = useState(0)
+  const [totalMarks, setTotalMarks] = useState(0)
+  const [userMarks, setUserMarks] = useState(0)
+  const [questionTotal, setQuestionTotal] = useState(0)
+  const [error, setError] = useState("")
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
+  const router = useRouter()
+  const { id } = searchParams
 
-    useEffect(() => {
-        const getTopic = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/api/topic/get?topicId=${id}`, {withCredentials: true});
-                setTopic(response.data);
-            } catch (error: any) {
-                setTopic(null);
-            }
-        }
+  useEffect(() => {
+    const getTopic = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/topic/get?topicId=${id}`, { withCredentials: true })
+        setTopic(response.data)
+      } catch (error: any) {
+        setTopic(null)
+      }
+    }
 
-        getTopic();
-    }, [])
+    getTopic()
+  }, [apiUrl, id])
 
-    useEffect(() => {
+  useEffect(() => {
+    const getQuestions = async () => {
+      try {
+        const response = await axios.get(`${apiUrl}/api/question/get?topicId=${id}`, { withCredentials: true })
+        setQuestions(response.data.questions)
+        setQuestionTotal(response.data.totalMarks)
+      } catch (error: any) {
+        setError(error.response?.data || "Failed to load questions")
+        setTimeout(() => {
+          router.push("/subjects")
+        }, 3000)
+      }
+    }
 
-        const getQuestions = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/api/question/get?topicId=${id}`, {withCredentials: true});
-                setQuestions(response.data.questions);
-                setQuestionTotal(response.data.totalMarks);
-            } catch (error: any) {
-                alert(error.response.data);
-                router.push('/subjects');
-            }
-        }
+    if (topic) {
+      getQuestions()
+    }
+  }, [topic, apiUrl, id, router])
 
-        getQuestions();
-    }, [topic]);
+  const currentQuestion = questions[currentQuestionIndex]
 
-    const currentQuestion = questions[currentQuestionIndex];
-    useEffect(() => {
-        if (currentQuestion) {
-            setQuestionMarks(currentQuestion.marks);
-        }
-    }, [currentQuestion]);
+  useEffect(() => {
+    if (currentQuestion) {
+      setQuestionMarks(currentQuestion.marks)
+    }
+  }, [currentQuestion])
 
-    useEffect(() => {
-        if (isCompleted) {
-
-            const saveMarks = async () => {
-                const payload = {"marks": totalMarks,"topicId": id, "proportion": totalMarks/questionTotal}
-                await axios.post(`${apiUrl}/api/user/save-marks`, payload, {withCredentials: true}).then((response) => {
-                    setUserMarks(response.data);
-                });
-            }
-
-            saveMarks();
-        }
-    }, [isCompleted, totalMarks]);
-
+  useEffect(() => {
     if (isCompleted) {
-        return (
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-lg bg-white py-10 rounded-3xl drop-shadow-2xl">
-                    <h1 className="text-center text-2xl font-bold text-gray-900 pb-4">Quiz Completed!</h1>
-                    <h2 className="text-center">Marks Earned: {totalMarks}</h2>
-                    <h2 className="text-center">Your Total Marks: {userMarks}</h2>
-                    <Link
-                        href="/subjects"
-                        className="pt-4 align-middle justify-center items-center flex underline font-bold"
-                    >Return to Subjects Page</Link>
-                </div>
-            </div>
-        );
+      const saveMarks = async () => {
+        const payload = {
+          marks: totalMarks,
+          topicId: id,
+          proportion: totalMarks / questionTotal,
+        }
+        try {
+          const response = await axios.post(`${apiUrl}/api/user/save-marks`, payload, { withCredentials: true })
+          setUserMarks(response.data)
+        } catch (error) {
+          setError("Failed to save marks")
+        }
+      }
+
+      saveMarks()
+    }
+  }, [isCompleted, totalMarks, apiUrl, id, questionTotal])
+
+  const nextQuestion = (marks = questionMarks) => {
+    setTotalMarks(Math.floor(totalMarks + marks))
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
+      setUserAnswer("")
+      setIsCorrect(null)
+    } else {
+      setIsCompleted(true)
+    }
+  }
+
+  const handleSkip = (event: React.MouseEvent) => {
+    event.preventDefault()
+    nextQuestion(0)
+  }
+
+  const handleAnswerSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+    if (questions.length === 0) return
+
+    if (userAnswer === "") {
+      setError("Please enter an answer")
+      return
     }
 
+    setError("")
 
-    const nextQuestion = (marks = questionMarks) => {
-        setTotalMarks(Math.floor(totalMarks + marks));
-        if (currentQuestionIndex < questions.length - 1) {
-            // Store marks in a variable for later.
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-            setUserAnswer('');
-        } else {
-            setIsCompleted(true);
-        }
+    if (userAnswer.trim() === currentQuestion.answer) {
+      setIsCorrect(true)
+      setTimeout(() => {
+        nextQuestion()
+      }, 1000)
+    } else {
+      setIsCorrect(false)
+      if (Math.abs(currentQuestion.marks * 0.81 - questionMarks) > 0.0001) {
+        setQuestionMarks(questionMarks * 0.9)
+      }
     }
+  }
 
-    const handleSkip = (event: { preventDefault: () => void }) => {
-        event.preventDefault();
-        nextQuestion(0);
-    }
-
-    const handleAnswerSubmit = (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
-        if (questions.length === 0) return;
-
-        if (userAnswer === '') {
-            alert('Please enter an answer');
-            return;
-        }
-
-        const currentQuestion = questions[currentQuestionIndex];
-        if (userAnswer.trim() === currentQuestion.answer) {
-            nextQuestion();
-        } else {
-            if (Math.abs(currentQuestion.marks * 0.81 - questionMarks) > 0.0001) {
-                setQuestionMarks(questionMarks * 0.9);
-            }
-            alert('Incorrect answer, please try again.');
-            // Decrease marks
-        }
-    };
-
+  if (isCompleted) {
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className=" sm:mx-auto sm:w-full sm:max-w-lg bg-white py-10 rounded-3xl drop-shadow-2xl">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h1 className="text-center text-2xl font-bold leading-9 underline text-gray-900">
-                        {topic != null ? topic.name : "Quiz Page"}
-                    </h1>
-                    <form
-                        className="w-full flex flex-col items-center lg:items-stretch"
-                    >
-                        <Progress className="my-5" value={(currentQuestionIndex / questions.length) * 100}/>
-                        <div
-                            className="w-3/4 lg:w-full text-center text-3xl py-10 bg-white font-medium text-gray-800 mb-6 select-none border-4 border-black border-opacity-25">
-                            {currentQuestion ? (
-                                <h2>
-                                    {currentQuestion.question}
-                                </h2>
-                            ) : (
-                                <h2>
-                                    Loading question...
-                                </h2>
-                            )}
-                        </div>
-                        <input
-                            type="text"
-                            value={userAnswer}
-                            onChange={(e) => setUserAnswer(e.target.value)}
-                            className="w-3/4 lg:w-full p-3 rounded-md border border-gray-300"
-                            placeholder="Enter your answer"
-                        />
-                        <div className="text-center text-md text-gray-800 font-bold m-4 select-none">
-                            {currentQuestion ? (
-                                `Marks Available: ${Math.floor(questionMarks)}`
-                            ) : (
-                                "Loading marks..."
-                            )}
-                        </div>
-                        <button
-                            onClick={handleAnswerSubmit}
-                            className="w-3/4 lg:w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-                        >
-                            Submit Answer
-                        </button>
-                        {currentQuestion && questionMarks == currentQuestion.marks ? (
-                            <div className="w-3/4 lg:w-full bg-blue-300 text-white py-2 mt-2 rounded-md select-none">
-                                <p className={"text-center"}>Skip Question</p>
-                            </div>
-                        ) : (
-                            <button
-                                onClick={handleSkip}
-                                className="text-center w-3/4 lg:w-full bg-blue-500 text-white py-2 mt-2 rounded-md hover:bg-blue-600"
-                            >
-                                Skip Question
-                            </button>
-                        )}
-                    </form>
-                </div>
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <Card className="sm:mx-auto sm:w-full sm:max-w-lg">
+          <CardHeader>
+            <CardTitle className="text-center text-2xl">
+              <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-2" />
+              Quiz Completed!
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-green-50 p-4 rounded-lg text-center space-y-2">
+              <p className="text-lg font-medium">Marks Earned</p>
+              <p className="text-3xl font-bold text-green-600">{totalMarks}</p>
             </div>
-        </div>
+            <div className="bg-slate-50 p-4 rounded-lg text-center space-y-2">
+              <p className="text-lg font-medium">Your Total Marks</p>
+              <p className="text-3xl font-bold text-slate-600">{userMarks}</p>
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <Button asChild className="w-full">
+              <Link href="/subjects">Return to Subjects Page</Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     )
+  }
+
+  return (
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <Card className="sm:mx-auto sm:w-full sm:max-w-lg">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl">{topic ? topic.name : "Quiz Page"}</CardTitle>
+          <Progress className="h-2 w-full" value={(currentQuestionIndex / questions.length) * 100} />
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          <form onSubmit={handleAnswerSubmit} className="space-y-6">
+            <div className="bg-slate-50 p-6 rounded-lg text-center min-h-[150px] flex items-center justify-center">
+              <h2 className="text-3xl font-medium text-slate-800 select-none">
+                {currentQuestion ? currentQuestion.question : "Loading question..."}
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <label htmlFor="answer" className="text-sm font-medium">
+                  Your Answer
+                </label>
+                <Badge variant={isCorrect === true ? "success" : isCorrect === false ? "destructive" : "outline"}>
+                  {isCorrect === true ? "Correct!" : isCorrect === false ? "Incorrect" : "Marks Available"}:{" "}
+                  {Math.floor(questionMarks)}
+                </Badge>
+              </div>
+
+              <Input
+                id="answer"
+                type="text"
+                value={userAnswer}
+                onChange={(e) => setUserAnswer(e.target.value)}
+                placeholder="Enter your answer"
+                className={`${isCorrect === true ? "border-green-500" : isCorrect === false ? "border-red-500" : ""}`}
+              />
+
+              <div className="flex flex-col gap-2">
+                <Button type="submit" className="w-full">
+                  Submit Answer
+                </Button>
+
+                <Button
+                  type="button"
+                  variant={questionMarks === currentQuestion?.marks ? "secondary" : "default"}
+                  onClick={handleSkip}
+                  className="w-full"
+                  disabled={isCorrect !== false}
+                >
+                  <SkipForward className="h-4 w-4 mr-2" />
+                  Skip Question
+                </Button>
+              </div>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className="text-center text-sm text-muted-foreground">
+          Question {currentQuestionIndex + 1} of {questions.length}
+        </CardFooter>
+      </Card>
+    </div>
+  )
 }
 
 
