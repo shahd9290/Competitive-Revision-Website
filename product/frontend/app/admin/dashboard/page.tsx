@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { BarChart, PieChart } from "@/components/ui/charts"
 import { BookOpen, Users, GraduationCap, FileQuestion, ArrowRight, Layers, CheckCircle2 } from "lucide-react"
 import axios from "axios";
+import Link from "next/link";
 
 /**
  * A dashboard component displaying user information and statistics.
@@ -180,25 +181,36 @@ const Dashboard = () => {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4">
-              <FileQuestion className="h-6 w-6" />
-              <span>Questions</span>
+            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4" asChild>
+              <Link href={"./questions"}>
+                <FileQuestion className="h-6 w-6" />
+                <span>Questions</span>
+              </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4">
-              <Layers className="h-6 w-6" />
-              <span>Topics</span>
+            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4" asChild>
+              <Link href={"./topics"}>
+                <Layers className="h-6 w-6" />
+                <span>Topics</span>
+              </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4">
-              <BookOpen className="h-6 w-6" />
-              <span>Subjects</span>
+            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4" asChild>
+              <Link href={"./subjects"}>
+                <BookOpen className="h-6 w-6" />
+                <span>Subjects</span>
+              </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4">
-              <GraduationCap className="h-6 w-6" />
-              <span>Qualifications</span>
+            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4" asChild>
+              <Link href={"./qualifications"}>
+                <GraduationCap className="h-6 w-6" />
+                <span>Qualifications</span>
+              </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4">
-              <Users className="h-6 w-6" />
-              <span>Users</span>
+            <Button variant="outline" className="h-auto flex-col items-center justify-center gap-2 p-4" asChild>
+              <Link href={"./users"}>
+                <Users className="h-6 w-6" />
+                <span>Users</span>
+              </Link>
+
             </Button>
           </div>
         </CardContent>
