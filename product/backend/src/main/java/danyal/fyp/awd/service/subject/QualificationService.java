@@ -88,4 +88,8 @@ public class QualificationService {
         qual.setName(qualification);
         qualificationRepository.save(qual);
     }
+
+    public int countQualifications() {
+        return (int) qualificationRepository.count();
+    }
 }

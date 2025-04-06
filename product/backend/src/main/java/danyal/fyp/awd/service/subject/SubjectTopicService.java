@@ -220,4 +220,12 @@ public class SubjectTopicService {
             t.setQualification(qualificationService.getQualification(qualification));
         topicRepository.save(t);
     }
+
+    public int countTopics() {
+        return (int) topicRepository.count();
+    }
+
+    public int countSubjects() {
+        return (int) subjectRepository.count();
+    }
 }

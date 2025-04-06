@@ -20,6 +20,9 @@ public interface UserAttemptsRepository extends JpaRepository<UserAttempts, Atte
     @Query("SELECT ua FROM UserAttempts ua WHERE ua.user = :user ORDER BY ua.id.date DESC LIMIT 4")
     List<UserAttempts> findRecentAttempts(@Param("user") User user);
 
+    @Query("SELECT ua FROM UserAttempts ua ORDER BY ua.id.date DESC LIMIT 6")
+    List<UserAttempts> findRecentAttempts();
+
     @Modifying
     @Transactional
     @Query("DELETE FROM UserAttempts ua WHERE ua.user = :user ")

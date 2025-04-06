@@ -76,4 +76,8 @@ public class QuestionService {
         question_.setMarks(marks);
         questionRepository.save(question_);
     }
+
+    public int countQuestions() {
+        return (int) questionRepository.count();
+    }
 }

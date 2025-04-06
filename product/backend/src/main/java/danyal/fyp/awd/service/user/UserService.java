@@ -75,4 +75,8 @@ public class UserService {
     public User getUserById(UUID userId) {
         return userRepository.findById(userId).get();
     }
+
+    public int countUsers() {
+        return (int) userRepository.count();
+    }
 }
