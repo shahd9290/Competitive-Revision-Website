@@ -39,8 +39,8 @@ public class SubjectTopicService {
     private final LogService logService;
 
     private final String ADD_SUBJECT = "Created New Subject: %s";
-    private final String EDIT_SUBJECT = "Edited Subject %s : %s";
-    private final String DELETE_SUBJECT = "Deleted Subject %s";
+    private final String EDIT_SUBJECT = "Edited Subject %s: %s";
+    private final String DELETE_SUBJECT = "Deleted Subject: %s";
     private final String ADD_TOPIC = "Created New %s Topic: %s";
     private final String EDIT_TOPIC = "Edited %s Topic %s: %s";
     private final String DELETE_TOPIC = "Deleted %s Topic: %s";

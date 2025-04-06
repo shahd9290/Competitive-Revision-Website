@@ -32,7 +32,7 @@ public class UserRegistrationService {
 
     private final String ADD_USER = "Created new %s: Username: %s, Email: %s";
     private final String EDIT_USER = "Edited User %s: Username: %s, Email: %s, Role: %s, Qualification: %s";
-    private final String DELETE_USER = "Delete User %s";
+    private final String DELETE_USER = "Delete User: %s";
 
     /**
      * Registers a new user in the system.

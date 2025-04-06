@@ -24,9 +24,9 @@ public class QualificationService {
     private final QualificationRepository qualificationRepository;
     private final LogService logService;
 
-    private final String ADD_QUALIFICATION = "Created New Qualification %s";
+    private final String ADD_QUALIFICATION = "Created New Qualification: %s";
     private final String EDIT_QUALIFICATION = "Edited Qualification %s: %s -> %s";
-    private final String DELETE_QUALIFICATION = "Deleted Qualification %s";
+    private final String DELETE_QUALIFICATION = "Deleted Qualification: %s";
 
 
     /**

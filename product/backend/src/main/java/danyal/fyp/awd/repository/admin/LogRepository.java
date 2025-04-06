@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface LogRepository extends JpaRepository<Log, Integer> {
 
@@ -16,4 +18,7 @@ public interface LogRepository extends JpaRepository<Log, Integer> {
     @Transactional
     @Query("DELETE FROM Log l WHERE l.user = :user")
     void deleteUserLogs(@Param("user") User user);
+
+    @Query("SELECT l FROM Log l ORDER BY l.date DESC LIMIT 5")
+    List<Log> getLatest();
 }

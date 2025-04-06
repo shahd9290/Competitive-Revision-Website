@@ -25,45 +25,8 @@ const Dashboard = () => {
       try {
         setLoading(true)
         const response = await axios.get(`${apiUrl}/api/admin/dashboard`, {withCredentials: true})
-        setStats(response.data)
-
-        setActivity([
-                {
-                  id: 1,
-                  user: "Admin",
-                  action: "Created new question",
-                  target: "Trigonometry #42",
-                  timestamp: "Today, 14:32",
-                },
-                {
-                  id: 2,
-                  user: "Sarah Williams",
-                  action: "Updated topic content",
-                  target: "Cell Division",
-                  timestamp: "Today, 11:15",
-                },
-                {
-                  id: 3,
-                  user: "Admin",
-                  action: "Added new subject",
-                  target: "Advanced Physics",
-                  timestamp: "Yesterday, 16:45",
-                },
-                {
-                  id: 4,
-                  user: "John Doe",
-                  action: "Modified question",
-                  target: "Algebra #15",
-                  timestamp: "Yesterday, 10:22",
-                },
-                {
-                  id: 5,
-                  user: "Admin",
-                  action: "Approved user account",
-                  target: "Michael Brown",
-                  timestamp: "2 days ago, 09:30",
-                },
-              ])
+        setStats(response.data.dashboard)
+        setActivity(response.data.logs)
 
         setLoading(false)
       } catch (error) {
