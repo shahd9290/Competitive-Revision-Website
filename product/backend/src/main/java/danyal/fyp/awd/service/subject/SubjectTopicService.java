@@ -231,7 +231,7 @@ public class SubjectTopicService {
             sub.setQualification(qualificationService.getQualification(subjectEditDto.qualification()));
         }
         subjectRepository.save(sub);
-        logService.addLog(token, EDIT_SUBJECT.formatted(oldSubjectName, "%s -> %s, %s -> %s".formatted(oldSubjectName, sub.getName(), oldQualName, subjectEditDto.qualification())));
+        logService.addLog(token, EDIT_SUBJECT.formatted(oldSubjectName, "Title: %s -> %s, Qualification: %s -> %s".formatted(oldSubjectName, sub.getName(), oldQualName, subjectEditDto.qualification())));
     }
 
     public void editTopic(TopicEditDto topicEditDto, String token) throws QualificationException {
@@ -240,14 +240,14 @@ public class SubjectTopicService {
         String oldSubject = t.getSubject().getName();
         String oldQual = t.getQualification().getName();
         t.setName(topicEditDto.topic());
-        String message = "%s -> %s".formatted(oldTopic, t.getName());
+        String message = "Name: %s -> %s".formatted(oldTopic, t.getName());
         if (!topicEditDto.subject().equals("")) {
             t.setSubject(getSubject(topicEditDto.subject()).get());
-            message += ", %s -> %s".formatted(oldSubject, t.getSubject().getName());
+            message += ", Subject: %s -> %s".formatted(oldSubject, t.getSubject().getName());
         }
         if (!topicEditDto.qualification().equals("")) {
             t.setQualification(qualificationService.getQualification(topicEditDto.qualification()));
-            message += ", %s -> %s".formatted(oldQual, t.getQualification().getName());
+            message += ", Qualification: %s -> %s".formatted(oldQual, t.getQualification().getName());
         }
         topicRepository.save(t);
         logService.addLog(token, EDIT_TOPIC.formatted(t.getSubject().getName(), oldTopic, message));
