@@ -17,10 +17,10 @@ import java.util.UUID;
 @Repository
 public interface UserAttemptsRepository extends JpaRepository<UserAttempts, AttemptId> {
 
-    @Query("SELECT ua FROM UserAttempts ua WHERE ua.user = :user ORDER BY ua.id.date DESC LIMIT 4")
+    @Query("SELECT ua FROM UserAttempts ua WHERE ua.user = :user ORDER BY ua.id.date DESC")
     List<UserAttempts> findRecentAttempts(@Param("user") User user);
 
-    @Query("SELECT ua FROM UserAttempts ua ORDER BY ua.id.date DESC LIMIT 6")
+    @Query("SELECT ua FROM UserAttempts ua ORDER BY ua.id.date DESC")
     List<UserAttempts> findRecentAttempts();
 
     @Modifying

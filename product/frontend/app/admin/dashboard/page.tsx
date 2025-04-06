@@ -118,7 +118,7 @@ const Dashboard = () => {
               <CardDescription>Recent changes made to the system</CardDescription>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="max-h-[45vh] overflow-y-auto">
             <div className="space-y-4">
               {loading ? "Loading..." : activity.map((item) => (
                 <div key={item.id} className="flex items-start justify-between border-b pb-3 last:border-0">
@@ -143,7 +143,7 @@ const Dashboard = () => {
               <CardDescription>Latest question attempts by users</CardDescription>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="max-h-[45vh] overflow-y-auto">
             <div className="space-y-4">
               {loading ? "Loading..." : stats.recentAttempts.map((attempt) => (
                 <div key={attempt.id} className="flex items-center justify-between border-b pb-2 last:border-0">

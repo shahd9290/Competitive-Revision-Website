@@ -19,6 +19,6 @@ public interface LogRepository extends JpaRepository<Log, Integer> {
     @Query("DELETE FROM Log l WHERE l.user = :user")
     void deleteUserLogs(@Param("user") User user);
 
-    @Query("SELECT l FROM Log l ORDER BY l.date DESC LIMIT 6")
+    @Query("SELECT l FROM Log l ORDER BY l.date DESC")
     List<Log> getLatest();
 }
