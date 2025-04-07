@@ -34,12 +34,7 @@ public class AdminQualificationController {
 
     @GetMapping("/get")
     public ResponseEntity<Object> getUsers() {
-        try {
-            return ResponseEntity.ok(qualificationService.getAllQualificationsAdmin());
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("An error occurred when fetching data");
-        }
+        return ResponseEntity.ok(qualificationService.getAllQualificationsAdmin());
     }
 
     @PostMapping("/edit")
