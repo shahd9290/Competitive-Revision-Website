@@ -133,5 +133,13 @@ public class TopicTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Subject Does Not Exist"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/topic/get-all")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Binomials"));
     }
 }

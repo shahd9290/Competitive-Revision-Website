@@ -165,6 +165,17 @@ public class SubjectQualificationTest {
     }
 
     @Test
+    public void getAllSubjectsNoQual() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("Mathematics"));
+    }
+
+    @Test
     @AfterAll // Last test to run
     public void getAllSubjects() throws Exception {
 
