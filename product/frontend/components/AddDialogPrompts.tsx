@@ -7,9 +7,11 @@ import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {DialogFooter} from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
+import {toast} from "@/hooks/use-toast";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-export function QuestionDialog({setOpenDialog, qualifications, subjects, topics }) {
+
+export function QuestionDialog({setOpenDialog, qualifications, subjects, topics, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
     const [selectedTopic, setSelectedTopic] = useState("");
@@ -44,130 +46,142 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics 
         try {
             await axios.post(`${apiUrl}/api/admin/questions/add`, payload, {
                 withCredentials: true,
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
             });
-
+            refetch()
             setOpenDialog(false); // Close the dialog on success
+            toast({
+                title: "Success!",
+                description: "The question has been added successfully!",
+                variant: "success",
+            })
         } catch (error) {
             console.error("Error submitting question:", error);
-            setErrorMessage("Failed to submit the question. Please try again.");
+            toast({
+                title: "Error!",
+                description: "Failed to submit the question, please try again.",
+                variant: "destructive",
+            })
         } finally {
             setLoading(false);
-            window.location.reload();
         }
     };
 
     return (
-            <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                {/* Show Error Message if Any */}
-                {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+            {/* Show Error Message if Any */}
+            {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
-                {/* Question */}
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">Question</Label>
-                    <Input className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)} required />
-                </div>
+            {/* Question */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Question</Label>
+                <Input className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)} required/>
+            </div>
 
-                {/* Answer */}
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">Answer</Label>
-                    <Input className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)} required />
-                </div>
+            {/* Answer */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Answer</Label>
+                <Input className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)} required/>
+            </div>
 
-                {/* Marks */}
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">Marks</Label>
-                    <Input className="col-span-3" type="number" value={marks} onChange={(e) => setMarks(e.target.value)} required />
-                </div>
+            {/* Marks */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Marks</Label>
+                <Input className="col-span-3" type="number" value={marks} onChange={(e) => setMarks(e.target.value)}
+                       required/>
+            </div>
 
-                {/* Qualification Dropdown */}
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">Qualification</Label>
-                    <Select
-                        onValueChange={(value) => {
-                            setSelectedQualification(value);
-                            setSelectedSubject(""); // Reset Subject
-                            setSelectedTopic(""); // Reset Topic
-                        }}
-                    >
-                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                            <SelectValue placeholder="Select Qualification" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {qualifications.map((q) => (
-                                <SelectItem key={q.id || q.qualification} value={q.qualification}>
-                                    {q.qualification}
+            {/* Qualification Dropdown */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Qualification</Label>
+                <Select
+                    onValueChange={(value) => {
+                        setSelectedQualification(value);
+                        setSelectedSubject(""); // Reset Subject
+                        setSelectedTopic(""); // Reset Topic
+                    }}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue placeholder="Select Qualification"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        {qualifications.map((q) => (
+                            <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                                {q.qualification}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Subject Dropdown */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Subject</Label>
+                <Select
+                    onValueChange={(value) => {
+                        setSelectedSubject(value);
+                        setSelectedTopic(""); // Reset Topic
+                    }}
+                    disabled={!selectedQualification || filteredSubjects.length === 0}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue
+                            placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"}/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        {filteredSubjects.length > 0 ? (
+                            filteredSubjects.map((s) => (
+                                <SelectItem key={s.id || s.name} value={s.name}>
+                                    {s.name}
                                 </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
+                            ))
+                        ) : (
+                            <SelectItem key="no-subjects" disabled/>
+                        )}
+                    </SelectContent>
+                </Select>
+            </div>
 
-                {/* Subject Dropdown */}
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">Subject</Label>
-                    <Select
-                        onValueChange={(value) => {
-                            setSelectedSubject(value);
-                            setSelectedTopic(""); // Reset Topic
-                        }}
-                        disabled={!selectedQualification || filteredSubjects.length === 0}
-                    >
-                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                            <SelectValue placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {filteredSubjects.length > 0 ? (
-                                filteredSubjects.map((s) => (
-                                    <SelectItem key={s.id || s.name} value={s.name}>
-                                        {s.name}
-                                    </SelectItem>
-                                ))
-                            ) : (
-                                <SelectItem key="no-subjects" disabled/>
-                            )}
-                        </SelectContent>
-                    </Select>
-                </div>
+            {/* Topic Dropdown */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label className="text-right">Topic</Label>
+                <Select
+                    onValueChange={setSelectedTopic}
+                    disabled={!selectedSubject || filteredTopics.length === 0}
+                >
+                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectValue placeholder={filteredTopics.length ? "Select Topic" : "No topics available"}/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        {filteredTopics.length > 0 ? (
+                            filteredTopics.map((t) => (
+                                <SelectItem key={t.id || t.name} value={t.name}>
+                                    {t.name}
+                                </SelectItem>
+                            ))
+                        ) : (
+                            <SelectItem key="no-topics" disabled/>
+                        )}
+                    </SelectContent>
+                </Select>
+            </div>
 
-                {/* Topic Dropdown */}
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right">Topic</Label>
-                    <Select
-                        onValueChange={setSelectedTopic}
-                        disabled={!selectedSubject || filteredTopics.length === 0}
-                    >
-                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                            <SelectValue placeholder={filteredTopics.length ? "Select Topic" : "No topics available"} />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {filteredTopics.length > 0 ? (
-                                filteredTopics.map((t) => (
-                                    <SelectItem key={t.id || t.name} value={t.name}>
-                                        {t.name}
-                                    </SelectItem>
-                                ))
-                            ) : (
-                                <SelectItem key="no-topics" disabled/>
-                            )}
-                        </SelectContent>
-                    </Select>
-                </div>
-
-                {/* Footer Buttons */}
-                <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
-                        Cancel
-                    </Button>
-                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
-                        {loading ? "Submitting..." : "Confirm"}
-                    </Button>
-                </DialogFooter>
-            </form>
+            {/* Footer Buttons */}
+            <DialogFooter>
+                <Button type="button" onClick={() => setOpenDialog(false)}
+                        className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={loading}
+                        className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                    {loading ? "Submitting..." : "Confirm"}
+                </Button>
+            </DialogFooter>
+        </form>
     );
 }
 
-export function TopicDialog({setOpenDialog, qualifications, subjects }) {
+export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) {
     const [topic, setTopic] = useState("");
     const [selectedQualification, setSelectedQualification] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
@@ -195,16 +209,24 @@ export function TopicDialog({setOpenDialog, qualifications, subjects }) {
         try {
             await axios.post(`${apiUrl}/api/admin/topics/add`, payload, {
                 withCredentials: true,
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
             });
-
+            refetch()
             setOpenDialog(false); // Close the dialog on success
+            toast({
+                title: "Success!",
+                description: "The question has been added successfully!",
+                variant: "success",
+            })
         } catch (error) {
             console.error("Error submitting question:", error);
-            setErrorMessage("Failed to submit the topic. Please try again.");
+            toast({
+                title: "Error!",
+                description: "Failed to submit the question, please try again.",
+                variant: "destructive",
+            })
         } finally {
             setLoading(false);
-            window.location.reload();
         }
     };
 
@@ -213,7 +235,7 @@ export function TopicDialog({setOpenDialog, qualifications, subjects }) {
             {/* Topic */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Topic</Label>
-                <Input className="col-span-3"  onChange={(e) => setTopic(e.target.value)} required />
+                <Input className="col-span-3" onChange={(e) => setTopic(e.target.value)} required/>
             </div>
 
             {/* Qualification Dropdown */}
@@ -226,7 +248,7 @@ export function TopicDialog({setOpenDialog, qualifications, subjects }) {
                     }}
                 >
                     <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                        <SelectValue placeholder="Select Qualification" />
+                        <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
                         {qualifications.map((q) => (
@@ -248,7 +270,8 @@ export function TopicDialog({setOpenDialog, qualifications, subjects }) {
                     disabled={!selectedQualification || filteredSubjects.length === 0}
                 >
                     <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                        <SelectValue placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"} />
+                        <SelectValue
+                            placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"}/>
                     </SelectTrigger>
                     <SelectContent>
                         {filteredSubjects.length > 0 ? (
@@ -263,19 +286,21 @@ export function TopicDialog({setOpenDialog, qualifications, subjects }) {
                     </SelectContent>
                 </Select>
             </div>
-             <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
-                        Cancel
-                    </Button>
-                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
-                        {loading ? "Submitting..." : "Confirm"}
-                    </Button>
+            <DialogFooter>
+                <Button type="button" onClick={() => setOpenDialog(false)}
+                        className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={loading}
+                        className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                    {loading ? "Submitting..." : "Confirm"}
+                </Button>
             </DialogFooter>
         </form>
     )
 }
 
-export function SubjectDialog({setOpenDialog, qualifications }) {
+export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
     const [subject, setSubject] = useState("");
     const [selectedQualification, setSelectedQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -284,7 +309,7 @@ export function SubjectDialog({setOpenDialog, qualifications }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!subject || !selectedQualification ) {
+        if (!subject || !selectedQualification) {
             setErrorMessage("Please fill out all fields before submitting.");
             return;
         }
@@ -300,16 +325,24 @@ export function SubjectDialog({setOpenDialog, qualifications }) {
         try {
             await axios.post(`${apiUrl}/api/admin/subjects/add`, payload, {
                 withCredentials: true,
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
             });
-
+            refetch()
             setOpenDialog(false); // Close the dialog on success
+            toast({
+                title: "Success!",
+                description: "The question has been added successfully!",
+                variant: "success",
+            })
         } catch (error) {
             console.error("Error submitting question:", error);
-            setErrorMessage("Failed to submit the subject. Please try again.");
+            toast({
+                title: "Error!",
+                description: "Failed to submit the question, please try again.",
+                variant: "destructive",
+            })
         } finally {
             setLoading(false);
-            window.location.reload();
         }
     };
 
@@ -318,7 +351,7 @@ export function SubjectDialog({setOpenDialog, qualifications }) {
             {/* Topic */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Subject</Label>
-                <Input className="col-span-3"  onChange={(e) => setSubject(e.target.value)} required />
+                <Input className="col-span-3" onChange={(e) => setSubject(e.target.value)} required/>
             </div>
 
             {/* Qualification Dropdown */}
@@ -330,7 +363,7 @@ export function SubjectDialog({setOpenDialog, qualifications }) {
                     }}
                 >
                     <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
-                        <SelectValue placeholder="Select Qualification" />
+                        <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
                         {qualifications.map((q) => (
@@ -342,19 +375,21 @@ export function SubjectDialog({setOpenDialog, qualifications }) {
                 </Select>
             </div>
 
-             <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
-                        Cancel
-                    </Button>
-                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
-                        {loading ? "Submitting..." : "Confirm"}
-                    </Button>
+            <DialogFooter>
+                <Button type="button" onClick={() => setOpenDialog(false)}
+                        className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={loading}
+                        className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                    {loading ? "Submitting..." : "Confirm"}
+                </Button>
             </DialogFooter>
         </form>
     )
 }
 
-export function QualificationDialog({setOpenDialog }) {
+export function QualificationDialog({setOpenDialog, refetch}) {
     const [qualification, setQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
@@ -377,16 +412,24 @@ export function QualificationDialog({setOpenDialog }) {
         try {
             await axios.post(`${apiUrl}/api/admin/qualifications/add`, payload, {
                 withCredentials: true,
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
             });
-
+            refetch()
             setOpenDialog(false); // Close the dialog on success
+            toast({
+                title: "Success!",
+                description: "The question has been added successfully!",
+                variant: "success",
+            })
         } catch (error) {
             console.error("Error submitting qualification:", error);
-            setErrorMessage("Failed to submit the qualification. Please try again.");
+            toast({
+                title: "Error!",
+                description: "Failed to submit the question, please try again.",
+                variant: "destructive",
+            })
         } finally {
             setLoading(false);
-            window.location.reload();
         }
     };
 
@@ -395,22 +438,24 @@ export function QualificationDialog({setOpenDialog }) {
             {/* Topic */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label className="text-right">Qualification</Label>
-                <Input className="col-span-3"  onChange={(e) => setQualification(e.target.value)} required />
+                <Input className="col-span-3" onChange={(e) => setQualification(e.target.value)} required/>
             </div>
 
-             <DialogFooter>
-                    <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
-                        Cancel
-                    </Button>
-                    <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
-                        {loading ? "Submitting..." : "Confirm"}
-                    </Button>
+            <DialogFooter>
+                <Button type="button" onClick={() => setOpenDialog(false)}
+                        className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                    Cancel
+                </Button>
+                <Button type="submit" disabled={loading}
+                        className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                    {loading ? "Submitting..." : "Confirm"}
+                </Button>
             </DialogFooter>
         </form>
     )
 }
 
-export function UserDialog({setOpenDialog, qualifications }) {
+export function UserDialog({setOpenDialog, qualifications, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -441,16 +486,24 @@ export function UserDialog({setOpenDialog, qualifications }) {
         try {
             await axios.post(`${apiUrl}/api/auth/register`, payload, {
                 withCredentials: true,
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
             });
-
+            refetch()
             setOpenDialog(false); // Close the dialog on success
+            toast({
+                title: "Success!",
+                description: "The question has been added successfully!",
+                variant: "success",
+            })
         } catch (error) {
             console.error("Error registering user:", error);
-            setErrorMessage("Failed to register the user. Please try again.");
+            toast({
+                title: "Error!",
+                description: "Failed to submit the question, please try again.",
+                variant: "destructive",
+            })
         } finally {
             setLoading(false);
-            window.location.reload();
         }
     };
 
@@ -519,10 +572,12 @@ export function UserDialog({setOpenDialog, qualifications }) {
 
             {/* Footer Buttons */}
             <DialogFooter>
-                <Button type="button" onClick={() => setOpenDialog(false)} className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
+                <Button type="button" onClick={() => setOpenDialog(false)}
+                        className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
-                <Button type="submit" disabled={loading} className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
+                <Button type="submit" disabled={loading}
+                        className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
             </DialogFooter>

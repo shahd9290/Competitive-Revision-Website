@@ -13,16 +13,16 @@ import {topicColumns} from "@/components/TableColumns";
 const TopicsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [topics, setTopics] = useState([]);
-    useEffect(() => {
-        const topicsReq = async() => {
-            try {
-                const response = await axios.get(`${apiUrl}/api/admin/topics/get`, {withCredentials: true});
-                setTopics(response.data);
-            }
-            catch (error:any) {
-                setTopics([]);
-            }
+    const topicsReq = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/topics/get`, {withCredentials: true});
+            setTopics(response.data);
         }
+        catch (error:any) {
+            setTopics([]);
+        }
+    }
+    useEffect(() => {
         topicsReq();
     }, []);
     return (
@@ -31,7 +31,7 @@ const TopicsDash = () => {
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Topics</h1>
                 {topics && topics.length > 0 ? (
                     <div className="container mx-auto">
-                        <DataTable columns={topicColumns} data={topics} name={"Topic"}/>
+                        <DataTable columns={topicColumns(topicsReq)} data={topics} name={"Topic"} refetch={topicsReq}/>
                     </div>
                 ) : (
                     <div className="flex justify-center items-center align-middle text-center">

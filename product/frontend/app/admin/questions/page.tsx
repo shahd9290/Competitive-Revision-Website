@@ -13,16 +13,18 @@ import {questionColumns} from "@/components/TableColumns";
 const QuestionsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [questions, setQuestions] = useState([]);
-    useEffect(() => {
-        const questionsReq = async() => {
-            try {
-                const response = await axios.get(`${apiUrl}/api/admin/questions/get`, {withCredentials: true});
-                setQuestions(response.data);
-            }
-            catch (error:any) {
-                setQuestions([]);
-            }
+
+    const questionsReq = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/questions/get`, {withCredentials: true});
+            setQuestions(response.data);
         }
+        catch (error:any) {
+            setQuestions([]);
+        }
+    }
+
+    useEffect(() => {
         questionsReq();
     }, []);
     return (
@@ -31,7 +33,7 @@ const QuestionsDash = () => {
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Questions</h1>
                 {questions && questions.length > 0 ? (
                     <div className="container mx-auto">
-                        <DataTable columns={questionColumns} data={questions} name={"Question"}/>
+                        <DataTable columns={questionColumns(questionsReq)} data={questions} name={"Question"} refetch={questionsReq}/>
                     </div>
                 ) : (
                     <div className="flex justify-center items-center align-middle text-center">

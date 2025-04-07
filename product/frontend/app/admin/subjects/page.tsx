@@ -13,16 +13,16 @@ import {subjectColumns} from "@/components/TableColumns";
 const SubjectsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [subjects, setSubjects] = useState([]);
-    useEffect(() => {
-        const subjectsReq = async() => {
-            try {
-                const response = await axios.get(`${apiUrl}/api/admin/subjects/get`, {withCredentials: true});
-                setSubjects(response.data);
-            }
-            catch (error:any) {
-                setSubjects([]);
-            }
+    const subjectsReq = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/subjects/get`, {withCredentials: true});
+            setSubjects(response.data);
         }
+        catch (error:any) {
+            setSubjects([]);
+        }
+    }
+    useEffect(() => {
         subjectsReq();
     }, []);
     return (
@@ -31,7 +31,7 @@ const SubjectsDash = () => {
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Subjects</h1>
                 {subjects && subjects.length > 0 ? (
                     <div className="container mx-auto">
-                        <DataTable columns={subjectColumns} data={subjects} name={"Subject"}/>
+                        <DataTable columns={subjectColumns(subjectsReq)} data={subjects} name={"Subject"} refetch={subjectsReq}/>
                     </div>
                 ) : (
                     <div className="flex justify-center items-center align-middle text-center">

@@ -13,16 +13,16 @@ import {qualificationsColumns} from "@/components/TableColumns";
 const QualificationsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [qualifications, setQualifications] = useState([]);
-    useEffect(() => {
-        const qualsReq = async() => {
-            try {
-                const response = await axios.get(`${apiUrl}/api/admin/qualifications/get`, {withCredentials: true});
-                setQualifications(response.data);
-            }
-            catch (error:any) {
-                setQualifications([]);
-            }
+    const qualsReq = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/qualifications/get`, {withCredentials: true});
+            setQualifications(response.data);
         }
+        catch (error:any) {
+            setQualifications([]);
+        }
+    }
+    useEffect(() => {
         qualsReq();
     }, []);
     return (
@@ -31,7 +31,7 @@ const QualificationsDash = () => {
             <h1 className="flex items-center justify-center align-middle text-4xl p-6">Qualifications</h1>
             {qualifications && qualifications.length > 0 ? (
                 <div className="container mx-auto">
-                    <DataTable columns={qualificationsColumns} data={qualifications} name={"Qualification"}/>
+                    <DataTable columns={qualificationsColumns(qualsReq)} data={qualifications} name={"Qualification"} refetch={qualsReq}/>
                 </div>
             ) : (
                 <div className="flex justify-center items-center align-middle text-center">

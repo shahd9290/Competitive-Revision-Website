@@ -14,17 +14,16 @@ import {Button} from "@/components/ui/button";
 const UsersDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        const usersReq = async() => {
-            try {
-                const response = await axios.get(`${apiUrl}/api/admin/users/get`, {withCredentials: true});
-                setUsers(response.data);
-            }
-            catch (error:any) {
-                setUsers([]);
-            }
+    const usersReq = async() => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/users/get`, {withCredentials: true});
+            setUsers(response.data);
         }
+        catch (error:any) {
+            setUsers([]);
+        }
+    }
+    useEffect(() => {
         usersReq();
     }, []);
 
@@ -34,7 +33,7 @@ const UsersDash = () => {
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Users</h1>
                 {users && users.length > 0 ? (
                     <div className="container mx-auto">
-                        <DataTable columns={usersColumns} data={users} name={"User"}/>
+                        <DataTable columns={usersColumns(usersReq)} data={users} name={"User"} refetch={usersReq}/>
                     </div>
                 ) : (
                     <div className="flex justify-center items-center align-middle text-center">

@@ -7,9 +7,10 @@ import {useEffect, useState} from "react";
 import {CancelUnsavedDialog} from "@/components/DialogPrompts";
 import axios from "axios";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {toast} from "@/hooks/use-toast";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export function EditQuestion({open, setOpen, row}) {
+export function EditQuestion({open, setOpen, row, refetch}) {
     const [id, setId] = useState(0);
     const [question, setQuestion] = useState("");
     const [answer, setAnswer] = useState("");
@@ -54,14 +55,23 @@ export function EditQuestion({open, setOpen, row}) {
                     withCredentials: true,
                     headers: {"Content-Type": "application/json"},
                 });
+                refetch()
 
                 setOpen(false); // Close the dialog on success
+                toast({
+                    title: "Success!",
+                    description: "The question has been edited successfully!",
+                    variant: "success",
+                })
             } catch (error) {
                 console.error("Error editing question:", error);
-                setErrorMessage("Failed to edit the question. Please try again.");
+                toast({
+                    title: "Error!",
+                    description: "Failed to edit the question, please try again.",
+                    variant: "destructive",
+                })
             } finally {
                 setLoading(false);
-                window.location.reload();
             }
         }
     }
@@ -133,7 +143,7 @@ export function EditQuestion({open, setOpen, row}) {
     )
 }
 
-export function EditQualification({open, setOpen, row}) {
+export function EditQualification({open, setOpen, row, refetch}) {
     const [id, setId] = useState(0);
     const [qualification, setQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -172,14 +182,23 @@ export function EditQualification({open, setOpen, row}) {
                     withCredentials: true,
                     headers: {"Content-Type": "application/json"},
                 });
+                refetch()
 
                 setOpen(false); // Close the dialog on success
+                toast({
+                    title: "Success!",
+                    description: "The qualification has been edited successfully!",
+                    variant: "success",
+                })
             } catch (error) {
                 console.error("Error editing qualification:", error);
-                setErrorMessage("Failed to edit the qualification. Please try again.");
+                toast({
+                    title: "Error!",
+                    description: "Failed to edit the qualification, please try again.",
+                    variant: "destructive",
+                })
             } finally {
                 setLoading(false);
-                window.location.reload();
             }
         }
     }
@@ -233,7 +252,7 @@ export function EditQualification({open, setOpen, row}) {
     )
 }
 
-export function EditUser({open, setOpen, row, qualifications}) {
+export function EditUser({open, setOpen, row, qualifications, refetch}) {
     const [id, setId] = useState(0);
     const [qualification, setQualification] = useState("");
     const [username, setUsername] = useState("");
@@ -288,14 +307,23 @@ export function EditUser({open, setOpen, row, qualifications}) {
                     withCredentials: true,
                     headers: {"Content-Type": "application/json"},
                 });
+                refetch()
 
                 setOpen(false); // Close the dialog on success
+                toast({
+                    title: "Success!",
+                    description: "The user has been edited successfully!",
+                    variant: "success",
+                })
             } catch (error) {
                 console.error("Error editing qualification:", error);
-                setErrorMessage("Failed to edit the qualification. Please try again.");
+                toast({
+                    title: "Error!",
+                    description: "Failed to edit the user, please try again.",
+                    variant: "destructive",
+                })
             } finally {
                 setLoading(false);
-                window.location.reload();
             }
         }
     }
@@ -407,7 +435,7 @@ export function EditUser({open, setOpen, row, qualifications}) {
     )
 }
 
-export function EditSubject({open, setOpen, row, qualifications }) {
+export function EditSubject({open, setOpen, row, qualifications, refetch}) {
     const [id, setId] = useState(0);
     const [subject, setSubject] = useState("");
     const [qualification, setQualification] = useState("");
@@ -449,14 +477,22 @@ export function EditSubject({open, setOpen, row, qualifications }) {
                     withCredentials: true,
                     headers: {"Content-Type": "application/json"},
                 });
-
+                refetch()
                 setOpen(false); // Close the dialog on success
+                toast({
+                    title: "Success!",
+                    description: "The subject has been edited successfully!",
+                    variant: "success",
+                })
             } catch (error) {
                 console.error("Error editing subject:", error);
-                setErrorMessage("Failed to edit the subject. Please try again.");
+                toast({
+                    title: "Error!",
+                    description: "Failed to edit the subject, please try again.",
+                    variant: "destructive",
+                })
             } finally {
                 setLoading(false);
-                window.location.reload();
             }
         }
     }
@@ -526,7 +562,7 @@ export function EditSubject({open, setOpen, row, qualifications }) {
     )
 }
 
-export function EditTopic({open, setOpen, row, qualifications, subjects}) {
+export function EditTopic({open, setOpen, row, qualifications, subjects, refetch}) {
     const [id, setId] = useState(0)
     const [topic, setTopic] = useState("");
     const [qualification, setQualification] = useState("");
@@ -574,14 +610,22 @@ export function EditTopic({open, setOpen, row, qualifications, subjects}) {
                     withCredentials: true,
                     headers: {"Content-Type": "application/json"},
                 });
-
+                refetch()
                 setOpen(false); // Close the dialog on success
+                toast({
+                    title: "Success!",
+                    description: "The topic has been edited successfully!",
+                    variant: "success",
+                })
             } catch (error) {
                 console.error("Error editing topic:", error);
-                setErrorMessage("Failed to edit the topic. Please try again.");
+                toast({
+                    title: "Error!",
+                    description: "Failed to edit the topic, please try again.",
+                    variant: "destructive",
+                })
             } finally {
                 setLoading(false);
-                window.location.reload();
             }
         }
     }

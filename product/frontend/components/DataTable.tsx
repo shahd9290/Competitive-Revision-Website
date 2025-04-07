@@ -33,12 +33,14 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     name: string
+    refetch: () => void
 }
 
 export function DataTable<TData, TValue>({
     data,
     columns,
-    name
+    name,
+    refetch,
  }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [globalFilter, setGlobalFilter] = useState("")
@@ -97,6 +99,7 @@ export function DataTable<TData, TValue>({
                     qualifications={qualifications}
                     subjects={subjects}
                     topics={topics}
+                    refetch={refetch}
                 />
             case "Topic":
                  return <TopicDialog
@@ -104,23 +107,27 @@ export function DataTable<TData, TValue>({
                      setOpenDialog={setOpenDialog}
                      qualifications={qualifications}
                      subjects={subjects}
+                     refetch={refetch}
                  />
             case "Subject":
                  return <SubjectDialog
                      openDialog={openDialog}
                      setOpenDialog={setOpenDialog}
                      qualifications={qualifications}
+                     refetch={refetch}
                  />
             case "Qualification":
                  return <QualificationDialog
                      openDialog={openDialog}
                      setOpenDialog={setOpenDialog}
+                     refetch={refetch}
                  />
             case "User":
                  return <UserDialog
                      openDialog={openDialog}
                      setOpenDialog={setOpenDialog}
                      qualifications={qualifications}
+                     refetch={refetch}
                  />
             default:
                 console.log("This shouldn't have happened!");

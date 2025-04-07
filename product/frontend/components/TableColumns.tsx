@@ -7,6 +7,7 @@ import {useState} from "react";
 import axios from "axios";
 import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
 import {EditQualification, EditQuestion, EditSubject, EditTopic, EditUser} from "@/components/EditDialogPrompts";
+import {toast} from "@/hooks/use-toast";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -24,7 +25,7 @@ export const attemptColumns: ColumnDef<Attempt>[] = [
         header: "Score",
     },
 ]
-export const usersColumns: ColumnDef<User>[] = [
+export const usersColumns = (refetch) : ColumnDef<User>[] => [
     {
         accessorKey: "username",
         header: ({column}) => {
@@ -112,13 +113,22 @@ export const usersColumns: ColumnDef<User>[] = [
                         data: payload,
                         withCredentials: true,
                     });
+                    refetch()
                     setDialogOpen(false);
+                    toast({
+                        title: "Success!",
+                        description: "The user has been deleted successfully!",
+                        variant: "success",
+                    })
                 } catch (error) {
                     console.error("Error deleting User:", error);
-                    alert("Failed to delete User.");
+                    toast({
+                        title: "Error!",
+                        description: "Failed to delete user, please try again later.",
+                        variant: "destructive",
+                    })
                 } finally {
                     setLoading(false);
-                    window.location.reload();
                 }
             };
             return (
@@ -143,13 +153,14 @@ export const usersColumns: ColumnDef<User>[] = [
                         setOpen={setEditOpen}
                         row={row.original}
                         qualifications={qualifications}
+                        refetch={refetch}
                     />
                 </div>
             );
         },
     },
 ]
-export const topicColumns: ColumnDef<Topic>[] = [
+export const topicColumns = (refetch): ColumnDef<Topic>[] => [
     {
         accessorKey: "name",
         header: ({column}) => {
@@ -219,7 +230,11 @@ export const topicColumns: ColumnDef<Topic>[] = [
             const handleDelete = async () => {
                 // Get Question Count.
                 if (topic.questionCount > 0) {
-                    alert("Topic cannot be deleted when Questions are present.")
+                    toast({
+                        title: "Error!",
+                        description: "Topic cannot be deleted when Questions are present.",
+                        variant: "destructive",
+                    })
                     return
                 }
                 setLoading(true);
@@ -230,13 +245,22 @@ export const topicColumns: ColumnDef<Topic>[] = [
                         data: payload,
                         withCredentials: true,
                     });
+                    refetch()
                     setDialogOpen(false);
+                    toast({
+                        title: "Success!",
+                        description: "The topic has been deleted successfully!",
+                        variant: "success",
+                    })
                 } catch (error) {
                     console.error("Error deleting Topic:", error);
-                    alert("Failed to delete Topic.");
+                    toast({
+                        title: "Error!",
+                        description: "Failed to delete topic, please try again later.",
+                        variant: "destructive",
+                    })
                 } finally {
                     setLoading(false);
-                    window.location.reload();
                 }
             };
 
@@ -264,13 +288,14 @@ export const topicColumns: ColumnDef<Topic>[] = [
                         row={topic}
                         qualifications={qualifications}
                         subjects={subjects}
+                        refetch={refetch}
                     />
                 </div>
             );
         },
     },
 ]
-export const subjectColumns: ColumnDef<Subject>[] = [
+export const subjectColumns = (refetch): ColumnDef<Subject>[] => [
     {
         accessorKey: "name",
         header: ({column}) => {
@@ -323,7 +348,11 @@ export const subjectColumns: ColumnDef<Subject>[] = [
             const [qualifications, setQualifications] = useState<any[]>([]);
             const handleDelete = async () => {
                 if (subject.topicNum > 0) {
-                    alert("Subject cannot be deleted when Topics are present.")
+                    toast({
+                        title: "Error!",
+                        description: "Subject cannot be deleted when Topics are present.",
+                        variant: "destructive",
+                    })
                     return
                 }
                 setLoading(true);
@@ -333,13 +362,22 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                         data: payload,
                         withCredentials: true,
                     });
+                    refetch();
                     setDialogOpen(false);
+                    toast({
+                        title: "Success!",
+                        description: "The subject has been deleted successfully!",
+                        variant: "success",
+                    })
                 } catch (error) {
                     console.error("Error deleting Subject:", error);
-                    alert("Failed to delete Subject.");
+                    toast({
+                        title: "Error!",
+                        description: "Failed to delete subject, please try again later.",
+                        variant: "destructive",
+                    })
                 } finally {
                     setLoading(false);
-                    window.location.reload();
                 }
             };
 
@@ -365,13 +403,14 @@ export const subjectColumns: ColumnDef<Subject>[] = [
                         setOpen={setEditOpen}
                         row = {row.original}
                         qualifications={qualifications}
+                        refetch={refetch}
                     />
                 </div>
             );
         },
     },
 ]
-export const questionColumns: ColumnDef<Question>[] = [
+export const questionColumns = (refetch): ColumnDef<Question>[] => [
     {
         accessorKey: "subject",
         header: ({column}) => {
@@ -438,13 +477,22 @@ export const questionColumns: ColumnDef<Question>[] = [
                         data: payload,
                         withCredentials: true,
                     });
+                    refetch();
                     setDialogOpen(false);
+                    toast({
+                        title: "Success!",
+                        description: "The question has been deleted successfully!",
+                        variant: "success",
+                    })
                 } catch (error) {
                     console.error("Error deleting Question:", error);
-                    alert("Failed to delete Question.");
+                    toast({
+                        title: "Error!",
+                        description: "Failed to delete question, please try again.",
+                        variant: "destructive",
+                    })
                 } finally {
                     setLoading(false);
-                    window.location.reload();
                 }
             };
 
@@ -468,6 +516,7 @@ export const questionColumns: ColumnDef<Question>[] = [
                         open={editOpen}
                         setOpen={setEditOpen}
                         row={row.original}
+                        refetch={refetch}
                     />
 
                 </div>
@@ -475,7 +524,7 @@ export const questionColumns: ColumnDef<Question>[] = [
         },
     },
 ]
-export const qualificationsColumns: ColumnDef<Qualification>[] = [
+export const qualificationsColumns = (refetch): ColumnDef<Qualification>[] => [
     {
         accessorKey: "qualification",
         header: ({column}) => {
@@ -528,7 +577,11 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
 
             const handleDelete = async () => {
                 if (qualification.subjectsNum > 0 || qualification.usersNum > 0) {
-                    alert("Qualification cannot be deleted when Subjects and Users are present.")
+                    toast({
+                        title: "Error!",
+                        description: "Qualification cannot be deleted when Subjects and Users are present.",
+                        variant: "destructive",
+                    })
                     return
                 }
                 setLoading(true);
@@ -538,13 +591,22 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                         data: payload,
                         withCredentials: true,
                     });
+                    refetch()
                     setDialogOpen(false);
+                    toast({
+                        title: "Success!",
+                        description: "The qualification has been deleted successfully!",
+                        variant: "success",
+                    })
                 } catch (error) {
                     console.error("Error deleting qualification:", error);
-                    alert("Failed to delete qualification.");
+                    toast({
+                        title: "Error!",
+                        description: "Failed to delete qualification, please try again later.",
+                        variant: "destructive",
+                    })
                 } finally {
                     setLoading(false);
-                    window.location.reload();
                 }
             };
 
@@ -567,6 +629,7 @@ export const qualificationsColumns: ColumnDef<Qualification>[] = [
                         open={editOpen}
                         setOpen={setEditOpen}
                         row={row.original}
+                        refetch={refetch}
                     />
                 </div>
             );
