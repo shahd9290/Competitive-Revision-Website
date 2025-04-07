@@ -1,11 +1,14 @@
 package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.user.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationRequestDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationResponseDto;
+import danyal.fyp.awd.exception.AdminException;
+import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,10 @@ public class AuthenticationService {
 
     private final RefreshTokenService refreshTokenService;
 
+    private Authentication authentication;
+
+    private User user;
+
     /**
      * Authenticates a user and generates an access token.
      *
@@ -35,13 +42,16 @@ public class AuthenticationService {
      * @return an {@link AuthenticationResponseDto} containing the generated access token.
      * @throws UsernameNotFoundException if the user does not exist.
      */
-    public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request) {
+    public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request) throws AdminException {
         final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
         final var authentication = authenticationManager.authenticate(authToken);
 
-        final var accessToken = jwtService.generateToken(request.username());
+        final var accessToken = jwtService.generateToken((JpaUserDetails) authentication.getPrincipal());
 
         final var user = userRepository.findByUsername(request.username()).orElse(null);
+
+        if (!user.getRoles().stream().findFirst().get().getName().equals(request.role()))
+            throw new AdminException("User is not authorised to view this page.");
         // Check if valid refresh token is in database.
         // If not (expired or non-existent) then create one
         // Otherwise ignore and continue

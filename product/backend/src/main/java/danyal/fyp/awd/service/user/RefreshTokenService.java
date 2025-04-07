@@ -1,6 +1,6 @@
 package danyal.fyp.awd.service.user;
 
-import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationResponseDto;
 import danyal.fyp.awd.model.user.RefreshToken;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.RefreshTokenRepository;
@@ -50,13 +50,14 @@ public class RefreshTokenService {
      * @return an {@link AuthenticationResponseDto} containing the new access token.
      */
     public AuthenticationResponseDto refreshToken(String accessToken) {
-        User user = userService.getUserByUsername(jwtService.extractUsernameFromToken(accessToken));
+        User user = userService.getUserByUsername(jwtService.getUserNameFromJwtToken(accessToken));
         // Checks expiry data is valid.
         if (hasInvalidRefreshToken(user))
             // No token found? Somehow? Brand new one then
             createToken(user);
 
-        final var newAccessToken = jwtService.generateToken(user.getUsername());
+        final var newAccessToken = jwtService.generateToken(user.toJpaUserDetails());
+
         return new AuthenticationResponseDto(newAccessToken);
     }
 

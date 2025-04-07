@@ -1,8 +1,7 @@
 package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
-import danyal.fyp.awd.dto.user.RefreshResponseDto;
-import danyal.fyp.awd.dto.user.RefreshTokenDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationResponseDto;
+import danyal.fyp.awd.dto.user.refresh.RefreshResponseDto;
 import danyal.fyp.awd.service.user.CookieService;
 import danyal.fyp.awd.service.user.RefreshTokenService;
 import lombok.RequiredArgsConstructor;

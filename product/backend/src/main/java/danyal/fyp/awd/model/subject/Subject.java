@@ -61,4 +61,18 @@ public class Subject {
         qualifications.add(qualification);
     }
 
+    public void removeQual(Qualification qualification) {
+        qualifications.remove(qualification);
+    }
+
+    public void setQualification(Qualification qualification) {
+        if (!qualifications.isEmpty()) {
+            qualifications.remove(qualifications.iterator().next());
+        }
+        qualifications.add(qualification);
+    }
+
+    public Qualification getQualification() {
+        return qualifications.iterator().next();
+    }
 }

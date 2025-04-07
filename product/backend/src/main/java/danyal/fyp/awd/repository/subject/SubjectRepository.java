@@ -1,5 +1,6 @@
 package danyal.fyp.awd.repository.subject;
 
+import danyal.fyp.awd.dto.admin.subject.SubjectDataDto;
 import danyal.fyp.awd.model.subject.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +35,13 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
      */
     @Query("SELECT s FROM Subject s WHERE s.name = :name")
     Optional<Subject> findByName(String name);
+
+    @Query("SELECT new danyal.fyp.awd.dto.admin.subject.SubjectDataDto(" +
+            "s.id, s.name, cast(count(t) as int), q.name) " +
+            "from Subject s " +
+            "left join s.qualifications q " +
+            "left join s.topics t on t.qualification = q " +
+            "group by s.id, s.name, q.name " +
+            "order by s.name asc")
+    List<SubjectDataDto> findAllDetails();
 }

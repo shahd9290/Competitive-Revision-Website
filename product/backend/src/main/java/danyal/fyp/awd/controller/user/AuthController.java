@@ -1,7 +1,8 @@
 package danyal.fyp.awd.controller.user;
 
-import danyal.fyp.awd.dto.user.AuthenticationRequestDto;
-import danyal.fyp.awd.dto.user.AuthenticationResponseDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationRequestDto;
+import danyal.fyp.awd.dto.user.auth.AuthenticationResponseDto;
+import danyal.fyp.awd.exception.AdminException;
 import danyal.fyp.awd.service.user.AuthenticationService;
 import danyal.fyp.awd.service.user.CookieService;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,13 @@ public class AuthController {
             AuthenticationResponseDto response = authenticationService.authenticate(authenticationRequestDto);
             ResponseCookie cookie = cookieService.createTokenCookie(response.accessToken());
             ResponseCookie cookieExpire = cookieService.createTimerCookie();
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully");
-        } catch (Exception e) {
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString(), cookieExpire.toString()).body("User logged in successfully.");
+        }
+        catch (AdminException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.badRequest().body("Username or password is incorrect.");
         }
     }
-
 }

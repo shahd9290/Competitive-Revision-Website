@@ -1,13 +1,20 @@
 package danyal.fyp.awd.service.user;
 
+import danyal.fyp.awd.dto.admin.user.UserDataDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
+import danyal.fyp.awd.model.subject.Question;
 import danyal.fyp.awd.model.user.User;
+import danyal.fyp.awd.repository.user.UserAttemptsRepository;
 import danyal.fyp.awd.repository.user.UserRepository;
 import danyal.fyp.awd.service.subject.QualificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.GONE;
 
@@ -54,10 +61,22 @@ public class UserService {
     }
 
     public int updateMarks(String token, int marks) {
-        String name = jwtService.extractUsernameFromToken(token);
+        String name = jwtService.getUserNameFromJwtToken(token);
         User user = getUserByUsername(name);
         user.setMarks(user.getMarks() + marks);
         userRepository.save(user);
         return user.getMarks();
+    }
+
+    public List<UserDataDto> getAllUsers() {
+        return userRepository.getUserData();
+    }
+
+    public User getUserById(UUID userId) {
+        return userRepository.findById(userId).get();
+    }
+
+    public int countUsers() {
+        return (int) userRepository.count();
     }
 }

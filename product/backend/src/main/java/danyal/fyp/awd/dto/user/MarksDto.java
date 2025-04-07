@@ -1,4 +1,0 @@
-package danyal.fyp.awd.dto.user;
-
-public record MarksDto(int marks, int topicId, double proportion) {
-}

@@ -1,11 +1,13 @@
 package danyal.fyp.awd.repository.user;
 
+import danyal.fyp.awd.dto.admin.user.UserDataDto;
 import danyal.fyp.awd.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,4 +51,12 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      */
     @Query("SELECT u.qualificationId FROM User u WHERE u.username = :username")
     int findQualificationIdByUsername(@Param("username") String username);
+
+    @Query("SELECT new danyal.fyp.awd.dto.admin.user.UserDataDto(" +
+            "u.id, u.username, u.email, r.name, u.createdAt, q.name)" +
+            "FROM User u " +
+            "LEFT JOIN Role r on r MEMBER OF u.roles " +
+            "LEFT JOIN Qualification q ON u.qualificationId = q.id " +
+            "ORDER BY u.id asc")
+    List<UserDataDto> getUserData();
 }

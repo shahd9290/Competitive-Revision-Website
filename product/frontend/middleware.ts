@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 /**
  * Configuration for middleware matcher.
@@ -7,7 +8,7 @@ import axios from "axios";
  * Defines routes where this middleware should be applied.
  */
 export const config = {
-    matcher: [ '/', '/dashboard', '/subjects', '/logout', '/quiz']
+    matcher: [ '/', '/dashboard', '/subjects', '/logout', '/quiz', '/admin/:path*']
 }
 
 /**
@@ -22,21 +23,38 @@ export async function middleware(req: NextRequest) {
     console.log("Middleware Running");
 
     const tokenExpiry = req.cookies.get("tokenExpiry")?.value;
-    const response = NextResponse.next()
+    let response = NextResponse.next()
+
+
 
     // not found?
     if (req.url.endsWith('/logout')) {
+        response = NextResponse.redirect(new URL("/login", req.url))
         response.cookies.set("tokenExpiry", "0", {httpOnly: true, expires: new Date(0)});
         response.cookies.set("token", "", {httpOnly:true, expires: new Date(0)})
-
+        return response;
+    }
+    else if (req.nextUrl.pathname === "/admin/login" || req.nextUrl.pathname === "/login") {
+        return response
     }
     else if (tokenExpiry !== undefined && !req.url.endsWith('/')) {
-
+        console.log("Checking token!")
         const isExpired = checkExpiration(tokenExpiry);
+        const token = req.cookies.get("token")?.value;
         // time is up?
+
+        // @ts-ignore
+        const decoded: {role?:string; exp?:number;} = jwtDecode(token);
+
+        if (decoded.role !== "ROLE_ADMIN" && req.nextUrl.pathname.startsWith("/admin")) {
+            return new Response(null, {status: 403});
+        }
+        else if (decoded.role !== "ROLE_USER" && config.matcher.some(path=>!req.nextUrl.pathname.startsWith("/admin"))) {
+            return new Response(null, {status: 403});
+        }
+
         if (isExpired) {
             console.log("Token Expired!")
-            const token = req.cookies.get("token")?.value;
             await axios.post('http://localhost:8080/api/refresh/refresh-token', {},{
                 headers: {
                     'Cookie': `token=${token}`,
@@ -58,6 +76,8 @@ export async function middleware(req: NextRequest) {
 
         return response
     }
+    if (req.nextUrl.pathname.startsWith("/admin"))
+        return NextResponse.redirect(new URL("/admin/login", req.url));
     return NextResponse.redirect(new URL('/login', req.url));
 
 }
