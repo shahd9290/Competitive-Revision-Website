@@ -57,11 +57,46 @@ public class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("User logged in successfully."));
+
+        payload = new HashMap<>();
+        payload.put("username", "admin");
+        payload.put("password", "password");
+        payload.put("role", "ROLE_ADMIN");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("User logged in successfully."));
     }
 
     @Test
     public void loginFail() throws Exception {
         payload = new HashMap<>();
+        payload.put("username", "user");
+        payload.put("password", "password");
+        payload.put("role", "ROLE_ADMIN");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("User is not authorised to view this page."));
+
+        payload.put("username", "admin");
+        payload.put("password", "password");
+        payload.put("role", "ROLE_USER");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("User is not authorised to view this page."));
+
+         payload = new HashMap<>();
         payload.put("username", "user");
         payload.put("password", "incorrect");
 
@@ -97,6 +132,18 @@ public class AuthControllerTest {
         payload.put("email", "testing@test.com");
         payload.put("qualification", "GCSE");
         payload.put("role", "ROLE_USER");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("User Registered Successfully"));
+
+        payload = new HashMap<>();
+        payload.put("username", "administrator");
+        payload.put("password", "administrator");
+        payload.put("email", "administrator@test.com");
+        payload.put("role", "ROLE_ADMIN");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

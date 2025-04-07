@@ -17,10 +17,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -71,5 +71,21 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(1))
                 .andExpect(jsonPath("name").value("GCSE"));
+    }
+
+    @Test
+    public void updateMarks() throws Exception {
+        payload = new HashMap<>();
+        payload.put("marks",1);
+        payload.put("topicId",1);
+        payload.put("proportion",100.0);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/save-marks")
+                .header("Authorization","Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload))
+                .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1"));
     }
 }

@@ -67,7 +67,6 @@ public class UserRegistrationService {
     }
 
     public void editUser(UserEditDto userEditDto, String token) throws QualificationException {
-        // NEW EDIT MESSAGE NEXT
        User user = userRepository.findById(userEditDto.id()).get();
 
        String oldUsername = user.getUsername();

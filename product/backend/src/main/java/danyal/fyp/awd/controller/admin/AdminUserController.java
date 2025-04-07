@@ -20,30 +20,21 @@ public class AdminUserController {
 
     @GetMapping("/get")
     public ResponseEntity<Object> getUsers() {
-        try {
-            return ResponseEntity.ok(userService.getAllUsers());
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("An error occurred when fetching data");
-        }
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deleteUser(@CookieValue("token") String token, @RequestBody final UserDeleteDto deleteDto) {
-        try {
-            userAttemptsService.deleteAttempts(deleteDto.id());
-            userRegistrationService.deleteUser(deleteDto.id(), token);
-            return ResponseEntity.ok("User Deleted Successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Failed To Delete User");
-        }
+        userAttemptsService.deleteAttempts(deleteDto.id());
+        userRegistrationService.deleteUser(deleteDto.id(), token);
+        return ResponseEntity.ok("User Deleted Successfully");
     }
 
     @PostMapping("/edit")
     public ResponseEntity<String> editUser(@CookieValue("token") String token, @RequestBody final UserEditDto userEditDto) {
         try {
             userRegistrationService.editUser(userEditDto, token);
-            return ResponseEntity.ok("Qualification Edited Successfully");
+            return ResponseEntity.ok("User Edited Successfully");
         }
         catch (Exception e) {
             return  ResponseEntity.badRequest().body("Failed To Edit User");
