@@ -39,7 +39,7 @@ public class SubjectQualificationTest {
 
     @BeforeEach
     public void generateToken() {
-        token = jwtService.generateToken("user");
+        token = jwtService.generateToken("admin");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class SubjectQualificationTest {
         payload = new HashMap<>();
         payload.put("qualification","GCSEs");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/qualification/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -67,7 +67,7 @@ public class SubjectQualificationTest {
         payload = new HashMap<>();
         payload.put("qualification","GCSEs");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/qualification/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -98,7 +98,7 @@ public class SubjectQualificationTest {
         payload.put("name", "Mathematics");
         payload.put("qualification","GCSEs");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/subject/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -107,7 +107,7 @@ public class SubjectQualificationTest {
                 .andExpect(content().string("Created new subject"));
 
         // Test it can't be added again
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/subject/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -127,7 +127,7 @@ public class SubjectQualificationTest {
         payload.put("name", "Mathematics");
         payload.put("qualification","A-Levels");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/subject/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -144,7 +144,7 @@ public class SubjectQualificationTest {
         payload = new HashMap<>();
         payload.put("qualification","A-Levels");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/qualification/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -154,7 +154,7 @@ public class SubjectQualificationTest {
 
         payload.put("name", "Mathematics");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/subject/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))

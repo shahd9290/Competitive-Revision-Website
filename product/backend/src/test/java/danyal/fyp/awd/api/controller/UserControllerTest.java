@@ -53,7 +53,8 @@ public class UserControllerTest {
                 .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("username").value("user"))
-                .andExpect(jsonPath("email").value("test@test.com"));
+                .andExpect(jsonPath("marks").value(0))
+                .andExpect(jsonPath("attempts").exists());
     }
 
     @Test

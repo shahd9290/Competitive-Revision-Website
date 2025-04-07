@@ -47,13 +47,14 @@ public class AuthControllerTest {
         payload = new HashMap<>();
         payload.put("username", "user");
         payload.put("password", "password");
+        payload.put("role", "ROLE_USER");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User logged in successfully"));
+                .andExpect(content().string("User logged in successfully."));
     }
 
     @Test
@@ -93,13 +94,13 @@ public class AuthControllerTest {
         payload.put("password", "test");
         payload.put("email", "testing@test.com");
         payload.put("qualification", "GCSE");
+        payload.put("role", "ROLE_USER");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("test"))
-                .andExpect(jsonPath("$.email").value("testing@test.com"));
+                .andExpect(content().string("User Registered Successfully"));
     }
 
     @Test
@@ -109,6 +110,7 @@ public class AuthControllerTest {
         payload.put("password", "test");
         payload.put("email", "testing@test.com");
         payload.put("qualification", "GCSE");
+        payload.put("role", "ROLE_USER");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -125,6 +127,7 @@ public class AuthControllerTest {
         payload.put("password", "test");
         payload.put("email", "testing1@test.com");
         payload.put("qualification", "A-Levels");
+        payload.put("role", "ROLE_USER");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

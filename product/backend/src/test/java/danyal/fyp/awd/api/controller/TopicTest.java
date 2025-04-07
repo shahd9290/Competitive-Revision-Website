@@ -39,7 +39,7 @@ public class TopicTest {
 
     @BeforeAll
     public void setup() throws Exception {
-        token = jwtService.generateToken("user");
+        token = jwtService.generateToken("admin");
 
         tokenCookie = new Cookie("token", token);
 
@@ -47,7 +47,7 @@ public class TopicTest {
         payload.put("name", "Mathematics");
         payload.put("qualification", "GCSE");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/subject/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -63,7 +63,7 @@ public class TopicTest {
         payload.put("subject", "Mathematics");
         payload.put("qualification", "GCSE");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/topic/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/topics/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -81,7 +81,7 @@ public class TopicTest {
         payload.put("subject", "English");
         payload.put("qualification", "GCSE");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/topic/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/topics/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
@@ -99,7 +99,7 @@ public class TopicTest {
         payload.put("subject", "Mathematics");
         payload.put("qualification", "Bachelors");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/topic/add")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/topics/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
