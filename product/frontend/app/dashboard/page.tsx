@@ -4,6 +4,8 @@ import axios from "axios";
 import {SidebarMenu} from '@/components/ui/SidebarMenu';
 import {AttemptsTable} from "@/components/AttemptsTable";
 import {attemptColumns} from "@/components/TableColumns";
+import {Button} from "@/components/ui/button";
+import Link from "next/link";
 
 /**
  * A dashboard component displaying user information and statistics.
@@ -185,10 +187,9 @@ const Dashboard = () => {
                             ) : (
                                 <div className="flex flex-col justify-center items-center h-full text-center p-6">
                                     <p className="text-gray-500 mb-4">No recent attempts found.</p>
-                                    <button
-                                        className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-                                        Start a New Quiz
-                                    </button>
+                                    <Button className={"bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"} asChild>
+                                        <Link href="/subjects">Start a New Quiz</Link>
+                                    </Button>
                                 </div>
                             )}
                         </div>
