@@ -87,5 +87,15 @@ public class UserControllerTest {
                 .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/profile")
+                .header("Authorization","Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload))
+                .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("username").value("user"))
+                .andExpect(jsonPath("marks").value(1))
+                .andExpect(jsonPath("attempts").exists());
     }
 }
