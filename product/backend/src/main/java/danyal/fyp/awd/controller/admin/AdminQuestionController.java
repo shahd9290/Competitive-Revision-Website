@@ -27,19 +27,14 @@ public class AdminQuestionController {
 
     @GetMapping("/get")
     public ResponseEntity<Object> getQuestions() {
-        try {
-            return ResponseEntity.ok(questionService.getAllQuestions());
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("An error occurred when fetching data");
-        }
+        return ResponseEntity.ok(questionService.getAllQuestions());
     }
 
     @PostMapping("/edit")
     public ResponseEntity<String> editQuestion(@CookieValue("token") String token, @RequestBody QuestionEditDto questionEditDto) {
         try {
             questionService.editQuestion(questionEditDto, token);
-            return ResponseEntity.ok("Question added");
+            return ResponseEntity.ok("Question edited");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

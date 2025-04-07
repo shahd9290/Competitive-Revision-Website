@@ -48,9 +48,7 @@ public class QuestionService {
     }
 
     public QuestionGetDto getQuestions(int topicId) throws Exception {
-        Topic topic;
-        if ((topic = subjectTopicService.getTopic(topicId)) == null)
-            throw new TopicException("Topic not found");
+        Topic topic = subjectTopicService.getTopic(topicId);
 
         List<Question> questions = questionRepository.getQuestionByTopic(topic);
 

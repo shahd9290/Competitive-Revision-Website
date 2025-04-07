@@ -110,6 +110,51 @@ public class AdminSubjectTopicControllerTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Failed To Delete Subject"));
+
+    }
+
+    @Test
+    public void deleteTwoQuals() throws Exception {
+        payload = new HashMap<>();
+        payload.put("qualification", "A-Levels");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk());
+
+        payload = new HashMap<>();
+        payload.put("name", "Chemistry");
+        payload.put("qualification", "GCSE");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie));
+
+        payload = new HashMap<>();
+        payload.put("name", "Chemistry");
+        payload.put("qualification", "A-Levels");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie));
+
+        payload = new HashMap<>();
+        payload.put("id", 1);
+        payload.put("qualification", "A-Levels");
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/subjects/delete")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Subject Deleted Successfully"));
     }
 
     @Test

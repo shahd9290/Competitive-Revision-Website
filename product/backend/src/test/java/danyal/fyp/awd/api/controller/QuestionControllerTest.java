@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -73,9 +72,6 @@ public class QuestionControllerTest {
                 .content(objectMapper.writeValueAsString(topic))
                 .cookie(tokenCookie)).andReturn();
 
-        // Optional: extract topic ID (you might need to hit /topics/get if the add endpoint doesn’t return it)
-
-        // 4. Add a question
         Map<String, Object> question = new HashMap<>();
         question.put("question", "What is 2 + 2?");
         question.put("answer", "4");
@@ -84,9 +80,11 @@ public class QuestionControllerTest {
         question.put("qualification", "GCSE");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/questions/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(question))
-                .cookie(tokenCookie));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(question))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Question added"));
     }
 
     @Test
@@ -96,6 +94,29 @@ public class QuestionControllerTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.questions").exists());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/question/get?topicId=2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Topic does not exist"));
+
+        Map<String, Object> topic = new HashMap<>();
+        topic.put("name", "Arithmetic");
+        topic.put("subject", "Maths");
+        topic.put("qualification", "GCSE");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/topics/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(topic))
+                .cookie(tokenCookie)).andReturn();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/question/get?topicId=2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(tokenCookie))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("No Questions for this topic!"));
+
     }
 }
 
