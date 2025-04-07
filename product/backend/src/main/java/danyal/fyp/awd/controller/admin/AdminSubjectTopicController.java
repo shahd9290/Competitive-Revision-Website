@@ -67,12 +67,7 @@ public class AdminSubjectTopicController {
 
     @GetMapping("/subjects/get")
     public ResponseEntity<Object> getSubjects() {
-        try {
-            return ResponseEntity.ok(subjectTopicService.getAllSubjectsAdmin());
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("An error occurred when fetching data");
-        }
+        return ResponseEntity.ok(subjectTopicService.getAllSubjectsAdmin());
     }
 
     @DeleteMapping("/subjects/delete")
@@ -114,12 +109,7 @@ public class AdminSubjectTopicController {
 
     @GetMapping("/topics/get")
     public ResponseEntity<Object> getTopics() {
-        try {
-            return ResponseEntity.ok(subjectTopicService.getAllTopicsAdmin());
-        }
-        catch (Exception e){
-            return ResponseEntity.badRequest().body("An error occurred when fetching data");
-        }
+        return ResponseEntity.ok(subjectTopicService.getAllTopicsAdmin());
     }
 
     @DeleteMapping("/topics/delete")

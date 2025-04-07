@@ -189,10 +189,6 @@ public class SubjectTopicService {
         return topicRepository.findAllBySubjectIdAndQualificationId(subject, qualification);
     }
 
-    public List<Topic> getAllTopics() {
-        return topicRepository.findAll();
-    }
-
     public List<SubjectDataDto> getAllSubjectsAdmin() {
         return subjectRepository.findAllDetails();
     }

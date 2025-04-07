@@ -70,6 +70,14 @@ public class TopicTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Topic saved successfully"));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/topics/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Topic already exists"));
     }
 
     @Test
@@ -141,5 +149,21 @@ public class TopicTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("Binomials"));
+    }
+
+    @Test
+    public void getTopicTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/topic/get?topicId=1")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(tokenCookie))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(1));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/topic/get?topicId=2")
+                .header("Authorization", "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .cookie(tokenCookie))
+            .andExpect(status().isBadRequest());
     }
 }
