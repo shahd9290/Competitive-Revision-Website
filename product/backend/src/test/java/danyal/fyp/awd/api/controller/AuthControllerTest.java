@@ -4,6 +4,7 @@ package danyal.fyp.awd.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danyal.fyp.awd.service.user.JwtService;
 import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class AuthControllerTest {
 
     private Map<String, Object> payload;

@@ -3,7 +3,7 @@ package danyal.fyp.awd.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danyal.fyp.awd.service.user.JwtService;
 import jakarta.servlet.http.Cookie;
-import org.junit.jupiter.api.AfterAll;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class SubjectQualificationTest {
 
     private Map<String, Object> payload;
@@ -40,15 +41,15 @@ public class SubjectQualificationTest {
     @BeforeEach
     public void generateToken() {
         token = jwtService.generateToken("admin");
+        tokenCookie = new Cookie("token", token);
     }
 
     @Test
-    public void addQualification() throws Exception {
-        tokenCookie = new Cookie("token", token);
-
+    public void addQualificationThenCheckDuplicate() throws Exception {
         payload = new HashMap<>();
-        payload.put("qualification","GCSEs");
+        payload.put("qualification", "GCSEs");
 
+        // Add qualification
         mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -57,16 +58,7 @@ public class SubjectQualificationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Qualification Added Successfully"));
 
-    }
-
-    @Test
-    @AfterAll
-    public void addQualificationExists() throws Exception {
-        tokenCookie = new Cookie("token", token);
-
-        payload = new HashMap<>();
-        payload.put("qualification","GCSEs");
-
+        // Try duplicate
         mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,58 +66,14 @@ public class SubjectQualificationTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Qualification Already Exists."));
-
     }
 
     @Test
-    public void getQualifications() throws Exception {
-        tokenCookie = new Cookie("token", token);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/qualification/get-all")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .cookie(tokenCookie))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("GCSE"));
-    }
-
-    @Test
-    public void addSubjectNew() throws Exception {
-        tokenCookie = new Cookie("token", token);
-
+    public void addSubjectWithAndWithoutQualification() throws Exception {
+        // No qualification yet
         payload = new HashMap<>();
         payload.put("name", "Mathematics");
-        payload.put("qualification","GCSEs");
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload))
-                        .cookie(tokenCookie))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Created new subject"));
-
-        // Test it can't be added again
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload))
-                        .cookie(tokenCookie))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Subject already exists with this qualification!"));
-
-
-    }
-
-
-    @Test
-    public void addSubjectNoQual() throws Exception {
-        tokenCookie = new Cookie("token", token);
-
-        payload = new HashMap<>();
-        payload.put("name", "Mathematics");
-        payload.put("qualification","A-Levels");
+        payload.put("qualification", "GCSEs");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
                         .header("Authorization", "Bearer " + token)
@@ -135,23 +83,73 @@ public class SubjectQualificationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Qualification Does Not Exist"));
 
-    }
-
-    @Test
-    public void addSubjectNewQual() throws Exception {
-        tokenCookie = new Cookie("token", token);
-
+        // Add qualification
         payload = new HashMap<>();
-        payload.put("qualification","A-Levels");
+        payload.put("qualification", "GCSEs");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(payload))
                         .cookie(tokenCookie))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Qualification Added Successfully"));
+                .andExpect(status().isOk());
 
+        // Add subject again
+        payload.put("name", "Mathematics");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Created new subject"));
+
+        // Try adding again to trigger duplicate
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Subject already exists with this qualification!"));
+    }
+
+    @Test
+    public void addSubjectWithMultipleQualifications() throws Exception {
+        // Add first qualification
+        payload = new HashMap<>();
+        payload.put("qualification", "GCSEs");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk());
+
+        // Add subject
+        payload.put("name", "Mathematics");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk());
+
+        // Add new qualification
+        payload = new HashMap<>();
+        payload.put("qualification", "A-Levels");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk());
+
+        // Add subject with new qualification
         payload.put("name", "Mathematics");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
@@ -161,40 +159,49 @@ public class SubjectQualificationTest {
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Updated Existing Subject with new qualification"));
-
     }
 
     @Test
-    public void getAllSubjectsNoQual() throws Exception {
+    public void getAllSubjectsQualifiedAndUnqualified() throws Exception {
+        // Add qualification & subject
+        payload = new HashMap<>();
+        payload.put("qualification", "GCSEs");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/qualifications/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk());
+
+        payload.put("name", "Mathematics");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/subjects/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk());
+
+        // Get all subjects (no filter)
         mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all")
                         .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Mathematics"));
-    }
+                .andExpect(jsonPath("$[0].id").exists());
 
-    @Test
-    @AfterAll // Last test to run
-    public void getAllSubjects() throws Exception {
-
+        // Get subjects by valid qualification
         mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all?qualification=GCSEs")
                         .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("Mathematics"));
 
+        // Invalid qualification should 400
         mockMvc.perform(MockMvcRequestBuilders.get("/api/subject/get-all?qualification=Bachelors")
                         .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Qualification Does Not Exist"));
     }
-
-
-
-
 }

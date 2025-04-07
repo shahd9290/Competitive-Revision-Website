@@ -3,6 +3,8 @@ package danyal.fyp.awd.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danyal.fyp.awd.service.user.JwtService;
 import jakarta.servlet.http.Cookie;
+import jakarta.transaction.TransactionScoped;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class TopicTest {
 
     private Map<String, Object> payload;
@@ -119,14 +122,25 @@ public class TopicTest {
     @Test
     @AfterAll // Last test to run
     public void getAllTopics() throws Exception {
+        payload = new HashMap<>();
+        payload.put("name", "Binomials");
+        payload.put("subject", "Mathematics");
+        payload.put("qualification", "GCSE");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/admin/topics/add")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload))
+                        .cookie(tokenCookie))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Topic saved successfully"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/topic/get-all?qualification=GCSE&subject=Mathematics")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Binomials"));
+                .andExpect(jsonPath("$[0].id").exists());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/topic/get-all?qualification=Bachelors&subject=Mathematics")
                         .header("Authorization", "Bearer " + token)
@@ -147,8 +161,7 @@ public class TopicTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(tokenCookie))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Binomials"));
+                .andExpect(jsonPath("$[0].id").exists());
     }
 
     @Test

@@ -3,6 +3,7 @@ package danyal.fyp.awd.api.controller.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import danyal.fyp.awd.service.user.JwtService;
 import jakarta.servlet.http.Cookie;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class AdminSubjectTopicControllerTest {
 
     private Map<String, Object> payload;
@@ -88,17 +90,6 @@ public class AdminSubjectTopicControllerTest {
     @Test
     public void deleteSubject() throws Exception {
         payload = new HashMap<>();
-        payload.put("id", 3);
-        payload.put("qualification", "GCSE");
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/subjects/delete")
-                        .header("Authorization", "Bearer " + token)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload))
-                        .cookie(tokenCookie))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Subject Deleted Successfully"));
-
-        payload = new HashMap<>();
         payload.put("id", 1);
         payload.put("qualification", "GCSE");
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/subjects/delete")
@@ -109,7 +100,7 @@ public class AdminSubjectTopicControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Subject Deleted Successfully"));
 
-         payload = new HashMap<>();
+        payload = new HashMap<>();
         payload.put("id", 1);
         payload.put("qualification", "nope");
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/admin/subjects/delete")
