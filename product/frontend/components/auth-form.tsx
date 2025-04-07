@@ -12,6 +12,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
+import {IconMail} from "@tabler/icons-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface AuthFormProps {
   type: "login" | "admin" | "register"
@@ -24,6 +26,7 @@ interface AuthFormProps {
     label: string
     type: string
     required?: boolean
+    options?: { id: number; name: string }[]
   }[]
 }
 
@@ -47,6 +50,10 @@ export function AuthForm({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
@@ -155,15 +162,42 @@ export function AuthForm({
             {additionalFields.map((field) => (
               <div key={field.name} className="space-y-2">
                 <Label htmlFor={field.name}>{field.label}</Label>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type={field.type}
-                  required={field.required}
-                  value={formData[field.name] || ""}
-                  onChange={handleChange}
-                  placeholder={`Enter your ${field.label.toLowerCase()}`}
-                />
+                <div className="relative">
+                  {field.type === "select" && field.options ? (
+                      <Select
+                    onValueChange={(value) => handleSelectChange(field.name, value)}
+                    defaultValue={formData[field.name] || ""}
+                  >
+                    <SelectTrigger id={field.name}>
+                      <SelectValue placeholder={`Select ${field.label.toLowerCase()}`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {field.options.map((option) => (
+                        <SelectItem key={option.id} value={option.name}>
+                          {option.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                      ) : (
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type={field.type}
+                    required={field.required}
+                    value={formData[field.name] || ""}
+                    onChange={handleChange}
+                    className="pl-10"
+                    placeholder={field.type === "password"? "Confirm your password" : `Enter your ${field.label.toLowerCase()}`}
+                  />)}
+                    {field.type !== "select" && (
+                      field.type === "password" ? (
+                        <LockKeyhole className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      ) : (
+                        <IconMail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      )
+                    )}
+                </div>
               </div>
             ))}
 
