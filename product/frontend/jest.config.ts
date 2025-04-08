@@ -1,33 +1,50 @@
-/**
- * For a detailed explanation regarding each configuration property, visit:
- * https://jestjs.io/docs/configuration
- */
+// jest.config.ts
 
-import type {Config} from 'jest';
-import nextJest from 'next/jest.js'
-
+import nextJest from 'next/jest';
+import type { Config } from '@jest/types';
 
 const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
   dir: './',
-})
+});
 
-const config: Config = {
-  // Automatically clear mock calls, instances, contexts and results before every test
+const customJestConfig: Config.InitialOptions = {
   clearMocks: true,
-
-  // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageProvider: 'v8',
 
-  // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  testEnvironment: 'jsdom',
 
-  // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  collectCoverageFrom: [
+    '**/*.{js,jsx,ts,tsx}',
+    '!**/*.d.ts',
+    '!**/node_modules/**',
+  ],
 
-  // The test environment that will be used for testing
-  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
+  moduleNameMapper: {
+    '^@/components/(.*)$': '<rootDir>/components/$1',
+
+    // Optional CSS & asset mocks (jest-preview handles this with transforms too)
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|webp|svg|ico|bmp)$': '<rootDir>/__mocks__/fileMock.js',
+  },
+
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+
+    // 👇 These two are for jest-preview support
+    '^.+\\.(css|scss|sass|less)$': 'jest-preview/transforms/css',
+    '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)': 'jest-preview/transforms/file',
+  },
+
+  transformIgnorePatterns: [
+    '/node_modules/',
+    // Removed: '^.+\\.module\\.(css|sass|scss)$'
+  ],
 };
 
-export default createJestConfig(config);
+export default createJestConfig(customJestConfig);

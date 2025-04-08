@@ -74,39 +74,40 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
 
             {/* Question */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Question</Label>
-                <Input className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)} required/>
+                <Label htmlFor="question" className="text-right">Question</Label>
+                <Input id="question" className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)} required/>
             </div>
 
             {/* Answer */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Answer</Label>
-                <Input className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)} required/>
+                <Label htmlFor="answer" className="text-right">Answer</Label>
+                <Input id="answer" className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)} required/>
             </div>
 
             {/* Marks */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Marks</Label>
-                <Input className="col-span-3" type="number" value={marks} onChange={(e) => setMarks(e.target.value)}
+                <Label htmlFor="marks" className="text-right">Marks</Label>
+                <Input id="marks" className="col-span-3" type="number" value={marks} onChange={(e) => setMarks(e.target.value)}
                        required/>
             </div>
 
             {/* Qualification Dropdown */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Qualification</Label>
+                <Label htmlFor="qualification" className="text-right">Qualification</Label>
                 <Select
                     onValueChange={(value) => {
                         setSelectedQualification(value);
                         setSelectedSubject(""); // Reset Subject
                         setSelectedTopic(""); // Reset Topic
                     }}
+
                 >
                     <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
                         {qualifications.map((q) => (
-                            <SelectItem key={q.id || q.qualification} value={q.qualification}>
+                            <SelectItem key={q.id || q.qualification} value={q.qualification} id="qualification">
                                 {q.qualification}
                             </SelectItem>
                         ))}
@@ -116,7 +117,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
 
             {/* Subject Dropdown */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Subject</Label>
+                <Label htmlFor="subject" className="text-right">Subject</Label>
                 <Select
                     onValueChange={(value) => {
                         setSelectedSubject(value);
@@ -131,7 +132,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     <SelectContent>
                         {filteredSubjects.length > 0 ? (
                             filteredSubjects.map((s) => (
-                                <SelectItem key={s.id || s.name} value={s.name}>
+                                <SelectItem key={s.id || s.name} value={s.name} id="subject">
                                     {s.name}
                                 </SelectItem>
                             ))
@@ -144,7 +145,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
 
             {/* Topic Dropdown */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Topic</Label>
+                <Label htmlFor="topic" className="text-right">Topic</Label>
                 <Select
                     onValueChange={setSelectedTopic}
                     disabled={!selectedSubject || filteredTopics.length === 0}
@@ -155,7 +156,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     <SelectContent>
                         {filteredTopics.length > 0 ? (
                             filteredTopics.map((t) => (
-                                <SelectItem key={t.id || t.name} value={t.name}>
+                                <SelectItem key={t.id || t.name} value={t.name} id="topic">
                                     {t.name}
                                 </SelectItem>
                             ))
@@ -234,8 +235,8 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
             {/* Topic */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Topic</Label>
-                <Input className="col-span-3" onChange={(e) => setTopic(e.target.value)} required/>
+                <Label htmlFor="topic" className="text-right">Topic</Label>
+                <Input id="topic" className="col-span-3" onChange={(e) => setTopic(e.target.value)} required/>
             </div>
 
             {/* Qualification Dropdown */}
@@ -247,7 +248,7 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
                         setSelectedSubject(""); // Reset Subject
                     }}
                 >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -269,7 +270,7 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
                     }}
                     disabled={!selectedQualification || filteredSubjects.length === 0}
                 >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Subject" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue
                             placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"}/>
                     </SelectTrigger>
@@ -350,8 +351,8 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
             {/* Topic */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Subject</Label>
-                <Input className="col-span-3" onChange={(e) => setSubject(e.target.value)} required/>
+                <Label htmlFor="subject" className="text-right">Subject</Label>
+                <Input id="subject" className="col-span-3" onChange={(e) => setSubject(e.target.value)} required/>
             </div>
 
             {/* Qualification Dropdown */}
@@ -362,7 +363,7 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
                         setSelectedQualification(value);
                     }}
                 >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -437,8 +438,8 @@ export function QualificationDialog({setOpenDialog, refetch}) {
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
             {/* Topic */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Qualification</Label>
-                <Input className="col-span-3" onChange={(e) => setQualification(e.target.value)} required/>
+                <Label htmlFor="qualification" className="text-right">Qualification</Label>
+                <Input id="qualification" className="col-span-3" onChange={(e) => setQualification(e.target.value)} required/>
             </div>
 
             <DialogFooter>
@@ -512,22 +513,22 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
             {/* Show Error Message if Any */}
             {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
-            {/* Question */}
+            {/* Username */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Username</Label>
-                <Input className="col-span-3" onChange={(e) => setUsername(e.target.value)} required/>
+                <Label htmlFor="username" className="text-right">Username</Label>
+                <Input id="username" className="col-span-3" onChange={(e) => setUsername(e.target.value)} required/>
             </div>
 
-            {/* Answer */}
+            {/* Email */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Email</Label>
-                <Input className="col-span-3" type={"email"} onChange={(e) => setEmail(e.target.value)} required/>
+                <Label htmlFor="email" className="text-right">Email</Label>
+                <Input id="email" className="col-span-3" type={"email"} onChange={(e) => setEmail(e.target.value)} required/>
             </div>
 
-            {/* Marks */}
+            {/* Password */}
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Password</Label>
-                <Input className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)} required/>
+                <Label htmlFor="password" className="text-right">Password</Label>
+                <Input id="password" className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)} required/>
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
@@ -537,7 +538,7 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                         setRole(value);
                     }}
                 >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Role" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Role"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -556,7 +557,7 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                             setSelectedQualification(value);
                         }}
                     >
-                        <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                             <SelectValue placeholder="Select Qualification"/>
                         </SelectTrigger>
                         <SelectContent>
