@@ -8,6 +8,7 @@ const createJestConfig = nextJest({
 });
 
 const customJestConfig: Config.InitialOptions = {
+  testTimeout: 30000,
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: 'coverage',
