@@ -10,6 +10,7 @@ import {
 import '@testing-library/jest-dom';
 import axios from "axios";
 import {userEvent} from "@testing-library/user-event/";
+import { debug } from "jest-preview";
 jest.mock('axios');
 
 const questionData = [
@@ -18,8 +19,8 @@ const questionData = [
 ];
 
 const qualificationData = [
-    {qualification: "Maths", subjectsNum: 3, usersNum: 5},
-    {qualification: "Science", subjectsNum: 1, usersNum: 2},
+    {qualification: "College", subjectsNum: 3, usersNum: 5},
+    {qualification: "High School", subjectsNum: 1, usersNum: 2},
 ];
 
 const subjectData = [
@@ -80,8 +81,8 @@ describe("Qualification Data Table", () => {
     it("renders qualification rows", () => {
         render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification"
                           refetch={refetch}/>);
-        expect(screen.getByText("Maths")).toBeInTheDocument();
-        expect(screen.getByText("Science")).toBeInTheDocument();
+        expect(screen.getByText("High School")).toBeInTheDocument();
+        expect(screen.getByText("College")).toBeInTheDocument();
     });
 
     it("opens add qualification dialog on button click", async () => {
@@ -165,6 +166,46 @@ describe("Questions Data Table", () => {
         expect(screen.getByLabelText("Answer")).toBeInTheDocument();
         expect(screen.getByLabelText("Marks")).toBeInTheDocument();
     });
+
+    it("lets the user create a new question", async () => {
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData})
+            .mockResolvedValueOnce({data: subjectData})
+            .mockResolvedValueOnce({data: topicData})
+        const user = userEvent.setup();
+
+        render(<DataTable data={questionData} columns={questionColumns(refetch)} name="Question" refetch={refetch}/>);
+
+        await user.click(screen.getByRole("button", {name: /add question/i}))
+        await user.type(await screen.findByLabelText(/^Question$/i), '1 + 1');
+        await user.type(await screen.findByLabelText(/^Answer$/i), '2');
+        await user.type(await screen.findByLabelText(/^Marks$/i), '2');
+
+        await user.click(screen.getByRole('combobox', {name: /qualification/i}));
+        await user.click(await screen.findByText("High School", {selector:"span"}))
+        await user.click(screen.getByRole('combobox', {name: /subject/i}));
+        await user.click(await screen.findByText("Math", {selector:"span"}))
+        await user.click(screen.getByRole('combobox', {name: /topic/i}));
+        await user.click(await screen.findByText("Algebra", {selector:"span"}))
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith("http://localhost:8080/api/admin/questions/add", {
+                question: "1 + 1",
+                answer: "2",
+                marks: 2,
+                topic: "Algebra",
+                qualification: "High School",
+            }, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json"
+                }});
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+            expect(refetch).toHaveBeenCalled();
+        })
+    })
 });
 
 describe("Subject Data Table", () => {
@@ -200,6 +241,37 @@ describe("Subject Data Table", () => {
         expect(screen.getByLabelText("Subject")).toBeInTheDocument();
         expect(screen.getByLabelText("Qualification")).toBeInTheDocument();
     });
+
+    it("lets the user create a new subject", async () => {
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData})
+            .mockResolvedValueOnce({data: subjectData})
+            .mockResolvedValueOnce({data: topicData})
+        const user = userEvent.setup();
+
+        render(<DataTable data={subjectData} columns={subjectColumns(refetch)} name="Subject" refetch={refetch}/>);
+
+        await user.click(screen.getByRole("button", {name: /add subject/i}))
+        await user.type(await screen.findByLabelText(/^Subject$/i), 'Physics');
+
+        await user.click(screen.getByRole('combobox', {name: /qualification/i}));
+        await user.click(await screen.findByText("High School", {selector:"span"}))
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith("http://localhost:8080/api/admin/subjects/add", {
+                name: "Physics",
+                qualification: "High School",
+            }, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json"
+                }});
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+            expect(refetch).toHaveBeenCalled();
+        })
+    })
 
 });
 
@@ -238,6 +310,39 @@ describe("Topic Data Table", () => {
         expect(screen.getByLabelText("Subject")).toBeInTheDocument();
         expect(screen.getByLabelText("Qualification")).toBeInTheDocument();
     });
+
+    it("lets the user create a new topic", async () => {
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData})
+            .mockResolvedValueOnce({data: subjectData})
+            .mockResolvedValueOnce({data: topicData})
+        const user = userEvent.setup();
+
+        render(<DataTable data={topicData} columns={topicColumns(refetch)} name="Topic" refetch={refetch}/>);
+
+        await user.click(screen.getByRole("button", {name: /add topic/i}))
+        await user.type(await screen.findByLabelText(/^Topic$/i), 'Arithmetic');
+
+        await user.click(screen.getByRole('combobox', {name: /qualification/i}));
+        await user.click(await screen.findByText("High School", {selector:"span"}))
+        await user.click(screen.getByRole('combobox', {name: /subject/i}));
+        await user.click(await screen.findByText("Math", {selector:"span"}))
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith("http://localhost:8080/api/admin/topics/add", {
+                name: "Arithmetic",
+                subject: "Math",
+                qualification: "High School",
+            }, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json"
+                }});
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+            expect(refetch).toHaveBeenCalled();
+        })
+    })
 });
 
 describe("Users Data Table", () => {
@@ -277,4 +382,48 @@ describe("Users Data Table", () => {
         expect(screen.getByLabelText("Email")).toBeInTheDocument();
         expect(screen.getByLabelText("Role")).toBeInTheDocument();
     });
+
+    it("lets the user create a new user", async () => {
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData})
+            .mockResolvedValueOnce({data: subjectData})
+            .mockResolvedValueOnce({data: topicData})
+        const user = userEvent.setup();
+
+        render(<DataTable data={userData} columns={usersColumns(refetch)} name="User" refetch={refetch}/>);
+
+        await user.click(screen.getByRole("button", {name: /add user/i}))
+        await user.type(await screen.findByLabelText(/^Username$/i), 'test');
+        await user.type(await screen.findByLabelText(/^Password$/i), 'test');
+        await user.type(await screen.findByLabelText(/^Email$/i), 'test@test.com');
+
+        await user.click(screen.getByRole('combobox', {name: /role/i}));
+        await user.click(await screen.findByText("Admin", {selector:"span"}));
+
+        expect(await screen.queryByRole("combobox", {name: /qualification/i})).not.toBeInTheDocument(); // Qualification Drop Down should not be visible if admin is selected.
+
+        await user.click(screen.getByRole('combobox', {name: /role/i}));
+        await user.click(await screen.findByText("User", {selector:"span"}))
+        const qualBox = await screen.findByRole("combobox", {name: /qualification/i})
+        expect(qualBox).toBeInTheDocument(); // Since it appears only when the user box is selected
+        await user.click(qualBox);
+        await user.click(await screen.findByText("High School", {selector:"span"}))
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith("http://localhost:8080/api/auth/register", {
+                username: "test",
+                email: "test@test.com",
+                password: "test",
+                role: "ROLE_USER",
+                qualification: "High School"
+            }, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json"
+                }});
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+            expect(refetch).toHaveBeenCalled();
+        })
+    })
 });

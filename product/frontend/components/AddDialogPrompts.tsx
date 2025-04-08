@@ -102,13 +102,13 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     }}
 
                 >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
                         {qualifications.map((q) => (
                             <SelectItem key={q.id || q.qualification} value={q.qualification} id="qualification">
-                                {q.qualification}
+                                <span>{q.qualification}</span>
                             </SelectItem>
                         ))}
                     </SelectContent>
@@ -125,7 +125,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     }}
                     disabled={!selectedQualification || filteredSubjects.length === 0}
                 >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Subject" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue
                             placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"}/>
                     </SelectTrigger>
@@ -133,7 +133,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                         {filteredSubjects.length > 0 ? (
                             filteredSubjects.map((s) => (
                                 <SelectItem key={s.id || s.name} value={s.name} id="subject">
-                                    {s.name}
+                                    <span>{s.name}</span>
                                 </SelectItem>
                             ))
                         ) : (
@@ -150,14 +150,14 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     onValueChange={setSelectedTopic}
                     disabled={!selectedSubject || filteredTopics.length === 0}
                 >
-                    <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Topic" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder={filteredTopics.length ? "Select Topic" : "No topics available"}/>
                     </SelectTrigger>
                     <SelectContent>
                         {filteredTopics.length > 0 ? (
                             filteredTopics.map((t) => (
                                 <SelectItem key={t.id || t.name} value={t.name} id="topic">
-                                    {t.name}
+                                    <span>{t.name}</span>
                                 </SelectItem>
                             ))
                         ) : (
@@ -371,7 +371,7 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
                     <SelectContent>
                         {qualifications.map((q) => (
                             <SelectItem key={q.id || q.qualification} value={q.qualification}>
-                                {q.qualification}
+                                <span>{q.qualification}</span>
                             </SelectItem>
                         ))}
                     </SelectContent>
@@ -546,8 +546,8 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                         <SelectValue placeholder="Select Role"/>
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value={"ROLE_ADMIN"}>Admin</SelectItem>
-                        <SelectItem value={"ROLE_USER"}>User</SelectItem>
+                        <SelectItem value={"ROLE_ADMIN"}><span>Admin</span></SelectItem>
+                        <SelectItem value={"ROLE_USER"}><span>User</span></SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -567,7 +567,7 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                         <SelectContent>
                             {qualifications.map((q) => (
                                 <SelectItem key={q.id || q.qualification} value={q.qualification}>
-                                    {q.qualification}
+                                    <span>{q.qualification}</span>
                                 </SelectItem>
                             ))}
                         </SelectContent>
