@@ -27,7 +27,7 @@ export default function RegisterPage() {
             title="Create an Account"
             description="Sign up to get started"
             apiEndpoint="/api/auth/register"
-            redirectPath="/dashboard"
+            redirectPath="/login"
             additionalFields={[
                 {
                     name: "confirmPassword",

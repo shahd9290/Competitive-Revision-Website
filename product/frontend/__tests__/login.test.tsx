@@ -84,6 +84,8 @@ it('submits user details and redirects on success', async () => {
         { withCredentials: true }
     );
 
+    expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "You have been logged in successfully."}));
+
     expect(mockPush).toHaveBeenCalledWith('/dashboard');
 });
 
@@ -103,7 +105,7 @@ it('shows an alert if an error occurs during login', async () => {
     await user.click(signInButton);
 
     expect(axios.post).toHaveBeenCalled();
-    expect(toastMock).toHaveBeenCalled();
+    expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "Unable to connect to server. Please try again later."}));
 });
 
 it('shows a generic toast if server is unreachable', async () => {
@@ -121,6 +123,5 @@ it('shows a generic toast if server is unreachable', async () => {
     await user.click(signInButton);
 
     expect(axios.post).toHaveBeenCalled();
-
-    expect(toastMock).toHaveBeenCalled();
+    expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "Unable to connect to server. Please try again later."}));
 });

@@ -9,7 +9,7 @@ import axios from "axios";
 
 // Mock the next/router or next/navigation (for Next.js 13)
 jest.mock('next/navigation', () => ({
-    useRouter: jest.fn().mockReturnValue({ push: jest.fn() }),
+    useRouter: jest.fn().mockReturnValue({push: jest.fn()}),
 }));
 
 // Mock axios
@@ -20,161 +20,172 @@ let mockPush: jest.Mock;
 beforeEach(() => {
     // Reset all mocks before each test
     jest.clearAllMocks();
-    const { useRouter } = jest.requireMock('next/navigation');
+    const {useRouter} = jest.requireMock('next/navigation');
     mockPush = jest.fn();
-    useRouter.mockReturnValue({ push: mockPush });
+    useRouter.mockReturnValue({push: mockPush});
+
+});
+beforeAll(() => {
+    if (!Element.prototype.scrollIntoView) {
+        Element.prototype.scrollIntoView = () => {
+        };
+    }
+    if (!Element.prototype.hasPointerCapture) {
+        Element.prototype.hasPointerCapture = () => false;
+    }
 });
 
+const toastMock = jest.fn();
+
+jest.mock('../hooks/use-toast', () => ({
+    useToast: () => ({
+        toast: toastMock,
+    }),
+}));
 ///////////////////////////////// END OF CHAT-GPT GENERATED CODE /////////////////////////////////////
-
+const qualifications = [
+    {id: 1, name: "GCSEs"},
+    {id: 2, name: "A-Levels"}
+];
 it("loads the registration form", async () => {
-    (axios.get as jest.Mock).mockResolvedValueOnce({data: []})
+    (axios.get as jest.Mock).mockResolvedValueOnce({data: qualifications})
 
-    render(<Page />);
+    render(<Page/>);
 
-    expect(await screen.findByText("Create your new Study App account")).toBeInTheDocument();
+    expect(await screen.findByText("Create an Account")).toBeInTheDocument();
+    expect(await screen.findByText("Sign up to get started")).toBeInTheDocument();
     expect(await screen.findByLabelText(/Username/i)).toBeInTheDocument();
-    expect(await screen.findByLabelText(/Email Address/i)).toBeInTheDocument();
-    expect(await screen.findByLabelText(/Confirm Email/i)).toBeInTheDocument();
-    expect(await screen.findByLabelText(/Password/i)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Email/i)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/^Password$/)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Confirm Password/i)).toBeInTheDocument();
     expect(await screen.findByLabelText(/Qualification/i)).toBeInTheDocument();
 })
 
 it("gets all qualifications", async () => {
-    const qualifications = [
-        {id: 1, name: "GCSEs"},
-        {id: 2, name: "A-Levels"}
-    ];
-    (axios.get as jest.Mock).mockResolvedValueOnce({ data: qualifications });
-    render(<Page />)
-    const user = userEvent.setup()
-
-    await screen.findByText("GCSEs")
-    const select =  screen.getByLabelText(/Qualification/i);
-
-    await user.selectOptions(select, "GCSEs");
-    expect(select).toHaveValue("GCSEs");
-})
-
-it('alerts if emails do not match', async () => {
-    (axios.get as jest.Mock).mockResolvedValueOnce({ data: [] });
-
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-
-    render(<Page />);
+    (axios.get as jest.Mock).mockResolvedValueOnce({data: qualifications});
+    render(<Page/>);
     const user = userEvent.setup();
 
+
+    // Selecting Option
+    const selectTrigger = screen.getByRole("combobox");
+    expect(selectTrigger).toHaveTextContent("Select qualification");
+    await user.click(selectTrigger);
+    const gcseOption = await screen.findByText("GCSEs", {selector: "span"});
+    expect(gcseOption).toBeInTheDocument();
+    await user.click(gcseOption);
+    await waitFor(() => {
+        expect(selectTrigger).toHaveTextContent("GCSEs");
+    });
+})
+
+it('alerts if passwords do not match', async () => {
+    (axios.get as jest.Mock).mockResolvedValueOnce({data: qualifications});
+
+    render(<Page/>);
+
+    const user = userEvent.setup();
     await user.type(screen.getByLabelText(/Username/i), 'user');
-    await user.type(screen.getByLabelText(/^Email Address$/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/Confirm Email/i), 'user2@example.com');
-    await user.type(screen.getByLabelText(/Password/i), 'password');
-    await user.selectOptions(screen.getByLabelText(/Qualification/i), 'Please select a qualification');
+    await user.type(screen.getByLabelText(/Email/i), 'user@example.com');
+    await user.type(screen.getByLabelText(/^Password$/i), 'password');
+    await user.type(screen.getByLabelText(/Confirm Password/i), 'wrongpassword');
 
-    await user.click(screen.getByRole('button', { name: /Create account/i }));
+    const selectTrigger = screen.getByRole("combobox");
+    await user.click(selectTrigger);
+    await user.click(await screen.findByText("GCSEs", {selector: "span"}));
+    await user.click(screen.getByRole('button', {name: /Sign up/i}));
 
-    expect(alertMock).toHaveBeenCalledWith("Please ensure you have entered the correct email address in both sections!");
-    alertMock.mockRestore();
+    expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "Passwords do not match!"}));
+
 });
 
 it('alerts if qualification is not selected', async () => {
-    (axios.get as jest.Mock).mockResolvedValueOnce({ data: [] });
+    (axios.get as jest.Mock).mockResolvedValueOnce({data: qualifications});
 
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
     const user = userEvent.setup();
 
-    render(<Page />);
+    render(<Page/>);
 
     await user.type(screen.getByLabelText(/Username/i), 'user');
-    await user.type(screen.getByLabelText(/^Email Address$/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/Confirm Email/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/Password/i), 'password');
+    await user.type(screen.getByLabelText(/Email/i), 'user@example.com');
+    await user.type(screen.getByLabelText(/^Password$/i), 'password');
+    await user.type(screen.getByLabelText(/Confirm Password/i), 'password');
 
-    await user.click(screen.getByRole('button', { name: /Create account/i }));
+    await user.click(screen.getByRole('button', {name: /Sign up/i}));
 
-    expect(alertMock).toHaveBeenCalledWith("Please select a qualification");
-    alertMock.mockRestore();
+    expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "Please select a qualification"}));
 });
 
 it('submits form and navigates on success', async () => {
-    (axios.get as jest.Mock).mockResolvedValueOnce({ data: [{id:1,name:'GCSEs'}] });
-    (axios.post as jest.Mock).mockResolvedValueOnce({ data: { success: true } });
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    (axios.get as jest.Mock).mockResolvedValueOnce({data: qualifications});
+    (axios.post as jest.Mock).mockResolvedValueOnce({data: {success: true}});
     const user = userEvent.setup();
 
-    render(<Page />);
+    render(<Page/>);
 
-    const usernameInput = await screen.findByLabelText(/Username/i);
-    const emailInput = screen.getByLabelText(/^Email Address$/i);
-    const confirmEmailInput = screen.getByLabelText(/Confirm Email/i);
-    const passwordInput = screen.getByLabelText(/Password/i);
-    const qualificationSelect = screen.getByLabelText(/Qualification/i);
+    await user.type(screen.getByLabelText(/Username/i), 'user');
+    await user.type(screen.getByLabelText(/Email/i), 'user@example.com');
+    await user.type(screen.getByLabelText(/^Password$/i), 'password');
+    await user.type(screen.getByLabelText(/Confirm Password/i), 'password');
 
-    await user.type(usernameInput, 'user');
-    await user.type(emailInput, 'user@example.com');
-    await user.type(confirmEmailInput, 'user@example.com');
-    await user.type(passwordInput, 'password');
-    await user.selectOptions(qualificationSelect, 'GCSEs');
-
-    await user.click(screen.getByRole('button', { name: /Create account/i }));
+    const selectTrigger = screen.getByRole("combobox");
+    await user.click(selectTrigger);
+    await user.click(await screen.findByText("GCSEs", {selector: "span"}));
+    await user.click(screen.getByRole('button', {name: /Sign up/i}));
 
     await waitFor(() => {
         expect(axios.post).toHaveBeenCalledWith("http://localhost:8080/api/auth/register", {
             username: 'user',
             email: 'user@example.com',
             password: 'password',
-            qualification: 'GCSEs'
-        });
-        expect(alertMock).toHaveBeenCalledWith("Account created successfully.");
+            confirmPassword: 'password',
+            qualification: 'GCSEs',
+            role: 'ROLE_USER'
+        }, {withCredentials: true});
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "Your account has been created successfully."}));
         expect(mockPush).toHaveBeenCalledWith('/login');
     });
-
-    alertMock.mockRestore();
 });
 
 it('displays error message from server', async () => {
-    (axios.get as jest.Mock).mockResolvedValueOnce({ data: [{id:1,name:'B.Sc in CS'}] });
-    (axios.post as jest.Mock).mockRejectedValueOnce({ response: { data: 'Email already in use' } });
-
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    (axios.get as jest.Mock).mockResolvedValueOnce({data: qualifications});
+    (axios.post as jest.Mock).mockRejectedValueOnce({response: {data: 'Email already in use'}});
     const user = userEvent.setup();
 
-    render(<Page />);
+    render(<Page/>);
 
-    await user.type(screen.getByLabelText(/Username/i), 'testuser');
-    await user.type(screen.getByLabelText(/^Email Address$/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/Confirm Email/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/Password/i), 'password123');
-    await user.selectOptions(screen.getByLabelText(/Qualification/i), 'B.Sc in CS');
+    await user.type(screen.getByLabelText(/Username/i), 'user');
+    await user.type(screen.getByLabelText(/Email/i), 'user@example.com');
+    await user.type(screen.getByLabelText(/^Password$/i), 'password');
+    await user.type(screen.getByLabelText(/Confirm Password/i), 'password');
 
-    await user.click(screen.getByRole('button', { name: /Create account/i }));
+    const selectTrigger = screen.getByRole("combobox");
+    await user.click(selectTrigger);
+    await user.click(await screen.findByText("GCSEs", {selector: "span"}));
 
-    await waitFor(() => {
-        expect(alertMock).toHaveBeenCalledWith("Email already in use");
-    });
+    await user.click(screen.getByRole('button', {name: /Sign up/i}));
 
-    alertMock.mockRestore();
+    expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "Email already in use"}));
+
 });
 
 it('displays generic error if server cannot be reached', async () => {
-    (axios.get as jest.Mock).mockResolvedValueOnce({ data: [{id:1,name:'B.Sc in CS'}] });
+    (axios.get as jest.Mock).mockResolvedValueOnce({data: qualifications});
     (axios.post as jest.Mock).mockRejectedValueOnce(new Error('Network Error'));
 
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
     const user = userEvent.setup();
+    render(<Page/>);
 
-    render(<Page />);
+    await user.type(screen.getByLabelText(/Username/i), 'user');
+    await user.type(screen.getByLabelText(/Email/i), 'user@example.com');
+    await user.type(screen.getByLabelText(/^Password$/i), 'password');
+    await user.type(screen.getByLabelText(/Confirm Password/i), 'password');
 
-    await user.type(screen.getByLabelText(/Username/i), 'testuser');
-    await user.type(screen.getByLabelText(/^Email Address$/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/Confirm Email/i), 'user@example.com');
-    await user.type(screen.getByLabelText(/Password/i), 'password123');
-    await user.selectOptions(screen.getByLabelText(/Qualification/i), 'B.Sc in CS');
+    const selectTrigger = screen.getByRole("combobox");
+    await user.click(selectTrigger);
+    await user.click(await screen.findByText("GCSEs", {selector: "span"}));
 
-    await user.click(screen.getByRole('button', { name: /Create account/i }));
+    await user.click(screen.getByRole('button', {name: /Sign up/i}));
 
-    await waitFor(() => {
-        expect(alertMock).toHaveBeenCalledWith("Unable to connect to server.");
-    });
-
-    alertMock.mockRestore();
+    expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "Unable to connect to server. Please try again later."}));
 });
