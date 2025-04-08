@@ -7,10 +7,9 @@ import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {DialogFooter} from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
-import {toast} from "@/hooks/use-toast";
+import {useToast} from "@/hooks/use-toast";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 export function QuestionDialog({setOpenDialog, qualifications, subjects, topics, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
@@ -20,6 +19,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
     const [marks, setMarks] = useState(0);
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const {toast} = useToast();
 
     const filteredSubjects = subjects.filter((subject) => subject.qualification === selectedQualification);
     const filteredTopics = topics.filter((topic) => topic.subject === selectedSubject && topic.qualification === selectedQualification);
@@ -188,6 +188,7 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
     const [selectedSubject, setSelectedSubject] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const {toast} = useToast();
 
     const filteredSubjects = subjects.filter((subject) => subject.qualification === selectedQualification);
     const handleSubmit = async (event) => {
@@ -306,6 +307,7 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const {toast} = useToast();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -394,6 +396,7 @@ export function QualificationDialog({setOpenDialog, refetch}) {
     const [qualification, setQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const {toast} = useToast();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -464,6 +467,7 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
     const [role, setRole] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const {toast} = useToast();
 
     const handleSubmit = async (event) => {
         event.preventDefault();

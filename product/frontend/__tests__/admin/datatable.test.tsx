@@ -54,10 +54,20 @@ beforeAll(() => {
     }
 });
 
+beforeEach(() => {
+    jest.clearAllMocks();
+})
 
+const refetch = jest.fn();
+const toastMock = jest.fn();
+
+jest.mock('../../hooks/use-toast', () => ({
+    useToast: () => ({
+        toast: toastMock,
+    }),
+}));
 describe("Qualification Data Table", () => {
 
-    const refetch = jest.fn();
 
     it("renders qualification columns", () => {
         render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification"
@@ -80,8 +90,7 @@ describe("Qualification Data Table", () => {
             .mockResolvedValueOnce({data: subjectData})
             .mockResolvedValueOnce({data: topicData})
 
-        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification"
-                          refetch={refetch}/>);
+        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>);
 
         const addButton = screen.getByRole("button", {name: /add qualification/i});
         fireEvent.click(addButton);
@@ -92,11 +101,35 @@ describe("Qualification Data Table", () => {
 
         expect(screen.getByLabelText("Qualification")).toBeInTheDocument();
     });
+
+    it("lets the user create a new qualification", async () => {
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData})
+            .mockResolvedValueOnce({data: subjectData})
+            .mockResolvedValueOnce({data: topicData})
+        const user = userEvent.setup();
+
+        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>);
+
+        await user.click(screen.getByRole("button", {name: /add qualification/i}))
+        await user.type(await screen.findByLabelText(/^Qualification$/i), 'GCSEs');
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith("http://localhost:8080/api/admin/qualifications/add", {
+                qualification: "GCSEs"
+            }, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json"
+                }});
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+            expect(refetch).toHaveBeenCalled();
+        })
+    })
 });
 
 describe("Questions Data Table", () => {
-
-    const refetch = jest.fn();
 
     it("renders question columns", () => {
         render(<DataTable data={questionData} columns={questionColumns(refetch)} name="Question" refetch={refetch}/>);
@@ -136,8 +169,6 @@ describe("Questions Data Table", () => {
 
 describe("Subject Data Table", () => {
 
-    const refetch = jest.fn();
-
     it("renders subject columns", () => {
         render(<DataTable data={subjectData} columns={subjectColumns(refetch)} name="Subject" refetch={refetch}/>);
         expect(screen.getByText("Subject")).toBeInTheDocument();
@@ -173,8 +204,6 @@ describe("Subject Data Table", () => {
 });
 
 describe("Topic Data Table", () => {
-
-    const refetch = jest.fn();
 
     it("renders topic columns", () => {
         render(<DataTable data={topicData} columns={topicColumns(refetch)} name="Topic" refetch={refetch}/>);
@@ -212,8 +241,6 @@ describe("Topic Data Table", () => {
 });
 
 describe("Users Data Table", () => {
-
-    const refetch = jest.fn();
 
     it("renders user columns", () => {
         render(<DataTable data={userData} columns={usersColumns(refetch)} name="User" refetch={refetch}/>);
