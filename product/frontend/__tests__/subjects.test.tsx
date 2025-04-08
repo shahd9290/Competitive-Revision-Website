@@ -38,7 +38,7 @@ it("uses the user's qualification to get and display two subjects", async () => 
     fireEvent.click(mathsButton);
     expect(screen.getByText("Binomials")).toBeInTheDocument();
     fireEvent.click(physButton);
-    expect(screen.getByText("No Topics Found!")).toBeInTheDocument()
+    expect(screen.getByText("No topics available for this subject")).toBeInTheDocument();
 
     expect(mockedAxios.get).toHaveBeenCalledTimes(2);
     expect(mockedAxios.get).toHaveBeenNthCalledWith(1, "http://localhost:8080/api/user/get-qualification", {withCredentials: true});

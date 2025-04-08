@@ -211,7 +211,7 @@ export function AuthForm({
             <>
               <div className="flex justify-center w-full text-sm">
                 <Button variant="outline" className="w-full px-0 h-auto" onClick={() => router.push("/create")}>
-                  Create account
+                  Create Account
                 </Button>
               </div>
               <Button variant="outline" className="w-full" onClick={() => router.push("/admin/login")}>

@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react'
+import {render, screen, within} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Page from '@/app/login/page'
 import {userEvent} from "@testing-library/user-event/";
 import axios from "axios";
+import {toast} from "@/hooks/use-toast";
 
 //////////////////////////////// START OF CHAT-GPT GENERATED CODE ////////////////////////////////////
 // Generative AI was used for this section to ensure mocks were created properly for these tests.
@@ -10,35 +11,47 @@ import axios from "axios";
 
 // Mock the next/router or next/navigation (for Next.js 13)
 jest.mock('next/navigation', () => ({
-    useRouter: jest.fn().mockReturnValue({ push: jest.fn() }),
+    useRouter: jest.fn().mockReturnValue({push: jest.fn()}),
 }));
 
 // Mock axios
 jest.mock('axios');
+
+const toastMock = jest.fn();
+
+jest.mock('../hooks/use-toast', () => ({
+  useToast: () => ({
+    toast: toastMock,
+  }),
+}));
 
 let mockPush: jest.Mock;
 
 beforeEach(() => {
     // Reset all mocks before each test
     jest.clearAllMocks();
-    const { useRouter } = jest.requireMock('next/navigation');
+    const {useRouter} = jest.requireMock('next/navigation');
     mockPush = jest.fn();
-    useRouter.mockReturnValue({ push: mockPush });
+    useRouter.mockReturnValue({push: mockPush});
 });
 
 ///////////////////////////////// END OF CHAT-GPT GENERATED CODE /////////////////////////////////////
 
 
 it('should render login page', () => {
-    render(<Page />)
-    expect(screen.getByText('Sign in to your account')).toBeInTheDocument();
+    render(<Page/>)
+    expect(screen.getByText('Welcome Back')).toBeInTheDocument();
+    expect(screen.getByText('Sign in to your account to continue')).toBeInTheDocument();
     expect(screen.getByLabelText(/Username/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign in' })).toBeInTheDocument();
+    expect(screen.getByRole('button', {name: 'Sign In'})).toBeInTheDocument();
+    expect(screen.getByRole('button', {name: 'Create Account'})).toBeInTheDocument();
+    expect(screen.getByRole('button', {name: 'Admin Login'})).toBeInTheDocument();
+
 })
 
 it('allows the user to enter login details', async () => {
-    render(<Page />)
+    render(<Page/>)
     const user = userEvent.setup();
     const usernameInput = screen.getByLabelText(/username/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -67,7 +80,7 @@ it('submits user details and redirects on success', async () => {
 
     expect(axios.post).toHaveBeenCalledWith(
         'http://localhost:8080/api/auth/login',
-        { username: 'user', password: 'password' },
+        { username: 'user', password: 'password', role: 'ROLE_USER' },
         { withCredentials: true }
     );
 
@@ -75,13 +88,8 @@ it('submits user details and redirects on success', async () => {
 });
 
 it('shows an alert if an error occurs during login', async () => {
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-
-    (axios.post as jest.Mock).mockRejectedValueOnce({
-        response: {
-            data: 'Invalid credentials',
-        },
-    });
+  // Setup axios to reject with a response error
+  (axios.post as jest.Mock).mockRejectedValueOnce({ data: 'Username or password is incorrect.' });
 
     render(<Page />);
     const user = userEvent.setup();
@@ -95,14 +103,10 @@ it('shows an alert if an error occurs during login', async () => {
     await user.click(signInButton);
 
     expect(axios.post).toHaveBeenCalled();
-    expect(alertMock).toHaveBeenCalledWith('Invalid credentials');
-
-    alertMock.mockRestore();
+    expect(toastMock).toHaveBeenCalled();
 });
 
-it('shows a generic alert if server is unreachable', async () => {
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-
+it('shows a generic toast if server is unreachable', async () => {
     (axios.post as jest.Mock).mockRejectedValueOnce(new Error('Network Error'));
 
     render(<Page />);
@@ -117,7 +121,6 @@ it('shows a generic alert if server is unreachable', async () => {
     await user.click(signInButton);
 
     expect(axios.post).toHaveBeenCalled();
-    expect(alertMock).toHaveBeenCalledWith('Unable to connect to server.');
 
-    alertMock.mockRestore();
+    expect(toastMock).toHaveBeenCalled();
 });
