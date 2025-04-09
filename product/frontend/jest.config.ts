@@ -20,6 +20,8 @@ const customJestConfig: Config.InitialOptions = {
     '**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
+    "!**/.next/**"
+
   ],
 
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],

@@ -7,7 +7,7 @@ import {useState} from "react";
 import axios from "axios";
 import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
 import {EditQualification, EditQuestion, EditSubject, EditTopic, EditUser} from "@/components/EditDialogPrompts";
-import {toast} from "@/hooks/use-toast";
+import {useToast} from "@/hooks/use-toast";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
@@ -104,6 +104,7 @@ export const usersColumns = (refetch) : ColumnDef<User>[] => [
             const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
             const [qualifications, setQualifications] = useState<any[]>([]);
+            const {toast} = useToast();
             const handleDelete = async () => {
                 // Check if user is currently logged in?
                 setLoading(true);
@@ -226,6 +227,7 @@ export const topicColumns = (refetch): ColumnDef<Topic>[] => [
             const [dialogOpen, setDialogOpen] = useState(false);
             const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
+            const {toast} = useToast();
 
             const handleDelete = async () => {
                 // Get Question Count.
@@ -346,6 +348,7 @@ export const subjectColumns = (refetch): ColumnDef<Subject>[] => [
             const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
             const [qualifications, setQualifications] = useState<any[]>([]);
+            const {toast} = useToast();
             const handleDelete = async () => {
                 if (subject.topicNum > 0) {
                     toast({
@@ -468,6 +471,7 @@ export const questionColumns = (refetch): ColumnDef<Question>[] => [
             const [dialogOpen, setDialogOpen] = useState(false);
             const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
+            const {toast} = useToast();
 
             const handleDelete = async () => {
                 setLoading(true);
@@ -574,6 +578,7 @@ export const qualificationsColumns = (refetch): ColumnDef<Qualification>[] => [
             const [dialogOpen, setDialogOpen] = useState(false);
             const [editOpen, setEditOpen] = useState(false);
             const [loading, setLoading] = useState(false);
+            const {toast} = useToast();
 
             const handleDelete = async () => {
                 if (qualification.subjectsNum > 0 || qualification.usersNum > 0) {

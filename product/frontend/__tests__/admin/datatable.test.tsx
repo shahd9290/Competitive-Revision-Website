@@ -10,32 +10,40 @@ import {
 import '@testing-library/jest-dom';
 import axios from "axios";
 import {userEvent} from "@testing-library/user-event/";
-import { debug } from "jest-preview";
+
 jest.mock('axios');
 
 const questionData = [
-    {subject: "Math", topic: "Algebra", question: "2+2?", answer: "4", marks: 1},
-    {subject: "Physics", topic: "Forces", question: "What is gravity?", answer: "9.8", marks: 2},
+    {id: 1, subject: "Math", topic: "Algebra", question: "2+2?", answer: "4", marks: 1},
+    {id: 2, subject: "Physics", topic: "Forces", question: "What is gravity?", answer: "9.8", marks: 2},
 ];
 
 const qualificationData = [
-    {qualification: "College", subjectsNum: 3, usersNum: 5},
-    {qualification: "High School", subjectsNum: 1, usersNum: 2},
+    {id: 1, qualification: "College", subjectsNum: 0, usersNum: 0},
+    {id: 2, qualification: "High School", subjectsNum: 1, usersNum: 2},
 ];
 
 const subjectData = [
-    {name: "Math", topicNum: 4, qualification: "High School"},
-    {name: "Biology", topicNum: 2, qualification: "College"},
+    {id: 1, name: "Math", topicNum: 0, qualification: "High School"},
+    {id: 2, name: "Biology", topicNum: 2, qualification: "College"},
 ];
 
 const topicData = [
-    {name: "Algebra", subject: "Math", qualification: "High School", questionCount: 10},
-    {name: "Photosynthesis", subject: "Biology", qualification: "College", questionCount: 5},
+    {id: 1, name: "Algebra", subject: "Math", qualification: "High School", questionCount: 0},
+    {id: 2, name: "Photosynthesis", subject: "Biology", qualification: "College", questionCount: 5},
 ];
 
 const userData = [
-    {username: "admin", email: "admin@example.com", role: "Admin", createdAt: "2024-01-01", qualification: "N/A"},
     {
+        id: "5d89117a-edb6-4d7b-9f82-68af46e390fb",
+        username: "admin",
+        email: "admin@example.com",
+        role: "Admin",
+        createdAt: "2024-01-01",
+        qualification: "N/A"
+    },
+    {
+        id: "ab3f0c2e-a70d-41f9-a4fb-61cd7e204b29",
         username: "student",
         email: "student@example.com",
         role: "User",
@@ -71,16 +79,14 @@ describe("Qualification Data Table", () => {
 
 
     it("renders qualification columns", () => {
-        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification"
-                          refetch={refetch}/>);
+        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>);
         expect(screen.getByText("Qualification")).toBeInTheDocument();
         expect(screen.getByText("Number of Subjects")).toBeInTheDocument();
         expect(screen.getByText("Number of Users")).toBeInTheDocument();
     });
 
     it("renders qualification rows", () => {
-        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification"
-                          refetch={refetch}/>);
+        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>);
         expect(screen.getByText("High School")).toBeInTheDocument();
         expect(screen.getByText("College")).toBeInTheDocument();
     });
@@ -123,11 +129,161 @@ describe("Qualification Data Table", () => {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
-                }});
-            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+                }
+            });
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}))
             expect(refetch).toHaveBeenCalled();
         })
     })
+
+    it("lets the user edit an existing qualification", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(
+            <DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>
+        );
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        const editButton = await screen.findByText("Edit");
+        await user.click(editButton);
+
+        // Edit the qualification name
+        const input = await screen.findByLabelText("Qualification");
+        await user.clear(input);
+        await user.type(input, "GCSEs - Updated");
+
+        // Submit
+        const confirmButton = screen.getByRole("button", {name: /confirm/i});
+        await user.click(confirmButton);
+
+        // Ensure the edit call was made
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith(
+                "http://localhost:8080/api/admin/qualifications/edit",
+                {
+                    id: qualificationData[0].id,
+                    qualification: "GCSEs - Updated",
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+            expect(refetch).toHaveBeenCalled();
+        });
+    });
+
+    it("lets the user cancel editing qualification", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(
+            <DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>
+        );
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Edit"));
+
+        // Edit the qualification name
+        await user.type(await screen.findByLabelText("Qualification"), "GCSEs - Updated");
+
+        // Submit
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+    });
+
+    it("lets the user delete qualification", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Delete"));
+        expect(screen.getByText(/confirm deletion/i));
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(axios.delete).toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+    });
+
+    it("doesn't let the user delete qualification when there's subjects/users", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[1]);
+
+        await user.click(await screen.findByText("Delete"));
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "destructive"}));
+    });
+
+    it("lets the user cancel deletion", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={qualificationData} columns={qualificationsColumns(refetch)} name="Qualification" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        await user.click(await screen.findByText("Delete"));
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        expect(axios.delete).not.toHaveBeenCalled()
+        expect(toastMock).not.toHaveBeenCalled();
+    });
+
 });
 
 describe("Questions Data Table", () => {
@@ -182,11 +338,11 @@ describe("Questions Data Table", () => {
         await user.type(await screen.findByLabelText(/^Marks$/i), '2');
 
         await user.click(screen.getByRole('combobox', {name: /qualification/i}));
-        await user.click(await screen.findByText("High School", {selector:"span"}))
+        await user.click(await screen.findByText("High School", {selector: "span"}))
         await user.click(screen.getByRole('combobox', {name: /subject/i}));
-        await user.click(await screen.findByText("Math", {selector:"span"}))
+        await user.click(await screen.findByText("Math", {selector: "span"}))
         await user.click(screen.getByRole('combobox', {name: /topic/i}));
-        await user.click(await screen.findByText("Algebra", {selector:"span"}))
+        await user.click(await screen.findByText("Algebra", {selector: "span"}))
 
         await user.click(screen.getByRole("button", {name: /confirm/i}));
 
@@ -201,11 +357,154 @@ describe("Questions Data Table", () => {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
-                }});
-            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+                }
+            });
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}))
             expect(refetch).toHaveBeenCalled();
         })
     })
+
+    it("lets the user edit an existing question", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={questionData} columns={questionColumns(refetch)} name="Question" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        const editButton = await screen.findByText("Edit");
+        await user.click(editButton);
+
+        const input1 = await screen.findByLabelText("Question");
+        await user.clear(input1);
+        await user.type(input1, "2 * 2");
+
+        const input2 = await screen.findByLabelText("Answer");
+        await user.clear(input2);
+        await user.type(input2, "4");
+
+        const input3 = await screen.findByLabelText("Marks");
+        await user.clear(input3);
+        await user.type(input3, "7");
+
+        // Submit
+        const confirmButton = screen.getByRole("button", {name: /confirm/i});
+        await user.click(confirmButton);
+
+        // Ensure the edit call was made
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith(
+                "http://localhost:8080/api/admin/questions/edit",
+                {
+                    id: questionData[0].id,
+                    question: "2 * 2",
+                    answer: "4",
+                    marks: "7"
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+            expect(refetch).toHaveBeenCalled();
+        });
+    });
+
+    it("lets the user cancel editing question", async () => {
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={questionData} columns={questionColumns(refetch)} name="Question" refetch={refetch}/>);
+
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        const editButton = await screen.findByText("Edit");
+        await user.click(editButton);
+
+        const input1 = await screen.findByLabelText("Question");
+        await user.clear(input1);
+        await user.type(input1, "2 * 2");
+
+        const input2 = await screen.findByLabelText("Answer");
+        await user.clear(input2);
+        await user.type(input2, "4");
+
+        const input3 = await screen.findByLabelText("Marks");
+        await user.clear(input3);
+        await user.type(input3, "7");
+
+        // Submit
+        const confirmButton = screen.getByRole("button", {name: /cancel/i});
+        await user.click(confirmButton);
+
+        expect(toastMock).not.toHaveBeenCalled();
+    });
+
+    it("lets the user delete questions", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={questionData} columns={questionColumns(refetch)} name="Question" refetch={refetch}/>);
+
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Delete"));
+        expect(screen.getByText(/confirm deletion/i));
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(axios.delete).toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+    });
+
+    it("lets the user cancel deletion", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={questionData} columns={questionColumns(refetch)} name="Question" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        await user.click(await screen.findByText("Delete"));
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        expect(axios.delete).not.toHaveBeenCalled()
+        expect(toastMock).not.toHaveBeenCalled();
+    });
 });
 
 describe("Subject Data Table", () => {
@@ -255,7 +554,7 @@ describe("Subject Data Table", () => {
         await user.type(await screen.findByLabelText(/^Subject$/i), 'Physics');
 
         await user.click(screen.getByRole('combobox', {name: /qualification/i}));
-        await user.click(await screen.findByText("High School", {selector:"span"}))
+        await user.click(await screen.findByText("High School", {selector: "span"}))
 
         await user.click(screen.getByRole("button", {name: /confirm/i}));
 
@@ -267,11 +566,170 @@ describe("Subject Data Table", () => {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
-                }});
-            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+                }
+            });
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}))
             expect(refetch).toHaveBeenCalled();
         })
     })
+
+    it("lets the user edit an existing subject", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData})
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={subjectData} columns={subjectColumns(refetch)} name="Subject" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        const editButton = await screen.findByText("Edit");
+        await user.click(editButton);
+
+        const input = await screen.findByLabelText("Subject");
+        await user.clear(input);
+        await user.type(input, "Mathematics");
+
+        await user.click(screen.getByRole('combobox', {name: /qualification/i}));
+        await user.click(await screen.findByText("College", {selector: "span"}))
+
+        // Submit
+        const confirmButton = screen.getByRole("button", {name: /confirm/i});
+        await user.click(confirmButton);
+
+        // Ensure the edit call was made
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith(
+                "http://localhost:8080/api/admin/subjects/edit",
+                {
+                    id: subjectData[0].id,
+                    subject: "Mathematics",
+                    qualification: "College",
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+            expect(refetch).toHaveBeenCalled();
+        });
+    });
+
+    it("lets the user cancel editing subject", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={subjectData} columns={subjectColumns(refetch)} name="Subject" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Edit"));
+
+        // Edit the qualification name
+        await user.type(await screen.findByLabelText("Subject"), "Mathematics");
+
+        // Submit
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(toastMock).not.toHaveBeenCalled();
+    });
+
+    it("lets the user delete subject", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={subjectData} columns={subjectColumns(refetch)} name="Subject" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Delete"));
+        expect(screen.getByText(/confirm deletion/i));
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(axios.delete).toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+    });
+
+    it("doesn't let the user delete subject when there's topics", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={subjectData} columns={subjectColumns(refetch)} name="Subject" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[1]);
+
+        await user.click(await screen.findByText("Delete"));
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "destructive"}));
+    });
+
+    it("lets the user cancel deletion", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={subjectData} columns={subjectColumns(refetch)} name="Subject" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        await user.click(await screen.findByText("Delete"));
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        expect(axios.delete).not.toHaveBeenCalled()
+        expect(toastMock).not.toHaveBeenCalled();
+    });
 
 });
 
@@ -324,9 +782,9 @@ describe("Topic Data Table", () => {
         await user.type(await screen.findByLabelText(/^Topic$/i), 'Arithmetic');
 
         await user.click(screen.getByRole('combobox', {name: /qualification/i}));
-        await user.click(await screen.findByText("High School", {selector:"span"}))
+        await user.click(await screen.findByText("High School", {selector: "span"}))
         await user.click(screen.getByRole('combobox', {name: /subject/i}));
-        await user.click(await screen.findByText("Math", {selector:"span"}))
+        await user.click(await screen.findByText("Math", {selector: "span"}))
         await user.click(screen.getByRole("button", {name: /confirm/i}));
 
         await waitFor(() => {
@@ -338,11 +796,174 @@ describe("Topic Data Table", () => {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
-                }});
-            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+                }
+            });
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}))
             expect(refetch).toHaveBeenCalled();
         })
     })
+
+    it("lets the user edit an existing topic", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData})
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={topicData} columns={topicColumns(refetch)} name="Topic" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        const editButton = await screen.findByText("Edit");
+        await user.click(editButton);
+
+        const input = await screen.findByLabelText("Topic");
+        await user.clear(input);
+        await user.type(input, "Binomials");
+
+        await user.click(screen.getByRole('combobox', {name: /qualification/i}));
+        await user.click((await screen.findAllByText("High School", {selector: "span"}))[1])
+        await user.click(screen.getByRole('combobox', {name: /subject/i}));
+        await user.click(await screen.findByText("Math", {selector: "span"}))
+        // Submit
+        const confirmButton = screen.getByRole("button", {name: /confirm/i});
+        await user.click(confirmButton);
+
+        // Ensure the edit call was made
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith(
+                "http://localhost:8080/api/admin/topics/edit",
+                {
+                    id: topicData[0].id, // make sure topicData has an .id
+                    topic: "Binomials",
+                    qualification: "High School",
+                    subject: "Math",
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+            expect(refetch).toHaveBeenCalled();
+        });
+    });
+
+    it("lets the user cancel editing topic", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={topicData} columns={topicColumns(refetch)} name="Topic" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Edit"));
+
+        // Edit the qualification name
+        await user.type(await screen.findByLabelText("Topic"), "Binomials");
+
+        // Submit
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(toastMock).not.toHaveBeenCalled();
+    });
+
+    it("lets the user delete topic", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={topicData} columns={topicColumns(refetch)} name="Topic" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Delete"));
+        expect(screen.getByText(/confirm deletion/i));
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(axios.delete).toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+    });
+
+    it("doesn't let the user delete topic when there's questions", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={topicData} columns={topicColumns(refetch)} name="Topic" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[1]);
+
+        await user.click(await screen.findByText("Delete"));
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "destructive"}));
+    });
+
+    it("lets the user cancel deletion", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={topicData} columns={topicColumns(refetch)} name="Topic" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        await user.click(await screen.findByText("Delete"));
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        expect(axios.delete).not.toHaveBeenCalled()
+        expect(toastMock).not.toHaveBeenCalled();
+    });
 });
 
 describe("Users Data Table", () => {
@@ -398,16 +1019,16 @@ describe("Users Data Table", () => {
         await user.type(await screen.findByLabelText(/^Email$/i), 'test@test.com');
 
         await user.click(screen.getByRole('combobox', {name: /role/i}));
-        await user.click(await screen.findByText("Admin", {selector:"span"}));
+        await user.click(await screen.findByText("Admin", {selector: "span"}));
 
         expect(await screen.queryByRole("combobox", {name: /qualification/i})).not.toBeInTheDocument(); // Qualification Drop Down should not be visible if admin is selected.
 
         await user.click(screen.getByRole('combobox', {name: /role/i}));
-        await user.click(await screen.findByText("User", {selector:"span"}))
+        await user.click(await screen.findByText("User", {selector: "span"}))
         const qualBox = await screen.findByRole("combobox", {name: /qualification/i})
         expect(qualBox).toBeInTheDocument(); // Since it appears only when the user box is selected
         await user.click(qualBox);
-        await user.click(await screen.findByText("High School", {selector:"span"}))
+        await user.click(await screen.findByText("High School", {selector: "span"}))
         await user.click(screen.getByRole("button", {name: /confirm/i}));
 
         await waitFor(() => {
@@ -421,9 +1042,158 @@ describe("Users Data Table", () => {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
-                }});
-            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant:"success"}))
+                }
+            });
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}))
             expect(refetch).toHaveBeenCalled();
         })
     })
+
+    it("lets the user edit an existing user", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={userData} columns={usersColumns(refetch)} name="User" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        const editButton = await screen.findByText("Edit");
+        await user.click(editButton);
+
+        const input1 = await screen.findByLabelText("Username");
+        await user.clear(input1);
+        await user.type(input1, "hello");
+
+        const input2 = await screen.findByLabelText("Email");
+        await user.clear(input2);
+        await user.type(input2, "hello@hello.com");
+
+        const input3 = await screen.findByLabelText("Password");
+        await user.clear(input3);
+        await user.type(input3, "hello");
+
+        await user.click(screen.getByRole('combobox', {name: /role/i}));
+        await user.click(await screen.findByText("User", {selector: "span"}))
+
+        await user.click(screen.getByRole('combobox', {name: /qualification/i}));
+        await user.click(await screen.findByText("College", {selector: "span"}))
+
+        // Submit
+        const confirmButton = screen.getByRole("button", {name: /confirm/i});
+        await user.click(confirmButton);
+
+        // Ensure the edit call was made
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalledWith(
+                "http://localhost:8080/api/admin/users/edit",
+                {
+                    id: userData[0].id,
+                    username: "hello",
+                    email: "hello@hello.com",
+                    password: "hello",
+                    role: "User",
+                    qualification: "College"
+                },
+                {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+            expect(refetch).toHaveBeenCalled();
+        });
+    });
+
+    it("lets the user cancel editing user", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={userData} columns={usersColumns(refetch)} name="User" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Edit"));
+
+        // Edit the qualification name
+        await user.type(await screen.findByLabelText("Username"), "hello");
+
+        // Submit
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(toastMock).not.toHaveBeenCalled();
+    });
+
+    it("lets the user delete other user", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={userData} columns={usersColumns(refetch)} name="User" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        // Click "Edit"
+        await user.click(await screen.findByText("Delete"));
+        expect(screen.getByText(/confirm deletion/i));
+        await user.click(screen.getByRole("button", {name: /confirm/i}));
+
+        expect(axios.delete).toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({variant: "success"}));
+    });
+
+    it("lets the user cancel deleting other user", async () => {
+        // Mock GET requests for initial data loading
+        (axios.get as jest.Mock)
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+            .mockResolvedValueOnce({data: subjectData}) // subjects
+            .mockResolvedValueOnce({data: topicData}) // topics
+            .mockResolvedValueOnce({data: qualificationData}) // qualifications
+
+
+        const user = userEvent.setup();
+
+        render(<DataTable data={userData} columns={usersColumns(refetch)} name="User" refetch={refetch}/>);
+
+        // Open the dropdown menu for the first row
+        const actionButtons = await screen.findAllByRole("button", {name: /open menu/i});
+        await user.click(actionButtons[0]);
+
+        await user.click(await screen.findByText("Delete"));
+        await user.click(screen.getByRole("button", {name: /cancel/i}));
+
+        expect(axios.delete).not.toHaveBeenCalled();
+        expect(toastMock).not.toHaveBeenCalled();
+    });
 });

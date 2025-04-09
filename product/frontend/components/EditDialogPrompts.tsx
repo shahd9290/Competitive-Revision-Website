@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import {CancelUnsavedDialog} from "@/components/DialogPrompts";
 import axios from "axios";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {toast} from "@/hooks/use-toast";
+import {useToast} from "@/hooks/use-toast";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export function EditQuestion({open, setOpen, row, refetch}) {
@@ -19,6 +19,7 @@ export function EditQuestion({open, setOpen, row, refetch}) {
     const [loading, setLoading] = useState(false);
     const [dirty, setDirty] = useState(false);
     const [showCancelDialog, setShowCancelDialog] = useState(false);
+    const {toast} = useToast();
 
     useEffect(() => {
         if (row && open) {
@@ -96,22 +97,22 @@ export function EditQuestion({open, setOpen, row, refetch}) {
 
                     {/* Question */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Question</Label>
-                        <Input className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)}
+                        <Label htmlFor="question" className="text-right">Question</Label>
+                        <Input id="question" className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)}
                                required/>
                     </div>
 
                     {/* Answer */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Answer</Label>
-                        <Input className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)}
+                        <Label htmlFor="answer" className="text-right">Answer</Label>
+                        <Input id="answer" className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)}
                                required/>
                     </div>
 
                     {/* Marks */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Marks</Label>
-                        <Input className="col-span-3" type="number" value={marks}
+                        <Label htmlFor="marks" className="text-right">Marks</Label>
+                        <Input id="marks" className="col-span-3" type="number" value={marks}
                                onChange={(e) => setMarks(e.target.value)}
                                required/>
                     </div>
@@ -150,6 +151,7 @@ export function EditQualification({open, setOpen, row, refetch}) {
     const [loading, setLoading] = useState(false);
     const [dirty, setDirty] = useState(false);
     const [showCancelDialog, setShowCancelDialog] = useState(false);
+    const {toast} = useToast();
 
     useEffect(() => {
         if (row && open) {
@@ -221,10 +223,10 @@ export function EditQualification({open, setOpen, row, refetch}) {
                     {/* Show Error Message if Any */}
                     {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
 
-                    {/* Question */}
+                    {/* Qualification */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Qualification</Label>
-                        <Input className="col-span-3" value={qualification} onChange={(e) => setQualification(e.target.value)}
+                        <Label htmlFor="qualification" className="text-right">Qualification</Label>
+                        <Input id="qualification" className="col-span-3" value={qualification} onChange={(e) => setQualification(e.target.value)}
                                required/>
                     </div>
 
@@ -263,6 +265,7 @@ export function EditUser({open, setOpen, row, qualifications, refetch}) {
     const [loading, setLoading] = useState(false);
     const [dirty, setDirty] = useState(false);
     const [showCancelDialog, setShowCancelDialog] = useState(false);
+    const {toast} = useToast();
 
     useEffect(() => {
         if (row && open) {
@@ -348,22 +351,22 @@ export function EditUser({open, setOpen, row, qualifications, refetch}) {
 
                     {/* Username */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Username</Label>
-                        <Input className="col-span-3" value={username} onChange={(e) => setUsername(e.target.value)}
+                        <Label htmlFor="username" className="text-right">Username</Label>
+                        <Input id="username" className="col-span-3" value={username} onChange={(e) => setUsername(e.target.value)}
                                required/>
                     </div>
 
                     {/* Email */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Email</Label>
-                        <Input className="col-span-3" type={"email"} value={email} onChange={(e) => setEmail(e.target.value)}
+                        <Label htmlFor="email" className="text-right">Email</Label>
+                        <Input id="email" className="col-span-3" type={"email"} value={email} onChange={(e) => setEmail(e.target.value)}
                                required/>
                     </div>
 
                     {/* Password */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Password</Label>
-                        <Input className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)}/>
+                        <Label htmlFor="password" className="text-right">Password</Label>
+                        <Input id="password" className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)}/>
                     </div>
 
                     {/* Role */}
@@ -375,12 +378,12 @@ export function EditUser({open, setOpen, row, qualifications, refetch}) {
                             }}
                             value={role}
                         >
-                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectTrigger aria-label="Role" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                                 <SelectValue placeholder="Select Role"/>
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={"Admin"}>Admin</SelectItem>
-                                <SelectItem value={"User"}>User</SelectItem>
+                                <SelectItem value={"Admin"}><span>Admin</span></SelectItem>
+                                <SelectItem value={"User"}><span>User</span></SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -396,13 +399,14 @@ export function EditUser({open, setOpen, row, qualifications, refetch}) {
                                 value={qualification !== "N/A" ? qualification : ""}
                             >
                                 <SelectTrigger
+                                    aria-label="Qualification"
                                     className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                                     <SelectValue placeholder="Select Qualification"/>
                                 </SelectTrigger>
                                 <SelectContent>
                                     {qualifications.map((q) => (
                                         <SelectItem key={q.id || q.qualification} value={q.qualification}>
-                                            {q.qualification}
+                                            <span>{q.qualification}</span>
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -443,6 +447,7 @@ export function EditSubject({open, setOpen, row, qualifications, refetch}) {
     const [loading, setLoading] = useState(false);
     const [dirty, setDirty] = useState(false);
     const [showCancelDialog, setShowCancelDialog] = useState(false);
+    const {toast} = useToast();
 
     useEffect(() => {
         if (row && open) {
@@ -512,10 +517,10 @@ export function EditSubject({open, setOpen, row, qualifications, refetch}) {
                     <DialogTitle>Editing Subject</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                    {/* Topic */}
+                    {/* Subject */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Subject</Label>
-                        <Input className="col-span-3"  value={subject} onChange={(e) => setSubject(e.target.value)}
+                        <Label htmlFor="Subject" className="text-right">Subject</Label>
+                        <Input id="Subject" className="col-span-3"  value={subject} onChange={(e) => setSubject(e.target.value)}
                                required />
                     </div>
 
@@ -528,13 +533,13 @@ export function EditSubject({open, setOpen, row, qualifications, refetch}) {
                             }}
                             value={qualification}
                         >
-                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                                 <SelectValue placeholder="Select Qualification" />
                             </SelectTrigger>
                             <SelectContent>
                                 {qualifications.map((q) => (
                                     <SelectItem key={q.id || q.qualification} value={q.qualification}>
-                                        {q.qualification}
+                                        <span>{q.qualification}</span>
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -572,6 +577,7 @@ export function EditTopic({open, setOpen, row, qualifications, subjects, refetch
     const [dirty, setDirty] = useState(false);
     const [showCancelDialog, setShowCancelDialog] = useState(false);
     const filteredSubjects = subjects.filter((subject) => subject.qualification === qualification);
+    const {toast} = useToast();
 
     useEffect(() => {
         if (row && open) {
@@ -647,8 +653,8 @@ export function EditTopic({open, setOpen, row, qualifications, subjects, refetch
                 <form onSubmit={handleSubmit} className="grid gap-4 py-4">
                     {/* Topic */}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right">Topic</Label>
-                        <Input className="col-span-3" value={topic} onChange={(e) => setTopic(e.target.value)} required/>
+                        <Label htmlFor="topic" className="text-right">Topic</Label>
+                        <Input id="topic" className="col-span-3" value={topic} onChange={(e) => setTopic(e.target.value)} required/>
                     </div>
 
                     {/* Qualification Dropdown */}
@@ -661,13 +667,13 @@ export function EditTopic({open, setOpen, row, qualifications, subjects, refetch
                             }}
                             value={qualification}
                         >
-                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                                 <SelectValue placeholder="Select Qualification"/>
                             </SelectTrigger>
                             <SelectContent>
                                 {qualifications.map((q) => (
                                     <SelectItem key={q.id || q.qualification} value={q.qualification}>
-                                        {q.qualification}
+                                        <span>{q.qualification}</span>
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -684,7 +690,7 @@ export function EditTopic({open, setOpen, row, qualifications, subjects, refetch
                             value={subject}
                             disabled={!qualification || filteredSubjects.length === 0}
                         >
-                            <SelectTrigger className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                            <SelectTrigger aria-label="Subject" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                                 <SelectValue
                                     placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"}/>
                             </SelectTrigger>
@@ -692,7 +698,7 @@ export function EditTopic({open, setOpen, row, qualifications, subjects, refetch
                                 {filteredSubjects.length > 0 ? (
                                     filteredSubjects.map((s) => (
                                         <SelectItem key={s.id || s.name} value={s.name}>
-                                            {s.name}
+                                            <span>{s.name}</span>
                                         </SelectItem>
                                     ))
                                 ) : (
