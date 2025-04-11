@@ -95,6 +95,7 @@ documents/*.cb2
 documents/.*.lb
 documents/*.pdf
 documents/*.synctex.gz
+documents/*.fdb_latexmk
 
 ### Environment Variables + Backend Keys ###
 product/frontend/.env

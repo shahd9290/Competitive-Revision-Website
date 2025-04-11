@@ -138,11 +138,44 @@ For the development of this project, I will follow a full stack development appr
 
 In order to utilise the World Wide Web that he had invented in 1990, Tim Berners-Lee had created WorldWideWeb, later Nexus~\cite{NEXUS}, the first web browser - which served as an inspiration for many subsequent browsers. These browsers were designed to load HyperText Markup Language (HTML) files, which later evolved into different web pages for consumer use as the Web had developed. Combined with Cascading Style Sheets (CSS) and JavaScript, they form the base framework used to create webpages ever since the dawn of the internet - with HTML files serving as the base, CSS files beautifying the styles, and JavaScript adding functionality to the webpages.
 
-While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: React, Angular and Vue.js, though there are many others written in different programming languages.
+While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: Angular, Vue.js and React, though there are many others written in different programming languages.
 
-When it comes to the differences between the three of them, there are some notable differences. For starters, Angular is known to have a steeper learning curve - given that it uses TypeScript as opposed to JavaScript, along with the extensive features that it provides. React has an easier learning curve as it revolves around the idea of reusable components, while Vue is the easiest to learn - given that the syntax is similar to HTML. Alongside this, Vue and React are best used for smaller applications, while Angular is the first choice for large enterprise applications~\cite{FRAMEWORKS_COMPARE}. 
+% Angular
 
-However, for the frontend of this project I will be using a combination of Next.JS with TailwindCSS. Next.js is based on the React framework, and is designed to overcome React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS} such as better Search-Engine Optimisation and Routing, both of which would be required for the web application to gain traction in the future.
+% Vue
+
+% React
+React was initially created in 2011 by Facebook and over time expanded as tools were subsequently released to further enhance the React library - ultimately making it into the comprehensive library that developers use today. React itself is used for creating the views for a web page, while a sister component ReactDOM is used to render the UI in the browser~\cite{BANKS_REACT}. More importantly, React utilises JSX - a hybrid of JavaScript and XML, which provides a simplified interface to create React components. An example of how a React component is defined with just JavaScript can be shown as:
+
+\begin{lstlisting}[language=javascript]
+	function IngredientsList() {
+		return React.createElement(
+			"ul",
+			{ className: "ingredients" },
+			items.map((ingredient, i) =>
+			React.createElement("li", { key: i }, ingredient)
+			)
+		);
+	}
+\end{lstlisting}
+\captionof{figure}{\cite{BANKS_REACT}}
+
+However when it comes to implementation with JSX, given the use of XML the syntax is comparable with HTML when it comes to developing a webpage, as seen in the following example:
+
+\begin{lstlisting}[language=javascript]
+	<IngredientsList>
+		<Ingredient />
+		<Ingredient />
+		<Ingredient />
+  </IngredientsList>
+\end{lstlisting}
+\captionof{figure}{\cite{BANKS_REACT}}
+
+Usage of JSX with React ultimately makes it easier to learn as a whole, as it combines very well with HTML elements to form the webpages required for the application. Components are also reusable, and ultimately makes React an ideal tool when it comes to Web Development.
+
+%When it comes to the differences between the three of them, there are some notable differences. For starters, Angular is known to have a steeper learning curve - given that it uses TypeScript as opposed to JavaScript, along with the extensive features that it provides. React has an easier learning curve as it revolves around the idea of reusable components, while Vue is the easiest to learn - given that the syntax is similar to HTML. Alongside this, Vue and React are best used for smaller applications, while Angular is the first choice for large enterprise applications~\cite{FRAMEWORKS_COMPARE}. 
+
+For the frontend of this project I will be using a combination of Next.JS with TailwindCSS. Next.js is based on the React framework, and is designed to overcome React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS} such as better Search-Engine Optimisation and Routing, both of which would be required for the web application to gain traction in the future.
 
 \subsection {Backend Technologies}
 
@@ -703,8 +736,11 @@ Professional Issues occur wherever computing meets society. As such they are alw
 \bibitem{FRAMEWORKS} Tamir Dresher, Amir Zuker, Shay Friedman (2018),
 \emph{Hands-on full stack web development with ASP.NET Core : learn end-to-end web development with leading frontend frameworks, such as Angular, React, and Vue - \url{https://learning.oreilly.com/library/view/hands-on-full-stack-web/9781788622882/98c5f517-66a6-444a-9e45-54853e1a8cb8.xhtml}}
 
-\bibitem{FRAMEWORKS_COMPARE} Sam (@learnwithakshay) (2024),
-\emph{React vs. Angular vs. Vue.js - What to Choose in 2024? - \url{https://medium.com/@learnwithakshay/react-vs-angular-vs-vue-js-what-to-choose-in-2024-87bf9ed38a80}}
+\bibitem{BANKS_REACT} Alex Banks, Eve Porcello (2015),
+\emph{Learning React, 2nd Edition - \url{https://learning.oreilly.com/library/view/learning-react-2nd/9781492051718/}}
+
+% \bibitem{FRAMEWORKS_COMPARE} Sam (@learnwithakshay) (2024),
+% \emph{React vs. Angular vs. Vue.js - What to Choose in 2024? - \url{https://medium.com/@learnwithakshay/react-vs-angular-vs-vue-js-what-to-choose-in-2024-87bf9ed38a80}}
 
 \bibitem{DB_NEXTJS} Dinh Bui (2023),
 \emph{Next.JS For Front-End and Compatible Backend Solutions - \url{https://www.theseus.fi/bitstream/handle/10024/800535/Bui_Dinh.pdf?sequence=2}}
