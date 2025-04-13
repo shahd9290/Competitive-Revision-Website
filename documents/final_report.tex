@@ -138,13 +138,37 @@ For the development of this project, I will follow a full stack development appr
 
 In order to utilise the World Wide Web that he had invented in 1990, Tim Berners-Lee had created WorldWideWeb, later Nexus~\cite{NEXUS}, the first web browser - which served as an inspiration for many subsequent browsers. These browsers were designed to load HyperText Markup Language (HTML) files, which later evolved into different web pages for consumer use as the Web had developed. Combined with Cascading Style Sheets (CSS) and JavaScript, they form the base framework used to create webpages ever since the dawn of the internet - with HTML files serving as the base, CSS files beautifying the styles, and JavaScript adding functionality to the webpages.
 
-While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: Angular, Vue.js and React, though there are many others written in different programming languages.
-
-% Angular
+While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: Vue.js, Angular and React, though there are many others written in different programming languages.
 
 % Vue
+\textbf{Vue.js}\\
+
+% Angular
+\textbf{Angular}\\
+The original Angular (known as AngularJS) was created in 2009 as an open-source, client-side JavaScript framework promoting a high-productivity web development experience~\cite{BRANAS_ANGULAR}. The idea behind AngularJS was that developers would be able to simplify their code bases, as the framework was designed around the fact that components can be reusable and easily maintainable. In 2010 AngularJS was made open-source, allowing others to use the library to create their own applications. However, as JavaScript faced many improvements over the years that had followed, AngularJS was soon unable to meet requirements for large development projects, and ultimately became obsolete. As a result, Google created Angular 2 (otherwise known as Angular), which was released in 2016~\cite{ANGULAR_ANALYSIS}.
+
+While AngularJS revolved around the MVC framework, Angular was designed to be a component-based framework. Each component is made up of HTML, CSS and TypeScript files, an example of which an be shown as:
+
+\begin{lstlisting}[language=javascript]
+	import { Component } from '@angular/core';
+	
+	@Component({
+		selector: 'app-root',
+		standalone: true,
+		imports: [],
+		template: `<h1>Hello world!</h1>`,
+		styleUrls: ['./app.component.css'],
+	})
+	export class AppComponent {
+		title = 'homes';
+	}
+\end{lstlisting}
+\captionof{figure}{\cite{HELLO_ANGULAR}}
+
+Angular's use of TypeScript, as opposed to JavaScript, ensures that projects are statically typed — requiring developers to declare the types of variables, parameters, and return values at compile time, thereby reducing the likelihood of runtime errors. Additionally, TypeScript supports the use of interfaces, allowing custom types to be defined and reused across a project. Combined with Angular’s modular architecture — where logic can be split into separate files and imported as needed — this leads to improved maintainability and scalability in large codebases~\cite{TSvJS}.\\
 
 % React
+\textbf{React}\\
 React was initially created in 2011 by Facebook and over time expanded as tools were subsequently released to further enhance the React library - ultimately making it into the comprehensive library that developers use today. React itself is used for creating the views for a web page, while a sister component ReactDOM is used to render the UI in the browser~\cite{BANKS_REACT}. More importantly, React utilises JSX - a hybrid of JavaScript and XML, which provides a simplified interface to create React components. An example of how a React component is defined with just JavaScript can be shown as:
 
 \begin{lstlisting}[language=javascript]
@@ -167,11 +191,11 @@ However when it comes to implementation with JSX, given the use of XML the synta
 		<Ingredient />
 		<Ingredient />
 		<Ingredient />
-  </IngredientsList>
+	</IngredientsList>
 \end{lstlisting}
 \captionof{figure}{\cite{BANKS_REACT}}
 
-Usage of JSX with React ultimately makes it easier to learn as a whole, as it combines very well with HTML elements to form the webpages required for the application. Components are also reusable, and ultimately makes React an ideal tool when it comes to Web Development.
+Usage of JSX with React ultimately makes it easier to learn as a whole, as it combines very well with HTML elements to form the webpages required for the application. Components are also reusable, and ultimately makes React an ideal tool when it comes to Web Development.\\
 
 %When it comes to the differences between the three of them, there are some notable differences. For starters, Angular is known to have a steeper learning curve - given that it uses TypeScript as opposed to JavaScript, along with the extensive features that it provides. React has an easier learning curve as it revolves around the idea of reusable components, while Vue is the easiest to learn - given that the syntax is similar to HTML. Alongside this, Vue and React are best used for smaller applications, while Angular is the first choice for large enterprise applications~\cite{FRAMEWORKS_COMPARE}. 
 
@@ -735,6 +759,18 @@ Professional Issues occur wherever computing meets society. As such they are alw
 
 \bibitem{FRAMEWORKS} Tamir Dresher, Amir Zuker, Shay Friedman (2018),
 \emph{Hands-on full stack web development with ASP.NET Core : learn end-to-end web development with leading frontend frameworks, such as Angular, React, and Vue - \url{https://learning.oreilly.com/library/view/hands-on-full-stack-web/9781788622882/98c5f517-66a6-444a-9e45-54853e1a8cb8.xhtml}}
+
+\bibitem{BRANAS_ANGULAR} Rodrigo Branas, Chandermani, Matt Frisbie, Amos Q. Haviv (2016),
+\emph{AngularJS: Maintaining Web Applications - \url{https://learning.oreilly.com/library/view/angularjs-maintaining-web/9781786465788/}}
+
+\bibitem{ANGULAR_ANALYSIS} G. Geetha, Monisha Mittal, K. Mohana Prasad, J. Godwin Ponsam (2022),
+\emph{Interpretation and Analysis of Angular Framework - \url{https://ieeexplore.ieee.org/abstract/document/10047474}}
+
+\bibitem{HELLO_ANGULAR} Google, 
+\emph{Angular V17 Tutorial, Lesson 01: Hello World (Completed Code) - \url{https://v17.angular.io/tutorial/first-app/first-app-lesson-01}}
+
+\bibitem{TSvJS} Saiful Islam (2023),
+\emph{JavaScript alternative (TypeScript) and its effectiveness in web development - \url{https://www.theseus.fi/bitstream/handle/10024/795522/Islam_Saiful.pdf?sequence=2&isAllowed=y}}
 
 \bibitem{BANKS_REACT} Alex Banks, Eve Porcello (2015),
 \emph{Learning React, 2nd Edition - \url{https://learning.oreilly.com/library/view/learning-react-2nd/9781492051718/}}
