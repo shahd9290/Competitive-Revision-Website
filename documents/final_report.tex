@@ -138,10 +138,7 @@ For the development of this project, I will follow a full stack development appr
 
 In order to utilise the World Wide Web that he had invented in 1990, Tim Berners-Lee had created WorldWideWeb, later Nexus~\cite{NEXUS}, the first web browser - which served as an inspiration for many subsequent browsers. These browsers were designed to load HyperText Markup Language (HTML) files, which later evolved into different web pages for consumer use as the Web had developed. Combined with Cascading Style Sheets (CSS) and JavaScript, they form the base framework used to create webpages ever since the dawn of the internet - with HTML files serving as the base, CSS files beautifying the styles, and JavaScript adding functionality to the webpages.
 
-While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Three of the most popular JavaScript based frameworks include: Vue.js, Angular and React, though there are many others written in different programming languages.
-
-% Vue
-\textbf{Vue.js}\\
+While it is possible to design a website solely with these three technologies, over time many different code libraries have emerged, bringing different controls and code reusability to web development. Ultimately, these libraries would be merged together and form a framework - with the intention of helping users create websites from start to end, as well as handling authentication, routing among other key features~\cite{FRAMEWORKS}. Two of the most popular JavaScript based frameworks include: Angular and React, though there are many others written in different programming languages.
 
 % Angular
 \textbf{Angular}\\
@@ -197,15 +194,17 @@ However when it comes to implementation with JSX, given the use of XML the synta
 
 Usage of JSX with React ultimately makes it easier to learn as a whole, as it combines very well with HTML elements to form the webpages required for the application. Components are also reusable, and ultimately makes React an ideal tool when it comes to Web Development.\\
 
-%When it comes to the differences between the three of them, there are some notable differences. For starters, Angular is known to have a steeper learning curve - given that it uses TypeScript as opposed to JavaScript, along with the extensive features that it provides. React has an easier learning curve as it revolves around the idea of reusable components, while Vue is the easiest to learn - given that the syntax is similar to HTML. Alongside this, Vue and React are best used for smaller applications, while Angular is the first choice for large enterprise applications~\cite{FRAMEWORKS_COMPARE}. 
+When it comes to the differences between these two frameworks, Angular is known to have a steeper learning curve - given that it uses TypeScript as opposed to JavaScript, along with the extensive features that it provides. At the same time, React has an easier learning curve as it revolves around the idea of reusable components. Angular has a large community which has Google backing, while React offers extensive libraries and resources as a result of a significantly active community supporting it~\cite{FRAMEWORKS_COMPARE}.\\ 
 
-For the frontend of this project I will be using a combination of Next.JS with TailwindCSS. Next.js is based on the React framework, and is designed to overcome React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS} such as better Search-Engine Optimisation and Routing, both of which would be required for the web application to gain traction in the future.
+However, for the frontend of this project, I will be using Next.js. Built on top of the React framework, Next.js is designed to address React's limitation when it comes to server-side rendering, whilst including many of its own additional features~\cite{DB_NEXTJS} such as better Search-Engine Optimisation and Routing, both of which would be required for the web application to gain traction in the future, as well as static site generation. Next.js also supports the use of TypeScript, bringing the previously mentioned advantages of static typing to the framework. This decision effectively combines the modularity and scalability of Angular with the flexibility and component-driven nature of React, offering a robust and efficient development environment for the frontend\\
+
+Alongside Next.js, my project will be styled using TailwindCSS. Tailwind is a utility-first CSS framework, allowing developers to embed styles into their components as class names during development. During the build process, TailwindCSS scans all source files and converts the used class names into their corresponding styles before writing them to a minimal, optimised and static CSS file~\cite{TAILWIND}. This gives developers the ability to leave maintenance of separate CSS files to the framework, allowing them to focus more on component logic and maintain design consistency.
 
 \subsection {Backend Technologies}
 
 Similarly to the frontend, there are a number of backend frameworks in existence that are widely used for different web applications. These frameworks are designed to act as the core of any client-server based system, as they process majority of the application logic, and facilitate communication with database systems. Many of these frameworks are widely used, including - but not limited to Node.js and Spring Boot.
 
-Node.js is based on JavaScript, and is known for its high performance and scalability. It is an event-drive runtime environment designed to build scalable network applications, where callbacks are triggered for each connection. Unfortunately, these features can also be seen as disadvantages of the system, wherein the code for callbacks can be increasingly difficult to manage in complex applications - while the event-driven architecture won't be beneficial for tasks that may be more CPU-intensive~\cite{BACKEND_FRAMEWORKS_BLOG}~\cite{BACKEND_FRAMEWORKS_REPORT}~\cite{SPRING}.
+Node.js is based on JavaScript, and is known for its high performance and scalability. It is an event-drive runtime environment designed to build scalable network applications, where callbacks are triggered for each connection. Unfortunately, these features can also be seen as disadvantages of the system, wherein the code for callbacks can be increasingly difficult to manage in complex applications - while the event-driven architecture won't be beneficial for tasks that may be more CPU-intensive~\cite{BACKEND_FRAMEWORKS_BLOG,BACKEND_FRAMEWORKS_REPORT, SPRING}.
 
 Spring Boot is part of the Spring framework, and is known for its security and integration capabilities. It uses a three-tiered architecture which include layers acting as Controllers, Services and Data Repositories - forming microservices as part of the overall backend system. Compared with Node.js, Spring Boot would be more preferable for security with the many libraries that it uses for it, as well as the fact that it has a larger support community - allowing for ease of development during this project~\cite{SPRING}. Furthermore, the benefit of Spring Boot will be that it will allow for seamless integration with the database system required - allowing me to focus on developing the endpoints required for the product. As a result I have chosen to use this framework for backend development.
 
@@ -775,11 +774,14 @@ Professional Issues occur wherever computing meets society. As such they are alw
 \bibitem{BANKS_REACT} Alex Banks, Eve Porcello (2015),
 \emph{Learning React, 2nd Edition - \url{https://learning.oreilly.com/library/view/learning-react-2nd/9781492051718/}}
 
-% \bibitem{FRAMEWORKS_COMPARE} Sam (@learnwithakshay) (2024),
-% \emph{React vs. Angular vs. Vue.js - What to Choose in 2024? - \url{https://medium.com/@learnwithakshay/react-vs-angular-vs-vue-js-what-to-choose-in-2024-87bf9ed38a80}}
+\bibitem{FRAMEWORKS_COMPARE} Sam (@learnwithakshay) (2024),
+\emph{React vs. Angular vs. Vue.js - What to Choose in 2024? - \url{https://medium.com/@learnwithakshay/react-vs-angular-vs-vue-js-what-to-choose-in-2024-87bf9ed38a80}}
 
 \bibitem{DB_NEXTJS} Dinh Bui (2023),
 \emph{Next.JS For Front-End and Compatible Backend Solutions - \url{https://www.theseus.fi/bitstream/handle/10024/800535/Bui_Dinh.pdf?sequence=2}}
+
+\bibitem{TAILWIND} Tailwind Labs (2025),
+\emph{TailwindCSS Documentation - \url{https://tailwindcss.com/docs}}
 
 \bibitem{BACKEND_FRAMEWORKS_BLOG} Kirill Karakhainko (2023),
 \emph{What are the best backend development frameworks? The ultimate comparison - \url{https://techwings.com/blog/backend-frameworks-ultimate-comparison}}
