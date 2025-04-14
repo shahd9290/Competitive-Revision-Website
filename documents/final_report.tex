@@ -481,8 +481,8 @@ Below is an Entity Relationship Diagram used to show how each of the tables are 
 
 \begin{center}
 	\includegraphics[scale=0.15]{ER-diagram}
+	\captionof{figure}{The Entity Relationship Diagram showing how the database tables are connected in the backend.}
 \end{center}
-\captionof{figure}{The Entity Relationship Diagram showing how the database tables are connected in the backend.}
 
 The database is structured as follows:
 \begin{itemize}
@@ -671,31 +671,55 @@ There are many components that have been sourced from public resources online, l
 \section{Deployment}
 \chapter{The Application}
 \section{User Stories \& Use Cases}
-\textbf{You have only a small number of user stories and they did not follow the formal structure of "As an [actor] I want to [do something] so that I can [benefit]". Each user story should have a priority associated with it.}
 
-User Stories allow me to gain an insight into what features need to be implemented into the system, and to who they should be made available. At this interim stage of development I have the following user stories:
+User Stories allow me to gain an insight into what features need to be implemented into the system, and to who they should be made available. This project has the following user stories:
 
 \subsection{Implemented User Stories}
 \begin{itemize}
-	\item As a student, I would like to choose my qualification when I create my account
-	\item As a student, I want to see a dashboard when I log into the system.
-	\item As a student, I want to see my recent attempts and how many marks I have at the very least.
-	\item As a student, I don't want to be redirected when I choose a subject, I just want to see the topics on the same page.
-	\item As a student, I want to see all of the topics I can choose to study for every subject there is.
+	\item \textbf{High} - As a student, I would like to choose my qualification when I create my account, so that I can see subjects and topics that are suited for my studies.
+	
+	\item \textbf{High} -  As a student, I want to see a dashboard when I log into the system, so I can see a summary of my progress using the system.
+
+	\item \textbf{High} - As a student, I want to be asked questions about the topic I choose once I've clicked on it, so I can immediately test my knowledge on the subject.
+
+	\item \textbf{High} - As an admin, I would like to be able to add and remove questipons, subjects, topics and qualifications to the system, so that we can keep the system dynamic to support a variety of students.
+	
+	\item \textbf{High} - As an admin, I would like to be able to edit information stored on the system - so that I can correct any mistakes that may have been made when initially adding it, or change user permissions.
+	
+	\item \textbf{High} - As an admin, I do not want any students to be able to access the admin web pages, so that data is kept confidential and secure.
+
+	\item \textbf{Medium} - As a student, I want to see my recent attempts and how many marks I have at the very least, so that I know where my weaknesses are in my studies.
+	
+	\item \textbf{Medium} - As a student, I want to see all of the topics I can choose to study for every subject there is, so that I can study for multiple subjects from one central location.
+	
+	\item \textbf{Medium} - As a student, I want to be able to skip a question if I feel that it is too difficult, so that I am still able to progress through the rest of the quiz.
+
+	\item \textbf{Medium} - As an admin, I want to have access to a log of all the changes that had been recently made to the system, so that I can manage activity and identify issues in case of an emergency.
+
+	\item \textbf{Low} - As a student, I don't want to be redirected when I choose a subject, I just want to see the topics on the same page, so that it is easier to remember where everything is.
+	
+	\item \textbf{Low} - As an admin, I would like all questions asked to students to be randomised, this includes a random selection, as well as random constants, so that students can't predict the questions they will be asked.
+
+	\item \textbf{Low} - As an admin, I would decrease the amount of available marks for every student until a suitable percentage, every time they get a question wrong, so that students are encouraged to answer correctly on the first attempt.
+
+	\item \textbf{Low} - As an admin, I want students to be able to skip questions only after getting the question wrong at least once, so that they are encouraged to at least try answering the question.
+	
+	\item \textbf{Low} - As an admin, I would like to be able to sort and filter information that is presented to me on the dashboard, so that it is easier to find specific data records that I am looking for.
 	
 \end{itemize}
 \subsection{User Stories To Be Implemented}
 \begin{itemize}
-	\item As a student, I want to be asked questions about the topic I choose once I've clicked on it.
-	\item As an admin, I would like all questions asked to students to be randomised, this includes a random selection, as well as random constants.
-	\item As an admin, I would decrease the amount of available marks for every student until a suitable percentage, every time they get a question wrong.
-	\item As an admin, I would like to show all students on a leaderboard, with the amount of points that they have. This can reset after a certain interval.
-	\item As an admin, I would like to be able to add and remove subjects, topics and qualifications to the system.
-	\item As a student, I would like to have the option to stay anonymous on the leaderboard - so I can be part of the competition without others knowing its me
-	\item As a student, I would like to have the ability to practice questions without contributing to the leaderboard.
+	\item \textbf{High} - As an admin, I would like all users to have access to be able to customize their profiles, including username, password - so that they can update their details at their own discretion.
+	
+	\item \textbf{Medium} - As an admin, I would like to show all students on a leaderboard, with the amount of points that they have. This can reset after a certain interval.
+	
+	\item \textbf{Low} - As a student, I would like to have the option to stay anonymous on the leaderboard - so I can be part of the competition without others knowing its me
+	
+	\item \textbf{Low} - As a student, I would like to have the ability to practice questions without contributing to the leaderboard.
 \end{itemize}
 
-These user stories are not final, there may be more that will come to light as further features are considered.
+Should the application be developed further, these user stories can definitely be expanded as further features are considered.
+
 \section{Implementation}
 \textbf{Complete by adding new features developed after interim submission}
 \subsection{User Registration}
