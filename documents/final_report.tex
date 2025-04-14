@@ -130,8 +130,6 @@ I aim to achieve this by adopting a points system inspired by the Picarats seen 
 
 % A report describing the state-of-the-art of Web development, including technologies/frameworks/platforms and their comparison as described above. The report will also explain the concrete choices made and the respective rationale/justification from a software engineering perspective (i.e. a justification merely based on a skills learning perspective will not suffice)
 
-\textbf{The report on the state of the art in web development needs to be a bit more detailed. This can be achieved by expanding the section on frontend technologies as the options considered for the frontend could each be described more.}
-
 For the development of this project, I will follow a full stack development approach - requiring me to manage both a frontend and a backend framework for this project.
 
 \subsection{Frontend Technologies}
@@ -247,9 +245,9 @@ As an additional benefit, Spring Boot allows for seamless integration with datab
 
 \subsection {Database Management Systems}
 
-There are two major types of databases that are widely used across different applications, SQL and NoSQL. SQL (Structured Query Languages) have been the most popular form of storing data since the beginning of web application history, and this is largely due to the durability factor. This stems from the ACID properties that relational databases follow - which ensures that database transactions are full, and that data is kept intact and consistent. NoSQL databases on the other hand do not follow the idea of having a relational structure. These are typically customized to fit the needs of a particular application, and it is unlikely that one example of a NoSQL database can be used for many different types of applications~\cite{SQL_COMPARE}.
+There are two major types of databases that are widely used across different applications, SQL and NoSQL. SQL (Structured Query Languages) have been the most popular form of storing data since the beginning of web application history, and this is largely due to the durability factor. This stems from the ACID properties that relational databases follow - which ensures that database transactions are full, and that data is kept intact and consistent. NoSQL databases on the other hand do not follow the idea of having a relational structure. These are typically customized to fit the needs of a particular application, and it is unlikely that one example of a NoSQL database can be used for many different types of applications~\cite{SQL_COMPARE}.\\
 
-The biggest difference that NoSQL databases have in common is the use of BASE properties over ACID. BASE (Basically Available, Soft state with Eventual consistency) has been a critical discussion point when the two types of databases have been compared in the past - and are typically used in applications where inconsistent data can be tolerated~\cite{SQL}. This is not the case for my application - especially given that user details are required to be stored securely, so it is imperative that I make use of a database system that follows ACID properties.
+The biggest difference that NoSQL databases have in common is the use of BASE properties over ACID. BASE (Basically Available, Soft state with Eventual consistency) has been a critical discussion point when the two types of databases have been compared in the past - and are typically used in applications where inconsistent data can be tolerated~\cite{SQL}. This is not the case for my application - especially given that user details are required to be stored securely, so it is imperative that I make use of a database system that follows ACID properties.\\
 
 There are still many databases to choose from that follow ACID properties. Two of the biggest database management systems include PostgreSQL and MySQL - which appear very similar on the surface however there are some key differences which make them stand out from each other. The biggest is that PostgreSQL is an Object-Relational Database Management System, providing the facilities of a standard Relational DBMS with additional Object Oriented concepts. This is beneficial for integration with Spring Boot, as it allows me to define entities that can be translated to database tables - making it possible to manipulate the system via the use of the Repository level in the backend such as in the following example. 
 
@@ -322,15 +320,27 @@ In the provided example, the use of the @RequiredArgsConstructor annotation is w
 	}
 \end{lstlisting}
 
-\subsection{Controller-Service-Repository Pattern}
+\subsection{N-Tier Architecture}
 
-Usage of Spring Boot for the backend has helped introduce a pattern similar to a Model-View-Controller Pattern. This is done by grouping the individual components into separate packages: Controller, Service and Repository; each of which have their own roles when it comes to organising the code.
+The use of Spring Boot for the backend framework has allowed me to utilise an N-tier architecture, promoting modularity, scalability, as well as ease of maintenance. This is done by grouping the individual components into distinct layers: Controller, Service and Repository; each of which have their own roles when it comes to organising and structuring the codebase.\\
 
-The Controller is used to receive the RestAPI endpoint request. This does not contain much logic - rather it instead acts as a protective layer to separate the external endpoint and the core application logic, as well as builds the final ResponseEntity to be sent back to the frontend. 
+The \textbf{Controller layer} is used to receive the RestAPI endpoint request. This does not contain much logic - rather it instead acts as a protective layer to separate the external endpoint and the core application logic, as well as builds the final \verb|ResponseEntity| to be sent back to the frontend. \\
 
-The Service is where the core application logic is kept. Given that it is not directly exposed to external sources, it is safer to handle business logic and processing requests here - as this is what will be accessing the repositories used to perform operations on the system's database.  
+The \textbf{Service layer} is where the core application logic is kept. Given that it is not directly exposed to external sources, it is safer to handle business logic and processing requests here - as this is what will be accessing the repositories used to perform operations on the system's database.  \\
 
-The Repository is used as the bridge between the backend and the database. Any entities that have been saved to the repository are translated into a record for the database table that the repository represents. At the same time, these repository classes can have different types of functions designed specifically to retrieve certain pieces of data from the database, to then use in the service layer.
+The \textbf{Repository layer} is used as the bridge between the backend and the database. Any entities that have been saved to the repository are translated into a record for the database table that the repository represents. At the same time, these repository classes can have different types of functions designed specifically to retrieve certain pieces of data from the database, to then use in the service layer.
+\begin{center}
+	\includegraphics[scale=0.75]{ntier.png}
+	\captionof{figure}{N-tier architecture in Spring Boot, showing the data flow between layers.}
+\end{center}
+
+The workflow for this is as follows:
+\begin{itemize}
+	\item The Client makes the HTTP request that is received by the Controller.
+	\item The Controller delegates the request to the appropriate method in the Service layer.
+	\item The Service layer executes the business logic and interacts with the Repository to fetch or update data.
+	\item The processed response is returned back through the Controller to the client.
+\end{itemize}
 
 \subsection{Component Based Approach}
 
