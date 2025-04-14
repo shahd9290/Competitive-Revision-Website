@@ -199,8 +199,7 @@ Alongside Next.js, my project will be styled using TailwindCSS. Tailwind is a ut
 
 Similarly to the frontend, there are a number of backend frameworks in existence that are widely used for different web applications. These frameworks are designed to act as the core of any client-server based system, as they process majority of the application logic, and facilitate communication with database systems. Many of these frameworks are widely used, including - but not limited to Node.js and Spring Boot.\\
 
-\textbf{Node.js}
-
+\textbf{Node.js}\\
 Node.js was created in 2009 by Ryan Dahl, with inspiration from the V8 JavaScript engine seen in the Google Chrome web browser. It is an event-driven runtime environment designed to build scalable network applications. In Node.js, asynchronous callbacks are triggered for I/O operations, allowing the system to handle multiple concurrent connections efficiently. As a result, it's suitable for use with real-time applications that may require instant updates, such as chat applications~\cite{BACKEND_FRAMEWORKS_BLOG,BACKEND_FRAMEWORKS_REPORT}.\\ 
 
 At the same time, given its single-threaded, non-blocking architecture, Node.js is widely used to develop REST APIs. This is achieved through the use of Express, which is the module that brings support for creating APIs to Node.js~\cite{NODE_API}. An example of a Node.js/Express endpoint can be shown below:
@@ -219,7 +218,6 @@ At the same time, given its single-threaded, non-blocking architecture, Node.js 
 With the models that Node.js follows, though they are ideal for some applications, for others that are more complex it can become increasingly difficult to manage the code. Alongside this, Node.js does not provide any native support for key security features such as password hashing or role-based access control. Instead, these must be manually configured using external libraries that can introduce additional complexity and maintenance overhead.\\
 
 \textbf{Spring Boot}\\
-
 Spring Boot was released in 2014 as a subproject under the Spring Framework, in order to simplify development of Java Web Applications.~\cite{MUSIB_SPRING} It uses a three-tiered architecture which include layers acting as Controllers, Services and Data Repositories - forming microservices as part of the overall backend system. Similarly to Node.js, Spring Boot can also be used to develop REST APIs for web applications, an example of which can be shown below:
 
 \begin{lstlisting}[language=java, caption={A basic GET endpoint that responds with "Hello World!"}]
@@ -414,7 +412,7 @@ An example of how this is setup in my application can be with how we view the li
 	}
 \end{lstlisting}
 
-The ResponseEntity object would then contain the necessary data that was requested, and is then returned to the frontend's calling function. In this case, it contains all of the qualifications that were requested for the frontend to receive.
+The \verb|ResponseEntity| object would then contain the necessary data that was requested, and is then returned to the frontend's calling function. In this case, it contains all of the qualifications that were requested for the frontend to receive.
 
 \begin{center}
 	\includegraphics[scale=0.45]{client-server.png}
@@ -446,7 +444,7 @@ The United Kingdom has a General Data Protection Regulation Act that has been im
 	\item Accountability - Organisations are required to comply with the other principles of the act.
 \end{itemize}
 
-In this application, the user is required to enter their username, password, email and qualification when they sign up to the service. The qualification is required for the system, so the user can see information that is relevant to their studies. The username and password are required for authentication, while the email is used for verification purposes - though this has not been implemented into the system as of yet. There are no further uses for the email at this time, and there are currently no concrete plans for this.\\
+In this application, the user is required to enter their username, password, email and qualification when they sign up to the service. The qualification is required for the system, so the user can see information that is relevant to their studies. The username and password are required for authentication, while the email is used for verification purposes - though this has not been implemented into the system, it is a feature that can be implemented in the future.\\
 
 The password, however, is required to be kept securely. This is achieved through the use of Bcrypt Hashing. Created in 1999, Bcrypt has become a widely adopted hashing algorithm to encode passwords, and keep them protected without needed to decode them. To authenticate, the password input is encoded, and the hashes are then compared against each other before authentication is granted to the user. 
 
@@ -478,8 +476,73 @@ This led to me beginning with the user registration system, as it did not have a
 \section{UML Diagrams}
 
 \subsection{Database Entity Relationship Diagram}
-\textbf{Update to reflect final submission}
-Below is an Entity Relationship Diagram used to show how each of the tables are linked to each other in the database. From Left to right, bottom to top, it shows that \verb|refresh_tokens| is reliant on the users table for its \verb|user_id| field, \verb|users| is reliants on \verb|qualifications| for its \verb|id| field, there is a many-to-many relationship between \verb|qualifications| and \verb|subjects|, and that \verb*|topics| is dependent on \verb|subjects| and \verb*|qualifications| for the ids required.
+
+Below is an Entity Relationship Diagram used to show how each of the tables are linked to each other in the database. The database is structured as follows:
+\begin{itemize}
+    \item \verb|users|
+    \begin{itemize}
+        \item Linked to \verb|qualifications| via the foreign key \verb|qualification_id|.
+        \item Has a one-to-many relationship with \verb|refresh_tokens|, \verb|recent_attempts|, and \verb|activity_logs|.
+        \item Linked to \verb|roles| through a many-to-many relationship via the \verb|user_roles| table.
+    \end{itemize}
+
+    \item \verb|qualifications|
+    \begin{itemize}
+        \item Connected to \verb|subjects| via a many-to-many relationship through the \verb|subject_qualification| table.
+        \item Has a one-to-many relationship with both \verb|topics| and \verb|users|.
+    \end{itemize}
+
+    \item \verb|subjects|
+    \begin{itemize}
+        \item Linked to \verb|qualifications| via the \verb|subject_qualification| join table (many-to-many).
+        \item Has a one-to-many relationship with \verb|topics|.
+    \end{itemize}
+
+    \item \verb|topics|
+    \begin{itemize}
+        \item Has foreign key dependencies on both \verb|subjects| and \verb|qualifications|.
+        \item Has a one-to-many relationship with \verb|questions| and \verb|recent_attempts|.
+    \end{itemize}
+
+    \item \verb|questions|
+    \begin{itemize}
+        \item Each question is linked to a specific topic via the \verb|topic_id| foreign key.
+    \end{itemize}
+
+    \item \verb|recent_attempts|
+    \begin{itemize}
+        \item Connects \verb|users| to \verb|topics|, recording attempt data and correctness proportion.
+        \item Includes foreign keys to both \verb|users| and \verb|topics|.
+    \end{itemize}
+
+    \item \verb|refresh_tokens|
+    \begin{itemize}
+        \item Used for session management.
+        \item Each token is associated with a user via \verb|user_id|.
+    \end{itemize}
+
+    \item \verb|activity_logs|
+    \begin{itemize}
+        \item Records user activity including timestamp and action description.
+        \item Linked to \verb|users| via \verb|user_id|.
+    \end{itemize}
+
+    \item \verb|roles|
+    \begin{itemize}
+        \item Defines user roles (e.g., admin, student).
+        \item Connected to \verb|users| through the \verb|user_roles| join table.
+    \end{itemize}
+
+    \item \verb|user_roles|
+    \begin{itemize}
+        \item Join table implementing a many-to-many relationship between \verb|users| and \verb|roles|.
+    \end{itemize}
+
+    \item \verb|subject_qualification|
+    \begin{itemize}
+        \item Join table implementing a many-to-many relationship between \verb|subjects| and \verb|qualifications|.
+    \end{itemize}
+\end{itemize}
 \begin{center}
 	\includegraphics[scale=0.2]{ER-diagram}
 \end{center}
