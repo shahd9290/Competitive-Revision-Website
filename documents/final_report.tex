@@ -144,7 +144,7 @@ The original Angular (known as AngularJS) was created in 2009 as an open-source,
 
 While AngularJS revolved around the MVC framework, Angular was designed to be a component-based framework. Each component is made up of HTML, CSS and TypeScript files, an example of which an be shown as:
 
-\begin{lstlisting}[language=javascript]
+\begin{lstlisting}[language=javascript, caption={An example of a "Hello World" component in Angular\cite{HELLO_ANGULAR}}]
 	import { Component } from '@angular/core';
 	
 	@Component({
@@ -158,7 +158,6 @@ While AngularJS revolved around the MVC framework, Angular was designed to be a 
 		title = 'homes';
 	}
 \end{lstlisting}
-\captionof{figure}{An example of a "Hello World" component in Angular\cite{HELLO_ANGULAR}}
 
 Angular's use of TypeScript, as opposed to JavaScript, ensures that projects are statically typed — requiring developers to declare the types of variables, parameters, and return values at compile time, thereby reducing the likelihood of runtime errors. Additionally, TypeScript supports the use of interfaces, allowing custom types to be defined and reused across a project. Combined with Angular’s modular architecture — where logic can be split into separate files and imported as needed — this leads to improved maintainability and scalability in large codebases~\cite{TSvJS}.\\
 
@@ -166,7 +165,7 @@ Angular's use of TypeScript, as opposed to JavaScript, ensures that projects are
 \textbf{React}\\
 React was initially created in 2011 by Facebook and over time expanded as tools were subsequently released to further enhance the React library - ultimately making it into the comprehensive library that developers use today. React itself is used for creating the views for a web page, while a sister component ReactDOM is used to render the UI in the browser~\cite{BANKS_REACT}. More importantly, React utilises JSX - a hybrid of JavaScript and XML, which provides a simplified interface to create React components. An example of how a React component is defined with just JavaScript can be shown as:
 
-\begin{lstlisting}[language=javascript]
+\begin{lstlisting}[language=javascript, caption={An example of a React element being defined with JavaScript\cite{BANKS_REACT}}]
 	function IngredientsList() {
 		return React.createElement(
 			"ul",
@@ -177,18 +176,16 @@ React was initially created in 2011 by Facebook and over time expanded as tools 
 		);
 	}
 \end{lstlisting}
-\captionof{figure}{An example of a React element being defined with JavaScript\cite{BANKS_REACT}}
 
 However when it comes to implementation with JSX, given the use of XML the syntax is comparable with HTML when it comes to developing a webpage, as seen in the following example:
 
-\begin{lstlisting}[language=javascript]
+\begin{lstlisting}[language=javascript, caption={An example of a React element being defined with JSX (IngredientsList and Ingredient are external functions)\cite{BANKS_REACT}}]
 	<IngredientsList>
 		<Ingredient />
 		<Ingredient />
 		<Ingredient />
 	</IngredientsList>
 \end{lstlisting}
-\captionof{figure}{An example of a React element being defined with JSX (IngredientsList and Ingredient are external functions)\cite{BANKS_REACT}}
 
 Usage of JSX with React ultimately makes it easier to learn as a whole, as it combines very well with HTML elements to form the webpages required for the application. Components are also reusable, and ultimately makes React an ideal tool when it comes to Web Development.\\
 
@@ -208,7 +205,7 @@ Node.js was created in 2009 by Ryan Dahl, with inspiration from the V8 JavaScrip
 
 At the same time, given its single-threaded, non-blocking architecture, Node.js is widely used to develop REST APIs. This is achieved through the use of Express, which is the module that brings support for creating APIs to Node.js~\cite{NODE_API}. An example of a Node.js/Express endpoint can be shown below:
 
-\begin{lstlisting}[language=javascript]
+\begin{lstlisting}[language=javascript, caption={A basic GET endpoint that responds with a JSON object~\cite{NODE_API}}]
 	import express from "express";
 
 	const PORT = 3000;
@@ -218,7 +215,6 @@ At the same time, given its single-threaded, non-blocking architecture, Node.js 
 
 	app.listen(PORT, () => console.log(`NTask API - Port ${PORT}`));
 \end{lstlisting}
-\captionof{figure}{A basic GET endpoint that responds with a JSON object~\cite{NODE_API}}
 
 With the models that Node.js follows, though they are ideal for some applications, for others that are more complex it can become increasingly difficult to manage the code. Alongside this, Node.js does not provide any native support for key security features such as password hashing or role-based access control. Instead, these must be manually configured using external libraries that can introduce additional complexity and maintenance overhead.\\
 
@@ -226,7 +222,7 @@ With the models that Node.js follows, though they are ideal for some application
 
 Spring Boot was released in 2014 as a subproject under the Spring Framework, in order to simplify development of Java Web Applications.~\cite{MUSIB_SPRING} It uses a three-tiered architecture which include layers acting as Controllers, Services and Data Repositories - forming microservices as part of the overall backend system. Similarly to Node.js, Spring Boot can also be used to develop REST APIs for web applications, an example of which can be shown below:
 
-\begin{lstlisting}[language=java]
+\begin{lstlisting}[language=java, caption={A basic GET endpoint that responds with "Hello World!"}]
 	@RestController
 	@NoArgsConstructor
 	@RequestMapping("/api")
@@ -237,7 +233,6 @@ Spring Boot was released in 2014 as a subproject under the Spring Framework, in 
 		}
 	}
 \end{lstlisting}
-\captionof{figure}{A basic GET endpoint that responds with "Hello World!"}
 
 Compared with Node.js however, Spring Boot includes many libraries that significantly enhance the security of web applications by providing built-in support for authentication and authorization, as well as protection against common vulnerabilities such as Cross-Site Request Forgery (CSRF) and Cross-Site Scripting (XSS). 
 
@@ -251,7 +246,7 @@ The biggest difference that NoSQL databases have in common is the use of BASE pr
 
 There are still many databases to choose from that follow ACID properties. Two of the biggest database management systems include PostgreSQL and MySQL - which appear very similar on the surface however there are some key differences which make them stand out from each other. The biggest is that PostgreSQL is an Object-Relational Database Management System, providing the facilities of a standard Relational DBMS with additional Object Oriented concepts. This is beneficial for integration with Spring Boot, as it allows me to define entities that can be translated to database tables - making it possible to manipulate the system via the use of the Repository level in the backend such as in the following example. 
 
-\begin{lstlisting}[language=java]
+\begin{lstlisting}[language=java, caption={Similar functions are provided as built-ins.}]
 @Service
 public class Service {
 	private final EntityRepository entityRepository
@@ -267,11 +262,10 @@ public class Service {
 	}
 }
 \end{lstlisting}
-\captionof{figure}{Similar functions are provided as built-ins.}
 
 Similarly, with how these queries can be translated into Java data structures, it becomes possible to format data into the necessary response packets that I may need for certain requests via the use of custom queries. An example of which can be shown here:
 
-\begin{lstlisting}[language=java]
+\begin{lstlisting}[language=java, caption={Each field returned from the query can be directly translated into a Data Transfer Object, useful for API requests that require specific data.}]
 	// QuestionRepository.java
 	@Query("select new danyal.fyp.awd.dto.admin.question.QuestionDataDto(" +
 		"q.id, q.question, q.answer, q.marks, s.name, t.name) " +
@@ -280,7 +274,6 @@ Similarly, with how these queries can be translated into Java data structures, i
 		"left join t.subject s")
 	List<QuestionDataDto> getQuestionData();
 \end{lstlisting}
-\captionof{figure}{Each field returned from the query can be directly translated into a Data Transfer Object, useful for API requests that require specific data.}
 
 Given its compatibility with Spring Boot, support for complex data types whilst following ACID properties, PostgreSQL appeared to be the most suitable choice for this project's database management system.
 
@@ -292,7 +285,7 @@ Given its compatibility with Spring Boot, support for complex data types whilst 
 
 Many design patterns have been considered throughout the development of the product thus far. This section will break down how and why some have been used in this project.
 \subsection{Dependency Injection}
-Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through autowiring. In this project however, I am using the Lombok plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
+Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through autowiring. In this project however, I am using the \textbf{Lombok} plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
 
 \begin{lstlisting}[language=java, caption={An example of a Spring Boot Component with the Lombok Plugin.}]
 	// UserProfileController.java
@@ -305,9 +298,14 @@ Dependency Injection is a core design pattern used in the Spring Framework. The 
 	}
 \end{lstlisting}
 
-In the provided example, the use of the @RequiredArgsConstructor annotation is what generates the constructor for this class. As the controller requires use of a UserService object, Spring will instantiate that and pass it through this constructor to be used for any requests made via this endpoint. This way - I would not be required to manually autowire each of the components that make up a class throughout my backend, in comparison to a regular Spring class such as that provided below.
+\begin{center}
+	\includegraphics[scale=0.475]{inject.png}
+	\captionof{figure}{Dependency Injection allows for the flow of events to be as follows for this API endpoint in particular.}
+\end{center}
 
-\begin{lstlisting}[language=Java, caption={An example of a Spring Boot Component without the Lombok Plugin. Use of the plugin prevents the need for boilerplate code such as this.}]
+In the provided example, the use of the \verb|@RequiredArgsConstructor| annotation is what generates the constructor for this class. As the controller requires use of a UserService object, Spring will instantiate that and pass it through this constructor to be used for any requests made via this endpoint. This way - I would not be required to manually autowire each of the components that make up a class throughout my backend, in comparison to a regular Spring class such as that provided below.
+
+\begin{lstlisting}[language=Java, caption={An example of a Spring Boot Component without the Lombok Plugin. Use of the plugin prevents the need for boilerplate code such as the constructor used here.}]
 	@Service
 	public class AssetService {
 		
@@ -347,12 +345,27 @@ The workflow for this is as follows:
 The Component Based Software Development Approach refers to the idea that a system can be developed via the use of off-the-shelf components, assembled with well defined software architecture~\cite{GPOUR_COMPONENT}. Based on React, Next.JS uses this by allowing developers to make use of reusable components, that contain logic and styling specific to it. This allows for a more organised codebase, making it easier to identify where any potential issues may lie should they appear.
 
 Given this, I have made sure to use different components within my project. A key component that will be present on majority of my webpages would be the Sidebar. By containing this into its own module it has been possible to pass the webpage content as a child component that is wrapped around by the Sidebar.
+\begin{lstlisting}[language=javascript, caption={An abstraction of the SidebarMenu function}]
+	export function SidebarMenu(content) {
+		const [open, setOpen] = useState(false);
+		return (
+			<div className={...}>
+				<Sidebar>
+					...
+				</Sidebar>
+				<div>
+					{content.children}
+				</div>
+			</div>
+		)
+	}
+\end{lstlisting}
 \begin{lstlisting}[language=JavaScript, caption={The SidebarMenu represents the sidebar, while the Dashboard represents the actual page being rendered.}]
 	const Page = () => {
 		
 		return (
 		<div>
-			<SidebarMenu>
+			<SidebarMenu role="ROLE_USER">
 				<Dashboard/>
 			</SidebarMenu>
 		</div>
@@ -404,6 +417,11 @@ An example of how this is setup in my application can be with how we view the li
 \end{lstlisting}
 
 The ResponseEntity object would then contain the necessary data that was requested, and is then returned to the frontend's calling function. In this case, it contains all of the qualifications that were requested for the frontend to receive.
+
+\begin{center}
+	\includegraphics[scale=0.45]{client-server.png}
+	\captionof{figure}{How sequences similar to the above are executed in the application.}
+\end{center}
 
 \subsection{Security Detail}
 
