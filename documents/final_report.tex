@@ -281,8 +281,6 @@ Given its compatibility with Spring Boot, support for complex data types whilst 
 
 % A report on Web development architectural paradigms and applicable design patterns, including an initial discussion of security, privacy and key-operational aspects and considerations (e.g. cloud deployments and DevOps aspects)
 
-\textbf{Similarly, the second report could explain other architectural paradigms (e.g. N-tier architecture). You could have included some diagrams to illustrate the architectural paradigms and design patterns. You provided a good explanation of the security and privacy aspects.}
-
 Many design patterns have been considered throughout the development of the product thus far. This section will break down how and why some have been used in this project.
 \subsection{Dependency Injection}
 Dependency Injection is a core design pattern used in the Spring Framework. The various controllers and services rely on one another to provide full functionality, however given that this is written in Java - these must be instantiated and provided as an argument to the individual components; in Spring, this is done through autowiring. In this project however, I am using the \textbf{Lombok} plugin to handle this for me. This allows me to simplify my code immensely, by using various annotations throughout my code, that automatically generated required constructors upon compiling.
