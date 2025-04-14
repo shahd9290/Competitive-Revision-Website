@@ -160,7 +160,7 @@ While AngularJS revolved around the MVC framework, Angular was designed to be a 
 		title = 'homes';
 	}
 \end{lstlisting}
-\captionof{figure}{\cite{HELLO_ANGULAR}}
+\captionof{figure}{An example of a "Hello World" component in Angular\cite{HELLO_ANGULAR}}
 
 Angular's use of TypeScript, as opposed to JavaScript, ensures that projects are statically typed — requiring developers to declare the types of variables, parameters, and return values at compile time, thereby reducing the likelihood of runtime errors. Additionally, TypeScript supports the use of interfaces, allowing custom types to be defined and reused across a project. Combined with Angular’s modular architecture — where logic can be split into separate files and imported as needed — this leads to improved maintainability and scalability in large codebases~\cite{TSvJS}.\\
 
@@ -179,7 +179,7 @@ React was initially created in 2011 by Facebook and over time expanded as tools 
 		);
 	}
 \end{lstlisting}
-\captionof{figure}{\cite{BANKS_REACT}}
+\captionof{figure}{An example of a React element being defined with JavaScript\cite{BANKS_REACT}}
 
 However when it comes to implementation with JSX, given the use of XML the syntax is comparable with HTML when it comes to developing a webpage, as seen in the following example:
 
@@ -190,7 +190,7 @@ However when it comes to implementation with JSX, given the use of XML the synta
 		<Ingredient />
 	</IngredientsList>
 \end{lstlisting}
-\captionof{figure}{\cite{BANKS_REACT}}
+\captionof{figure}{An example of a React element being defined with JSX (IngredientsList and Ingredient are external functions)\cite{BANKS_REACT}}
 
 Usage of JSX with React ultimately makes it easier to learn as a whole, as it combines very well with HTML elements to form the webpages required for the application. Components are also reusable, and ultimately makes React an ideal tool when it comes to Web Development.\\
 
@@ -251,7 +251,40 @@ There are two major types of databases that are widely used across different app
 
 The biggest difference that NoSQL databases have in common is the use of BASE properties over ACID. BASE (Basically Available, Soft state with Eventual consistency) has been a critical discussion point when the two types of databases have been compared in the past - and are typically used in applications where inconsistent data can be tolerated~\cite{SQL}. This is not the case for my application - especially given that user details are required to be stored securely, so it is imperative that I make use of a database system that follows ACID properties.
 
-There are still many databases to choose from that follow ACID properties. Two of the biggest database management systems include PostgreSQL and MySQL - which appear very similar on the surface however there are some key differences which make them stand out from each other. The biggest is that PostgreSQL is an Object-Relational Database Management System, providing the facilities of a standard Relational DBMS with additional Object Oriented concepts. This is beneficial for integration with Spring Boot, as it allows me to define entities that can be translated to database tables - allowing me to manipulate the system via the use of the Repository level in the backend. As a result, I have opted to use PostgreSQL to serve as my database.
+There are still many databases to choose from that follow ACID properties. Two of the biggest database management systems include PostgreSQL and MySQL - which appear very similar on the surface however there are some key differences which make them stand out from each other. The biggest is that PostgreSQL is an Object-Relational Database Management System, providing the facilities of a standard Relational DBMS with additional Object Oriented concepts. This is beneficial for integration with Spring Boot, as it allows me to define entities that can be translated to database tables - making it possible to manipulate the system via the use of the Repository level in the backend such as in the following example. 
+
+\begin{lstlisting}[language=java]
+@Service
+public class Service {
+	private final EntityRepository entityRepository
+	
+	// Equivalent to "SELECT * FROM table;"
+	public List<E> getEntity() {
+		return entityRepository.findAll();
+	}
+
+	// Equivalent to "SELECT * FROM table WHERE id = 1;"
+	public E getOneEntity() {
+		return entityRepository.findById(1).orElse(null);
+	}
+}
+\end{lstlisting}
+\captionof{figure}{Similar functions are provided as built-ins.}
+
+Similarly, with how these queries can be translated into Java data structures, it becomes possible to format data into the necessary response packets that I may need for certain requests via the use of custom queries. An example of which can be shown here:
+
+\begin{lstlisting}[language=java]
+	// QuestionRepository.java
+	@Query("select new danyal.fyp.awd.dto.admin.question.QuestionDataDto(" +
+		"q.id, q.question, q.answer, q.marks, s.name, t.name) " +
+		"from Question q " +
+		"left join q.topic t " +
+		"left join t.subject s")
+	List<QuestionDataDto> getQuestionData();
+\end{lstlisting}
+\captionof{figure}{Each field returned from the query can be directly translated into a Data Transfer Object, useful for API requests that require specific data.}
+
+Given its compatibility with Spring Boot, support for complex data types whilst following ACID properties, PostgreSQL appeared to be the most suitable choice for this project's database management system.
 
 \newpage\section{Architectural Paradigms \& Design Patterns}
 
