@@ -590,64 +590,68 @@ Below is a UML Class Diagram that shows the core functionality of the backend. I
 \captionof{figure}{Classes used for configurations, exceptions, DTOs and HTTP Request modifications have been omitted to show core functionality.}
 
 \section{Testing}
-\textbf{Update to reflect final submission}
 
 Prior to submission, the project has been thoroughly tested via unit testing to ensure that all components are working as they should be in order to achieve the desired outcomes. For the backend, this is carried out using the MockMvc library - which sends mock REST API requests to the backend, and then checks whether the output is as expected.
 
 \begin{lstlisting}[language=Java, caption={A payload is made with the information that is to be sent to the backend, then the test simulates an API request to the Auth Controller. It checks to see if the status returns is OK (200), and that it contains the string "User logged in successfully" in order for it to pass.}]
 	// AuthControllerTest.java
 	@Test
-	public void loginSuccess() throws Exception {
-		payload = new HashMap<>();
-		payload.put("username", "user");
-		payload.put("password", "password");
-		
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
-		.header("Authorization", "Bearer " + token)
-		.contentType(MediaType.APPLICATION_JSON)
-		.content(objectMapper.writeValueAsString(payload)))
-		.andExpect(status().isOk())
-		.andExpect(content().string("User logged in successfully"));
-	}
+    public void loginSuccess() throws Exception {
+        payload = new HashMap<>();
+        payload.put("username", "user");
+        payload.put("password", "password");
+        payload.put("role", "ROLE_USER");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(payload)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("User logged in successfully."));
+
+		...
+    }
 \end{lstlisting}
 
-Having applied these tests throughout the backend, the resultant coverages comes out to be 91\%. Some branches were not able to be tested as they cannot be tested directly - while others, I have not been able to write the tests for as of yet. The latter will be completed following the interim submission.
+Having applied these tests throughout the backend, the resultant coverages comes out to be 94\%. Some branches were not able to be tested as they cannot be tested directly, and are there for errors that have since been prevented.
 
 \includegraphics[scale=0.55]{backend-coverage}
-\captionof{figure}{91\% coverage at the moment for the backend}
+\captionof{figure}{94\% coverage for the backend}
 
 For the frontend however this works slightly differently. These tests are carried out by using the JEST library, which checks to see if any defined elements are present in the page that has been rendered. It can also simulate user interactions with the web page as well, testing that the web page functions as intended.
 
 \begin{lstlisting}[language=JavaScript, caption={This test renders the page and checks that the necessary elements are present, before simulating a user entering their details and submitting them - causing the API request to be called.}]
-	it('submits user details and redirects on success', async () => {
-		render(<Page />)
-		const user = userEvent.setup();
-		
-		(axios.post as jest.Mock).mockResolvedValueOnce({data : {success: true}});
-		
-		const usernameInput = screen.getByLabelText(/username/i);
-		const passwordInput = screen.getByLabelText(/password/i);
-		const signInButton = screen.getByRole('button', { name: /sign in/i });
-		
-		await user.type(usernameInput, 'user');
-		await user.type(passwordInput, 'password');
-		await user.click(signInButton);
-		
-		
-		expect(axios.post).toHaveBeenCalledWith(
+it('submits user details and redirects on success', async () => {
+	render(<Page />)
+	const user = userEvent.setup();
+
+	(axios.post as jest.Mock).mockResolvedValueOnce({data : {success: true}});
+
+	const usernameInput = screen.getByLabelText(/username/i);
+	const passwordInput = screen.getByLabelText(/password/i);
+	const signInButton = screen.getByRole('button', { name: /sign in/i });
+
+	await user.type(usernameInput, 'user');
+	await user.type(passwordInput, 'password');
+	await user.click(signInButton);
+
+
+	expect(axios.post).toHaveBeenCalledWith(
 		'http://localhost:8080/api/auth/login',
-		{ username: 'user', password: 'password' },
+		{ username: 'user', password: 'password', role: 'ROLE_USER' },
 		{ withCredentials: true }
-		);
-		
-		expect(mockPush).toHaveBeenCalledWith('/dashboard');
-	});
+	);
+
+	expect(toastMock).toHaveBeenCalledWith(expect.objectContaining({description: "You have been logged in successfully."}));
+
+	expect(mockPush).toHaveBeenCalledWith('/dashboard');
+});
 \end{lstlisting}
 
-Having applied these tests to the frontend, the resultant coverage comes out to be 99.67\%. The discrepancy comes from an error that can be thrown in the sidebar component - which has not been used throughout the web pages. All of the other pages have been fully tested.
+Having applied these tests to the frontend, the resultant coverage comes out to be 95.03\%. The main discrepancy comes from the use-toast hook, which is not fully used throughout the application. All of the other pages have been fully tested.
 
 \includegraphics[scale=0.3]{frontend-coverage}
-\captionof{figure}{99.67\% coverage at the moment for the frontend}
+\captionof{figure}{95.03\% coverage at the moment for the frontend}
 
 Alongside the unit tests, I have also been sure to carry out integration and system for this application. For integration testing - this would be testing the API endpoints to ensure that the data being retrieved by the backend is correct, and that there are no discrepancies or irrelevant data present. With system testing, this would be after connecting the frontend to the backend - and ensuring that I am able to view the retrieved data on the frontend, such that they can be interacted with further by the user.
 \section{Documentation}
