@@ -477,7 +477,14 @@ This led to me beginning with the user registration system, as it did not have a
 
 \subsection{Database Entity Relationship Diagram}
 
-Below is an Entity Relationship Diagram used to show how each of the tables are linked to each other in the database. The database is structured as follows:
+Below is an Entity Relationship Diagram used to show how each of the tables are linked to each other in the database. 
+
+\begin{center}
+	\includegraphics[scale=0.15]{ER-diagram}
+\end{center}
+\captionof{figure}{The Entity Relationship Diagram showing how the database tables are connected in the backend.}
+
+The database is structured as follows:
 \begin{itemize}
     \item \verb|users|
     \begin{itemize}
@@ -543,10 +550,7 @@ Below is an Entity Relationship Diagram used to show how each of the tables are 
         \item Join table implementing a many-to-many relationship between \verb|subjects| and \verb|qualifications|.
     \end{itemize}
 \end{itemize}
-\begin{center}
-	\includegraphics[scale=0.2]{ER-diagram}
-\end{center}
-\captionof{figure}{The Entity Relationship Diagram showing how the database tables are connected in the backend.}
+
 \subsection{UML Sequence Diagram}
 
 \textbf{Note that your sequence diagrams have a minor issue with the notation: messages being returned from operations should be represented with dashed lines and open arrowheads. }
@@ -655,14 +659,13 @@ Having applied these tests to the frontend, the resultant coverage comes out to 
 
 Alongside the unit tests, I have also been sure to carry out integration and system for this application. For integration testing - this would be testing the API endpoints to ensure that the data being retrieved by the backend is correct, and that there are no discrepancies or irrelevant data present. With system testing, this would be after connecting the frontend to the backend - and ensuring that I am able to view the retrieved data on the frontend, such that they can be interacted with further by the user.
 \section{Documentation}
-\textbf{Update to reflect final submission}
-
 
 I have made sure to add sufficient documentation for each class and method that is involved with providing the current stage of the application, across both the frontend and backend.\\
 
 For the backend I will be using Javadoc to draft my documentation. Each method will be described in detail about how it contributes to the overall application, and the class will summarise how the methods are grouped together. For the frontend I will be using TSdocs for drafting documentation. These will dictate what the page is supposed to show, as well as what components are in use - and which components have been made available for public use with sources. \\
 
-For the interim submission I will not be writing documentation for the components that I have sourced from public resources online as I am not the original author - and I am not fully certain how each part of the component operates at the moment. This is something I will be changing for the final submission.
+There are many components that have been sourced from public resources online, largely from the shadcn library~\cite{SHADCN}. Where these components are used, the original documentation pages will be linked to them at the top of their respective files. This way, I am able to credit the original authors appropriately, rather than pass off their work as my own.
+
 \section{Version Control}
 \section{Scalability}
 \section{Deployment}
@@ -992,6 +995,9 @@ Professional Issues occur wherever computing meets society. As such they are alw
 
 \bibitem{GDPR} Data Protection Commission (2019),
 \emph{Quick Guide to the Principles of Data Protection - \url{https://www.dataprotection.ie/sites/default/files/uploads/2019-11/Guidance\%20on\%20the\%20Principles\%20of\%20Data\%20Protection_Oct19.pdf}}
+
+\bibitem{SHADCN} shadcn (2025),
+\emph{shadcn/ui - \url{https://ui.shadcn.com/}}
 
 \end{thebibliography}
 
