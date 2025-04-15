@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
@@ -8,8 +8,10 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {DialogFooter} from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import {useToast} from "@/hooks/use-toast";
+import {CancelUnsavedDialog} from "@/components/DialogPrompts";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export function QuestionDialog({setOpenDialog, qualifications, subjects, topics, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
@@ -19,11 +21,29 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
     const [marks, setMarks] = useState(0);
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
+
     const {toast} = useToast();
 
     const filteredSubjects = subjects.filter((subject) => subject.qualification === selectedQualification);
     const filteredTopics = topics.filter((topic) => topic.subject === selectedSubject && topic.qualification === selectedQualification);
 
+    useEffect(() => {
+        if (question !== "" || answer !== "" || marks !== 0 || selectedQualification !== "" || selectedSubject !== "" || selectedTopic !== "") {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [question, answer, marks, selectedQualification, selectedSubject, selectedTopic]);
+
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpenDialog(false);
+        }
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -75,19 +95,22 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
             {/* Question */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="question" className="text-right">Question</Label>
-                <Input id="question" className="col-span-3" value={question} onChange={(e) => setQuestion(e.target.value)} required/>
+                <Input id="question" className="col-span-3" value={question}
+                       onChange={(e) => setQuestion(e.target.value)} required/>
             </div>
 
             {/* Answer */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="answer" className="text-right">Answer</Label>
-                <Input id="answer" className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)} required/>
+                <Input id="answer" className="col-span-3" value={answer} onChange={(e) => setAnswer(e.target.value)}
+                       required/>
             </div>
 
             {/* Marks */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="marks" className="text-right">Marks</Label>
-                <Input id="marks" className="col-span-3" type="number" value={marks} onChange={(e) => setMarks(e.target.value)}
+                <Input id="marks" className="col-span-3" type="number" value={marks}
+                       onChange={(e) => setMarks(e.target.value)}
                        required/>
             </div>
 
@@ -102,7 +125,8 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     }}
 
                 >
-                    <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Qualification"
+                                   className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -125,7 +149,8 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     }}
                     disabled={!selectedQualification || filteredSubjects.length === 0}
                 >
-                    <SelectTrigger aria-label="Subject" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Subject"
+                                   className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue
                             placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"}/>
                     </SelectTrigger>
@@ -150,7 +175,8 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     onValueChange={setSelectedTopic}
                     disabled={!selectedSubject || filteredTopics.length === 0}
                 >
-                    <SelectTrigger aria-label="Topic" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Topic"
+                                   className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder={filteredTopics.length ? "Select Topic" : "No topics available"}/>
                     </SelectTrigger>
                     <SelectContent>
@@ -169,7 +195,7 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
 
             {/* Footer Buttons */}
             <DialogFooter>
-                <Button type="button" onClick={() => setOpenDialog(false)}
+                <Button type="button" onClick={handleCancel}
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
@@ -178,6 +204,12 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
             </DialogFooter>
+
+            <CancelUnsavedDialog
+                open={showCancelDialog}
+                setOpen={setShowCancelDialog}
+                setEdit={setOpenDialog}
+            />
         </form>
     );
 }
@@ -189,8 +221,27 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const {toast} = useToast();
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
 
     const filteredSubjects = subjects.filter((subject) => subject.qualification === selectedQualification);
+
+    useEffect(() => {
+        if (topic !== "" || selectedQualification !== "" || selectedSubject !== "") {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [topic, selectedQualification, selectedSubject]);
+
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpenDialog(false);
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -249,7 +300,8 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
                         setSelectedSubject(""); // Reset Subject
                     }}
                 >
-                    <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Qualification"
+                                   className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -271,7 +323,8 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
                     }}
                     disabled={!selectedQualification || filteredSubjects.length === 0}
                 >
-                    <SelectTrigger aria-label="Subject" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Subject"
+                                   className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue
                             placeholder={filteredSubjects.length ? "Select Subject" : "No subjects available"}/>
                     </SelectTrigger>
@@ -289,7 +342,7 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
                 </Select>
             </div>
             <DialogFooter>
-                <Button type="button" onClick={() => setOpenDialog(false)}
+                <Button type="button" onClick={handleCancel}
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
@@ -298,6 +351,12 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
             </DialogFooter>
+
+            <CancelUnsavedDialog
+                open={showCancelDialog}
+                setOpen={setShowCancelDialog}
+                setEdit={setOpenDialog}
+            />
         </form>
     )
 }
@@ -307,8 +366,24 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
     const {toast} = useToast();
+    useEffect(() => {
+        if (subject !== "" || selectedQualification !== "") {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [subject, selectedQualification]);
 
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpenDialog(false);
+        }
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -365,7 +440,8 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
                         setSelectedQualification(value);
                     }}
                 >
-                    <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Qualification"
+                                   className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Qualification"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -379,7 +455,7 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
             </div>
 
             <DialogFooter>
-                <Button type="button" onClick={() => setOpenDialog(false)}
+                <Button type="button" onClick={handleCancel}
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
@@ -388,6 +464,11 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
             </DialogFooter>
+            <CancelUnsavedDialog
+                open={showCancelDialog}
+                setOpen={setShowCancelDialog}
+                setEdit={setOpenDialog}
+            />
         </form>
     )
 }
@@ -396,8 +477,24 @@ export function QualificationDialog({setOpenDialog, refetch}) {
     const [qualification, setQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
     const {toast} = useToast();
+    useEffect(() => {
+        if (qualification !== "") {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [qualification]);
 
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpenDialog(false);
+        }
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -442,11 +539,12 @@ export function QualificationDialog({setOpenDialog, refetch}) {
             {/* Topic */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="qualification" className="text-right">Qualification</Label>
-                <Input id="qualification" className="col-span-3" onChange={(e) => setQualification(e.target.value)} required/>
+                <Input id="qualification" className="col-span-3" onChange={(e) => setQualification(e.target.value)}
+                       required/>
             </div>
 
             <DialogFooter>
-                <Button type="button" onClick={() => setOpenDialog(false)}
+                <Button type="button" onClick={handleCancel}
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
@@ -455,6 +553,11 @@ export function QualificationDialog({setOpenDialog, refetch}) {
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
             </DialogFooter>
+            <CancelUnsavedDialog
+                open={showCancelDialog}
+                setOpen={setShowCancelDialog}
+                setEdit={setOpenDialog}
+            />
         </form>
     )
 }
@@ -467,8 +570,24 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
     const [role, setRole] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [dirty, setDirty] = useState(false);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
     const {toast} = useToast();
+    useEffect(() => {
+        if (username !== "" || email !== "" || password !== "" || role !== "" || selectedQualification !== "") {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [username, email, password, role, selectedQualification]);
 
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpenDialog(false);
+        }
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -526,13 +645,15 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
             {/* Email */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="email" className="text-right">Email</Label>
-                <Input id="email" className="col-span-3" type={"email"} onChange={(e) => setEmail(e.target.value)} required/>
+                <Input id="email" className="col-span-3" type={"email"} onChange={(e) => setEmail(e.target.value)}
+                       required/>
             </div>
 
             {/* Password */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="password" className="text-right">Password</Label>
-                <Input id="password" className="col-span-3" type={"password"} onChange={(e) => setPassword(e.target.value)} required/>
+                <Input id="password" className="col-span-3" type={"password"}
+                       onChange={(e) => setPassword(e.target.value)} required/>
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
@@ -542,7 +663,8 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                         setRole(value);
                     }}
                 >
-                    <SelectTrigger aria-label="Role" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                    <SelectTrigger aria-label="Role"
+                                   className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                         <SelectValue placeholder="Select Role"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -561,7 +683,8 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                             setSelectedQualification(value);
                         }}
                     >
-                        <SelectTrigger aria-label="Qualification" className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
+                        <SelectTrigger aria-label="Qualification"
+                                       className="col-span-3 bg-white disabled:bg-gray-200 disabled:text-gray-500">
                             <SelectValue placeholder="Select Qualification"/>
                         </SelectTrigger>
                         <SelectContent>
@@ -577,7 +700,7 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
 
             {/* Footer Buttons */}
             <DialogFooter>
-                <Button type="button" onClick={() => setOpenDialog(false)}
+                <Button type="button" onClick={handleCancel}
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
@@ -586,6 +709,11 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
             </DialogFooter>
+            <CancelUnsavedDialog
+                open={showCancelDialog}
+                setOpen={setShowCancelDialog}
+                setEdit={setOpenDialog}
+            />
         </form>
     );
 }
