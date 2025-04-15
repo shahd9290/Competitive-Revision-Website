@@ -268,14 +268,14 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
             setOpenDialog(false); // Close the dialog on success
             toast({
                 title: "Success!",
-                description: "The question has been added successfully!",
+                description: "The topic has been added successfully!",
                 variant: "success",
             })
         } catch (error) {
-            console.error("Error submitting question:", error);
+            console.error("Error submitting topic:", error);
             toast({
                 title: "Error!",
-                description: "Failed to submit the question, please try again.",
+                description: "Failed to submit the topic, please try again.",
                 variant: "destructive",
             })
         } finally {
@@ -409,14 +409,14 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
             setOpenDialog(false); // Close the dialog on success
             toast({
                 title: "Success!",
-                description: "The question has been added successfully!",
+                description: "The subject has been added successfully!",
                 variant: "success",
             })
         } catch (error) {
-            console.error("Error submitting question:", error);
+            console.error("Error submitting subject:", error);
             toast({
                 title: "Error!",
-                description: "Failed to submit the question, please try again.",
+                description: "Failed to submit the subject, please try again.",
                 variant: "destructive",
             })
         } finally {
@@ -519,14 +519,14 @@ export function QualificationDialog({setOpenDialog, refetch}) {
             setOpenDialog(false); // Close the dialog on success
             toast({
                 title: "Success!",
-                description: "The question has been added successfully!",
+                description: "The qualification has been added successfully!",
                 variant: "success",
             })
         } catch (error) {
             console.error("Error submitting qualification:", error);
             toast({
                 title: "Error!",
-                description: "Failed to submit the question, please try again.",
+                description: "Failed to submit the qualification, please try again.",
                 variant: "destructive",
             })
         } finally {
@@ -616,14 +616,14 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
             setOpenDialog(false); // Close the dialog on success
             toast({
                 title: "Success!",
-                description: "The question has been added successfully!",
+                description: "The user has been added successfully!",
                 variant: "success",
             })
         } catch (error) {
             console.error("Error registering user:", error);
             toast({
                 title: "Error!",
-                description: "Failed to submit the question, please try again.",
+                description: "Failed to submit the user, please try again.",
                 variant: "destructive",
             })
         } finally {

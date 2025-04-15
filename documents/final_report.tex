@@ -342,6 +342,7 @@ The Component Based Software Development Approach refers to the idea that a syst
 
 Given this, I have made sure to use different components within my project. A key component that will be present on majority of my webpages would be the Sidebar. By containing this into its own module it has been possible to pass the webpage content as a child component that is wrapped around by the Sidebar.
 \begin{lstlisting}[language=javascript, caption={An abstraction of the SidebarMenu function}]
+	// components/ui/SidebarMenu.tsx
 	export function SidebarMenu(content) {
 		const [open, setOpen] = useState(false);
 		return (
@@ -357,6 +358,7 @@ Given this, I have made sure to use different components within my project. A ke
 	}
 \end{lstlisting}
 \begin{lstlisting}[language=JavaScript, caption={The SidebarMenu represents the sidebar, while the Dashboard represents the actual page being rendered.}]
+	// app/dashboard/page.tsx
 	const Page = () => {
 		
 		return (
@@ -382,7 +384,7 @@ Communication is facilitated through the use of API endpoints. These endpoints a
 An example of how this is setup in my application can be with how we view the list of qualifications that the user sees when they sign up to the application. When the create page is loaded, an API request is sent to the backend to fetch all of the qualification, the result of which will be stored as a constant to be used in the registration form itself.
 
 \begin{lstlisting}[language=JavaScript, caption={When the page is loaded, axios sends an API request to get all the qualifications.}]
-	// create/page.tsx
+	// app/create/page.tsx
 	useEffect(() => {
 		const quals = async () => {
 			const response = await axios.get("http://localhost:8080/api/qualification/get-all")
@@ -625,6 +627,7 @@ Having applied these tests throughout the backend, the resultant coverages comes
 For the frontend however this works slightly differently. These tests are carried out by using the JEST library, which checks to see if any defined elements are present in the page that has been rendered. It can also simulate user interactions with the web page as well, testing that the web page functions as intended.
 
 \begin{lstlisting}[language=JavaScript, caption={This test renders the page and checks that the necessary elements are present, before simulating a user entering their details and submitting them - causing the API request to be called.}]
+	// __tests__/login.test.tsx
 it('submits user details and redirects on success', async () => {
 	render(<Page />)
 	const user = userEvent.setup();
@@ -721,7 +724,6 @@ User Stories allow me to gain an insight into what features need to be implement
 Should the application be developed further, these user stories can definitely be expanded as further features are considered.
 
 \section{Implementation}
-\textbf{Complete by adding new features developed after interim submission}
 \subsection{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
 \begin{center}
@@ -850,7 +852,7 @@ When submitted, the username and password are packaged into a JSON body to be se
 	}
 \end{lstlisting}
 
-The returned JSON Web Token is required for future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window. Both cookies have been designed to be as secure as possible.This includes setting the HTTP-Only and Secure flags to true, so that they are not detected by any external JavaScript - as well as ensuring that the sameSite flag is set to Strict. This way these cookies can only be used within the application itself, and not anywhere else.
+The returned JSON Web Token is required for future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window. Both cookies have been designed to be as secure as possible. This includes setting the HTTP-Only and Secure flags to true, so that they are not detected by any external JavaScript - as well as ensuring that the sameSite flag is set to Strict. This way these cookies can only be used within the application itself, and not anywhere else.
 
 \begin{center}
 	\includegraphics[scale=0.725]{cookies}
@@ -917,13 +919,13 @@ In the backend, the API request will gets the user from the database and check t
 		return new AuthenticationResponseDto(newAccessToken);
 	}
 \end{lstlisting}
-\subsection{Dashboard}
+\subsection{User Dashboard}
 
 The dashboard is the first screen that the user will see upon successfully logging in. The dashboard is separated into three sections, providing the user with information relevant to their current performance.\\
 
 \begin{center}
 	\includegraphics[scale=0.3]{dashboard1}
-	\captionof{figure}{The view that the user is presented when they log into the application, at this current stage in development.}
+	\captionof{figure}{The view that the user is presented when they log into the application.}
 \end{center}
 
 The top left section is used to greet the user, showing the amount of points that they currently have. This section also displays a level for the user as well, which is calculated based on the number of points that they have, whilst showing a progress bar and counter informing the user of how many points they need to achieve before progressing to the next level.\\
@@ -970,6 +972,7 @@ Quizzes are the core component of this system, as this is where students are tes
 Should the user answer the question correctly, the input box will show a green outline, and the \verb|Marks Available| will change to \verb|Correct!| before loading the next question, informing the user that their answer was correct. The questions are stored in a list, so moving to the next question is a case of incrementing the index whilst we are still within the range of the list's length.
 
 \begin{lstlisting}[language=javascript, caption={How the next question is loaded.}]
+	// app/quiz/page.tsx
 	const nextQuestion = (marks = questionMarks) => {
 		setTotalMarks(Math.floor(totalMarks + marks))
 		if (currentQuestionIndex < questions.length - 1) {
@@ -995,6 +998,7 @@ On the other hand, if the user answers incorrectly, the quiz also updates to ref
 \end{center}
 
 \begin{lstlisting}[language=javascript, caption={The user's answer is handled here, setting a boolean to determine if the answer is correct or not. This determines how the page should be updated.}]
+	// app/quiz/page.tsx
 	// Determines whether the question is correct or not.
 	const handleAnswerSubmit = (event: React.FormEvent) => {
 		...
@@ -1037,12 +1041,14 @@ On the other hand, if the user answers incorrectly, the quiz also updates to ref
 A notable difference however is that the \verb|Skip Question| button is also then enabled, allowing the user to skip the question if they are unable to answer correctly - earning them 0 marks. The other key difference is that the number of marks available for the question is decreased by 10\% - a negligible change in questions with a smaller weighting, however much more noticeable for those worth more marks. This reduction only happens twice, after which the number of marks will remain at 81\% of the original question.
 
 \begin{lstlisting}[language=javascript, caption={The logic used to reduce marks for an incorrect answer. If the mark value is already close to 81\% of the original, no further reduction is applied. }]
+	// app/quiz/page.tsx
 	if (Math.abs(currentQuestion.marks * 0.81 - questionMarks) > 0.0001) {
 		setQuestionMarks(questionMarks * 0.9)
 	}
 \end{lstlisting}
 
 \begin{lstlisting}[language=javascript, caption={The variant of the button changes based on the number of marks currently offered by the question, and is enabled if the user's answer is false.}]
+	// app/quiz/page.tsx
 	<Button
 		...
 		variant={questionMarks === currentQuestion?.marks ? "secondary" : "default"}
@@ -1059,7 +1065,8 @@ Upon completion of the quiz, the user is presented with a screen that will summa
 	\captionof{figure}{The quiz completion screen displays the marks earned and updated total marks, before allowing the user to return to the main page.}
 \end{center}
 
-\begin{lstlisting}[language=javascript, caption={The marks earned are packaged into a JSON array, with the topic id of the quiz and percentage score before being sent to the backend.}]
+\begin{lstlisting}[language=javascript, caption={The marks earned, topic id and score are sent to the backend via a JSON payload.}]
+	// app/quiz/page.tsx
 	const payload = {
 		marks: totalMarks,
 		topicId: id,
@@ -1106,12 +1113,291 @@ Once the marks are saved to the system, the backend also creates a new attempt r
     }
 \end{lstlisting}
 
-\subsection{Admin Login \& Dashboard}
+\subsection{Admin Login \& Role-Based Access Control}
+
+The admin system is kept separate from the users, to enforce the idea that each role should only have access to what is relevant to them. Admins can log into the system via a separate login form. This form is identical to the student's login page, the only difference is the absence of the \verb|Account Creation| button - and passing the admin role as a parameter when calling the login endpoint.
+
+\begin{center}
+	\includegraphics[scale=0.3]{admin-login.png}
+	\captionof{figure}{The admin login page mirrors the user login page in structure, but only allows for authorisation for admin accounts.}
+\end{center}
+
+Both login forms add \verb|"ROLE_USER"| or \verb|"ROLE_ADMIN"| to the payload, depending on which form the user is trying to access. This is then validated against the role that the user actually has, granting access to the user only if they match. An exception will be thrown otherwise indicating that the user is unable to view the page.
+
+\begin{center}
+	\includegraphics[scale=0.3]{admin-login-fail.png}
+	\captionof{figure}{A toast prompt is shown, stating that the user is not authorised to access this page.}
+\end{center}
+
+\begin{lstlisting}[language=java, caption={The authentication function, which retrieves the users details and ensures the role of the user matches the role needed to log into the system.}]
+	// AuthenticationService.java
+	public AuthenticationResponseDto authenticate(final AuthenticationRequestDto request) throws AdminException {
+        final var authToken = UsernamePasswordAuthenticationToken.unauthenticated(request.username(), request.password());
+        final var authentication = authenticationManager.authenticate(authToken);
+
+        final var accessToken = jwtService.generateToken((JpaUserDetails) authentication.getPrincipal());
+
+        final var user = userRepository.findByUsername(request.username()).orElse(null);
+
+		// This determines whether the user is trying to log into the wrong page.
+        if (!user.getRole().getName().equals(request.role()))
+            throw new AdminException("User is not authorised to view this page.");
+
+        if (refreshTokenService.hasInvalidRefreshToken(user)) {
+             refreshTokenService.createToken(user);
+        }
+
+        return new AuthenticationResponseDto(accessToken);
+    }
+\end{lstlisting}
+
+For both users, once they are authenticated, if they attempt to navigate to a page which is otherwise restricted to the other role, such as a user accessing the admin dashboard or vice versa, the middleware will intervene and prevent the user from accessing the page. This is achieved by decoding the token and validating the role each time the user wishes to redirect.
+
+\begin{center}
+	\includegraphics[scale=0.3]{unauthorised.png}
+	\captionof{figure}{The unauthorised screen is identical, and is shown when a user tries an admin page, or an admin tries a user page.}
+\end{center}
+
+\begin{lstlisting}[language=javascript, caption={If the user is unauthorised they will see a 403 error, indicating that the path is forbidden for them.}]
+	// middleware.ts
+	const decoded: {role?:string; exp?:number;} = jwtDecode(token);
+
+	if (decoded.role !== "ROLE_ADMIN" && req.nextUrl.pathname.startsWith("/admin")) {
+		return new Response(null, {status: 403});
+	}
+	else if (decoded.role !== "ROLE_USER" && config.matcher.some(path=>!req.nextUrl.pathname.startsWith("/admin"))) {
+		return new Response(null, {status: 403});
+	}
+\end{lstlisting}
+
+For further security, all admin endpoints have been configured in the backend such that they require the user to have the admin role assigned to them. Admins can access other endpoints if they are authenticated, however the admin endpoints are the ones required for managing the persistence of data. 
+
+\begin{lstlisting}[language=java, caption={The backend configuration ensures that admin endpoints require the user to have an admin role, while all other endpoints require authentication. Authentication and qualification retrieval are permitted to all users, as they are necessary for registration and login.}]
+	// SecurityConfig.java
+	@Bean
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+        return http.csrf(AbstractHttpConfigurer::disable)
+				...
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**",
+                                "/api/qualification/get-all"
+                        ).permitAll()
+						// Validates the the user has the ADMIN role for admin endpoints
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+				...
+    }
+\end{lstlisting}
+
+\subsection{Admin Dashboard}
+
+Having logged in successfully, the admin will be presented with a dashboard tailored specifically to their role. While the student dashboard focuses on their performance, the admin dashboard focuses on system-wide insights and data management - as it is here where changes to the system can be made via the data tables. This dashboard has four sections, relating to the current status of the system.
+
+\begin{center}
+	\includegraphics[scale=0.3]{admin-dashboard1.png}
+	\captionof{figure}{The view that the admin is presented when they log into the application.}
+\end{center}
+
+At the very top of the dashboard the admin is shown how many questions, topics, subjects, qualifications and users are present on the system. This updates as more items are added or removed from the system.\\
+
+The left hand side shows an activity log, used to display all of the recent changes that were made to the system. A log will show for adding, editing and deleting an item from any of the data tables that we have for the system, offering the ability to trace who performed a given action, so they can be held accountable if required.\\
+
+The right hand side contains another log, containing recent user attempts and their scores. This can be used to gain an insight into how students on average perform in a specific topic - where supporting features, such as filtering, can be something implemented if further development were to take place.\\
+
+With the admin section largely used for data management, quick access buttons are located at the bottom to assist with navigating to a specific data table quickly. These buttons are also presented in the admin version of the sidebar, along with buttons to logout and return to the dashboard.
+
+\begin{center}
+	\includegraphics[scale=0.3]{admin-dashboard2.png}
+	\captionof{figure}{The admin dashboard with the sidebar expanded. The main links are identical to the quick access buttons seen, along with the dashboard and logout buttons.}
+\end{center}
 
 \subsection{Data Tables}
 
-For all subjects, topics and qualifications - it is possible to add them to the system via the use of a dedicated endpoint. % At the moment I have not developed a frontend counterpart to them, however this will be a feature for the admin profiles in the future. 
+The system requires the following in order to function effectively:
+\begin{itemize}
+	\item Questions
+	\item Topics
+	\item Subjects
+	\item Qualifications
+	\item Users
+\end{itemize}
 
+These entities are managed through a dedicated data table, where records are stored in a corresponding database table. These tables provide the admin with the ability to add, edit or delete records in the system.
+
+\begin{center}
+	\includegraphics[scale=0.3]{tables1.png}
+	\captionof{figure}{All of the tables are structured similarly to this one, the only difference is the data displayed.}
+\end{center}
+
+Clicking on the \verb|Add [Entity]| button will open a dialogue box, containing fields which the admin can fill in. 
+
+\begin{center}
+	\includegraphics[scale=0.3]{add}
+	\captionof{figure}{The fields will differ depending on the item being added}
+\end{center}
+
+If the admin fills in any of these fields, but decides to click on the \verb|Cancel| button half way, they will be faced with an alert prompt informing them that data will be lost.
+
+\begin{lstlisting}[language=javascript, caption={The page constantly checks to see if any one of the fields contains a value, and if so it sets the state to be dirty. If this is the case, when trying to cancel it will trigger the cancel prompt.}]
+	// components/AddDialogPrompts.tsx
+    useEffect(() => {
+        if (question !== "" || answer !== "" || marks !== 0 || selectedQualification !== "" || selectedSubject !== "" || selectedTopic !== "") {
+            setDirty(true);
+        } else {
+            setDirty(false);
+        }
+    }, [question, answer, marks, selectedQualification, selectedSubject, selectedTopic]);
+
+    const handleCancel = () => {
+        if (dirty) {
+            setShowCancelDialog(true);
+        } else {
+            setOpenDialog(false);
+        }
+    };
+\end{lstlisting}
+
+\begin{center}
+	\includegraphics[scale=0.3]{cancel-add.png}
+	\captionof{figure}{The alert, informing users that changes will be lost. Confirming will close the outer dialogue, while cancel will return the admin to the form.}
+\end{center}
+
+Pressing \verb|Submit| will send the fields to be saved to the backend via a JSON payload.
+
+\begin{lstlisting}[language=java, caption={Adding a user uses the registration method, so this example uses a question. Here, a new entity is created and fields are filled before saving to the system. The same applies for all other tables.}]
+	// QuestionService.java
+	public void addQuestion(QuestionAddDto questionAddDto, String token) throws Exception {
+        ...
+        Question question = new Question();
+
+        question.setQuestion(questionAddDto.question());
+        question.setAnswer(questionAddDto.answer());
+        question.setMarks(questionAddDto.marks());
+        question.setTopic(topic);
+
+        questionRepository.save(question);
+        ...
+    }
+\end{lstlisting}
+
+Once complete, the page will reload to show the new information as a row in the table. These tables support actions on these rows, which is where admins can edit and delete records in the system.
+
+\begin{center}
+	\includegraphics[scale=0.3]{tables2.png}
+	\captionof{figure}{Each row in each table contains these row actions, allowing admins to edit and delete data relating to that row.}
+\end{center}
+
+Choosing to edit the record will open a different dialogue box, with fields that are pre-filled with the row's values. By default the submit button is disabled, however this can be enabled by simply changing the values in any of the fields. 
+
+\begin{center}
+	\includegraphics[scale=0.3]{edit.png}
+	\captionof{figure}{Changing the values of these fields will enable the submit button.}
+\end{center}
+
+If the admin has filled in the fields and chooses to cancel, they will receive the same alert as the one shown if they wanted to cancel adding an entity. Submitting however will send all fields to the backend, where the record is fetched and fields updated before being saved to the system again.
+
+\begin{lstlisting}[language=java, caption={The user record is retrieved using the id, and its fields are updated before then being saved again to the system.}]
+	// UserRegistrationService.java
+	public void editUser(UserEditDto userEditDto, String token) throws QualificationException {
+		User user = userRepository.findById(userEditDto.id()).get();
+		... 
+		user.setUsername(userEditDto.username());
+		user.setEmail(userEditDto.email());
+		if (!userEditDto.password().equals(""))
+			user.setPassword(passwordEncoder.encode(userEditDto.password()));
+		user.setRole(roleService.getRole(userEditDto.role()));
+		if (!userEditDto.qualification().equals(""))
+			user.setQualificationId(qualificationService.getIdByName(userEditDto.qualification()));
+		userRepository.save(user);
+		...
+	 }
+\end{lstlisting}
+
+If the admin wishes to delete a record, they can do so by clicking the delete button in the row actions menu. This will trigger an alert informing them that deletion is permanent, and prompts them to confirm deletion - doing so will proceed with deleting the entity from the system.
+
+\begin{center}
+	\includegraphics[scale=0.3]{delete.png}
+	\captionof{figure}{The warning shown to users as they attempt to delete an entity.}
+\end{center}
+
+By confirming, depending on the entity the id or the name will be sent to the backed for deletion, where the item is simply removed from the JpaRepository.
+
+\begin{lstlisting}[language=java, caption={For users, the user is retrieved from the database, their logs are deleted before the user themselves is deleted. Their details are then used for logging the action.}]
+	// UserRegistrationService.java
+    public void deleteUser(UUID id, String token) {
+        User user = userRepository.findById(id).get();
+        logService.deleteUserLogs(user);
+        userRepository.deleteById(id);
+        logService.addLog(token, DELETE_USER.formatted(user.getUsername()));
+    }
+\end{lstlisting}
+
+All actions will provide immediate feedback via the use of a toast prompt. For instance, if the admin attempts to delete an entity that has a dependency, for example a topic with questions, then the system will return an error stating that the admin is unable to delete the entity due to the dependency.
+
+\begin{lstlisting}[language=javascript, caption={The error will only be thrown if the topic's question count is greater than 0. This is similar for qualifications/subjects with their dependencies.}]
+	// components/TableColumns.tsx
+	if (topic.questionCount > 0) {
+		toast({
+			title: "Error!",
+			description: "Topic cannot be deleted when Questions are present.",
+			variant: "destructive",
+		})
+		return
+	}
+\end{lstlisting}
+
+\begin{center}
+	\includegraphics[scale=0.3]{delete2.png}
+	\captionof{figure}{The toast prompt appears when trying to delete a topic that has questions. A similar prompt shows for qualifications with subjects, or subjects with topics.}
+\end{center}
+
+On the other hand - elements which are successfully added, edited or deleted will return a toast prompt to confirm this to the admin. 
+
+\begin{center}
+	\includegraphics[scale=0.3]{tables3.png}
+	\captionof{figure}{A toast prompt such as this will appear for adding, editing and deleting an entity from any table.}
+\end{center}
+
+\subsection{Activity Log}
+
+The activity log is used to visualise changes that are made to the system, whether it be adding, editing or deleting entities. These logs allow admins to see what changes where made, who made them and when they were made.
+
+\begin{lstlisting}[language=java, caption={The system uses constants to contain the string template, and then formats it to insert the relevant data.}]
+	// SubjectTopicService.java
+	private final String ADD_TOPIC = "Created New %s Topic: %s";
+	...
+	public void saveTopic(TopicDto topicDto, String token) throws Exception {
+		...
+        logService.addLog(token, ADD_TOPIC.formatted(subject.getName(), topicName));
+    }
+\end{lstlisting}
+
+As for the logs themselves, the user is extracted from the active admin's JSON Web Token, at it would be them who had performed the action. The action is a parameter for the function, and the time used for the action is generated as the log is being saved. These fields are saved together, and cannot be edited or removed from the system, unless the account that had performed the actions is deleted due to how the tables are linked.
+
+\begin{lstlisting}[language=java, caption={How the log itself is saved}]
+	// LogService.java
+	public void addLog(String token, String action) {
+        Log log = new Log();
+        String username = jwtService.getUserNameFromJwtToken(token);
+        User user = userRepository.findByUsername(username).get();
+        saveLog(user, action);
+    }
+    private void saveLog(User user, String action) {
+        Log log = new Log();
+        log.setUser(user);
+        log.setActivity(action);
+        log.setDate(Instant.now());
+        logRepository.save(log);
+    }
+\end{lstlisting}
+
+All logs are then presented on the main admin dashboard as previously mentioned. Here the admin can scroll through the list to see who performed a specific action, where the logs are sorted from the latest date to oldest.
+
+\begin{center}
+	\includegraphics[scale=0.3]{logs.png}
+	\captionof{figure}{The logs will only be visible here, where admins can scroll through the list. They will not be removed here unless the user who performed the action is deleted.}
+\end{center}
 
 \chapter{Professional Issues}
 

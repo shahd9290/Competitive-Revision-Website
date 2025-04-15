@@ -50,7 +50,7 @@ public class AuthenticationService {
 
         final var user = userRepository.findByUsername(request.username()).orElse(null);
 
-        if (!user.getRoles().stream().findFirst().get().getName().equals(request.role()))
+        if (!user.getRole().getName().equals(request.role()))
             throw new AdminException("User is not authorised to view this page.");
         // Check if valid refresh token is in database.
         // If not (expired or non-existent) then create one
