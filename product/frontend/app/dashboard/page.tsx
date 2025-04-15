@@ -45,13 +45,13 @@ const Dashboard = () => {
                         <div className="flex items-center mb-4">
                             <span className="text-xl">Level {Math.floor((user.marks || 0) / 100) + 1}</span>
                             <span className="mx-2 text-gray-400">•</span>
-                            <span className="text-xl font-semibold">{user.marks || 0} Points</span>
+                            <span className="text-xl font-semibold">{user.marks || 0} Marks</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
                             <div className="bg-blue-500 h-2.5 rounded-full"
                                  style={{width: `${user.marks % 100}%`}}></div>
                         </div>
-                        <p className="text-sm text-gray-500">{100 - (user.marks % 100)} points to next level</p>
+                        <p className="text-sm text-gray-500">{100 - (user.marks % 100)} marks to next level</p>
                     </div>
 
                     {/* Top right */}
