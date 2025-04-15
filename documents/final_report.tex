@@ -724,37 +724,61 @@ Should the application be developed further, these user stories can definitely b
 \textbf{Complete by adding new features developed after interim submission}
 \subsection{User Registration}
 The User Registration is a key component of the system, as this is where users will be required to submit their details in order to create an account for the system. They are required to enter their username, email and password - as well as select the qualification that they are studying from a provided drop-down box.
-\\\\\includegraphics[scale=0.3]{create}
-\captionof{figure}{The Account Creation Page}
+\begin{center}
+	\includegraphics[scale=0.3]{create}
+	\captionof{figure}{The Account Creation Page}
+\end{center}
 
-When submitted, the frontend will check to make sure that the email and email confirmation match. Following that, it also checks if the qualification has a valid input. If neither of these is the case, an alert would show on the screen to inform the user - and nothing would happen.
-\\\\\includegraphics[scale=0.3]{create-alerts}
-\captionof{figure}{The alert thrown when the emails do not match.}
+When submitted, the frontend will check to make sure that the password and password confirmation match. Following that, it also checks if the qualification has a valid input. If neither of these is the case, an alert would show on the screen to inform the user - and nothing would happen.
+\begin{center}
+	\includegraphics[scale=0.3]{create-alerts}
+	\captionof{figure}{The alert thrown when the passwords do not match.}
+\end{center}
 
-\newpage % for formatting
 \begin{lstlisting}[language=JavaScript, caption={An excerpt from the frontend code where the conditions are checked for the alerts to be thrown.}]
-	// create/page.tsx
-	if (email !== emailConfirm) {
-		alert("Please ensure you have entered the correct email address in both sections!");
-	}
-	else if (qualificationInput === "") {
-		alert("Please select a qualification");
+	// components/auth-form.tsx
+	if (type === "register") {
+		if (formData.qualification === undefined) {
+			toast({
+				title: "Error!",
+				description: "Please select a qualification",
+				variant: "destructive",
+			})
+			setIsLoading(false);
+			return
+		}
+		else if (formData.password !== formData.confirmPassword) {
+			toast({
+				title: "Registration failed",
+				description: "Passwords do not match!",
+				variant: "destructive",
+			})
+			setIsLoading(false);
+			return;
+		}
 	}
 \end{lstlisting}
 
-When both of these are satisfied, the frontend will collect the variables together into a JSON body to be submitted with the API POST request to the backend. The frontend then waits for a response from the backend before redirecting the user to the homepage. If any issues were to occur at this stage, an exception would be caught and stop the user from being redirected - instead presenting them with an alert informing them of the error.
+When both of these are satisfied, the frontend will collect the variables together into a JSON body to be submitted with the API POST request to the backend. The frontend then waits for a response from the backend before informing the user that registration was successful, followed by redirecting them to the homepage. If any issues were to occur at this stage, an exception would be caught and stop the user from being redirected - instead presenting them with a toast prompt informing them of the error.
 
-\begin{lstlisting}[language=JavaScript, caption={The variables are put together into a JSON array, and are then supplied to axios to be send in a request to the backend. Any exceptions that are thrown are caught and handled appropriately.}]
-	// create/page.tsx
+\begin{lstlisting}[language=JavaScript, caption={The variables are put together into a JSON array, and are then supplied to axios to be sent in a request to the backend. Any exceptions that are thrown are caught and handled appropriately.}]
+	// components/auth-form.tsx
 	const payload = {
-		"username": username, "email": email, "password": password, "qualification": qualificationInput
+		...formData, // username, password, email, role, qualification
+		role: type === "admin" ? "ROLE_ADMIN" : "ROLE_USER",
 	}
-	
+
 	try {
-		const response = await axios.post("http://localhost:8080/api/auth/register", payload);
-		alert("Account created successfully.");
-		router.push('/login')
-		
+		await axios.post(`${apiUrl}${apiEndpoint}`, payload, {withCredentials: true})
+
+		toast({
+			title: "Success!",
+			description:
+				type === "register" ? "Your account has been created successfully." : "You have been logged in successfully.",
+			variant: "success",
+		})
+
+		router.push(redirectPath)
 	}
 	// Error Handling 
 \end{lstlisting}
@@ -781,24 +805,35 @@ When both of these are satisfied, the frontend will collect the variables togeth
 \end{lstlisting}
 
 \subsection{User Login}
-Once the user has created their account, they will be redirected to the login page where they are able to enter their details. Through this, they will be able to access the application to then carry out their revision tasks.
-\\\\\includegraphics[scale=0.3]{login}
+As implied by the frontend code, the form used for creating a user account is also used for allowing them to log into the system. Once the user has created their account, they will be redirected to the login page where they are able to enter their details. Through this, they will be able to access the application to then carry out their revision tasks.
+\begin{center}
+	\includegraphics[scale=0.3]{login}
+	\captionof{figure}{The Student Login Page}
+\end{center}
 
-When submitted, the username and password are packaged into a JSON body to be sent via an axios request to the backend. The user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. This will be used in future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window.
+When submitted, the username and password are packaged into a JSON body to be sent via an axios request to the backend. The user details are authenticated, before a JSON Web Token is returned to the frontend as a cookie. The code used here is identical to that seen for the registration form, the only difference is the contents of formData. For the login form it contains the username, password and the user's role - while the registration form also adds the user's email and qualification to the formData. 
 
-\begin{lstlisting}[language=JavaScript, caption={The username and password are added to a payload, and sent as the request body to the backend}]
-	// login/page.tsx
-	const login = async (event: { preventDefault: () => void; }) => {
-		event.preventDefault();
-		const payload = {
-			"username": username, "password": password
-		}
-		try {
-			const login_confirm = await axios.post("http://localhost:8080/api/auth/login", payload, {withCredentials: true});
-			router.push('/dashboard')
-		}
-		// Error Handling
+
+\begin{lstlisting}[language=JavaScript, caption={The username and password are added to a payload, and sent as the request body to the backend.}]
+	// components/auth-form.tsx
+	const payload = {
+		...formData, / username, password, role
+		role: type === "admin" ? "ROLE_ADMIN" : "ROLE_USER",
 	}
+
+	try {
+		await axios.post(`${apiUrl}${apiEndpoint}`, payload, {withCredentials: true})
+
+		toast({
+			title: "Success!",
+			description:
+				type === "register" ? "Your account has been created successfully." : "You have been logged in successfully.",
+			variant: "success",
+		})
+
+		router.push(redirectPath)
+	}
+	// Error Handling
 \end{lstlisting}
 
 \begin{lstlisting}[language=Java, caption={The controller code showing the steps required to authenticate the user.}]
@@ -815,9 +850,13 @@ When submitted, the username and password are packaged into a JSON body to be se
 	}
 \end{lstlisting}
 
-Both cookies have been designed to be as secure as possible.This includes setting the HTTP-Only and Secure flags to true, so that they are not detected by any external JavaScript - as well as ensuring that the sameSite flag is set to Strict. This way these cookies can only be used within the application itself, and not anywhere else.
-\\\\\includegraphics[scale=0.725]{cookies}
-\captionof{figure}{Example cookies as they appear in browser's cookies tab.}
+The returned JSON Web Token is required for future API Requests, where the user needs to be authenticated for the functions to be executed. Additionally, a secondary cookie is returned with a timestamp that represents the time two minutes before the token is due to expire. This is used to trigger the refresh token mechanism - so that the token can be automatically refreshed if the user is within the two minute window. Both cookies have been designed to be as secure as possible.This includes setting the HTTP-Only and Secure flags to true, so that they are not detected by any external JavaScript - as well as ensuring that the sameSite flag is set to Strict. This way these cookies can only be used within the application itself, and not anywhere else.
+
+\begin{center}
+	\includegraphics[scale=0.725]{cookies}
+	\captionof{figure}{Example cookies as they appear in browser's cookies tab.}
+\end{center}
+
 \begin{lstlisting}[language=Java, caption={The code used to create the token cookie. For the tokenExpiry the only difference would be the value of the cookie instead.}]
 	// CookieService.java
 	public ResponseCookie createTokenCookie(String token) {
@@ -880,23 +919,199 @@ In the backend, the API request will gets the user from the database and check t
 \end{lstlisting}
 \subsection{Dashboard}
 
-The dashboard is the first screen that the user will see upon successfully logging in. The dashboard is separated into three sections, of which only one has information at the moment. This will greet the user, and show the amount of points which they currently have. This could change to their position in the leaderboard in the future when implemented. The section at the bottom I plan to allow students to use that to view their recent attempts, while I am not so certain about how I can use the section in the top right at this stage of development. It is likely it will be related to the competition side of the product.
-\\\\\includegraphics[scale=0.3]{dashboard1}
-\captionof{figure}{The view that the user is presented when they log into the application, at this current stage in development.}
+The dashboard is the first screen that the user will see upon successfully logging in. The dashboard is separated into three sections, providing the user with information relevant to their current performance.\\
+
+\begin{center}
+	\includegraphics[scale=0.3]{dashboard1}
+	\captionof{figure}{The view that the user is presented when they log into the application, at this current stage in development.}
+\end{center}
+
+The top left section is used to greet the user, showing the amount of points that they currently have. This section also displays a level for the user as well, which is calculated based on the number of points that they have, whilst showing a progress bar and counter informing the user of how many points they need to achieve before progressing to the next level.\\
+
+The top right section provides the user with a summary of their performance. This is split into four further sub-categories, showing the user what their average and highest scores are, the total number of attempts they have as well as the score of their previous attempt. This data is calculated by the frontend, based on the information retrieved pertaining to the user's latest attempts.\\
+
+The bottom section is used to store these recent attempts. It holds a table consisting of the topic the user had previously attempted, the date they attempted it as well as the score that they had received. In the event that the user is a brand new user, without any attempts, then a placeholder button is shown prompting the user to start a new quiz instead.
+
+\begin{center}
+	\includegraphics[scale=0.3]{dashboard3}
+	\captionof{figure}{This placeholder is only shown for brand new users, who have no recent attempts on their profile.}
+\end{center}
+
 All pages from here will also include a Sidebar. By default the sidebar is collapsed, however it will expand to show what each of the buttons represent in further details - when the user's cursor hovers over it. At the moment, there are only buttons to take the user to the dashboard and search page, as well as to log out of the system.
-\\\\\includegraphics[scale=0.3]{dashboard2}
-\captionof{figure}{The same view with the sidebar expanded. Each icon has text next to it showing the user where to go.}
+\begin{center}
+	\includegraphics[scale=0.3]{dashboard2}
+	\captionof{figure}{The dashboard with the sidebar expanded. Each icon has text next to it showing the user where to go.}
+\end{center}
 
 \subsection{Subject Search \& Topics}
 When the user wants to choose the subject which they would like to study, they would visit this screen at first. A request is made which will fetch all of the subjects that are suitable for the user's qualification. For every subject, they will appear in a grid to be displayed to the user.
-\\\\\includegraphics[scale=0.3]{search}
-\captionof{figure}{How the subjects appear to the user on the frontend}
+\begin{center}
+	\includegraphics[scale=0.3]{search}
+	\captionof{figure}{How the subjects appear to the user on the frontend.}
+\end{center}
 
-Each subject will have a separate list of topics compared to others. For any subjects that may exist for more than one qualification - the topics shown will only be relevant to the qualification that the user may have. These topics will appear in a dialogue modal box as a list for the user to select. At this point in development - there are no further interactions, however the plan is that the user can select a topic from this list and will be redirected to the question page, which will consist of a random selection of questions with random values. 
-\\\\\includegraphics[scale=0.3]{topics}
-\captionof{figure}{How the topics appear to the user on the frontend after selecting a subject}
+Each subject will have a separate list of topics compared to others. For any subjects that may exist for more than one qualification - the topics shown will only be relevant to the qualification that the user may have. These topics will appear in a dialogue modal box as a list for the user to select. Based on how many questions that the topic contains, the user will or will not be able to interact with the topic. Doing so will redirect the user to a quiz page, where the user can answer a random selection of questions to earn marks.
 
-For all subjects, topics and qualifications - it is possible to add them to the system via the use of a dedicated endpoint. At the moment I have not developed a frontend counterpart to them, however this will be a feature for the admin profiles in the future. 
+\begin{center}
+	\includegraphics[scale=0.3]{topics}
+	\captionof{figure}{How the topics appear to the user on the frontend after selecting a subject. Topics without questions are greyed out.}
+\end{center} 
+
+
+\subsection{The Quizzes}
+
+Quizzes are the core component of this system, as this is where students are tested on their understanding of their chosen topic. Students will be prompted with a question, and a text input box for them to enter their answers before submitting them. 
+
+\begin{center}
+	\includegraphics[scale=0.3]{quiz1.png}
+	\captionof{figure}{An example question being displayed in the quiz.}
+\end{center}
+
+Should the user answer the question correctly, the input box will show a green outline, and the \verb|Marks Available| will change to \verb|Correct!| before loading the next question, informing the user that their answer was correct. The questions are stored in a list, so moving to the next question is a case of incrementing the index whilst we are still within the range of the list's length.
+
+\begin{lstlisting}[language=javascript, caption={How the next question is loaded.}]
+	const nextQuestion = (marks = questionMarks) => {
+		setTotalMarks(Math.floor(totalMarks + marks))
+		if (currentQuestionIndex < questions.length - 1) {
+		  setCurrentQuestionIndex(currentQuestionIndex + 1)
+		  setUserAnswer("")
+		  setIsCorrect(null)
+		} else {
+		  setIsCompleted(true)
+		}
+	}
+\end{lstlisting}
+
+\begin{center}
+	\includegraphics[scale=0.3]{quiz2.png}
+	\captionof{figure}{The prompt that the user sees when answering correctly.}
+\end{center}
+
+On the other hand, if the user answers incorrectly, the quiz also updates to reflect that. The text box outline turns red, the \verb|Marks Available| text will change to \verb|Incorrect|, with the container also turning red to add emphasis to the user's mistake. 
+
+\begin{center}
+	\includegraphics[scale=0.3]{quiz3.png}
+	\captionof{figure}{The original mark for this question was 20, the incorrect answer reduces it to 18. Another incorrect answer will further reduce it to 16.}
+\end{center}
+
+\begin{lstlisting}[language=javascript, caption={The user's answer is handled here, setting a boolean to determine if the answer is correct or not. This determines how the page should be updated.}]
+	// Determines whether the question is correct or not.
+	const handleAnswerSubmit = (event: React.FormEvent) => {
+		...
+		if (userAnswer.trim().toLowerCase() === currentQuestion.answer.toLowerCase()) {
+		  setIsCorrect(true)
+		  setTimeout(() => { 
+			nextQuestion()
+		  }, 1000)
+		} else {
+		  setIsCorrect(false)
+		  ...
+		}
+	}
+	
+	return (
+		...	
+		<form onSubmit={handleAnswerSubmit} className="space-y-6">
+			...
+			<div className="space-y-4">
+				<div className="flex justify-between items-center">
+					...
+					// Changes depending on if the question is correct or not.
+					<Badge variant={isCorrect === true ? "success" : isCorrect === false ? "destructive" : "outline"}>
+						{isCorrect === true ? "Correct!" : isCorrect === false ? "Incorrect" : "Marks Available"}:{" "}
+						{Math.floor(questionMarks)}
+					</Badge>
+				</div>
+
+				// Changes depending on if the question is correct or not.
+				<Input
+				...
+				className={`${isCorrect === true ? "border-green-500" : isCorrect === false ? "border-red-500" : ""}`}
+				/>
+				...
+			</div>
+		</form>
+	)
+\end{lstlisting}
+
+A notable difference however is that the \verb|Skip Question| button is also then enabled, allowing the user to skip the question if they are unable to answer correctly - earning them 0 marks. The other key difference is that the number of marks available for the question is decreased by 10\% - a negligible change in questions with a smaller weighting, however much more noticeable for those worth more marks. This reduction only happens twice, after which the number of marks will remain at 81\% of the original question.
+
+\begin{lstlisting}[language=javascript, caption={The logic used to reduce marks for an incorrect answer. If the mark value is already close to 81\% of the original, no further reduction is applied. }]
+	if (Math.abs(currentQuestion.marks * 0.81 - questionMarks) > 0.0001) {
+		setQuestionMarks(questionMarks * 0.9)
+	}
+\end{lstlisting}
+
+\begin{lstlisting}[language=javascript, caption={The variant of the button changes based on the number of marks currently offered by the question, and is enabled if the user's answer is false.}]
+	<Button
+		...
+		variant={questionMarks === currentQuestion?.marks ? "secondary" : "default"}
+		...
+		disabled={isCorrect !== false}
+	>
+		...
+  </Button>
+\end{lstlisting}
+Upon completion of the quiz, the user is presented with a screen that will summarise their performance. It shows them the number of marks they had earned, along with the number of marks that they now currently have before giving them the option to redirect back to the main page.
+
+\begin{center}
+	\includegraphics[scale=0.3]{quiz4.png}
+	\captionof{figure}{The quiz completion screen displays the marks earned and updated total marks, before allowing the user to return to the main page.}
+\end{center}
+
+\begin{lstlisting}[language=javascript, caption={The marks earned are packaged into a JSON array, with the topic id of the quiz and percentage score before being sent to the backend.}]
+	const payload = {
+		marks: totalMarks,
+		topicId: id,
+		proportion: totalMarks / questionTotal,
+	  }
+	  try {
+		const response = await axios.post(`${apiUrl}/api/user/save-marks`, payload, { withCredentials: true })
+		setUserMarks(response.data)
+	  } catch (error) {
+		setError("Failed to save marks")
+	  }
+\end{lstlisting}
+
+\begin{lstlisting}[language=java, caption={How the marks are updated in the backend}]
+	// UserService.java
+    public int updateMarks(String token, int marks) {
+        String name = jwtService.getUserNameFromJwtToken(token);
+        User user = getUserByUsername(name);
+        user.setMarks(user.getMarks() + marks);
+        userRepository.save(user);
+        return user.getMarks();
+    }
+\end{lstlisting}
+
+Once the marks are saved to the system, the backend also creates a new attempt record for the user - so that it is displayed on their dashboard when they load into the system. 
+
+\begin{lstlisting}[language=java, caption={The user is fetched from the token, and a new Attempt is created before being saved to the database.}]
+    // UserAttemptsService.java
+	public void addAttempt(String accessToken, int topicId, double proportion) {
+        String username = jwtService.getUserNameFromJwtToken(accessToken);
+
+        User user = userService.getUserByUsername(username);
+        Topic topic = subjectTopicService.getTopic(topicId);
+        Instant now = Instant.now();
+        AttemptId attemptId = new AttemptId(user.getId(), topic.getId(), now);
+
+        UserAttempts attempts = new UserAttempts();
+        attempts.setId(attemptId);
+        attempts.setUser(user);
+        attempts.setTopic(topic);
+        attempts.setProportion(proportion);
+
+        userAttemptsRepository.save(attempts);
+    }
+\end{lstlisting}
+
+\subsection{Admin Login \& Dashboard}
+
+\subsection{Data Tables}
+
+For all subjects, topics and qualifications - it is possible to add them to the system via the use of a dedicated endpoint. % At the moment I have not developed a frontend counterpart to them, however this will be a feature for the admin profiles in the future. 
+
 
 \chapter{Professional Issues}
 
