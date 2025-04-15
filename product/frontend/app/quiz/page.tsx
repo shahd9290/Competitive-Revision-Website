@@ -120,7 +120,7 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
 
     setError("")
 
-    if (userAnswer.trim() === currentQuestion.answer) {
+    if (userAnswer.trim().toLowerCase() === currentQuestion.answer.toLowerCase()) {
       setIsCorrect(true)
       setTimeout(() => {
         nextQuestion()
