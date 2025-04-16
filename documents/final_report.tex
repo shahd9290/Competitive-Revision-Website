@@ -658,7 +658,7 @@ it('submits user details and redirects on success', async () => {
 Having applied these tests to the frontend, the resultant coverage comes out to be 95.03\%. The main discrepancy comes from the use-toast hook, which is not fully used throughout the application. All of the other pages have been fully tested.
 
 \includegraphics[scale=0.3]{frontend-coverage}
-\captionof{figure}{95.03\% coverage at the moment for the frontend}
+\captionof{figure}{95.03\% coverage for the frontend}
 
 Alongside the unit tests, I have also been sure to carry out integration and system for this application. For integration testing - this would be testing the API endpoints to ensure that the data being retrieved by the backend is correct, and that there are no discrepancies or irrelevant data present. With system testing, this would be after connecting the frontend to the backend - and ensuring that I am able to view the retrieved data on the frontend, such that they can be interacted with further by the user.
 \section{Documentation}
@@ -939,7 +939,7 @@ The bottom section is used to store these recent attempts. It holds a table cons
 	\captionof{figure}{This placeholder is only shown for brand new users, who have no recent attempts on their profile.}
 \end{center}
 
-All pages from here will also include a Sidebar. By default the sidebar is collapsed, however it will expand to show what each of the buttons represent in further details - when the user's cursor hovers over it. At the moment, there are only buttons to take the user to the dashboard and search page, as well as to log out of the system.
+All pages from here will also include a Sidebar. By default the sidebar is collapsed, however it will expand to show what each of the buttons represent in further details - when the user's cursor hovers over it. This sidebar includes buttons for the dashboard, subject search and logging out of the system - the core areas of navigation for the user.
 \begin{center}
 	\includegraphics[scale=0.3]{dashboard2}
 	\captionof{figure}{The dashboard with the sidebar expanded. Each icon has text next to it showing the user where to go.}
