@@ -473,7 +473,7 @@ This project had been an idea for a considerable amount of time - and began with
 	\captionof{figure}{The original design for the question screen did not include the background, this came at a later date when designing for the rest of the application began.}
 \end{center}
 
-This led to me beginning with the user registration system, as it did not have any prior requirements. From there, subsequent features fell into place - based on how the user would interact with the system typically. This would be from account registration, to logging in, viewing their dashboard before searching for their subjects and later topics. 
+This led to me beginning with the user registration system, as it did not have any prior requirements. From there, subsequent features fell into place - based on how the user would interact with the system typically. This would be from account registration, to logging in, viewing their dashboard before searching for their subjects and topics, and later questions to complete the user section. 
 
 \section{UML Diagrams}
 
@@ -557,37 +557,83 @@ The database is structured as follows:
 
 \textbf{Note that your sequence diagrams have a minor issue with the notation: messages being returned from operations should be represented with dashed lines and open arrowheads. }
 
-The UML Sequence Diagrams show the full flow from frontend to database, dictating the sequence of events that take place when a given API request is called. For each diagram, the client sends the request to API, which calls the service methods, calling the methods in the repository. The top to bottom flow dictates the series of events that would take place. Any flow to the right after a flow to the left simulates a branching effect (i.e. saveSubject() beneath `Qualification not found`)\\
+The UML Sequence Diagrams show the full flow from frontend to database, dictating the sequence of events that take place when a given API request is called. For each diagram, the client sends the request to API, which calls the service methods, calling the methods in the repository. The top to bottom flow dictates the series of events that would take place. Any flow to the right after a flow to the left simulates a branching effect (i.e. saveSubject() beneath `Qualification not found`). Sequence diagrams for GET requests are not included given how most requests are returned immediately with the data. However, select GET flows with additional computation or validation are included.\\
 
-First is a condensed diagram for adding qualifications, subjects and topics. It shows the POST request being made contained the necessary values being sent straight to the Service layer - which saves the item to the repository. In the case of Subjects and Topics, it will return an error if the service was not able to find the corresponding Qualification or Subject (topics only) - which are otherwise required for the request to be completed.
+First are diagrams for adding qualifications, subjects, topics and questions. Each show the POST request being made containing the necessary values being sent straight to the Service layer - which saves the item to the repository. For Qualifications it will not return any errors, while the others are likely to throw errors if they were not able to find given dependency (for example, a missing topic when adding a question) - as they are otherwise required to complete the request.
 
 \begin{center}
-	\includegraphics[scale=0.4]{AddQualSubTopic.drawio}
+	\includegraphics[scale=0.5]{AddQual.drawio.png}
+	\captionof{figure}{Add Qualification}
 \end{center}
-\captionof{figure}{}
+
+\begin{center}
+	\includegraphics[scale=0.5]{AddSub.drawio.png}
+	\captionof{figure}{Add Subject}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.5]{AddTopic.drawio.png}
+	\captionof{figure}{Add Topic}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.5]{AddQuestion.drawio.png}
+	\captionof{figure}{Add Question}
+\end{center}
+
+Following this comes the ability to edit the entities that were created. For all tables this is a similar process, where the POST request containing the values are sent to the service layer. The service layer retrieves the object, updates the values before saving the new item.
+
+\begin{center}
+	\includegraphics[scale=0.5]{EditTopic.drawio.png}
+	\captionof{figure}{All edits follow a similar sequence, this example uses the Topic Edit sequence.}
+\end{center}
+
+Deleting entities works slightly differently. A DELETE request is sent to the backend, with either the id or the name of the entity as the payload. The backend will receive this, delete the item and then return a response to the frontend. However, the content that gets deleted differs depending on the entity. For Qualifications and Questions the entity gets deleted directly, for Topics and Users the entity and related attempts are also deleted.\\
+
+For subjects the process works differently, as it depends on how many qualifications the subject has. If the subject only has one it will just get deleted, however if there is more than one - the qualification will need to be removed. 
+
+\begin{center}
+	\includegraphics[scale=0.5]{DeleteTopic.drawio.png}
+	\captionof{figure}{Deleting a topic will also delete any logged attempts that use that topic.}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.5]{DeleteSubject.drawio.png}
+	\captionof{figure}{For Subjects it depends on how many qualifications there are. If there is only one it gets deleted, otherwise the qualification is removed.}
+\end{center}
 
 Next dictates the registration flow. It shows the POST request being sent with the user's details. It checks to see if the user exists before saving the user. If it does a message is returned, and if it doesn't then the account is created.
 \begin{center}
 	\includegraphics[scale=0.4]{RegisterSequence.drawio}
+	\captionof{figure}{Register Sequence}
 \end{center}
-\captionof{figure}{}
-This sequence diagram dictates the login flow. It sends the users details in an API request, which are then forwarded to the service layer. The repository then checks if the user exists, and if it does not then an error is sent back to the client. If it does exists, the JSON Web Token is generated with the tokenExpiry time, and both are sent back with a redirect as cookies.
+This sequence diagram dictates the login flow. It sends the user's details in an API request, which are then forwarded to the service layer. The repository then checks if the user exists, and if it does not then an error is sent back to the client. If it does exist, the JSON Web Token is generated with the tokenExpiry time, and both are sent back with a redirect as cookies.
 \begin{center}
 	\includegraphics[scale=0.4]{LoginSequence.drawio}
+	\captionof{figure}{Login Sequence}
 \end{center}
-\captionof{figure}{}
-This dictates the profile request flow. Using the Middleware it checks if the user has a valid token. If they do not, and the tokenExpiry cookie cannot be found then it logs them out - otherwise it refreshes the token first before continuing with the rest of the API request. In this case, it will get the user from the repository and return their details. There is no need to check if they exist, as this check would have been performed already when authenticating.
+This dictates the profile request flow. Using the Middleware it checks if the user has a valid token. If they do not, and the tokenExpiry cookie cannot be found then it logs them out - otherwise it refreshes the token first before continuing with the rest of the API request. In this case, it will get the user from the repository and return their details. There is no need to check if they exist, as this check would have been performed already when authenticating. 
 
 \begin{center}
 	\includegraphics[scale=0.3]{ProfileSequence.drawio}
+	\captionof{figure}{User Profile Sequence \& Refresh Tokens}
 \end{center}
-\captionof{figure}{}
 
-This final Sequence Diagram shows the events that take place when loading all subjects with topics for a user. As before, it checks that they have a valid token, and will refresh if applicable. It then fetches the user's qualification first, before using the same qualification in a second request to fetch the subjects list. In the backend, it retrieves the subjects first - and then appends the topics afterwards to prevent mixing unnecessary topics together. The final list is then returned to the client for rendering.
+The refresh token validation happens for all authenticated endpoints, so it will not be included in the following Sequence Diagrams.
+
+The next Sequence Diagram shows the events that take place when loading all subjects with topics for a user. As before, it checks that they have a valid token, and will refresh if applicable. It then fetches the user's qualification first, before using the same qualification in a second request to fetch the subjects list. In the backend, it retrieves the subjects first - and then appends the topics afterwards to prevent mixing unnecessary topics together. The final list is then returned to the client for rendering.
 \begin{center}
 	\includegraphics[scale=0.3]{SubjectsSequence.drawio}
+	\captionof{figure}{Subject Fetch Sequence}
 \end{center}
-\captionof{figure}{}
+
+The quiz functionality is a core feature of the application, which consists of two endpoints. The first is a GET request, that will fetch a randomized list of questions based on the given topic. When the quiz is complete, a POST request is then sent with the marks and score achieved to the saved to the system.
+\begin{center}
+	\includegraphics[scale=0.5]{QuestionSequence.drawio.png}
+	\captionof{figure}{The flow of events for the quiz system}
+\end{center}
+
+
 \subsection{UML Class Diagram}
 
 Below is a UML Class Diagram that shows the core functionality of the backend. It displays how each of the classes are linked from the Controllers down to the Repositories. The frontend does not have a UML Class Diagram.
