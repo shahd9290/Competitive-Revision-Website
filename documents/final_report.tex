@@ -626,7 +626,7 @@ The next Sequence Diagram shows the events that take place when loading all subj
 	\captionof{figure}{Subject Fetch Sequence}
 \end{center}
 
-The quiz functionality is a core feature of the application, which consists of two endpoints. The first is a GET request, that will fetch a randomized list of questions based on the given topic. When the quiz is complete, a POST request is then sent with the marks and score achieved to the saved to the system.
+The quiz functionality is a core feature of the application, which consists of two endpoints. The first is a GET request, that will fetch a randomized list of questions based on the given topic. When the quiz is complete, a POST request is then sent with the marks and score achieved to be saved to the system.
 \begin{center}
 	\includegraphics[scale=0.5]{QuestionSequence.drawio.png}
 	\captionof{figure}{The flow of events for getting the questions}
@@ -652,7 +652,7 @@ Below is a UML Class Diagram that shows the core functionality of the backend. I
 
 Prior to submission, the project has been thoroughly tested via unit testing to ensure that all components are working as they should be in order to achieve the desired outcomes. For the backend, this is carried out using the MockMvc library - which sends mock REST API requests to the backend, and then checks whether the output is as expected.
 
-\begin{lstlisting}[language=Java, caption={A payload is made with the information that is to be sent to the backend, then the test simulates an API request to the Auth Controller. It checks to see if the status returns is OK (200), and that it contains the string "User logged in successfully" in order for it to pass.}]
+\begin{lstlisting}[language=Java, caption={A payload is made with the information that is to be sent to the backend, then the test simulates an API request to the Auth Controller. It checks to see if the status returned is OK (200), and that it contains the string "User logged in successfully" in order for it to pass.}]
 	// AuthControllerTest.java
 	@Test
     public void loginSuccess() throws Exception {
@@ -672,7 +672,7 @@ Prior to submission, the project has been thoroughly tested via unit testing to 
     }
 \end{lstlisting}
 
-Having applied these tests throughout the backend, the resultant coverages comes out to be 94\%. Some branches were not able to be tested as they cannot be tested directly, and are there for errors that have since been prevented.
+Having applied these tests throughout the backend, the resultant coverage comes out to be 94\%. Some branches were not able to be tested as they cannot be tested directly, and are there for errors that have since been prevented.
 
 \includegraphics[scale=0.55]{backend-coverage}
 \captionof{figure}{94\% coverage for the backend}
@@ -713,7 +713,7 @@ Having applied these tests to the frontend, the resultant coverage comes out to 
 \includegraphics[scale=0.3]{frontend-coverage}
 \captionof{figure}{95.03\% coverage for the frontend}
 
-Alongside the unit tests, I have also been sure to carry out integration and system for this application. For integration testing - this would be testing the API endpoints to ensure that the data being retrieved by the backend is correct, and that there are no discrepancies or irrelevant data present. With system testing, this would be after connecting the frontend to the backend - and ensuring that I am able to view the retrieved data on the frontend, such that they can be interacted with further by the user.
+Alongside the unit tests, I have also been sure to carry out integration and system testing for this application. For integration testing - this would be testing the API endpoints to ensure that the data being retrieved by the backend is correct, and that there are no discrepancies or irrelevant data present. With system testing, this would be after connecting the frontend to the backend - and ensuring that I am able to view the retrieved data on the frontend, such that they can be interacted with further by the user.
 \section{Documentation}
 
 I have made sure to add sufficient documentation for each class and method that is involved with providing the current stage of the application, across both the frontend and backend.\\
@@ -728,7 +728,7 @@ Version Control plays a vital role when it comes to managing development of this
 
 For this project I was provided with a GitLab repository by Royal Holloway at the start of the academic year, to use as the central repository to keep the entire project. This was used to store source code files, as well as tests and reports that were drafted throughout the project. \\
 
-Using this repository, my strategy was to work in an isolated branch when I would be developing a significant feature. Most branches would divert from the \verb|main| branch, and would not merge back until that feature has been fully completed, preserving the integrity of the system during implementation. If there is a feature which became quite complicated, I could then shift my focus to a different aspect of the project, by branching again from a previous commit - without affecting existing progress.\\
+Using this repository, my strategy was to work in an isolated branch when I would be developing a significant feature. Most branches would divert from the \verb|main| branch, and would not merge back until that feature has been fully completed, preserving the integrity of the system during implementation. If a feature became quite complicated, I could then shift my focus to a different aspect of the project, by branching again from a previous commit - without affecting existing progress.\\
 
 In addition, usage of a \verb|.gitignore| file has allowed me to keep the repository clean of unnecessary files and directories. Next.js, Spring Boot and even \LaTeX{} generate many build files and temporary directories, that would significantly increase the size of the project. Placing these in the \verb|.gitignore| file will prevent them from being added to the repository, allow me to only store source code and other important information relating to the project.\\
 
