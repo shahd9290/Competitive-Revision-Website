@@ -29,10 +29,6 @@ public class AuthenticationService {
 
     private final RefreshTokenService refreshTokenService;
 
-    private Authentication authentication;
-
-    private User user;
-
     /**
      * Authenticates a user and generates an access token.
      *

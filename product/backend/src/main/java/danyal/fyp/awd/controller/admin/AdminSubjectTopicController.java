@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class AdminSubjectTopicController {
 
     private final SubjectTopicService subjectTopicService;
-    private final QualificationService qualificationService;
     private final UserAttemptsService userAttemptsService;
      /**
      * Adds a subject or updates an existing subject with a new qualification.
@@ -34,7 +33,7 @@ public class AdminSubjectTopicController {
     @PostMapping("/subjects/add")
     public ResponseEntity<String> addSubject(@CookieValue("token") String token, @RequestBody final SubjectDto subjectDto) {
         try {
-            subjectTopicService.newSubject(subjectDto.name(), subjectDto.qualification(), token);
+            return ResponseEntity.ok(subjectTopicService.newSubject(subjectDto.name(), subjectDto.qualification(), token));
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
