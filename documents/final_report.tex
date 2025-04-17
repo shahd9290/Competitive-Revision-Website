@@ -457,6 +457,7 @@ The password, however, is required to be kept securely. This is achieved through
 	\item Each source summarised and analysed
 	\item Accurate, up to date, biased, relevant.
  \end{itemize}
+
 \chapter{Software Engineering}
 \section{Methodology}
 There are many different approaches when it comes to Software Development. The Waterfall model for example focuses on completing phases of the project at a time, i.e. requirements first, then design and implementation etc. For me this approach is very strict - as it requires myself as the developer to consider the application as a whole from the very beginning, when the requirements of the product are continuously evolving as development ensues. Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
@@ -555,8 +556,6 @@ The database is structured as follows:
 
 \subsection{UML Sequence Diagram}
 
-\textbf{Note that your sequence diagrams have a minor issue with the notation: messages being returned from operations should be represented with dashed lines and open arrowheads. }
-
 The UML Sequence Diagrams show the full flow from frontend to database, dictating the sequence of events that take place when a given API request is called. For each diagram, the client sends the request to API, which calls the service methods, calling the methods in the repository. The top to bottom flow dictates the series of events that would take place. Any flow to the right after a flow to the left simulates a branching effect (i.e. saveSubject() beneath `Qualification not found`). Sequence diagrams for GET requests are not included given how most requests are returned immediately with the data. However, select GET flows with additional computation or validation are included.\\
 
 First are diagrams for adding qualifications, subjects, topics and questions. Each show the POST request being made containing the necessary values being sent straight to the Service layer - which saves the item to the repository. For Qualifications it will not return any errors, while the others are likely to throw errors if they were not able to find given dependency (for example, a missing topic when adding a question) - as they are otherwise required to complete the request.
@@ -643,8 +642,11 @@ The quiz functionality is a core feature of the application, which consists of t
 
 Below is a UML Class Diagram that shows the core functionality of the backend. It displays how each of the classes are linked from the Controllers down to the Repositories. The frontend does not have a UML Class Diagram.
 
-\includegraphics[scale=0.15]{Backend-Class.drawio}
-\captionof{figure}{Classes used for configurations, exceptions, DTOs and HTTP Request modifications have been omitted to show core functionality.}
+\begin{center}
+	\includegraphics[scale=0.14]{Backend-Class.drawio}
+	\captionof{figure}{Classes used for configurations, exceptions, DTOs and HTTP Request modifications have been omitted to show core functionality.}
+\end{center}
+
 
 \section{Testing}
 
@@ -721,8 +723,33 @@ For the backend I will be using Javadoc to draft my documentation. Each method w
 There are many components that have been sourced from public resources online, largely from the shadcn library~\cite{SHADCN}. Where these components are used, the original documentation pages will be linked to them at the top of their respective files. This way, I am able to credit the original authors appropriately, rather than pass off their work as my own.
 
 \section{Version Control}
+
+Version Control plays a vital role when it comes to managing development of this project. Using Git, it was possible to track changes that were made to the project, as well as manage updates via commits. In the event a mistake was made, it would be possible to undo the commit, provided that it had not been pushed to the remote repository, allowing for greater control over the development process.\\
+
+For this project I was provided with a GitLab repository by Royal Holloway at the start of the academic year, to use as the central repository to keep the entire project. This was used to store source code files, as well as tests and reports that were drafted throughout the project. \\
+
+Using this repository, my strategy was to work in an isolated branch when I would be developing a significant feature. Most branches would divert from the \verb|main| branch, and would not merge back until that feature has been fully completed, preserving the integrity of the system during implementation. If there is a feature which became quite complicated, I could then shift my focus to a different aspect of the project, by branching again from a previous commit - without affecting existing progress.\\
+
+In addition, usage of a \verb|.gitignore| file has allowed me to keep the repository clean of unnecessary files and directories. Next.js, Spring Boot and even \LaTeX{} generate many build files and temporary directories, that would significantly increase the size of the project. Placing these in the \verb|.gitignore| file will prevent them from being added to the repository, allow me to only store source code and other important information relating to the project.\\
+
+
+The same concept applies to environment variables and secret keys. As the JSON Web Tokens are signed via an OpenSSL Public/Private Key pair, it is important that these files are not committed to the repository, and instead are replaced with a new batch any time the repository has been cloned. 
+
+\begin{lstlisting}[caption={An excerpt from the .gitignore file, excluding environment variables and JWT keys.}]
+### Environment Variables + Backend Keys ###
+product/frontend/.env
+product/backend/src/main/resources/application.properties
+product/backend/src/main/resources/jwt/app.key
+product/backend/src/main/resources/jwt/app.pub
+product/backend/src/test/resources/jwt/app.key
+product/backend/src/test/resources/jwt/app.pub
+\end{lstlisting}
+
+Ignoring files such as \verb|application.properties|, \verb|.env|, and the JWT key pairs ensures that all sensitive information remains secure. As an alternative, template versions of the configuration files are available so that others can replicate the setup safely with their own credentials - suitable for their own systems.
+
 \section{Scalability}
 \section{Deployment}
+
 \chapter{The Application}
 \section{User Stories \& Use Cases}
 
