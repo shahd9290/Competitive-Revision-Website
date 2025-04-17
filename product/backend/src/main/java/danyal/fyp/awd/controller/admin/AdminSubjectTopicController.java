@@ -32,33 +32,9 @@ public class AdminSubjectTopicController {
      * @throws QualificationException if the qualification is invalid.
      */
     @PostMapping("/subjects/add")
-    public ResponseEntity<String> addSubject(@CookieValue("token") String token, @RequestBody final SubjectDto subjectDto) throws QualificationException {
-
-
-        String subjectName = subjectDto.name();
-        String subjectQual = subjectDto.qualification();
-
-        // Check if Qualification exists?
+    public ResponseEntity<String> addSubject(@CookieValue("token") String token, @RequestBody final SubjectDto subjectDto) {
         try {
-            Qualification qualification = qualificationService.getQualification(subjectQual);
-            // Check if subject exists now.
-            Subject subject;
-            if ((subject = subjectTopicService.getSubject(subjectName).orElse(null)) != null) {
-                // Subject exists, does it already have the qualification?
-                if (subject.getQualifications().contains(qualification)) {
-                    return ResponseEntity.badRequest().body("Subject already exists with this qualification!");
-                }
-                // It doesn't, needs to be updated.
-                else {
-                    subjectTopicService.addQualification(subject, qualification, token);
-                    return ResponseEntity.ok("Updated Existing Subject with new qualification");
-                }
-            }
-            // Subject does not exist. Qualification does so we can create a new one with it.
-            else {
-                subjectTopicService.addSubject(subjectName, qualification, token);
-                return ResponseEntity.ok("Created new subject");
-            }
+            subjectTopicService.newSubject(subjectDto.name(), subjectDto.qualification(), token);
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

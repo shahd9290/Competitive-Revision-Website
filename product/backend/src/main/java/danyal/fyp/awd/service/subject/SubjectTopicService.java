@@ -20,8 +20,10 @@ import danyal.fyp.awd.service.admin.LogService;
 import danyal.fyp.awd.service.user.UserAttemptsService;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.Pair;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Struct;
 import java.util.*;
 
 /**
@@ -164,7 +166,7 @@ public class SubjectTopicService {
     /**
      * Retrieves a topic by its name and qualification ID.
      *
-     * @param topicId       the id of the topic.
+     * @param topicId the id of the topic.
      * @return the {@link Topic} if found
      * @throws TopicException if the topic was not found.
      */
@@ -202,8 +204,7 @@ public class SubjectTopicService {
         if (sub.getQualifications().size() == 1) {
             subjectRepository.deleteById(subjectDeleteDto.id());
             logService.addLog(token, DELETE_SUBJECT.formatted(sub.getName()));
-        }
-        else {
+        } else {
             Qualification qual = qualificationService.getQualification(subjectDeleteDto.qualification());
             sub.removeQual(qual);
             subjectRepository.save(sub);
@@ -255,5 +256,28 @@ public class SubjectTopicService {
 
     public int countSubjects() {
         return (int) subjectRepository.count();
+    }
+
+    public String newSubject(String subjectName, String subjectQual, String token) throws QualificationException {
+        // Check if Qualification exists?
+        Qualification qualification = qualificationService.getQualification(subjectQual);
+        // Check if subject exists now.
+        Subject subject;
+        if ((subject = getSubject(subjectName).orElse(null)) != null) {
+            // Subject exists, does it already have the qualification?
+            if (subject.getQualifications().contains(qualification)) {
+                return "Subject already exists with this qualification!";
+            }
+            // It doesn't, needs to be updated.
+            else {
+                addQualification(subject, qualification, token);
+                return "Updated Existing Subject with new qualification";
+            }
+        }
+        // Subject does not exist. Qualification does so we can create a new one with it.
+        else {
+            addSubject(subjectName, qualification, token);
+            return "Created new subject";
+        }
     }
 }

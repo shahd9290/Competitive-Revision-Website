@@ -33,7 +33,7 @@ public class AdminQualificationController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Object> getUsers() {
+    public ResponseEntity<Object> getQualifications() {
         return ResponseEntity.ok(qualificationService.getAllQualificationsAdmin());
     }
 
