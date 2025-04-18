@@ -1667,10 +1667,42 @@ Professional Issues occur wherever computing meets society. As such they are alw
 
 \item Management - appropriate costing of time and resources at the start of a project. Revision during project. Consultation with stakeholders.
 \end{itemize}
+
 \chapter{Reflection}
+
+There have been many achievements and difficulties that I have faced throughout development of this project, both of which have been significant learning opportunities when it comes to Web Development. 
+
 \section{Achievements}
+
+I view the project overall as a significant achievement for me. Though I was not able to implement all of the features I had initially planned, the state the project is at can act as a lightweight application serving the core purpose - to help students revise through the use of quizzes. More specific achievements include:
+
+\begin{itemize}
+	\item \textbf{Familiarity with Next.js:} The most significant achievement, as I was able to familiarise myself with a framework that I had not had any experience with prior to the start of this project. Using what I have learned throughout the academic year, I will be utilising Next.js for additional future projects, including development of a personal portfolio - so I can exercise the greater freedom of design and functionality compared to traditional website builders such as WordPress and SquareSpace.
+	\item \textbf{Reusability:} I'm very happy with my decision to ensure reusability was possible throughout frontend development, as there are many areas that would otherwise have been duplicated - particularly when it comes to the data tables. It was a challenge to ensure data was shared across the tables correctly, however separating the dialogues into their own functions allows the code to be much more readable - which is ideal for development.
+\end{itemize}
+
 \section{Difficulties}
+
+These achievements could not have been achieved without facing a large amount of challenges and shortcomings. As a result, I had been keeping track of some of the notable challenges that I had faced during development, which include:
+
+\begin{itemize}
+	\item \textbf{Usage of Token Cookie for Authentication:} With the JSON web token being stored as a cookie, it was being sent with a cookie header on each request. However, the reality was it needed to be sent as an Authorization header for the request to be processed.\\ \textbf{Solution:} I would have to modify the request on the backend side before it could be processed, which included adding a token filter to add the Authorization header for me, before the request could be processed fully.
+	
+	\item \textbf{Refresh Tokens:} The tutorial that I had followed to implement the authentication system had included use of a Refresh Token system, however it required the refresh token to be part of the request body which the user would not have access to.\\ \textbf{Solution:} I would automate retrieval of the refresh token so that it all takes place in the backend, and call the API request via a \verb|middleware.ts| file designed to run once on every page load. \\ \textbf{Note:} This feature was implemented after I had added the filtering for the authorization header in the backend. In hindsight, it may have been easier to use the middleware to modify the request being sent rather than the backend given the lack of complexity, however the current implementation .
+	
+	\item \textbf{Refresh Tokens Request:} With how I had implemented the \verb|middleware.ts| file, I would enter a loop of \verb|Status 400| and \verb|Status 401| errors, preventing the request from being sent. \\ \textbf{Solution:} When building the request in the \verb|middleware.ts| file, I was placing the token in the Authorization header as opposed to the Cookie header, under the assumption that the cookie was already sent from the frontend - however this would interfere with the filter system I had setup previously in the backend.
+	
+	\item \textbf{Role-Based Access Control (RBAC):} Having followed a tutorial it was possible to assign roles to a user, with the idea that the user would be granted access to the admin endpoints only if they had the role however this was not the case. \\ \textbf{Solution:} Implementation of RBAC required me to restructure the \verb|SecurityContext.java| file to add an custom filter which conflicted with the existing setup. To solve this I had to remove the old \verb|.oauth2ResourceServer(...)| configuration, implemented when adding users, to ensure that the backend worked as expected.
+	
+\end{itemize}
+
 \section{Future Improvements}
+
+When I started this project I had intended to make the application a \texttt{Competitive} Revision System, which gamifies the quizzes by adding points that students could then use to compete with each other as an incentive to carry out revision. Unfortunately, I was not able to implement the contest element for the final submission, however this is definitely a feature that I would want to implement in the future.\\
+
+Another key feature that would be beneficial is to add support for teachers and classes. While the application would support competition among other students nationally, it is understandable that some students may wish to compete among their own peers. At the same time, teachers may also wish to add their own questions specifically for their class as well as keep track of how their students are performing. As a result, to implement support for classes I believe would cover both of these areas - and so it is a feature that can be added in the future.\\
+
+There are many resources to include and cover in order to streamline revision in this application. Any features that can benefit students in their revision can be added, as long as they are encouraged to return to the system to revise at the end of the day. Students should use the system for revision, and the goal is to streamline that so that they can enjoy it with all of the resources which they may require.
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
