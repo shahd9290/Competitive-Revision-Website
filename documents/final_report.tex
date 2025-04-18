@@ -460,12 +460,12 @@ The password, however, is required to be kept securely. This is achieved through
 
 \chapter{Software Engineering}
 \section{Methodology}
-There are many different approaches when it comes to Software Development. The Waterfall model for example focuses on completing phases of the project at a time, i.e. requirements first, then design and implementation etc. For me this approach is very strict - as it requires myself as the developer to consider the application as a whole from the very beginning, when the requirements of the product are continuously evolving as development ensues. Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
+There are many different approaches when it comes to Software Development. The Waterfall model for example focuses on completing phases of the project at a time, i.e. requirements first, followed by design and implementation, etc. For me this approach is very strict - as it requires me, as the developer, to consider the application as a whole from the very beginning, when the requirements of the product are continuously evolving as development ensues. Another example of a development approach can be Rapid Application Development. This approach focuses more on developing components in parallel to each other, prioritizing speed over completion of features. Though it closely aligns with my current development approach - it is also unsuitable as it requires components to be integrated to the system as a later date, as opposed to during the development process.\\
 
-As a result, I have chosen to develop this application by following a combination of the Agile and Incremental Approaches. The Incremental Approach allows me to focus on developing one feature at a time - ensuring that it's working to the fullest before I move my focus onto the next feature in sequence. The Agile Approach here relates to the flexibility that I am giving myself; there is no dedicated client for this product, so I am able to develop features at my own pace and alternate between different features as I wish to. At the same time, I am then able to revisit features if I am required to make any additions following its completion - given the ongoing flexibility in requirements. This can be referred to as similar vertical slicing - wherein the application is developed component by component - and ultimately expands from these components as a dependency.
+As a result, I have chosen to develop this application by following a combination of the Agile and Incremental Approaches. The Incremental Approach allows me to focus on developing one feature at a time - ensuring that it's working to the fullest before I move my focus onto the next feature in sequence. The Agile Approach here relates to the flexibility that I am giving myself; there is no dedicated client for this product, so I am able to develop features at my own pace and alternate between different features as I wish to. At the same time, I am then able to revisit features if I am required to make any additions following its completion - given the ongoing flexibility in requirements. This is similar to vertical slicing - wherein the application is developed component by component - and ultimately expands from these components as a dependency.
 \section{Requirements Analysis}
 
-The Requirements Analysis is an ongoing phase - changing if required as the product evolves. Following this approach leaves me with the flexibility to revisit components if I am required to add a feature which I had not have included in the first place, unaware at the time of it's use. Despite this, there were still some core features that I had to research, which led to me researching how a variety of different revision websites function, based on both past experience, as well as new websites that have caught my attention. These include the likes of MathsWatch, Quizlet, as well as my employer's system used for assessments. This allowed me to gain an idea of some of the core features needed to be implemented, such as focusing on individual subjects - and grouping by qualification. \\
+The Requirements Analysis is an ongoing phase - changing if required as the product evolves. Following this approach leaves me with the flexibility to revisit components if I am required to add a feature which I had not included in the first place, unaware at the time of its use. Despite this, there were still some core features that I had to research, which led to me researching how a variety of different revision websites function, based on both past experience, as well as new websites that have caught my attention. These include the likes of MathsWatch, Quizlet, as well as my employer's system used for assessments. This allowed me to gain an idea of some of the core features needed to be implemented, such as focusing on individual subjects - and grouping by qualification. \\
 
 This project had been an idea for a considerable amount of time - and began with a concept I had designed for the actual Question UI itself. However, by following a vertical slicing approach it did not make sense for me to begin with implementing the question screen in the beginning, as there were a multitude of other features that were to be added in the lead up to this.
 
@@ -865,6 +865,62 @@ The frontend works slightly differently, as that revolves around the use of comp
 The reusability behind these components therefore allow the frontend to remain clean and efficient, whilst providing room for scalability without the need for restructuring.
 
 \section{Deployment}
+
+This project has not been deployed to a live environment, though it has been developed such that it can be deployed at any given moment. The frontend and backend would have to be hosted on separate hosting platforms, which are tailored to support the framework used for development.\\ 
+
+For the frontend, the most suitable option is Vercel. Vercel manages the Next.js framework, as a result their platform is built specifically around these applications. Vercel allows for seamless integration with Git - whilst also supporting automatic builds and deployment, along with server-side rendering.\\
+
+For the backend, there are a variety of platforms that support Spring Boot applications. For instance, it can be containerised with the use of Docker, allowing the backend to be portable among cloud services. Alternatively a platform such as Railway can be used, for cases where deployment is automatic upon making a push to Git. It is more ideal for use with GitHub due to the availability of GitHub actions, however it can be configured manually such that it works with the use of GitLab CI/CD as well.\\
+
+For the databases, though PostgreSQL was used in development, this can be changed to suit other database platforms via the \verb|application.properties| files. This can be hosted on deployment services, however this could potentially be limiting as the system grows. In these cases, it would be ideal to have a self-managed database system, which would provide more control over performance, backups and data handling.\\
+
+To support development, a CI/CD pipeline can be configured which would be directly supported by the GitLab repository. Usage of these pipelines would allow the project to run through multiple stages with each push to the repository.
+
+\begin{itemize}
+	\item \textbf{Build stage:} The application is compiled to ensure the codebase is valid and error-free.
+	\item \textbf{Test stage:} Here tests are run automatically on both the frontend and backend, to validate that features implemented behave as expected.
+	\item \textbf{Deploy stage:} If the build and tests succeed, deployment is triggered across the different hosting platforms, ensuring that they receive the changes made to the codebase.
+\end{itemize}
+
+\begin{lstlisting}[caption={A general idea for a GitLab CI/CD pipeline configuration for the project. The backend is built and tested first before the frontend, after which both can be deployed together.}]
+	stages:
+	  - build
+	  - test
+	  - deploy
+	
+	build_backend:
+	  stage: build
+	  script:
+		- cd product/backend
+		- ./gradlew build
+	
+	test_backend:
+	  stage: test
+	  script:
+		- cd product/backend
+		- ./gradlew test
+	
+	build_frontend:
+	  stage: build
+	  script:
+		- cd product/frontend
+		- npm install
+		- npm run build
+	
+	test_frontend:
+	  stage: test
+	  script:
+		- cd product/frontend
+		- npm run test
+	
+	deploy:
+	  stage: deploy
+	  script:
+		- echo "Deployment would be triggered here for a given system."
+	  when: manual
+\end{lstlisting}
+	
+Ultimately, while deployment has not yet been carried out --- there are a variety of resources available to facilitate this process, which can be considered in future development of the project.
 
 \chapter{The Application}
 \section{User Stories \& Use Cases}
