@@ -142,7 +142,7 @@ While it is possible to design a website solely with these three technologies, o
 \textbf{Angular}\\
 The original Angular (known as AngularJS) was created in 2009 as an open-source, client-side JavaScript framework promoting a high-productivity web development experience~\cite{BRANAS_ANGULAR}. The idea behind AngularJS was that developers would be able to simplify their code bases, as the framework was designed around the fact that components can be reusable and easily maintainable. In 2010 AngularJS was made open-source, allowing others to use the library to create their own applications. However, as JavaScript faced many improvements over the years that had followed, AngularJS was soon unable to meet requirements for large development projects, and ultimately became obsolete. As a result, Google created Angular 2 (otherwise known as Angular), which was released in 2016~\cite{ANGULAR_ANALYSIS}.
 
-While AngularJS revolved around the MVC framework, Angular was designed to be a component-based framework. Each component is made up of HTML, CSS and TypeScript files, an example of which an be shown as:
+While AngularJS revolved around the MVC framework, Angular was designed to be a component-based framework. Each component is made up of HTML, CSS and TypeScript files, an example of which can be shown as:
 
 \begin{lstlisting}[language=javascript, caption={An example of a "Hello World" component in Angular\cite{HELLO_ANGULAR}}]
 	import { Component } from '@angular/core';
@@ -425,7 +425,7 @@ The \verb|ResponseEntity| object would then contain the necessary data that was 
 
 Being a web application that handles a user's private data, is is imperative that I secure the product, by minimising possible weaknesses that can be exploited. Out of all software available, the web browser is one that will run code provided from untrusted sources whenever presented\cite{WEB_SEC} despite being used to submit and receive private information across the world. With that in mind, it was important that I research adequate methods to protect the JSON Web Token that it used to prove the user's authenticity.\\
 
-There are many ways that people may choose to store JWTs, be it in memory or even in the browser's session storage. However, research has shown that these are not as viable compared to the use of cookies. Storing the token in memory leaves the risk of it disappearing when the browser is closed or reset. On the other hand, storing it in Session Storage leaves the token vulnerable to Cross-Site Scripting (XSS) attacks. With cookies, by settings the HTTPOnly, Secure and SameSite flags to be true - there is added protection which prevents these cookies from ebing identified by external JavaScript, protecting them from XSS attacks~\cite{JWT}.
+There are many ways that people may choose to store JWTs, be it in memory or even in the browser's session storage. However, research has shown that these are not as viable compared to the use of cookies. Storing the token in memory leaves the risk of it disappearing when the browser is closed or reset. On the other hand, storing it in Session Storage leaves the token vulnerable to Cross-Site Scripting (XSS) attacks. With cookies, by settings the HTTPOnly, Secure and SameSite flags to be true - there is added protection which prevents these cookies from being identified by external JavaScript, protecting them from XSS attacks~\cite{JWT}.
 
 \includegraphics[scale=0.465]{cookies-outline}
 \captionof{figure}{The HttpOnly and Secure flags are set to true, and the SameSite flag has been set to "Strict"}
@@ -920,7 +920,7 @@ To support development, a CI/CD pipeline can be configured which would be direct
 	  when: manual
 \end{lstlisting}
 	
-Ultimately, while deployment has not yet been carried out --- there are a variety of resources available to facilitate this process, which can be considered in future development of the project.
+Ultimately, while deployment has not yet been carried out - there are a variety of resources available to facilitate this process, which can be considered in future development of the project.
 
 \chapter{The Application}
 \section{User Stories \& Use Cases}
@@ -935,7 +935,7 @@ User Stories allow me to gain an insight into what features need to be implement
 
 	\item \textbf{High} - As a student, I want to be asked questions about the topic I choose once I've clicked on it, so I can immediately test my knowledge on the subject.
 
-	\item \textbf{High} - As an admin, I would like to be able to add and remove questipons, subjects, topics and qualifications to the system, so that we can keep the system dynamic to support a variety of students.
+	\item \textbf{High} - As an admin, I would like to be able to add and remove questions, subjects, topics and qualifications to the system, so that we can keep the system dynamic to support a variety of students.
 	
 	\item \textbf{High} - As an admin, I would like to be able to edit information stored on the system - so that I can correct any mistakes that may have been made when initially adding it, or change user permissions.
 	
