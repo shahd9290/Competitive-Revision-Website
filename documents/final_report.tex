@@ -433,7 +433,6 @@ There are many ways that people may choose to store JWTs, be it in memory or eve
 This is not the only point of concern when it comes to security. It is also crucial to sanitise inputs as a means of removing any possible control characters - so as to not inject any malicious code into the system. This is a benefit of React, and therefore Next.JS, as all inputs are sanitised before being used within the frontend application. This is achieved by converting everything to a string before being rendered or used, adding further prevention to XSS attacks~\cite{XSS_REACT}. Where SQL injections are concerned, there are two types of queries that have been written for the backend. One type refers to the default functions that come with a JpaRepository, representing standard queries - while the other type relates to custom queries that I have had to write for the system. These custom queries are written with the use of named parameters, reducing the user's input only to valid arguments to complement them~\cite{SQL_PARAM}. The query is therefore built through the code, instead of being completed by the code.
 
 \subsection{Privacy}
-
 The United Kingdom has a General Data Protection Regulation Act that has been imposed to set out the legislation behind usage of personal data in a variety of applications. The following principles are set out in the act~\cite{GDPR}:
 
 \begin{itemize}
@@ -1650,23 +1649,53 @@ All logs are then presented on the main admin dashboard as previously mentioned.
 \end{center}
 
 \chapter{Professional Issues}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Professional Issues occur wherever computing meets society. As such they are always concerned with how people interact with computers and software. This is a very wide area and you may well choose a topic not listed below but these are given as guidelines to help you. \url {https://moodle.royalholloway.ac.uk/mod/page/view.php?id=744455}
-\begin{itemize}
-\item Usability - accessibility, replacing humans, artificial intelligence.
+% describe an example from the public domain of what can happen when professional issues are not properly addressed;
 
-\item Plagiarism - correct citation, using code with acknowledgement.
+% write about how a particular issue has been of concern to you in your project;
 
-\item Licensing - shareware, open source, copyright, patenting, reverse engineering.
+% describe some professional issue that has arisen during your project and discuss its ethical or practical importance.
 
-\item Safety - reliability, economic impact, trust, provided "as is" clauses.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\item Privacy - web privacy, legal issues, data usage.
+% Plagiarism - correct citation, using code with acknowledgement.
 
-\item Monopoly - proprietary formats, tie-ins, cartels, DRM, Google, Amazon, Microsoft, Apple.
+% Licensing - shareware, open source, copyright, patenting, reverse engineering.
 
-\item Management - appropriate costing of time and resources at the start of a project. Revision during project. Consultation with stakeholders.
-\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+
+When it comes to product development, developers have more responsibilities on top of writing code. They are required to consider how their work will impact potential users of the system and society as a whole. Boards such as the British Computer Society (BCS) require members to follow a Code of Conduct~\cite{BCS}, with rules that promote integrity, competence and respect for the public interest. This covers a variety of topics, from acknowledging intellectual property of others, to ensuring that systems are designed to protect the rights, data and well-being of users. In many cases, software is developed with contributions from the wider community, so developers are required to comply with the terms set out in licenses used, as well as avoid plagiarism by crediting the original sources of borrowed code. Failing to do so would lead to a series of consequences, including legal disputes and damage to one's reputation.
+
+\section{Use of Open-Source Technologies}
+
+Development of this project has required extensive use of open-source technologies across the frontend and backend. Next.js and TailwindCSS have been deployed using the MIT license, while Spring Boot uses the Apache License 2.0. Although these tools allowed me to focus on the core features of the system with ease, it was important to follow the terms of the license so as to ensure that I was not violating any of the conditions that were set.\\
+
+Fortunately these licenses are quite permissive and provide flexibility when it comes to project development. The MIT License is the most permissive of the two, and allows users to use, modify and distribute software provided that the original license and copyright notice are included~\cite{MIT_LICENSE}. Apache License 2.0 is similar in that it allows commercial and private use, along with modification and redistribution. However, there are additional responsibilities that must be followed, including declaring any modifications made to the software as well as a clause granting users a license to relevant patents held by contributors, reducing the chances of future legal disputes~\cite{APACHE_LICENSE}.
+
+\section{Respecting Licenses}
+
+Given the conditions of the licenses, it was important to ensure that all tools and libraries used in the project are properly acknowledged. For instance, a significant proportion of components are from the shadcn~\cite{SHADCN} library, which are licensed under the MIT License. In order to comply with the terms of this license, I made sure to add the original link to the relevant component page under each file in my frontend, to indicate that the code is not mine and clearly identify its source. This is the case for every file where the code has not been fully written in-house.\\
+
+In addition, to support this I also included the use of a \verb|.gitignore| file, to be used throughout the project. There are many files, modules and dependencies which Next.js and Spring Boot import of which some, when imported, include content that could be unlicensed, third-party, or sensitive. Using the \verb|.gitignore| file therefore helps to reduce the risk of publishing such content, which could otherwise result in a breach of the license terms or lead to plagiarism allegations in a professional context.
+
+\section{Academic Integrity \& Plagiarism}
+
+Plagiarism refers to the act of using the work of another person without acknowledgement, and is considered as a serious academic offence. In computing, it can also raise concerns about honesty and trust - as it is very easy to present work that others are responsible for as your own. The BCS Code of Conduct stresses this, stating that one should \textit{not claim any level of competence that they do not possess}~\cite{BCS}\\
+
+To comply with the requirements of this project it was important to avoid any instances of plagiarism, ensuring that any external material was properly referenced. Given this, any code that was not written entirely in-house was either reimplemented with original logic or clearly cited, both in the source files and in this project report. This included components sourced from the shadcn library~\cite{SHADCN}, as well as features that were implemented by following tutorials. In some cases, such as during testing, I used Generative AI to assist me with code generation - making sure to identify which section was generated, with the rest of the code being written by myself. This approach ensured transparency, and allowed me to distinguish between original and outsourced work.
+
+\section{Case Study - Oracle vs. Google}
+
+There have been many disputes regarding licensing and plagiarism in software development, a notable case being between Oracle and Google. In 2010, Oracle filed a lawsuit against Google, arguing that they had copied 11,500 lines of Java API code for their Android Operating System, without securing permission~\cite{ORACLE_VS_GOOGLE}. Although Google had their own implementations for the APIs in question, the issue was the fact that they had duplicated method names and code structure. Google argued that this practice was fair use, however Oracle saw this as an infringement of their intellectual property - violating copyright law. The lawsuit spanned over a decade, with multiple appeals made and billions of dollars spent in an attempt to reach a fair outcome. In the end, the U.S. Supreme Court ruled in Google's favour citing that their implementation was under fair use and nothing more.\\
+
+This case raised concerns about licensing obligations and ethical boundaries in software development. The fact that Google didn't obtain a license relating to Java APIs violates expectations around intellectual property rights. Moreover, the design of Google's own APIs was ultimately heavily inspired by Java, in terms of the structure, and without formal acknowledgement can be seen as a form of plagiarism, even if the implementation is different. This serves as a reminder for developers that it is important to remain compliant and professional when it comes to software development. Developers are responsible for crediting individuals when using external ideas or code, so as to avoid any possibility of violating laws surrounding intellectual property.
+
+\section{Summary}
+
+It's important to ensure that all work is appropriately licensed. Even licenses such as the MIT License act as a written confirmation of how software can be used, modified and redistributed. Although they provide freedom to developers, they also establish clear expectations that are to be followed, reducing the likelihood of professional disputes.
 
 \chapter{Reflection}
 
@@ -1806,6 +1835,22 @@ There are many resources to include and cover in order to streamline revision in
 \bibitem{SHADCN} shadcn (2025),
 \emph{shadcn/ui - \url{https://ui.shadcn.com/}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Issues
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibitem{BCS} British Computing Society (2025),
+\emph{BCS Code of Conduct - \url{https://www.bcs.org/membership-and-registrations/become-a-member/bcs-code-of-conduct}}
+
+\bibitem{MIT_LICENSE} Open Source Initiative (2025),
+\emph{The MIT License - \url{https://opensource.org/license/mit}}
+
+\bibitem{APACHE_LICENSE} The Apache Software Foundation (2004),
+\emph{Apache License, Version 2.0 - \url{https://www.apache.org/licenses/LICENSE-2.0}}
+
+\bibitem{ORACLE_VS_GOOGLE} Linna Chen, Nathalie Russell(2021),
+\emph{Google LLC v. Oracle America, Inc - \url{https://www.loeb.com/en/insights/publications/2021/04/google-v-oracle}}
+
 \end{thebibliography}
 
 \chapter*{Appendix}
@@ -1845,8 +1890,6 @@ All Diagrams that are present in Section 4.3 have been included as separate imag
 \section*{Demo}
 \addcontentsline{toc}{section}{Demo}
 A video demonstration of the application at its current stage can be viewed here: \url{https://youtu.be/dFIjE3_42No}
-
-
 
 \end{document}
 
