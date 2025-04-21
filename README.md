@@ -31,3 +31,9 @@ Rename `src/main/resources/application.properties.examples` to `src/main/resourc
 Ensure that you have permissions to execute the `./gradlew` file
 
 Run `./gradlew bootRun` to start the Spring Boot application.
+
+You can now log into the Admin dashboard using the following login details, make sure to change the admin password via the users dashboard:
+```
+Username: admin
+Password: password
+```
