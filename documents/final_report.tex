@@ -84,7 +84,7 @@ This report has been prepared on the basis of my own work. Where other published
 
 \vskip3em
 
-Word Count: 
+Word Count: $\sim$15,000
 
 \vskip3em
 
@@ -92,7 +92,7 @@ Student Name: \studentname
 
 \vskip3em
 
-Date of Submission: 
+Date of Submission: 21/04/2025 
 
 \vskip3em
 
@@ -482,11 +482,7 @@ However, usage patterns indicate different priorities:
 	\item Completing Assignment for School (46\%)
 \end{enumerate}
 
-These findings highlight that a significant proportion of children rely on devices more for leisure activities, with education playing a secondary role. Educational tools need to compete with entertaining content in order to maintain students' attention. When faced with only academic material, it is very easy for students to get distracted and switch to these leisure activities by simply changing tabs, making it important to retain their interest. From working in education, an effective strategy that I have witnessed is gamification, where students are more motivated to complete challenges when there are rewards involved. With features such as contests and progression systems, students are more likely to return to the platform and stay engaged with their studies.\\
-
-There are many different varieties of gamification across both entertainment and educational platforms. Earning points towards a leaderboard is already a powerful motivator, used in platforms such as LeetCode where they use a competition style system behind their coding problems~\cite{LEETCODE}. This can be further enhanced by deducting marks for incorrect answers, as inspired by the Picarats system in the Professor Layton Series~\cite{LAYTON}. This way students are encouraged to take their time answering correctly so that they can earn the maximum amount of marks available.\\
-
-Overall, for online revision to be effective, it helps to incorporate features commonly used in the entertainment sector, to ensure that revision remains fun and interactive. Gamifying revision provides a way of maintaining attention and encourage continued use, using incentives that are tailored to the students' competitive nature. This way, these elements can make studying more enjoyable whilst supporting consistent engagement, which is beneficial when it comes to studying in the long term.
+These results show that children rely on devices more for leisurely activities as opposed to education. This can lead to cases where during revision, students are more likely to get sidetracked and switch to an entertainment platform rather than prioritise their studies, making it important that the system retains the student's attention. From working in education a strategy that works is by having incentives, with students more likely to return to revision and continue revising knowing that there is some reward that can be achieved. The same principle can be applied by gamifying the process. Earning points towards a leaderboard, in systems such as LeetCode~\cite{LEETCODE}, can act as a powerful motivator that can exercise children's competitive nature. This can be further enhanced by penalising incorrect answers in a manner similar to the Picarats system in the Professor Layton Series~\cite{LAYTON}, encouraging students to work harder to answer questions correctly on their first attempt to earn maximum marks.
 
 \section{Web Technologies}
 
@@ -524,7 +520,7 @@ Michael Gunnulfsen compared the two approaches~\cite{SQL_COMPARE}, identifying t
 
 \subsection{Architectural Paradigms}
 
-This system is structured around various architectural paradigms, utilising design patterns in order to enhance modularity and security. In the backend a layered structure is followed, with logic separated across controllers, services and repositories. While this N-tier architecture is not directly cited in the literature, it represents a key pattern in modern backend development. Each layer is responsible for a specific function, with controllers managing incoming API requests, services handling business logic and repositories handling data persistence. This delegation of responsibilities simplifies debugging, supports code reuse, and improves long-term maintainability.\\
+With Spring Boot used as the backend, an N-tier architecture is used to provide scalability to the system. N-tier architecture is not cited in the literature however it plays a key role in modern web development. A layered structure is followed, separating logic across controllers, services, and repositories. Each layer is responsible for a specific function, with controllers managing incoming API requests, services handling business logic and repositories handling data persistence. With responsibilities delegated this way, debugging becomes easier and code reusability is supported, allowing the system to be maintainable in the long run.\\
 
 Using Next.js for the frontend allows it to follow a component-based architecture, with the ability to build the system through modular, reusable components. Gilda Pour's research~\cite{GPOUR_COMPONENT} highlights that systems following a component-based approach can be implemented rapidly with components, whether they be commercial or in-house, helping to reduce overall development time and cost. This method supports reusability, and allows the system to be scalable and easily maintainable. This architecture is greatly beneficial for this project, by allowing features such as dialog boxes to be implemented independently such that they can be reused across different areas of the system.\\
 
