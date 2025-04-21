@@ -3,7 +3,6 @@ package danyal.fyp.awd.service.user;
 import danyal.fyp.awd.dto.admin.user.UserDataDto;
 import danyal.fyp.awd.exception.QualificationException;
 import danyal.fyp.awd.model.subject.Qualification;
-import danyal.fyp.awd.model.subject.Question;
 import danyal.fyp.awd.model.user.User;
 import danyal.fyp.awd.repository.user.UserAttemptsRepository;
 import danyal.fyp.awd.repository.user.UserRepository;
@@ -20,6 +19,7 @@ import static org.springframework.http.HttpStatus.GONE;
 
 /**
  * Service class for managing user-related operations.
+ * Provides methods for retrieving user details, updating user marks, and managing user qualifications.
  *
  * @author Danyal Shah
  */
@@ -33,10 +33,11 @@ public class UserService {
 
     /**
      * Retrieves a user by their username.
+     * Throws an exception if the user account is deleted or deactivated.
      *
      * @param username the username of the user to retrieve.
      * @return the {@link User} entity.
-     * @throws ResponseStatusException if the user account is deleted or deactivated.
+     * @throws ResponseStatusException if the user account had been deleted or deactivated.
      */
     public User getUserByUsername(final String username) {
         return userRepository.findByUsername(username)
@@ -45,6 +46,7 @@ public class UserService {
 
     /**
      * Retrieves the qualification associated with a user by their username.
+     * If the qualification is not found, returns null.
      *
      * @param name the username of the user.
      * @return the {@link Qualification} entity, or {@code null} if no qualification is found.
@@ -60,6 +62,14 @@ public class UserService {
         }
     }
 
+    /**
+     * Updates the marks of a user based on the provided token and mark value.
+     * The token is used to identify the user, and the marks are added to the existing marks.
+     *
+     * @param token the authentication token of the user.
+     * @param marks the number of marks to add to the user's total.
+     * @return the updated total marks of the user.
+     */
     public int updateMarks(String token, int marks) {
         String name = jwtService.getUserNameFromJwtToken(token);
         User user = getUserByUsername(name);
@@ -68,14 +78,30 @@ public class UserService {
         return user.getMarks();
     }
 
+    /**
+     * Retrieves data for all users, formatted for admin purposes.
+     *
+     * @return a list of {@link UserDataDto} containing user details for all users.
+     */
     public List<UserDataDto> getAllUsers() {
         return userRepository.getUserData();
     }
 
+    /**
+     * Retrieves a user by their unique identifier (UUID).
+     *
+     * @param userId the unique identifier (UUID) of the user.
+     * @return the {@link User} entity associated with the given UUID.
+     */
     public User getUserById(UUID userId) {
         return userRepository.findById(userId).get();
     }
 
+    /**
+     * Counts the total number of users in the system.
+     *
+     * @return the total number of users.
+     */
     public int countUsers() {
         return (int) userRepository.count();
     }

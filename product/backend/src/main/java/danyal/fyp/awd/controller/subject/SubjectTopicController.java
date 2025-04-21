@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Handles REST API endpoints for managing subjects and topics.
+ * Provides methods to fetch subjects and topics based on qualification and subject filters.
  *
  * @author Danyal Shah
  */
@@ -22,15 +23,12 @@ import java.util.List;
 public class SubjectTopicController {
 
     private final SubjectTopicService subjectTopicService;
-    private final QualificationService qualificationService;
-
-
 
     /**
      * Retrieves all subjects for a given qualification.
      *
-     * @param qualification the qualification to filter subjects by.
-     * @return a list of subjects or an error message.
+     * @param qualification the qualification to filter subjects by (optional)
+     * @return a list of matching subjects or all subjects if no filter is applied
      */
     @GetMapping("/subject/get-all")
     public ResponseEntity<Object> getAllSubjects(@RequestParam(required = false) String qualification) {
@@ -50,9 +48,9 @@ public class SubjectTopicController {
     /**
      * Retrieves all topics for a given subject and qualification.
      *
-     * @param qualification the qualification to filter topics by.
-     * @param subject       the subject to filter topics by.
-     * @return a list of topics or an error message.
+     * @param qualification the qualification to filter topics by (optional)
+     * @param subject the subject to filter topics by (optional)
+     * @return a list of topics matching the filters, or all topics if no filter is applied
      */
     @GetMapping("/topic/get-all")
     public ResponseEntity<Object> getAllTopics(@RequestParam(required = false) String qualification, @RequestParam(required = false) String subject) {
@@ -68,11 +66,12 @@ public class SubjectTopicController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
     /**
-     * Retrieves a topics for a given id.
+     * Retrieves a specific topic by its ID.
      *
-     * @param topicId the id of the topic to find.
-     * @return the topic or an error message.
+     * @param topicId the ID of the topic to retrieve
+     * @return the topic details if found, or an error message
      */
     @GetMapping("/topic/get")
     public ResponseEntity<Object> getTopic(@RequestParam int topicId) {
@@ -82,5 +81,4 @@ public class SubjectTopicController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

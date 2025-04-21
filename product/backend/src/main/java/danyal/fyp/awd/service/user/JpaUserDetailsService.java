@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * Service class for loading user details from the database using JPA.
+ * This class implements the {@link UserDetailsService} interface to provide user details
+ * for authentication in Spring Security.
  *
  * @author Danyal Shah
  */

@@ -12,6 +12,7 @@ import java.util.UUID;
 
 /**
  * Represents a refresh token entity in the system.
+ * Used for handling token-based authentication and session renewal.
  *
  * @author Danyal Shah
  */
@@ -50,5 +51,4 @@ public class RefreshToken {
      */
     @Column(nullable = false)
     private Instant expiresAt;
-
 }

@@ -17,9 +17,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  * Service class for managing JWT generation and validation.
+ * This service provides methods for creating JWT tokens, extracting user information from tokens,
+ * and validating token expiration.
  *
  * @author Danyal Shah
  */
@@ -35,6 +36,7 @@ public class JwtService {
 
     /**
      * Generates a JWT token for the specified username.
+     * The token includes the username as the subject and is signed with the issuer's details.
      *
      * @param username the username for which the token is generated.
      * @return the generated JWT token as a string.
@@ -50,6 +52,13 @@ public class JwtService {
                 .getTokenValue();
     }
 
+    /**
+     * Generates a JWT token for the given user details.
+     * The token includes the user's username, the assigned role(s), and the expiration time.
+     *
+     * @param userDetails the {@link JpaUserDetails} object containing user information.
+     * @return the generated JWT token as a string.
+     */
     public String generateToken(final JpaUserDetails userDetails) {
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         final var claimsSet = JwtClaimsSet.builder()
@@ -64,7 +73,7 @@ public class JwtService {
     }
 
     /**
-     * Extracts the username from a given JWT token.
+     * Extracts the username (subject) from a given JWT token.
      *
      * @param token the JWT token to decode.
      * @return the username (subject) contained in the token.
@@ -76,7 +85,7 @@ public class JwtService {
     }
 
     /**
-     * Checks whether a given JWT token has expired.
+     * Validates whether a given JWT token has expired.
      *
      * @param token the JWT token to validate.
      * @return {@code true} if the token has expired; {@code false} otherwise.

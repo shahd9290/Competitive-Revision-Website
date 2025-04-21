@@ -13,6 +13,8 @@ import java.io.IOException;
 
 /**
  * A filter that extracts a JWT from cookies and adds it to the Authorization header.
+ * This allows authentication to work with cookies instead of requiring header-based tokens.
+ * Skips requests to the /api/auth path.
  *
  * @author Danyal Shah
  */

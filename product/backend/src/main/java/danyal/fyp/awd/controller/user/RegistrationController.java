@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Handles REST API endpoints for user registration.
+ * Accepts registration data and delegates validation and persistence to the registration service.
  *
  * @author Danyal Shah
  */
@@ -27,8 +28,8 @@ public class RegistrationController {
     /**
      * Registers a new user with the provided registration details.
      *
-     * @param registrationDTO the registration data for the user.
-     * @return the registered user details or an error message if validation fails.
+     * @param registrationDTO the registration data for the user
+     * @return a success message or an error message if validation fails
      */
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody final RegistrationRequestDto registrationDTO) {
@@ -39,5 +40,4 @@ public class RegistrationController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

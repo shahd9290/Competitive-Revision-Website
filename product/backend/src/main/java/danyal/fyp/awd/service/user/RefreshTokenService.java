@@ -14,6 +14,8 @@ import java.util.UUID;
 
 /**
  * Service class for managing refresh tokens.
+ * This service handles the creation, validation, and revocation of refresh tokens,
+ * as well as generating new access tokens based on valid refresh tokens.
  *
  * @author Danyal Shah
  */
@@ -32,6 +34,7 @@ public class RefreshTokenService {
 
     /**
      * Creates a new refresh token for the specified user.
+     * The refresh token is stored in the database and assigned an expiration time.
      *
      * @param user the user for whom the refresh token is created.
      * @return the created {@link RefreshToken}.
@@ -45,16 +48,17 @@ public class RefreshTokenService {
 
     /**
      * Refreshes the access token using the user's current refresh token.
+     * If the refresh token is invalid or expired, a new one is created.
      *
      * @param accessToken the current access token.
      * @return an {@link AuthenticationResponseDto} containing the new access token.
      */
     public AuthenticationResponseDto refreshToken(String accessToken) {
         User user = userService.getUserByUsername(jwtService.getUserNameFromJwtToken(accessToken));
-        // Checks expiry data is valid.
-        if (hasInvalidRefreshToken(user))
-            // No token found? Somehow? Brand new one then
+        // Checks if the current refresh token is invalid and creates a new one if necessary
+        if (hasInvalidRefreshToken(user)) {
             createToken(user);
+        }
 
         final var newAccessToken = jwtService.generateToken(user.toJpaUserDetails());
 
@@ -63,6 +67,7 @@ public class RefreshTokenService {
 
     /**
      * Revokes a refresh token by its UUID.
+     * This removes the token from the database, making it invalid for future use.
      *
      * @param refreshToken the UUID of the refresh token to revoke.
      */

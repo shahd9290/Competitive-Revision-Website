@@ -12,6 +12,7 @@ import java.util.Set;
 
 /**
  * Represents a subject entity in the system.
+ * Each subject can be associated with multiple qualifications and topics.
  *
  * @author Danyal Shah
  */
@@ -55,16 +56,27 @@ public class Subject {
     /**
      * Adds a qualification to the subject.
      *
-     * @param qualification the qualification to add.
+     * @param qualification the qualification to add
      */
     public void addQualification(Qualification qualification) {
         qualifications.add(qualification);
     }
 
+    /**
+     * Removes a qualification from the subject.
+     *
+     * @param qualification the qualification to remove
+     */
     public void removeQual(Qualification qualification) {
         qualifications.remove(qualification);
     }
 
+    /**
+     * Sets the subject to have only the specified qualification,
+     * removing any others if present.
+     *
+     * @param qualification the qualification to set
+     */
     public void setQualification(Qualification qualification) {
         if (!qualifications.isEmpty()) {
             qualifications.remove(qualifications.iterator().next());
@@ -72,6 +84,11 @@ public class Subject {
         qualifications.add(qualification);
     }
 
+    /**
+     * Retrieves the first (and typically only) qualification associated with the subject.
+     *
+     * @return the associated qualification
+     */
     public Qualification getQualification() {
         return qualifications.iterator().next();
     }

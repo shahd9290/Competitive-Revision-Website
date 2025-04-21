@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 /**
  * Handles REST API endpoints for managing qualifications.
+ * Provides access to all available qualifications in the system.
  *
  * @author Danyal Shah
  */
@@ -22,13 +24,10 @@ public class QualificationController {
     /**
      * Retrieves all qualifications.
      *
-     * @return a list of all qualifications.
+     * @return a {@link ResponseEntity} containing a list of all qualifications
      */
     @GetMapping("/get-all")
     public ResponseEntity<List<Qualification>> getAllQualifications() {
         return ResponseEntity.ok(qualificationService.getAllQualifications());
     }
-
-
-
 }

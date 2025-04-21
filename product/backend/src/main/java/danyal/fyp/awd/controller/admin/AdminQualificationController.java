@@ -8,6 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for managing qualifications in the admin panel.
+ * Provides endpoints to add, edit, fetch, and delete qualifications.
+ *
+ * @author Danyal Shah
+ */
 @RestController
 @RequestMapping("/api/admin/qualifications")
 @RequiredArgsConstructor
@@ -18,8 +24,9 @@ public class AdminQualificationController {
     /**
      * Adds a new qualification.
      *
+     * @param token the authentication token from the cookie.
      * @param qualificationDto the data for the qualification to add.
-     * @return a success message.
+     * @return a ResponseEntity with a success message or an error message.
      */
     @PostMapping("/add")
     public ResponseEntity<String> addQualification(@CookieValue("token") String token, @RequestBody final QualificationDto qualificationDto) {
@@ -32,11 +39,23 @@ public class AdminQualificationController {
         }
     }
 
+    /**
+     * Retrieves all qualifications for the admin view.
+     *
+     * @return a ResponseEntity containing the list of qualifications.
+     */
     @GetMapping("/get")
     public ResponseEntity<Object> getQualifications() {
         return ResponseEntity.ok(qualificationService.getAllQualificationsAdmin());
     }
 
+    /**
+     * Edits an existing qualification.
+     *
+     * @param token the authentication token from the cookie.
+     * @param qualificationEditDto the updated data for the qualification.
+     * @return a ResponseEntity with a success message or an error message.
+     */
     @PostMapping("/edit")
     public ResponseEntity<String> editQualification(@CookieValue("token") String token, @RequestBody final QualificationEditDto qualificationEditDto) {
         try {
@@ -48,6 +67,13 @@ public class AdminQualificationController {
         }
     }
 
+    /**
+     * Deletes a qualification.
+     *
+     * @param token the authentication token from the cookie.
+     * @param qualificationDto the qualification to delete.
+     * @return a ResponseEntity with a success message or an error message.
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deleteQualification(@CookieValue("token") String token, @RequestBody final QualificationDto qualificationDto) {
         try {

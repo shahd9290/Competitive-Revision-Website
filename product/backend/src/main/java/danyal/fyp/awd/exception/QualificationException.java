@@ -2,8 +2,10 @@ package danyal.fyp.awd.exception;
 
 /**
  * A custom exception representing qualification-related errors.
+ * This exception is thrown during operations such as adding,
+ * editing, or deleting a qualification when an error occurs.
  *
- * * @author Danyal Shah
+ * @author Danyal Shah
  */
 public class QualificationException extends Exception {
 

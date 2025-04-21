@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 /**
- * Service class for handling user registration.
+ * Service class for handling user registration, editing, and deletion.
+ * This service provides methods for registering new users, editing existing users' details,
+ * and deleting users from the system.
  *
  * @author Danyal Shah
  */
@@ -36,9 +38,10 @@ public class UserRegistrationService {
 
     /**
      * Registers a new user in the system.
+     * This method checks if the username or email already exists before creating a new user.
+     * If the user role is "ROLE_USER", a qualification is associated with the user.
      *
      * @param request the {@link RegistrationRequestDto} containing user registration details.
-     * @return the registered {@link User}.
      * @throws QualificationException if the specified qualification does not exist.
      * @throws ValidationException if the username or email already exists.
      */
@@ -66,30 +69,45 @@ public class UserRegistrationService {
         ));
     }
 
+    /**
+     * Edits an existing user's details, including username, email, password, role, and qualification.
+     * Logs the changes made to the user's information.
+     *
+     * @param userEditDto the {@link UserEditDto} containing the new user details.
+     * @param token the authentication token of the user making the edits.
+     * @throws QualificationException if the specified qualification does not exist.
+     */
     public void editUser(UserEditDto userEditDto, String token) throws QualificationException {
-       User user = userRepository.findById(userEditDto.id()).get();
+        User user = userRepository.findById(userEditDto.id()).get();
 
-       String oldUsername = user.getUsername();
-       String oldEmail = user.getEmail();
-       String oldRole = user.getRole().getName();
-       String oldQual = qualificationService.getQualification(user.getQualificationId()).getName();
+        String oldUsername = user.getUsername();
+        String oldEmail = user.getEmail();
+        String oldRole = user.getRole().getName();
+        String oldQual = qualificationService.getQualification(user.getQualificationId()).getName();
 
-       user.setUsername(userEditDto.username());
-       user.setEmail(userEditDto.email());
-       if (!userEditDto.password().equals(""))
-           user.setPassword(passwordEncoder.encode(userEditDto.password()));
-       user.setRole(roleService.getRole(userEditDto.role()));
-       if (!userEditDto.qualification().equals(""))
-           user.setQualificationId(qualificationService.getIdByName(userEditDto.qualification()));
-       userRepository.save(user);
-       logService.addLog(token, EDIT_USER.formatted(oldUsername,
-               "%s -> %s".format(oldUsername, user.getUsername()),
-               "%s -> %s".format(oldEmail, user.getEmail()),
-               "%s -> %s".format(oldRole, user.getRole().getName()),
-               user.getRole().getName().equals("ROLE_USER") ? "%s -> %s".format(oldQual, userEditDto.qualification()) : "Admin"
-       ));
+        user.setUsername(userEditDto.username());
+        user.setEmail(userEditDto.email());
+        if (!userEditDto.password().equals(""))
+            user.setPassword(passwordEncoder.encode(userEditDto.password()));
+        user.setRole(roleService.getRole(userEditDto.role()));
+        if (!userEditDto.qualification().equals(""))
+            user.setQualificationId(qualificationService.getIdByName(userEditDto.qualification()));
+        userRepository.save(user);
+        logService.addLog(token, EDIT_USER.formatted(oldUsername,
+                "%s -> %s".format(oldUsername, user.getUsername()),
+                "%s -> %s".format(oldEmail, user.getEmail()),
+                "%s -> %s".format(oldRole, user.getRole().getName()),
+                user.getRole().getName().equals("ROLE_USER") ? "%s -> %s".format(oldQual, userEditDto.qualification()) : "Admin"
+        ));
     }
 
+    /**
+     * Deletes a user from the system by their ID.
+     * The user's logs are also deleted before removing the user from the database.
+     *
+     * @param id the UUID of the user to be deleted.
+     * @param token the authentication token of the user performing the deletion.
+     */
     public void deleteUser(UUID id, String token) {
         User user = userRepository.findById(id).get();
         logService.deleteUserLogs(user);

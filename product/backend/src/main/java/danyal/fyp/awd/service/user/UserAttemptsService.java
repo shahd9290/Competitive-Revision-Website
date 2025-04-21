@@ -20,6 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Service class for managing user attempts on topics.
+ * This service provides methods for tracking user attempts, retrieving recent attempts, and deleting attempts.
+ *
+ * @author Danyal Shah
+ */
 @Service
 @AllArgsConstructor
 public class UserAttemptsService {
@@ -29,6 +35,14 @@ public class UserAttemptsService {
     private final SubjectTopicService subjectTopicService;
     private final UserAttemptsRepository userAttemptsRepository;
 
+    /**
+     * Adds a new attempt for a user on a specific topic.
+     * The attempt includes the topic ID and the proportion of correct answers.
+     *
+     * @param accessToken the authentication token for the user.
+     * @param topicId the ID of the topic attempted by the user.
+     * @param proportion the proportion of correct answers as a decimal (e.g., 0.85 for 85%).
+     */
     public void addAttempt(String accessToken, int topicId, double proportion) {
         String username = jwtService.getUserNameFromJwtToken(accessToken);
 
@@ -46,6 +60,12 @@ public class UserAttemptsService {
         userAttemptsRepository.save(attempts);
     }
 
+    /**
+     * Retrieves the latest attempts made by a user.
+     *
+     * @param user the user whose attempts are to be retrieved.
+     * @return a list of {@link UserAttemptDto} containing information about the latest attempts.
+     */
     public List<UserAttemptDto> getLatestAttempts(User user) {
         List<UserAttempts> attempts = userAttemptsRepository.findRecentAttempts(user);
         List<UserAttemptDto> filteredAttempts = new ArrayList<>();
@@ -57,16 +77,31 @@ public class UserAttemptsService {
         return filteredAttempts;
     }
 
+    /**
+     * Deletes all attempts made by a user.
+     *
+     * @param userId the ID of the user whose attempts are to be deleted.
+     */
     public void deleteAttempts(UUID userId) {
         User user = userService.getUserById(userId);
         userAttemptsRepository.deleteByIdUserId(user);
     }
 
+    /**
+     * Deletes all attempts for a specific topic.
+     *
+     * @param topicId the ID of the topic whose attempts are to be deleted.
+     */
     public void deleteAttempts(int topicId) {
         Topic topic = subjectTopicService.getTopic(topicId);
         userAttemptsRepository.deleteByIdTopicId(topic);
     }
 
+    /**
+     * Retrieves recent attempts made by all users for admin view.
+     *
+     * @return a list of {@link UserAttemptAdminDto} containing detailed information about recent attempts.
+     */
     public List<UserAttemptAdminDto> getAttempts() {
         List<UserAttempts> attempts = userAttemptsRepository.findRecentAttempts();
         List<UserAttemptAdminDto> filteredAttempts = new ArrayList<>();
@@ -80,6 +115,13 @@ public class UserAttemptsService {
         return filteredAttempts;
     }
 
+    /**
+     * Processes an attempt to extract the topic name, proportion score, and formatted date.
+     *
+     * @param attempt the {@link UserAttempts} object to process.
+     * @param dateFormat the date format to use for the formatted date.
+     * @return a {@link Triple} containing the topic name, proportion score, and formatted date.
+     */
     private Triple<String, String, String> processAttempt(UserAttempts attempt, String dateFormat) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
         String topicName = attempt.getTopic().getName();

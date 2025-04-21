@@ -11,6 +11,7 @@ import java.util.Optional;
 
 /**
  * Repository interface for managing {@link Qualification} entities.
+ * Provides methods for finding qualifications by name and retrieving qualification data.
  *
  * @author Danyal Shah
  */
@@ -20,11 +21,16 @@ public interface QualificationRepository extends JpaRepository<Qualification, In
     /**
      * Finds a qualification by its name.
      *
-     * @param name the name of the qualification.
-     * @return an {@link Optional} containing the qualification if found, or empty otherwise.
+     * @param name the name of the qualification
+     * @return an {@link Optional} containing the qualification if found, or empty otherwise
      */
     Optional<Qualification> findByName(String name);
 
+    /**
+     * Retrieves all qualification data, including the number of associated subjects and users.
+     *
+     * @return a list of {@link QualificationDataDto} containing the qualification data
+     */
     @Query("SELECT new danyal.fyp.awd.dto.admin.qualification.QualificationDataDto(" +
             "q.id, q.name, CAST(COUNT(DISTINCT s) AS int), CAST(COUNT(DISTINCT u) AS int))" +
             "FROM Qualification q " +

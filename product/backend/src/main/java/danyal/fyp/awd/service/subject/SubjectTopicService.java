@@ -19,15 +19,13 @@ import danyal.fyp.awd.repository.subject.TopicRepository;
 import danyal.fyp.awd.service.admin.LogService;
 import danyal.fyp.awd.service.user.UserAttemptsService;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.Pair;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.sql.Struct;
 import java.util.*;
 
 /**
  * Service class for managing subjects and topics.
+ * Provides methods for creating, editing, deleting, and retrieving subjects and topics.
  *
  * @author Danyal Shah
  */
@@ -50,8 +48,9 @@ public class SubjectTopicService {
     /**
      * Adds a new subject with an associated qualification.
      *
-     * @param subjectName   the name of the subject.
-     * @param qualification the qualification to associate with the subject.
+     * @param subjectName the name of the subject
+     * @param qualification the qualification to associate with the subject
+     * @param token the authentication token of the user performing the action
      */
     public void addSubject(String subjectName, Qualification qualification, String token) {
 
@@ -69,29 +68,29 @@ public class SubjectTopicService {
     /**
      * Retrieves a subject by its name.
      *
-     * @param name the name of the subject.
-     * @return an {@link Optional} containing the subject if found, or empty otherwise.
+     * @param name the name of the subject
+     * @return an {@link Optional} containing the subject if found, or empty otherwise
      */
     public Optional<Subject> getSubject(String name) {
         return subjectRepository.findByName(name);
     }
 
     /**
-     * Retrieves subjects associated with a given qualification.
+     * Retrieves all subjects associated with a specific qualification.
      *
-     * @param qualification the qualification to filter by.
-     * @return a list of subjects associated with the qualification.
+     * @param qualification the qualification to filter subjects by
+     * @return a list of {@link Subject} entities associated with the qualification
      */
     public List<Subject> getSubjectWithQual(Qualification qualification) {
         return subjectRepository.findSubjectsByQualificationId(qualification.getId());
     }
 
     /**
-     * Retrieves all subjects along with their topics for a given qualification.
+     * Retrieves all subjects and their associated topics for a specific qualification.
      *
-     * @param qualName the name of the qualification.
-     * @return a list of {@link SubjectAllResultDto} containing subjects and their topics.
-     * @throws Exception if the qualification does not exist.
+     * @param qualName the name of the qualification
+     * @return a list of {@link SubjectAllResultDto} containing subject and topic details
+     * @throws Exception if the qualification does not exist
      */
     public List<SubjectAllResultDto> getAllSubjects(String qualName) throws Exception {
         Qualification qualification = qualificationService.getQualification(qualName);
@@ -108,6 +107,11 @@ public class SubjectTopicService {
         return subjectAllResultDtos;
     }
 
+    /**
+     * Retrieves all subjects from the database.
+     *
+     * @return a list of all {@link Subject} entities
+     */
     public List<Subject> getAllSubjects() {
         return subjectRepository.findAll();
     }
@@ -115,8 +119,9 @@ public class SubjectTopicService {
     /**
      * Adds a qualification to an existing subject.
      *
-     * @param subject       the subject to update.
-     * @param qualification the qualification to add.
+     * @param subject the subject to update
+     * @param qualification the qualification to add to the subject
+     * @param token the authentication token of the user performing the action
      */
     public void addQualification(Subject subject, Qualification qualification, String token) {
         subject.addQualification(qualification);
@@ -125,10 +130,11 @@ public class SubjectTopicService {
     }
 
     /**
-     * Saves a new topic based on the provided DTO.
+     * Saves a new topic based on the provided {@link TopicDto}.
      *
-     * @param topicDto the {@link TopicDto} containing topic details.
-     * @throws Exception if the qualification, subject, or topic does not exist or already exists.
+     * @param topicDto the DTO containing topic details
+     * @param token the authentication token of the user performing the action
+     * @throws Exception if the topic or subject does not exist or already exists
      */
     public void saveTopic(TopicDto topicDto, String token) throws Exception {
         String qualName = topicDto.qualification();
@@ -154,21 +160,21 @@ public class SubjectTopicService {
     /**
      * Retrieves a topic by its name and qualification ID.
      *
-     * @param topicName       the name of the topic.
-     * @param qualificationId the ID of the qualification.
-     * @return the {@link Topic} if found
-     * @throws TopicException if the topic was not found.
+     * @param topicName the name of the topic
+     * @param qualificationId the ID of the qualification
+     * @return the {@link Topic} entity if found
+     * @throws TopicException if the topic does not exist
      */
     public Topic getTopic(String topicName, int qualificationId) {
         return topicRepository.findByNameAndQualificationId(topicName, qualificationId).orElse(null);
     }
 
     /**
-     * Retrieves a topic by its name and qualification ID.
+     * Retrieves a topic by its ID.
      *
-     * @param topicId the id of the topic.
-     * @return the {@link Topic} if found
-     * @throws TopicException if the topic was not found.
+     * @param topicId the ID of the topic
+     * @return the {@link Topic} entity if found
+     * @throws TopicException if the topic does not exist
      */
     public Topic getTopic(int topicId) {
         Topic topic;
@@ -178,12 +184,12 @@ public class SubjectTopicService {
     }
 
     /**
-     * Retrieves all topics for a specific subject and qualification.
+     * Retrieves all topics associated with a specific subject and qualification.
      *
-     * @param qualName the name of the qualification.
-     * @param subName  the name of the subject.
-     * @return a list of topics associated with the subject and qualification.
-     * @throws Exception if the qualification or subject does not exist.
+     * @param qualName the name of the qualification
+     * @param subName the name of the subject
+     * @return a list of {@link TopicCountDto} containing topic details
+     * @throws Exception if the qualification or subject does not exist
      */
     public List<TopicCountDto> getAllForSubQual(String qualName, String subName) throws Exception {
         Qualification qualification = qualificationService.getQualification(qualName);
@@ -191,14 +197,31 @@ public class SubjectTopicService {
         return topicRepository.findAllBySubjectIdAndQualificationId(subject, qualification);
     }
 
+    /**
+     * Retrieves detailed subject data for the admin view.
+     *
+     * @return a list of {@link SubjectDataDto} containing subject details
+     */
     public List<SubjectDataDto> getAllSubjectsAdmin() {
         return subjectRepository.findAllDetails();
     }
 
+    /**
+     * Retrieves detailed topic data for the admin view.
+     *
+     * @return a list of {@link TopicDataDto} containing topic details
+     */
     public List<TopicDataDto> getAllTopicsAdmin() {
         return topicRepository.findTopicDetails();
     }
 
+    /**
+     * Deletes a subject based on the provided DTO and logs the action.
+     *
+     * @param subjectDeleteDto the DTO containing the subject ID and qualification
+     * @param token the authentication token of the user performing the action
+     * @throws QualificationException if the qualification does not exist
+     */
     public void deleteSubject(SubjectDeleteDto subjectDeleteDto, String token) throws QualificationException {
         Subject sub = subjectRepository.findById(subjectDeleteDto.id()).get();
         if (sub.getQualifications().size() == 1) {
@@ -212,12 +235,25 @@ public class SubjectTopicService {
         }
     }
 
+    /**
+     * Deletes a topic by its ID and logs the action.
+     *
+     * @param id the ID of the topic to delete
+     * @param token the authentication token of the user performing the action
+     */
     public void deleteTopic(int id, String token) {
         Topic topic = getTopic(id);
         topicRepository.deleteById(id);
         logService.addLog(token, DELETE_TOPIC.formatted(topic.getSubject().getName(), topic.getName()));
     }
 
+    /**
+     * Edits an existing subject and logs the changes.
+     *
+     * @param subjectEditDto the DTO containing updated subject data
+     * @param token the authentication token of the user performing the action
+     * @throws QualificationException if the qualification does not exist
+     */
     public void editSubject(SubjectEditDto subjectEditDto, String token) throws QualificationException {
 
         Subject sub = subjectRepository.findById(subjectEditDto.id()).get();
@@ -231,6 +267,13 @@ public class SubjectTopicService {
         logService.addLog(token, EDIT_SUBJECT.formatted(oldSubjectName, "Title: %s -> %s, Qualification: %s -> %s".formatted(oldSubjectName, sub.getName(), oldQualName, subjectEditDto.qualification())));
     }
 
+    /**
+     * Edits an existing topic and logs the changes.
+     *
+     * @param topicEditDto the DTO containing updated topic data
+     * @param token the authentication token of the user performing the action
+     * @throws QualificationException if the qualification does not exist
+     */
     public void editTopic(TopicEditDto topicEditDto, String token) throws QualificationException {
         Topic t = topicRepository.findById(topicEditDto.id()).get();
         String oldTopic = t.getName();
@@ -250,14 +293,33 @@ public class SubjectTopicService {
         logService.addLog(token, EDIT_TOPIC.formatted(t.getSubject().getName(), oldTopic, message));
     }
 
+    /**
+     * Counts the total number of topics in the system.
+     *
+     * @return the total number of topics
+     */
     public int countTopics() {
         return (int) topicRepository.count();
     }
 
+    /**
+     * Counts the total number of subjects in the system.
+     *
+     * @return the total number of subjects
+     */
     public int countSubjects() {
         return (int) subjectRepository.count();
     }
 
+    /**
+     * Creates or updates a subject with its associated qualification.
+     *
+     * @param subjectName the name of the subject
+     * @param subjectQual the qualification to associate with the subject
+     * @param token the authentication token of the user performing the action
+     * @return a message indicating the result of the operation
+     * @throws QualificationException if the qualification does not exist
+     */
     public String newSubject(String subjectName, String subjectQual, String token) throws QualificationException {
         // Check if Qualification exists?
         Qualification qualification = qualificationService.getQualification(subjectQual);

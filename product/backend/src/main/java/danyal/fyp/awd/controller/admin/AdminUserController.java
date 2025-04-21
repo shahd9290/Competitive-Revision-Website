@@ -9,6 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for managing user-related operations in the admin panel.
+ * Provides endpoints to retrieve, delete, and edit users.
+ *
+ * @author Danyal Shah
+ */
 @RestController
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
@@ -18,11 +24,23 @@ public class AdminUserController {
     private final UserRegistrationService userRegistrationService;
     private final UserAttemptsService userAttemptsService;
 
+    /**
+     * Retrieves a list of all users.
+     *
+     * @return a ResponseEntity containing the list of users.
+     */
     @GetMapping("/get")
     public ResponseEntity<Object> getUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    /**
+     * Deletes a user and their associated attempt records.
+     *
+     * @param token the authentication token from the cookie.
+     * @param deleteDto the DTO containing the ID of the user to delete.
+     * @return a ResponseEntity with a success message.
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deleteUser(@CookieValue("token") String token, @RequestBody final UserDeleteDto deleteDto) {
         userAttemptsService.deleteAttempts(deleteDto.id());
@@ -30,6 +48,13 @@ public class AdminUserController {
         return ResponseEntity.ok("User Deleted Successfully");
     }
 
+    /**
+     * Edits the details of an existing user.
+     *
+     * @param token the authentication token from the cookie.
+     * @param userEditDto the updated user data.
+     * @return a ResponseEntity with a success or error message.
+     */
     @PostMapping("/edit")
     public ResponseEntity<String> editUser(@CookieValue("token") String token, @RequestBody final UserEditDto userEditDto) {
         try {

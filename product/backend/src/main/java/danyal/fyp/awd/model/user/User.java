@@ -21,7 +21,9 @@ import java.util.stream.Collectors;
  * Represents a user entity in the system.
  *
  * <p>This entity is mapped to the {@code users} table and includes user details,
- * qualification ID, and associated refresh tokens.</p>
+ * roles, qualification ID, and associated refresh tokens.</p>
+ *
+ * Provides helper methods for converting to Spring Security user details.
  *
  * @author Danyal Shah
  */
@@ -90,16 +92,29 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RefreshToken> refreshTokens = new ArrayList<>();
 
+    /**
+     * The roles assigned to the user.
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    /**
+     * Converts this user to a Spring Security-compatible user details object.
+     *
+     * @return an instance of {@link JpaUserDetails} for authentication
+     */
     public JpaUserDetails toJpaUserDetails() {
         List<GrantedAuthority> authorities = roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
         return new JpaUserDetails(getUsername(), getPassword(), authorities);
     }
 
+    /**
+     * Assigns a single role to the user, replacing any existing role.
+     *
+     * @param role the new role to assign
+     */
     public void setRole(Role role) {
         if (!roles.isEmpty()) { // Overwrite existing role
             roles.remove(roles.iterator().next());
@@ -107,8 +122,12 @@ public class User {
         roles.add(role);
     }
 
+    /**
+     * Retrieves the user's assigned role.
+     *
+     * @return the user's role
+     */
     public Role getRole() {
         return roles.stream().findFirst().get();
     }
 }
-

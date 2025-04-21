@@ -13,6 +13,7 @@ import java.util.UUID;
 
 /**
  * Repository interface for managing {@link User} entities.
+ * Provides methods for querying users by username, email, and qualification ID.
  *
  * @author Danyal Shah
  */
@@ -22,36 +23,41 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     /**
      * Finds a user by their username.
      *
-     * @param username the username of the user.
-     * @return an {@link Optional} containing the user if found, or empty otherwise.
+     * @param username the username of the user
+     * @return an {@link Optional} containing the user if found, or empty otherwise
      */
     Optional<User> findByUsername(String username);
 
     /**
      * Checks if a user exists by their username.
      *
-     * @param username the username to check.
-     * @return {@code true} if a user with the given username exists; {@code false} otherwise.
+     * @param username the username to check
+     * @return {@code true} if a user with the given username exists; {@code false} otherwise
      */
     boolean existsByUsername(String username);
 
     /**
      * Checks if a user exists by their email address.
      *
-     * @param email the email to check.
-     * @return {@code true} if a user with the given email exists; {@code false} otherwise.
+     * @param email the email to check
+     * @return {@code true} if a user with the given email exists; {@code false} otherwise
      */
     boolean existsByEmail(String email);
 
     /**
      * Retrieves the qualification ID associated with a specific username.
      *
-     * @param username the username of the user.
-     * @return the qualification ID of the user.
+     * @param username the username of the user
+     * @return the qualification ID of the user
      */
     @Query("SELECT u.qualificationId FROM User u WHERE u.username = :username")
     int findQualificationIdByUsername(@Param("username") String username);
 
+    /**
+     * Retrieves detailed user data including their roles and qualification.
+     *
+     * @return a list of {@link UserDataDto} containing user details
+     */
     @Query("SELECT new danyal.fyp.awd.dto.admin.user.UserDataDto(" +
             "u.id, u.username, u.email, r.name, u.createdAt, q.name)" +
             "FROM User u " +

@@ -9,6 +9,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
+/**
+ * Entity representing an activity log entry in the system.
+ * Used for tracking user actions performed in the admin interface.
+ *
+ * @author Danyal Shah
+ */
 @Entity
 @Getter
 @Setter
@@ -17,17 +23,29 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 public class Log {
 
+    /**
+     * The unique identifier for the log entry.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * The user who performed the activity.
+     */
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * The description of the activity performed.
+     */
     @Column(nullable = false)
     private String activity;
 
+    /**
+     * The timestamp when the activity occurred.
+     */
     @Column(nullable = false)
     private Instant date;
 }

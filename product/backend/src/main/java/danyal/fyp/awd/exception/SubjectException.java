@@ -2,6 +2,8 @@ package danyal.fyp.awd.exception;
 
 /**
  * A custom exception representing subject-related errors.
+ * This exception is used for operations that fail when managing subjects,
+ * such as creation, update, or deletion due to validation or integrity issues.
  *
  * @author Danyal Shah
  */

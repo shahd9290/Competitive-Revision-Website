@@ -9,11 +9,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Represents a topic entity in the system.
+ * A topic is associated with both a qualification and a subject.
  *
  * @author Danyal Shah
  */
 @Entity
-@Table(name="topics")
+@Table(name = "topics")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -37,7 +38,7 @@ public class Topic {
      * The qualification associated with the topic.
      */
     @ManyToOne
-    @JoinColumn(name="qualification_id", nullable = false)
+    @JoinColumn(name = "qualification_id", nullable = false)
     @JsonBackReference
     private Qualification qualification;
 
@@ -45,9 +46,7 @@ public class Topic {
      * The subject associated with the topic.
      */
     @ManyToOne
-    @JoinColumn(name="subject_id", nullable = false)
+    @JoinColumn(name = "subject_id", nullable = false)
     @JsonBackReference
     private Subject subject;
-
-
 }

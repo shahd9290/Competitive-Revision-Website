@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Handles REST API endpoints for user profile management.
+ * Provides access to authenticated user data, including marks, qualifications, and attempt history.
  *
  * @author Danyal Shah
  */
@@ -52,6 +53,13 @@ public class UserProfileController {
         return ResponseEntity.ok(qualification);
     }
 
+    /**
+     * Saves the user's updated marks and logs the attempt.
+     *
+     * @param accessToken the authentication token from the cookie.
+     * @param marksDto the data transfer object containing mark details.
+     * @return the updated mark value.
+     */
     @PostMapping("/save-marks")
     public ResponseEntity<Integer> saveMarks(@CookieValue(name = "token") String accessToken, @RequestBody MarksDto marksDto) {
         int marks = userService.updateMarks(accessToken, marksDto.marks());

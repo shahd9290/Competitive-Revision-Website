@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Handles REST API endpoints for refreshing authentication tokens.
+ * Allows users to obtain a new access token when their current one is nearing expiration.
  *
  * @author Danyal Shah
  */
@@ -25,14 +26,13 @@ public class RefreshTokenController {
     /**
      * Refreshes the access token using the provided cookie.
      *
-     * @param accessToken the current access token from the cookie.
-     * @return a new access token and session timer value.
+     * @param accessToken the current access token from the cookie
+     * @return a new access token and session timer value wrapped in a {@link RefreshResponseDto}
      */
     @PostMapping("/refresh-token")
-    public ResponseEntity<RefreshResponseDto> refreshToken(@CookieValue(name="token") String accessToken) {
+    public ResponseEntity<RefreshResponseDto> refreshToken(@CookieValue(name = "token") String accessToken) {
         AuthenticationResponseDto response = refreshTokenService.refreshToken(accessToken);
         ResponseCookie cookieExpire = cookieService.createTimerCookie();
         return ResponseEntity.ok(new RefreshResponseDto(response.accessToken(), cookieExpire.getValue()));
     }
-
 }

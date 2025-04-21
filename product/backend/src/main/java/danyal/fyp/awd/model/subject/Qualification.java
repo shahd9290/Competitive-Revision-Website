@@ -8,16 +8,18 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Represents a qualification entity in the system.
+ * A qualification can be linked to multiple subjects and users.
  *
  * @author Danyal Shah
  */
 @Entity
-@Table(name="qualifications")
+@Table(name = "qualifications")
 @NoArgsConstructor
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Qualification {
+
     /**
      * The unique identifier for the qualification.
      */

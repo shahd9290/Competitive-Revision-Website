@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service class for handling administrative operations.
+ * Aggregates data from different services to load the dashboard and provide necessary statistics.
+ *
+ * @author Danyal Shah
+ */
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -21,6 +27,12 @@ public class AdminService {
     private final QualificationService qualificationService;
     private final UserAttemptsService userAttemptsService;
 
+    /**
+     * Loads the dashboard data, including the total count of questions, topics, subjects, users, and qualifications,
+     * as well as the most recent user attempts.
+     *
+     * @return a {@link DashboardInfoDto} containing the aggregated statistics for the admin dashboard
+     */
     public DashboardInfoDto loadDashboard() {
         int totalQuestions = questionService.countQuestions();
         int totalTopics = subjectTopicService.countTopics();

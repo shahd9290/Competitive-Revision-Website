@@ -13,22 +13,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Controller for handling admin dashboard-related API endpoints.
+ * Provides access to dashboard summary information and activity logs.
+ *
+ * @author Danyal Shah
+ */
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 public class AdminDashboardController {
 
-
     private final AdminService adminService;
     private final LogService logService;
 
+    /**
+     * Loads the admin dashboard information, including system statistics and recent activity logs.
+     *
+     * @return a ResponseEntity containing the dashboard data and logs if successful,
+     *         or an error message in case of failure.
+     */
     @GetMapping("/dashboard")
     public ResponseEntity<Object> loadDashboard() {
         try {
             DashboardInfoDto response = adminService.loadDashboard();
             List<ActivityLogDto> logs = logService.getLogs();
 
-            return ResponseEntity.ok(new DashboardDto(response,logs));
+            return ResponseEntity.ok(new DashboardDto(response, logs));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

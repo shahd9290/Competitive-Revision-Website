@@ -2,6 +2,8 @@ package danyal.fyp.awd.exception;
 
 /**
  * A custom runtime exception representing topic-related errors.
+ * This exception is typically thrown when a topic operation fails,
+ * such as creation, editing, or deletion under invalid conditions.
  *
  * @author Danyal Shah
  */

@@ -17,6 +17,12 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Service class for managing {@link Question} entities.
+ * Provides methods for adding, editing, deleting, and retrieving questions.
+ *
+ * @author Danyal Shah
+ */
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
@@ -30,6 +36,14 @@ public class QuestionService {
     private final String EDIT_QUESTION = "Edited %s Question: Question: %s -> %s, Answer: %s -> %s, Marks: %d -> %d";
     private final String DELETE_QUESTION = "Deleted %s Question: Question: %s, Answer: %s Marks: %d";
 
+    /**
+     * Adds a new question to a specified topic and qualification.
+     * Throws a {@link TopicException} if the topic is not found.
+     *
+     * @param questionAddDto the data for the new question
+     * @param token the authentication token of the user adding the question
+     * @throws Exception if an error occurs during question addition
+     */
     public void addQuestion(QuestionAddDto questionAddDto, String token) throws Exception {
         Qualification qual = qualificationService.getQualification(questionAddDto.qualification());
         Topic topic;
@@ -47,6 +61,15 @@ public class QuestionService {
         logService.addLog(token, ADD_QUESTION.formatted(topic.getName(), questionAddDto.question(), questionAddDto.answer(), questionAddDto.marks()));
     }
 
+    /**
+     * Retrieves a list of questions for a specific topic.
+     * Limits the number of questions to 10 and calculates the total marks.
+     * Throws a {@link QuestionException} if no questions are found.
+     *
+     * @param topicId the ID of the topic to retrieve questions for
+     * @return a {@link QuestionGetDto} containing the questions and their total marks
+     * @throws Exception if no questions are found for the topic
+     */
     public QuestionGetDto getQuestions(int topicId) throws Exception {
         Topic topic = subjectTopicService.getTopic(topicId);
 
@@ -67,16 +90,33 @@ public class QuestionService {
         return new QuestionGetDto(questions, totalMarks);
     }
 
+    /**
+     * Retrieves all questions and their associated data.
+     *
+     * @return a list of {@link QuestionDataDto} containing detailed question information
+     */
     public List<QuestionDataDto> getAllQuestions() {
         return questionRepository.getQuestionData();
     }
 
+    /**
+     * Deletes a question by its ID and logs the deletion action.
+     *
+     * @param id the ID of the question to delete
+     * @param token the authentication token of the user performing the deletion
+     */
     public void deleteQuestion(int id, String token) {
         Question question = questionRepository.findById(id).get();
         questionRepository.deleteById(id);
         logService.addLog(token, DELETE_QUESTION.formatted(question.getTopic().getName(), question.getQuestion(), question.getAnswer(), question.getMarks()));
     }
 
+    /**
+     * Edits an existing question and logs the changes.
+     *
+     * @param questionEditDto the updated question data
+     * @param token the authentication token of the user performing the edit
+     */
     public void editQuestion(QuestionEditDto questionEditDto, String token) {
         Question question_ = questionRepository.findById(questionEditDto.id()).get();
         String oldQuestion = question_.getQuestion();
@@ -94,6 +134,11 @@ public class QuestionService {
         ));
     }
 
+    /**
+     * Counts the total number of questions in the system.
+     *
+     * @return the total number of questions
+     */
     public int countQuestions() {
         return (int) questionRepository.count();
     }
