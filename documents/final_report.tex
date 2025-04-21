@@ -74,7 +74,7 @@
 \begin{document}
 
 \maketitle
-
+\pagenumbering{roman}
 %%%%%%%%%%%%%%%%%%%%%%
 %%% Declaration
 
@@ -108,10 +108,10 @@ Signature: Danyal
 %%% Your Abstract here
 
 \begin{abstract}
-	This report documents the development of a Competitive Revision Web Application created as part of my Final Year Project. The system encourages students to answer quiz questions as a method of revision, gamifying the experience by introducing penalties for incorrect answers and awarding points for correct responses. These points are saved under the user's profile as a form of progress tracking. Administrators are able to manage the system's data, including qualifications, subjects, and questions, which are automatically assigned to relevant student profiles based on their qualification. The report begins by discussing key technologies and background theory, followed by a detailed overview of the development process and system implementation. It then addresses professional issues in software development before concluding with a personal reflection on the project as a whole.
+This final report documents my journey with regards to my Final Year Project aimed at developing a Competitive Revision Web Application. The report begins with discussing why I have chosen to develop this project, and what I aim to achieve from this. The report then explores different technologies that are available for Web Development, along with various design patterns that are applicable to this project, before critiquing them further referring to relevant sources. It then examines the Software Engineering principles I have employed during development, before evaluating on my implementation of the system. The report then discusses professional issues in software development before concluding with a reflection on what I have been able to achieve with this project, and what could be added if this project were to continue further.
 \end{abstract}
-
 \chapter{Introduction}
+\pagenumbering{arabic}
 \section{Introduction \& Motivation}
 
 When it was first introduced to the public in 1991, the World Wide Web was conceived as a "Universal Linked Information System"~\cite{TBL_WWW} - allowing users to access various documents and media content made available to them via web browsers. In 2000, companies began to shift to a web-centric approach when it came to enterprise development, as it was then when the World Wide web began to take off~\cite{MODERN_WEB}. Since then, many different websites and applications were published, allowing both users and businesses to take advantage of how accessible this system is across the world.
@@ -1748,13 +1748,13 @@ All logs are then presented on the main admin dashboard as previously mentioned.
 
 \section{Introduction}
 
-When it comes to product development, developers have more responsibilities on top of writing code. They are required to consider how their work will impact potential users of the system and society as a whole. Boards such as the British Computer Society (BCS) require members to follow a Code of Conduct~\cite{BCS}, with rules that promote integrity, competence and respect for the public interest. This covers a variety of topics, from acknowledging intellectual property of others, to ensuring that systems are designed to protect the rights, data and well-being of users. In many cases, software is developed with contributions from the wider community, so developers are required to comply with the terms set out in licenses used, as well as avoid plagiarism by crediting the original sources of borrowed code. Failing to do so would lead to a series of consequences, including legal disputes and damage to one's reputation.
+Much like writing code, developers are also responsible for ensuring that ethical practices are followed in product development. Members of different computing boards, like the British Computing Society (BCS) are required to follow a code of conduct. These are established to ensure that members follow professional standards for each project that is developed, such as acknowledging intellectual property and protection for users and their personal data. Failing to follow these standards can result in serious consequences that can harm the developer's reputation as well as cause legal disputes.
 
 \section{Use of Open-Source Technologies}
 
 Development of this project has required extensive use of open-source technologies across the frontend and backend. Next.js and TailwindCSS have been deployed using the MIT license, while Spring Boot uses the Apache License 2.0. Although these tools allowed me to focus on the core features of the system with ease, it was important to follow the terms of the license so as to ensure that I was not violating any of the conditions that were set.\\
 
-Fortunately these licenses are quite permissive and provide flexibility when it comes to project development. The MIT License is the most permissive of the two, and allows users to use, modify and distribute software provided that the original license and copyright notice are included~\cite{MIT_LICENSE}. Apache License 2.0 is similar in that it allows commercial and private use, along with modification and redistribution. However, there are additional responsibilities that must be followed, including declaring any modifications made to the software as well as a clause granting users a license to relevant patents held by contributors, reducing the chances of future legal disputes~\cite{APACHE_LICENSE}.
+Fortunately these licenses are quite permissive and provide flexibility when it comes to project development. The MIT License is the most permissive of the two, and allows users to use, modify and distribute software provided that the original license and copyright notice are included~\cite{MIT_LICENSE}. Apache License 2.0 is similar in that it allows commercial and private use, along with modification and redistribution. However, it also requires users to declare any changes made to the software, and to include a clause granting a license to patents held by contributors that may be relevant, in order to reduce the chances of legal disputes.
 
 \section{Respecting Licenses}
 
