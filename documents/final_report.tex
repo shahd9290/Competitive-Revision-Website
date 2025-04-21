@@ -125,6 +125,18 @@ This project aims to facilitate revision for the average student, whilst also ca
 I aim to achieve this by adopting a points system inspired by the Picarats seen in the Professor Layton video game series~\cite{LAYTON} - where students will lose marks each time they fail to answer a question correctly until a set minimum. My intention with this system is that students are encouraged to try their hardest to answer correctly in their initial attempt, in order for them to score maximum marks - enabling their competitive spirit when comparing against others. This can be enhanced by hosting regular contests similarly to websites such as LeetCode~\cite{LEETCODE}, who host weekly and biweekly contests for their users to compete in for a similar purpose. Of course, there will also be some students who may be anxious at the idea that their performance would be public for all to see - for which this competitive feature can be optional for students to participate in. 
 \section{The Report}
 
+The remaining chapters outline the development process of the product as a whole.
+
+\begin{itemize}
+	\item Chapter 2 presents the theoretical background of the core technologies used, supported by the literature reviewed in Chapter 3.
+	\item Chapter 4 details the development methodology, internal system design, and testing process.
+	\item Chapter 5 focuses on the visible implementation, explaining how the application operates from the user's perspective.
+	\item Chapter 6 discusses professional issues related to software development.
+	\item Chapter 7 offers a critical reflection on the project as a whole.
+	\item The Appendix provides a breakdown of the development process and includes a link to a demonstration video of the application in action.
+\end{itemize}
+
+
 \chapter{Background Theory}
 \section{State-of-the-art Web Development}
 
@@ -450,12 +462,86 @@ In this application, the user is required to enter their username, password, ema
 The password, however, is required to be kept securely. This is achieved through the use of Bcrypt Hashing. Created in 1999, Bcrypt has become a widely adopted hashing algorithm to encode passwords, and keep them protected without needed to decode them. To authenticate, the password input is encoded, and the hashes are then compared against each other before authentication is granted to the user. 
 
 \chapter{Literature Review}
-\begin{itemize}
-	\item Critical Review over Sources
-	\item Section for each report
-	\item Each source summarised and analysed
-	\item Accurate, up to date, biased, relevant.
- \end{itemize}
+
+A number of sources were used to provide relevant information in earlier chapters. This section aims to clarify how they were applied and the influence they had on key decisions throughout the development of this project.
+
+\section{Context \& Motivation}
+
+Tim Berners-Lee created a proposal in 1989, envisioning a "universal linked information system" designed to allow seamless information sharing across networks~\cite{TBL_WWW}. In the years that followed, the web has continuously evolved, providing society with the ability to not just communicate, but to facilitate entertainment, productivity and importantly, education. IBM made this evolution clear, by emphasising how enterprises began to focus on web development in 2000 because of improved communication with the end user. Their discussion also included the emergence of core web technologies such as the Document Object Model and JavaScript Object Notation (JSON)~\cite{MODERN_WEB}, both of which remain fundamental components of modern web frameworks today.\\
+
+In 2022, Ofcom reported that an average 97\% of homes with children had access to the internet, higher than all households across the United Kingdom (at 93\%)~\cite{INTERNET_USERS}. Despite this level of connectivity, education is not the main reason a child would access the internet today. Research from Kaspersky shows that the top three reasons a parent would buy a device for their child are~\cite{DEVICE_REPORT}: 
+
+\begin{enumerate}
+	\item Playing Games (53\%)
+	\item Completing Assignment for School (45\%)
+	\item Watching YouTube Videos (43\%)
+\end{enumerate}
+However, usage patterns indicate different priorities:
+\begin{enumerate}
+	\item Playing Games (60\%)
+	\item Watching YouTube Videos (54\%)
+	\item Completing Assignment for School (46\%)
+\end{enumerate}
+
+These findings highlight that a significant proportion of children rely on devices more for leisure activities, with education playing a secondary role. Educational tools need to compete with entertaining content in order to maintain students' attention. When faced with only academic material, it is very easy for students to get distracted and switch to these leisure activities by simply changing tabs, making it important to retain their interest. From working in education, an effective strategy that I have witnessed is gamification, where students are more motivated to complete challenges when there are rewards involved. With features such as contests and progression systems, students are more likely to return to the platform and stay engaged with their studies.\\
+
+There are many different varieties of gamification across both entertainment and educational platforms. Earning points towards a leaderboard is already a powerful motivator, used in platforms such as LeetCode where they use a competition style system behind their coding problems~\cite{LEETCODE}. This can be further enhanced by deducting marks for incorrect answers, as inspired by the Picarats system in the Professor Layton Series~\cite{LAYTON}. This way students are encouraged to take their time answering correctly so that they can earn the maximum amount of marks available.\\
+
+Overall, for online revision to be effective, it helps to incorporate features commonly used in the entertainment sector, to ensure that revision remains fun and interactive. Gamifying revision provides a way of maintaining attention and encourage continued use, using incentives that are tailored to the students' competitive nature. This way, these elements can make studying more enjoyable whilst supporting consistent engagement, which is beneficial when it comes to studying in the long term.
+
+\section{Web Technologies}
+
+\subsection{Frontend Frameworks}
+
+To support features such as gamification and interactive user experiences, it is important to make sure that the correct web technologies are used.\\
+
+Many web browsers were introduced following the creation of the WorldWideWeb browser by Tim Berners-Lee in 1990~\cite{NEXUS}. These browsers were designed to load files written in HTML, providing the foundation of a given webpage with basic formatting. CSS was later introduced to provide advanced styling, and JavaScript to add interactivity and client-side functionality. The three of them form the core foundation of web development, natively supported by all major browsers.\\
+
+This approach, however, became inefficient with the limitations that these tools presented, while the requirements for web applications became more complex. To combat this, web development frameworks slowly appeared to extend the capabilities of these tools, and provide advanced patterns and techniques for developers to use in creating large-scale applications, as described by Dresher et al.~\cite{FRAMEWORKS}.\\
+
+Two of the most commonly used frontend frameworks are Angular and React. Angular, developed by Google, is a platform used to build single-page applications through the use of components, including features such as routing and dependency injection, as noted by Geetha et al.~\cite{ANGULAR_ANALYSIS}. Angular is built with TypeScript, allowing for greater flexibility in code organisation, through the use of features such as modules and static typing compared to JavaScript as noted by Saiful Islam \cite{TSvJS}. However, the framework is known to be quite complex compared to other frameworks, with Dresher et al. noting that alternatives such as React and Vue.js offer a lighter learning curve~\cite{FRAMEWORKS}.\\
+
+React is a JavaScript library created by Facebook, which focuses on building interfaces through a component-based architecture. It does this using JSX, a hybrid of JavaScript and XML, making React more readable and easier to learn for developers used to HTML as explained by Banks et al.~\cite{BANKS_REACT}. Dresher et al.~\cite{FRAMEWORKS} compare React with Angular, and note that, unlike Angular, React is primarily a view engine. However, developers have created libraries to provide additional web development tools such as state management and routing. These libraries, when imported, allow developers to use React to create full-scale web applications, while maintaining a syntax familiar to those experienced with HTML.\\
+
+Next.js builds on top of React, designed to simplify the process of building web applications. Dinh Bui's analysis of Next.js~\cite{DB_NEXTJS} highlights several key features that it provides, including file-based routing and server-side rendering, which help streamline development and improve performance. These features made Next.js a suitable choice for frontend development, as it combines React's JSX with routing flexibility and enhanced efficiency.\\
+
+With regards to visual styling, TailwindCSS was chosen, allowing developers to apply pre-defined classes directly to HTML elements. According to official documentation~\cite{TAILWIND}, this works by scanning all project files for class names before generating and compiling the corresponding styles into a CSS file. This results in a fast and reliable system with zero runtime overhead, and because it pairs well with Next.js, it was considered an ideal choice in frontend development.
+
+\subsection{Backend Frameworks}
+
+It is also important to choose a suitable backend, that can be used to handle a significant volume of data as well as faciliate communication with the frontend. Two notable examples of backend frameworks are Node.js and Spring Boot.\\
+
+Node.js is a popular backend framework built around the V8 JavaScript engine. Pereira~\cite{NODE_API} states that it is known for its event-driven, non-blocking I/O model, making it suited for applications that require high concurrency and fast data handling. Developers can use Node.js to build lightweight APIs and backend services, given the flexibility it provides and large collection of libraries available. However, as both Karakhainko and Shetty et al. have noted~\cite{BACKEND_FRAMEWORKS_BLOG,BACKEND_FRAMEWORKS_REPORT}, Node.js does come with some limitations. The use of a single-thread architecture makes it less suitable for CPU-intensive tasks, whilst the asynchronous callback-based design can lead to increased complexity as applications scale further. Moreover, there's a heavy reliance on third-party libraries where security is concerned, which makes Node.js less suitable for use in this project.\\
+
+Instead, Spring Boot was chosen as the framework for the backend of this project. Spring Boot is built on top of the Spring Framework, and simplifies backend development through the use of auto-configuration and an embedded Tomcat server, among other features that Somnath Musib discusses~\cite{MUSIB_SPRING}. A notable strength of Spring Boot is object-relational mapping with Java Persistence API (JPA) and Hibernate, as well as a strong foundation in security through the Spring Security module. Shetty et al. also emphasise~\cite{BACKEND_FRAMEWORKS_REPORT} that it is very easy to build REST services using Spring Boot, and that database connectivity is greatly simplified, ultimately making it an ideal choice for use in the backend of this project.
+
+\subsection{Databases}
+
+It is important to ensure that the correct database is used for storing data in the backend of the application. There are two approaches for this, relational (SQL) and non-relational (NoSQL).\\
+
+Michael Gunnulfsen compared the two approaches~\cite{SQL_COMPARE}, identifying that an SQL database often guarantees ACID (Atomicity, Consistency, Isolation, Durability) properties in order to provide a reliable and consistent database solution. On the other hand, NoSQL databases tend to relax these principles in favour of faster performance and improved replication properties. Deari et al. also discuss this~\cite{SQL}, noting that NoSQL databases follow the BASE model (Basically Available, Soft state, Eventual consistency), which increases the risk of data inconsistency in favour of performance. Based on these findings, I chose to use a relational database for this project, specifically PostgreSQL.
+
+\section{Application Structure}
+
+\subsection{Architectural Paradigms}
+
+This system is structured around various architectural paradigms, utilising design patterns in order to enhance modularity and security. In the backend a layered structure is followed, with logic separated across controllers, services and repositories. While this N-tier architecture is not directly cited in the literature, it represents a key pattern in modern backend development. Each layer is responsible for a specific function, with controllers managing incoming API requests, services handling business logic and repositories handling data persistence. This delegation of responsibilities simplifies debugging, supports code reuse, and improves long-term maintainability.\\
+
+Using Next.js for the frontend allows it to follow a component-based architecture, with the ability to build the system through modular, reusable components. Gilda Pour's research~\cite{GPOUR_COMPONENT} highlights that systems following a component-based approach can be implemented rapidly with components, whether they be commercial or in-house, helping to reduce overall development time and cost. This method supports reusability, and allows the system to be scalable and easily maintainable. This architecture is greatly beneficial for this project, by allowing features such as dialog boxes to be implemented independently such that they can be reused across different areas of the system.\\
+
+Both of these come together to form a client-server architecture, where the frontend (client) communicates with the backend (server) through API endpoints. Kinza Yasar discusses their use~\cite{API}, and highlights how API endpoints act as specific digital locations where requests can be sent to manipulate or retrieve stored information. Edward Lile further expands on this model~\cite{CSA}, discussing that the two operate completely independently, and that changes in one do not require changes in the other. This allows for modular development and independent deployment, enabling flexibility and scalability within the architecture.
+
+\subsection{Design Patterns}
+
+There is only one key design pattern used  in this project, which is dependency injection. It allows components to receive dependencies externally rather than instantiating individual classes. This promotes loose coupling, enhances modularity, and improves testability and maintainability of the system. Although dependency injection is not explicitly cited in the literature, it is a pattern that is widely supported in modern backend frameworks, and one that was essential for the development of this system.
+
+\subsection{Security \& Privacy}
+
+It is important to ensure that the system remains secure as user data is stored within it. JSON Web Tokens are used to grant authentication to users; however, they offer limited protection by nature, as discussed by Omkar Hiremath~\cite{JWT}. It is therefore the responsibility of the developer to implement JWTs securely, using features such as short token lifetimes, digital signatures, and secure cookie storage as suggested by Hiremath - all of which have been incorporated into this project.\\
+
+It is also vital to minimise the risk of Cross-Site Scripting (XSS) attacks  and SQL injections, preventing data from being tampered with as it is transmitted across the system. To reduce XSS attacks, it was necessary to ensure that inputs were sanitised before being processed by the frontend, which React (and by extension, Next.js) handles by default, according to the legacy React documentation~\cite{XSS_REACT}. A similar mitigation applies when it comes to SQL injection. While Hibernate provides some predefined functions relating to the database tables, it also supports the ability to develop custom queries. These queries are able to take in named parameters which, according to Mkyong~\cite{SQL_PARAM}, ensure that data is safely bound to the query based on the object's properties. This reduces the possibility of SQL injection, as the data is treated as an object rather than a string.\\
+
+In addition to security, privacy is a critical requirement for an application of this scale. The General Data Protection Regulation (GDPR)~\cite{GDPR} outlines several key principles for this, including data minimisation and purpose limitation. These principles were taken into account during development by collecting only the user's username for identification and email address for verification purposes.
 
 \chapter{Software Engineering}
 \section{Methodology}
@@ -1735,6 +1821,12 @@ There are many resources to include and cover in order to streamline revision in
 
 \begin{thebibliography}{99}
 \addcontentsline{toc}{chapter}{Bibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREMISE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \bibitem{TBL_WWW} Tim Berners-Lee (1990),
 \emph{Information Management: A Proposal - \url{https://www.w3.org/History/1989/proposal.html}}.
 
@@ -1812,10 +1904,8 @@ There are many resources to include and cover in order to streamline revision in
 \bibitem{GPOUR_COMPONENT} Gilda Pour (1998),
 \emph{Component-Based Software Development Approach: Is It the Next Silver Bullet? - \url{https://ieeexplore.ieee.org/document/711055}}
 
-
 \bibitem{CSA} Edward Lile (1993),
-\emph{Client/Server Architecture: A Brief Overview - \url{https://www.proquest.com/openview/6f660e1578ee4f9741d31bf0bb2aef3f/1?pq-origsite=gscholar&cbl=40682}}
-
+\emph{Client/Server Architecture: A Brief Overview - \url{https://link.gale.com/apps/doc/A15052364/AONE?u=rho_ttda&sid=bookmark-AONE&xid=80c5a23c}}
 
 \bibitem{API} Kinza Yasar (2024),
 \emph{What is an API endpoint? - \url{https://www.techtarget.com/searchapparchitecture/definition/API-endpoint}}
