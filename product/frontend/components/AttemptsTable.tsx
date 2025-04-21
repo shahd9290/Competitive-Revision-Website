@@ -16,6 +16,9 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
+/**
+ * Original Documentation - https://ui.aceternity.com/components/data-table
+ */
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]

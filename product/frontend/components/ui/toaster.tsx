@@ -10,6 +10,9 @@ import {
   ToastViewport,
 } from "@/components/ui/toast"
 
+/**
+ * Original Documentation - https://ui.aceternity.com/components/toast
+ */
 export function Toaster() {
   const { toasts } = useToast()
 

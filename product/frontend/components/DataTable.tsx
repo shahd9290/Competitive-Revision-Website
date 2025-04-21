@@ -29,6 +29,9 @@ import {UUID} from "node:crypto";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
+/**
+ * Original Documentation - https://ui.aceternity.com/components/data-table
+ */
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]

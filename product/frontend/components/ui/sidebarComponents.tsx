@@ -4,8 +4,9 @@ import Link, { LinkProps } from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-/* This Sidebar component was made free for use in web development by Manu Arora at Aceternity UI - https://ui.aceternity.com/components/sidebar*/
-
+/**
+ * Original Documentation - https://ui.aceternity.com/components/sidebar
+ */
 interface Links {
   label: string;
   href: string;

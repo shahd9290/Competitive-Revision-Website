@@ -6,8 +6,9 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-// Dialog components provided via the shadcn/ui library - https://ui.shadcn.com/docs/components/dialog
-
+/**
+ * Original Documentation - https://ui.shadcn.com/docs/components/dialog
+ */
 const Dialog = DialogPrimitive.Root
 
 const DialogTrigger = DialogPrimitive.Trigger

@@ -10,7 +10,9 @@ import {
     IconUsersGroup
 } from "@tabler/icons-react";
 import React from "react";
-
+/**
+ * Original Documentation - https://ui.aceternity.com/components/sidebar
+ */
 export const userLinks = [
     {
         label: "Dashboard",
