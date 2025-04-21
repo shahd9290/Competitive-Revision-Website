@@ -1950,6 +1950,54 @@ There are many resources to include and cover in order to streamline revision in
 All Diagrams that are present in Section 4.3 have been included as separate images for convenience.
 
 \addcontentsline{toc}{chapter}{Appendix}
+
+\section*{User Manual}
+\addcontentsline{toc}{section}{User Manual}
+
+For the application to function fully, both the frontend and backend need to run separately.
+
+\subsection*{Frontend}
+
+The frontend will require \href{https://nodejs.org/en}{Node.js} to be installed.
+\begin{itemize}
+\item Ensure that the terminal is pointing to the \verb|/frontend| directory. 
+
+\item Run \verb|npm install| to install all required dependencies for Next.js to function. Run `npm audit fix` if required.
+
+\item Rename \verb|.env.example| to \verb|.env| - Ensure the link within points to the url for the backend API, e.g. \verb|http://localhost:8080|
+
+\item Run \verb|npm run dev| to start the application.
+\item You can then access the student page at \verb|http://localhost:3000/login|, or the admin page at \verb|http://localhost:3000/admin/login|
+\end{itemize}
+
+\subsection*{Backend}
+
+The Backend requires \href{https://www.postgresql.org/download/}{PostgreSQL} and \href{https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html}{Java 17} to be installed
+
+\begin{itemize}
+	\item Create a dedicated schema for the project in the PostgreSQL database.
+
+	\item Ensure that the terminal is pointing to the \verb|/backend| directory.
+	
+	\item Use the following bash commands to generate a public/private key pair - used to sign the tokens
+	\begin{lstlisting}
+	cd src/main/resources/jwt
+	openssl genpkey -algorithm RSA -out app.key -outform PEM
+	openssl rsa -pubout -in app.key -out app.pub
+	\end{lstlisting}
+
+	\item Rename \verb|src/main/resources/application.properties.examples| to \verb|src/main/resources/application.properties|, and enter the correct details for the Postgres database. These include the \verb|Schema Name|, \verb|Username|, \verb|Password|
+	
+	\item Ensure that you have permissions to execute the \verb|./gradlew| file
+	
+	\item Run \verb|./gradlew bootRun| to start the Spring Boot application.
+\end{itemize}
+
+\section*{Demo}
+\addcontentsline{toc}{section}{Demo}
+A video demonstration of the application can be viewed here: \url{https://youtu.be/1nWVz-bocpM}
+
+
 \section*{Diary}
 \addcontentsline{toc}{section}{Diary}
 
@@ -2136,11 +2184,6 @@ All Diagrams that are present in Section 4.3 have been included as separate imag
 \begin{itemize}
     \item Work on Final Report
 \end{itemize}
-
-
-\section*{Demo}
-\addcontentsline{toc}{section}{Demo}
-A video demonstration of the application at its current stage can be viewed here: \url{https://youtu.be/dFIjE3_42No}
 
 \end{document}
 
