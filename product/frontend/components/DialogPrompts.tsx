@@ -32,6 +32,19 @@ interface TableDropDownProps {
   setSubjects?: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
+/**
+ * A dialog component that confirms deletion of an item.
+ *
+ * Displays a confirmation prompt to the user, including the item name,
+ * and provides options to either cancel or confirm the deletion.
+ * The deletion action is triggered when the user confirms.
+ *
+ * @param open - A boolean that controls the visibility of the dialog.
+ * @param setOpen - A function to toggle the visibility of the dialog.
+ * @param handleDelete - The function to be called when the user confirms the deletion.
+ * @param loading - A boolean that indicates if the deletion process is ongoing.
+ * @param name - The name of the item to be deleted, displayed in the dialog.
+ */
 export function DeleteDialog({open, setOpen, handleDelete, loading, name}) {
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
@@ -66,6 +79,17 @@ export function DeleteDialog({open, setOpen, handleDelete, loading, name}) {
     )
 }
 
+/**
+ * A dialog component that warns the user about unsaved changes.
+ *
+ * Displays a warning message when the user tries to discard unsaved changes.
+ * Provides options to either cancel the discard action or confirm it.
+ * The dialog closes the edit form and confirms the discard action when the user confirms.
+ *
+ * @param open - A boolean that controls the visibility of the dialog.
+ * @param setOpen - A function to toggle the visibility of the dialog.
+ * @param setEdit - A function to close the edit dialog when the user confirms discarding changes.
+ */
 export function CancelUnsavedDialog({open, setOpen, setEdit}) {
     const handleDiscard = () => {
         setOpen(false); // close warning
@@ -101,6 +125,21 @@ export function CancelUnsavedDialog({open, setOpen, setEdit}) {
     )
 }
 
+Here's a TSDoc comment for the TableDropDown component:
+
+tsx
+Copy
+/**
+ * A dropdown menu component that provides actions for editing and deleting a table entry.
+ *
+ * This component includes options to edit and delete a table entry. It fetches qualifications and subjects
+ * from the backend when the "Edit" option is selected. The "Delete" option opens a confirmation dialog for deletion.
+ *
+ * @param setDialogOpen - A function to open the delete confirmation dialog when the "Delete" option is clicked.
+ * @param setEditOpen - A function to open the edit form dialog when the "Edit" option is clicked.
+ * @param setQualifications - A function to set the fetched qualifications data.
+ * @param setSubjects - A function to set the fetched subjects data.
+ */
 export function TableDropDown ({setDialogOpen, setEditOpen, setQualifications, setSubjects} : TableDropDownProps) {
     return (
         <DropdownMenu>

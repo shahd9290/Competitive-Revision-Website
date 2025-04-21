@@ -6,13 +6,18 @@ import {DataTable} from "@/components/DataTable";
 import {subjectColumns} from "@/components/TableColumns";
 
 /**
- * A dashboard component displaying user information and statistics.
+ * A component for displaying the subjects dashboard.
  *
+ * Fetches the list of subjects from the backend and displays them in a table.
+ * If no subjects are available or an error occurs, a message is shown to the user.
+ *
+ * @returns The rendered subjects dashboard component.
  * @author Danyal Shah
  */
 const SubjectsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [subjects, setSubjects] = useState([]);
+
     const subjectsReq = async() => {
         try {
             const response = await axios.get(`${apiUrl}/api/admin/subjects/get`, {withCredentials: true});
@@ -22,9 +27,11 @@ const SubjectsDash = () => {
             setSubjects([]);
         }
     }
+
     useEffect(() => {
         subjectsReq();
     }, []);
+
     return (
         <div className="flex items-center justify-center min-h-screen ">
             <div className="w-full max-w-7xl p-6 rounded-lg bg-white">
@@ -45,9 +52,11 @@ const SubjectsDash = () => {
 
 /**
  * A wrapper component for the SubjectsDash with a sidebar menu.
+ *
+ * @returns The rendered page component containing the sidebar and subjects dashboard.
+ * @author Danyal Shah
  */
 const Page = () => {
-
     return (
         <div>
             <SidebarMenu role="ROLE_ADMIN">

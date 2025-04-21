@@ -6,13 +6,18 @@ import {DataTable} from "@/components/DataTable";
 import {topicColumns} from "@/components/TableColumns";
 
 /**
- * A dashboard component displaying user information and statistics.
+ * A component for displaying the topics dashboard.
  *
+ * Fetches the list of topics from the backend and displays them in a table.
+ * If no topics are available or an error occurs, a message is shown to the user.
+ *
+ * @returns The rendered topics dashboard component.
  * @author Danyal Shah
  */
 const TopicsDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [topics, setTopics] = useState([]);
+
     const topicsReq = async() => {
         try {
             const response = await axios.get(`${apiUrl}/api/admin/topics/get`, {withCredentials: true});
@@ -22,9 +27,11 @@ const TopicsDash = () => {
             setTopics([]);
         }
     }
+
     useEffect(() => {
         topicsReq();
     }, []);
+
     return (
         <div className="flex items-center justify-center min-h-screen ">
             <div className="w-full max-w-7xl p-6 rounded-lg bg-white">
@@ -45,9 +52,11 @@ const TopicsDash = () => {
 
 /**
  * A wrapper component for the TopicsDash with a sidebar menu.
+ *
+ * @returns The rendered page component containing the sidebar and topics dashboard.
+ * @author Danyal Shah
  */
 const Page = () => {
-
     return (
         <div>
             <SidebarMenu role="ROLE_ADMIN">

@@ -28,6 +28,15 @@ interface SubjectGridProps {
     subjects: Subject[]
 }
 
+/**
+ * A grid view for displaying subjects and their associated topics.
+ *
+ * This component allows users to search subjects and view detailed information about the selected subject, including its topics and the number of questions in each topic.
+ *
+ * @param {SubjectGridProps} props - The props for the SubjectGrid component.
+ * @param {Subject[]} props.subjects - List of subjects to display in the grid.
+ * @returns {JSX.Element} The SubjectGrid component displaying a list of subjects and their topics.
+ */
 export function SubjectGrid({subjects}: SubjectGridProps) {
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null)
@@ -105,9 +114,25 @@ export function SubjectGrid({subjects}: SubjectGridProps) {
     )
 }
 
+
 interface SubjectCardProps {
     subject: Subject
     onClick: () => void
+}
+
+/**
+ * A card component that displays a subject's details in a grid.
+ *
+ * This card includes the subject's name, number of topics, and the total number of questions across the topics.
+ * When clicked, it will open a dialog showing more detailed information about the topics of that subject.
+ *
+ * @param {SubjectCardProps} props - The props for the SubjectCard component.
+ * @param {Subject} props.subject - The subject data to display on the card.
+ * @param {Function} props.onClick - A function to call when the subject card is clicked to open the dialog.
+ * @returns {JSX.Element} The SubjectCard component displaying a single subject's details.
+ */
+function SubjectCard({subject, onClick}: SubjectCardProps) {
+    ...
 }
 
 function SubjectCard({subject, onClick}: SubjectCardProps) {

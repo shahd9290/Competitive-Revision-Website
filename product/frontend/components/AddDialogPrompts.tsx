@@ -11,7 +11,21 @@ import {useToast} from "@/hooks/use-toast";
 import {CancelUnsavedDialog} from "@/components/DialogPrompts";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
+/**
+ * A dialog component for adding a question.
+ *
+ * This component allows the admin to add a new question by selecting a qualification,
+ * subject, and topic. It handles form submission, validation, and error messages.
+ * After successfully adding the question, it refetches the data and shows a success message.
+ * If the form is dirty, the user is prompted to confirm before closing the dialog.
+ *
+ * @param setOpenDialog Function to close the dialog.
+ * @param qualifications List of qualifications to choose from.
+ * @param subjects List of subjects to choose from based on qualification.
+ * @param topics List of topics to choose from based on subject and qualification.
+ * @param refetch Function to refetch data after the form submission.
+ * @returns The rendered question dialog form component.
+ */
 export function QuestionDialog({setOpenDialog, qualifications, subjects, topics, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [selectedSubject, setSelectedSubject] = useState("");
@@ -214,6 +228,20 @@ export function QuestionDialog({setOpenDialog, qualifications, subjects, topics,
     );
 }
 
+/**
+ * A dialog component for adding a new topic.
+ *
+ * This component allows the admin to add a topic by selecting a qualification, subject,
+ * and specifying the topic's name. It handles form submission, validation, and displays error messages
+ * when necessary. The form also tracks if changes are made, prompting the user to confirm if they want
+ * to cancel while changes are unsaved.
+ *
+ * @param setOpenDialog Function to close the dialog.
+ * @param qualifications List of qualifications to choose from.
+ * @param subjects List of subjects to choose from, filtered by the selected qualification.
+ * @param refetch Function to refetch data after the form submission.
+ * @returns The rendered topic dialog form component.
+ */
 export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) {
     const [topic, setTopic] = useState("");
     const [selectedQualification, setSelectedQualification] = useState("");
@@ -361,6 +389,19 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
     )
 }
 
+/**
+ * A dialog component for adding a new subject.
+ *
+ * This component allows the admin to add a subject by selecting a qualification
+ * and specifying the subject's name. It handles form submission, validation, and displays error messages
+ * when necessary. The form also tracks if changes are made, prompting the user to confirm if they want
+ * to cancel while changes are unsaved.
+ *
+ * @param setOpenDialog Function to close the dialog.
+ * @param qualifications List of qualifications to choose from.
+ * @param refetch Function to refetch data after the form submission.
+ * @returns The rendered subject dialog form component.
+ */
 export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
     const [subject, setSubject] = useState("");
     const [selectedQualification, setSelectedQualification] = useState("");
@@ -473,6 +514,17 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
     )
 }
 
+/**
+ * A dialog component for adding a new qualification.
+ *
+ * This component allows the admin to add a qualification. It handles form submission, validation,
+ * and displays error messages when necessary. It also tracks if changes are made and prompts the user
+ * to confirm if they want to cancel while there are unsaved changes.
+ *
+ * @param setOpenDialog Function to close the dialog.
+ * @param refetch Function to refetch data after the form submission.
+ * @returns The rendered qualification dialog form component.
+ */
 export function QualificationDialog({setOpenDialog, refetch}) {
     const [qualification, setQualification] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -562,6 +614,18 @@ export function QualificationDialog({setOpenDialog, refetch}) {
     )
 }
 
+/**
+ * A dialog component for adding a new user.
+ *
+ * This component allows the admin to register a new user by providing their username, email, password, role, and qualification.
+ * The form includes validation and handles form submission. If the user role is 'ROLE_USER', the qualification field is required.
+ * Upon successful submission, it refetches the data and closes the dialog. It also provides error messages for failed submissions.
+ *
+ * @param setOpenDialog Function to close the dialog.
+ * @param qualifications List of available qualifications for the user, displayed in a dropdown.
+ * @param refetch Function to refetch data after the user is successfully created.
+ * @returns The rendered user dialog form component.
+ */
 export function UserDialog({setOpenDialog, qualifications, refetch}) {
     const [selectedQualification, setSelectedQualification] = useState("");
     const [username, setUsername] = useState("");

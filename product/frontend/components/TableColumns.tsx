@@ -11,6 +11,18 @@ import {useToast} from "@/hooks/use-toast";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
+/**
+ * The column definitions for the attempts table.
+ *
+ * This configuration defines how each column in the attempts table should behave, including
+ * the data field to be accessed and the column header text.
+ *
+ * - `topicName`: Represents the name of the topic for the attempt.
+ * - `date`: Represents the date when the attempt was made.
+ * - `proportion`: Represents the score of the attempt in proportion (e.g., as a percentage).
+ *
+ * @type {ColumnDef<Attempt>[]}
+ */
 export const attemptColumns: ColumnDef<Attempt>[] = [
     {
         accessorKey: "topicName",
@@ -25,6 +37,23 @@ export const attemptColumns: ColumnDef<Attempt>[] = [
         header: "Score",
     },
 ]
+
+/**
+ * The column definitions for the users table.
+ *
+ * This configuration defines how each column in the users table should behave, including
+ * the data field to be accessed and the column header text. Each column also supports sorting.
+ *
+ * - `username`: Represents the username of the user.
+ * - `email`: Represents the email address of the user.
+ * - `role`: Represents the user's role (e.g., admin, user).
+ * - `createdAt`: Represents the date when the user was created.
+ * - `qualification`: Represents the qualification associated with the user.
+ * - `actions`: Provides actions (like editing and deleting) for each user entry in the table.
+ *
+ * @param {function} refetch - A function to refetch the data after modifications (e.g., after deleting or editing a user).
+ * @returns {ColumnDef<User>[]} The column definitions for the users table.
+ */
 export const usersColumns = (refetch) : ColumnDef<User>[] => [
     {
         accessorKey: "username",
@@ -161,6 +190,23 @@ export const usersColumns = (refetch) : ColumnDef<User>[] => [
         },
     },
 ]
+
+/**
+ * The column definitions for the topics table.
+ *
+ * This configuration defines how each column in the topics table should behave, including
+ * the data field to be accessed, sorting functionality, and the column header text.
+ * It also includes actions for editing and deleting a topic.
+ *
+ * - `name`: Represents the name of the topic.
+ * - `subject`: Represents the subject associated with the topic.
+ * - `qualification`: Represents the qualification associated with the topic.
+ * - `questionCount`: Represents the number of questions for the topic.
+ * - `actions`: Provides actions (like editing and deleting) for each topic entry in the table.
+ *
+ * @param {function} refetch - A function to refetch the data after modifications (e.g., after deleting or editing a topic).
+ * @returns {ColumnDef<Topic>[]} The column definitions for the topics table.
+ */
 export const topicColumns = (refetch): ColumnDef<Topic>[] => [
     {
         accessorKey: "name",
@@ -297,6 +343,22 @@ export const topicColumns = (refetch): ColumnDef<Topic>[] => [
         },
     },
 ]
+
+/**
+ * The column definitions for the subjects table.
+ *
+ * This configuration defines how each column in the subjects table should behave, including
+ * the data field to be accessed, sorting functionality, and the column header text.
+ * It also includes actions for editing and deleting a subject.
+ *
+ * - `name`: Represents the name of the subject.
+ * - `topicNum`: Represents the number of topics under the subject.
+ * - `qualification`: Represents the qualification associated with the subject.
+ * - `actions`: Provides actions (like editing and deleting) for each subject entry in the table.
+ *
+ * @param {function} refetch - A function to refetch the data after modifications (e.g., after deleting or editing a subject).
+ * @returns {ColumnDef<Subject>[]} The column definitions for the subjects table.
+ */
 export const subjectColumns = (refetch): ColumnDef<Subject>[] => [
     {
         accessorKey: "name",
@@ -413,6 +475,24 @@ export const subjectColumns = (refetch): ColumnDef<Subject>[] => [
         },
     },
 ]
+
+/**
+ * The column definitions for the questions table.
+ *
+ * This configuration defines how each column in the questions table should behave, including
+ * the data field to be accessed, sorting functionality, and the column header text.
+ * It also includes actions for editing and deleting a question.
+ *
+ * - `subject`: Represents the subject of the question.
+ * - `topic`: Represents the topic the question is related to.
+ * - `question`: Represents the text of the question itself.
+ * - `answer`: Represents the correct answer for the question.
+ * - `marks`: Represents the number of marks the question is worth.
+ * - `actions`: Provides actions (like editing and deleting) for each question entry in the table.
+ *
+ * @param {function} refetch - A function to refetch the data after modifications (e.g., after deleting or editing a question).
+ * @returns {ColumnDef<Question>[]} The column definitions for the questions table.
+ */
 export const questionColumns = (refetch): ColumnDef<Question>[] => [
     {
         accessorKey: "subject",
@@ -528,6 +608,22 @@ export const questionColumns = (refetch): ColumnDef<Question>[] => [
         },
     },
 ]
+
+/**
+ * The column definitions for the qualifications table.
+ *
+ * This configuration defines how each column in the qualifications table should behave, including
+ * the data field to be accessed, sorting functionality, and the column header text.
+ * It also includes actions for editing and deleting a qualification.
+ *
+ * - `qualification`: Represents the name of the qualification.
+ * - `subjectsNum`: Represents the number of subjects associated with the qualification.
+ * - `usersNum`: Represents the number of users assigned to the qualification.
+ * - `actions`: Provides actions (like editing and deleting) for each qualification entry in the table.
+ *
+ * @param {function} refetch - A function to refetch the data after modifications (e.g., after deleting or editing a qualification).
+ * @returns {ColumnDef<Qualification>[]} The column definitions for the qualifications table.
+ */
 export const qualificationsColumns = (refetch): ColumnDef<Qualification>[] => [
     {
         accessorKey: "qualification",

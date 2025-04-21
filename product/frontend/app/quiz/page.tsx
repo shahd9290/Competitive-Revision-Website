@@ -17,6 +17,19 @@ interface SearchParams {
     id?: string;
 }
 
+/**
+ * A quiz component that handles the process of answering questions, tracking progress,
+ * and displaying results after completion.
+ *
+ * The component retrieves questions for a given topic, allows the user to answer them,
+ * and calculates the total marks based on the answers. It also provides features like skipping a question,
+ * checking if the answer is correct, and displaying the user's total score at the end.
+ *
+ * @param searchParams - The search parameters passed to the component, which includes the topic ID.
+ *
+ * @returns The rendered quiz page, including the questions, user progress, and result after completion.
+ * @author Danyal Shah
+ */
 const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [questions, setQuestions] = useState<Question[]>([])
@@ -232,9 +245,16 @@ const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
   )
 }
 
-
 /**
  * A wrapper component for the `Quiz` component with a sidebar menu.
+ *
+ * This component wraps the `Quiz` component inside a `SidebarMenu` to display the quiz
+ * with an appropriate sidebar navigation for users.
+ *
+ * @param searchParams - The search parameters passed to the component, which includes the topic ID.
+ *
+ * @returns The rendered quiz page wrapped inside a sidebar menu component.
+ * @author Danyal Shah
  */
 const Page = ({searchParams}: { searchParams: SearchParams }) => {
 

@@ -10,6 +10,19 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useToast} from "@/hooks/use-toast";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+/**
+ * A component that provides a dialog for editing a question.
+ *
+ * This component allows the user to edit an existing question, its answer, and its marks. The subject, topic, and qualification
+ * of the question cannot be edited. When changes are made, the component allows submitting the updated data to the server.
+ *
+ * @param open - A boolean that controls whether the dialog is open or not.
+ * @param setOpen - A function to set the state of the dialog (open or closed).
+ * @param row - The row of data for the question to be edited.
+ * @param refetch - A function to refetch the data after the question has been successfully edited.
+ *
+ * @returns The rendered `EditQuestion` component with a form for editing the question.
+ */
 export function EditQuestion({open, setOpen, row, refetch}) {
     const [id, setId] = useState(0);
     const [question, setQuestion] = useState("");
@@ -144,6 +157,19 @@ export function EditQuestion({open, setOpen, row, refetch}) {
     )
 }
 
+/**
+ * A component for editing an existing qualification.
+ *
+ * This component allows the user to edit the name of a qualification. Once changes are made, the updated data can be submitted
+ * to the server. If there are any unsaved changes, a warning dialog is shown before closing the form.
+ *
+ * @param open - A boolean that controls whether the dialog is open or not.
+ * @param setOpen - A function to set the state of the dialog (open or closed).
+ * @param row - The current qualification data to be edited.
+ * @param refetch - A function to refetch the data after the qualification has been successfully edited.
+ *
+ * @returns The rendered `EditQualification` component with a form for editing the qualification name.
+ */
 export function EditQualification({open, setOpen, row, refetch}) {
     const [id, setId] = useState(0);
     const [qualification, setQualification] = useState("");
@@ -254,6 +280,21 @@ export function EditQualification({open, setOpen, row, refetch}) {
     )
 }
 
+/**
+ * A component for editing an existing user.
+ *
+ * This component allows the user to edit a user's details, such as username, email, password, role, and qualification.
+ * Once changes are made, the updated data is submitted to the server. If there are unsaved changes, a warning dialog is displayed
+ * before closing the form.
+ *
+ * @param open - A boolean that controls whether the dialog is open or not.
+ * @param setOpen - A function to set the state of the dialog (open or closed).
+ * @param row - The current user data to be edited.
+ * @param qualifications - A list of available qualifications to assign to the user.
+ * @param refetch - A function to refetch the data after the user has been successfully edited.
+ *
+ * @returns The rendered `EditUser` component with a form for editing the user details.
+ */
 export function EditUser({open, setOpen, row, qualifications, refetch}) {
     const [id, setId] = useState(0);
     const [qualification, setQualification] = useState("");
@@ -439,6 +480,21 @@ export function EditUser({open, setOpen, row, qualifications, refetch}) {
     )
 }
 
+/**
+ * A component for editing an existing subject.
+ *
+ * This component allows an admin user to edit a subject's name and associated qualification.
+ * The form is pre-filled with the existing data, and the user can modify the subject's details.
+ * If there are any unsaved changes, a confirmation dialog will appear before closing the form.
+ *
+ * @param open - A boolean that controls whether the dialog is open or not.
+ * @param setOpen - A function to set the state of the dialog (open or closed).
+ * @param row - The current subject data to be edited.
+ * @param qualifications - A list of available qualifications to assign to the subject.
+ * @param refetch - A function to refetch the data after the subject has been successfully edited.
+ *
+ * @returns The rendered `EditSubject` component with a form for editing the subject details.
+ */
 export function EditSubject({open, setOpen, row, qualifications, refetch}) {
     const [id, setId] = useState(0);
     const [subject, setSubject] = useState("");
@@ -567,6 +623,22 @@ export function EditSubject({open, setOpen, row, qualifications, refetch}) {
     )
 }
 
+/**
+ * A component for editing an existing topic.
+ *
+ * This component allows an admin user to edit the topic's name, associated qualification,
+ * and subject. The form is pre-filled with the existing data, and the user can modify the topic's
+ * details. If there are any unsaved changes, a confirmation dialog will appear before closing the form.
+ *
+ * @param open - A boolean that controls whether the dialog is open or not.
+ * @param setOpen - A function to set the state of the dialog (open or closed).
+ * @param row - The current topic data to be edited.
+ * @param qualifications - A list of available qualifications to assign to the topic.
+ * @param subjects - A list of available subjects that are filtered based on the selected qualification.
+ * @param refetch - A function to refetch the data after the topic has been successfully edited.
+ *
+ * @returns The rendered `EditTopic` component with a form for editing the topic details.
+ */
 export function EditTopic({open, setOpen, row, qualifications, subjects, refetch}) {
     const [id, setId] = useState(0)
     const [topic, setTopic] = useState("");

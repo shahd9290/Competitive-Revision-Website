@@ -8,8 +8,14 @@ import {Button} from "@/components/ui/button";
 import Link from "next/link";
 
 /**
- * A dashboard component displaying user information and statistics.
+ * A user dashboard component that displays the user's profile, performance summary, and recent attempts.
  *
+ * Fetches the user's profile data including marks, attempts, and performance. Displays
+ * a summary of the user's performance such as average score, highest score, total attempts,
+ * and last attempt. If available, it shows a table of recent attempts made by the user.
+ * The dashboard also includes a section for navigating to the quiz section if no attempts are found.
+ *
+ * @returns The rendered dashboard with the user's performance summary and recent attempts.
  * @author Danyal Shah
  */
 const Dashboard = () => {

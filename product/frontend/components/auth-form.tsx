@@ -29,6 +29,20 @@ interface AuthFormProps {
     }[]
 }
 
+/**
+ * A form for user authentication (login, registration, admin login).
+ *
+ * Handles form submission for logging in users, registering new users, and admin login.
+ * Displays appropriate loading indicators, validates input fields, and provides feedback via toasts.
+ * Can include additional fields like qualification for user registration.
+ *
+ * @param type - The type of form: "login", "admin", or "register".
+ * @param title - The title of the form (e.g., "Sign In", "Sign Up").
+ * @param description - A brief description displayed above the form (e.g., "Enter your credentials").
+ * @param apiEndpoint - The API endpoint for form submission (e.g., "/api/auth/login").
+ * @param redirectPath - Path to redirect to after successful submission.
+ * @param additionalFields - Optional additional fields like qualifications for user registration.
+ */
 export function AuthForm({
                              type,
                              title,

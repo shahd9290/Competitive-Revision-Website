@@ -11,6 +11,10 @@ import Link from "next/link";
 /**
  * A dashboard component displaying user information and statistics.
  *
+ * Fetches dashboard data such as total questions, total topics, total subjects,
+ * total qualifications, total users, activity logs, and recent attempts.
+ *
+ * @returns The rendered dashboard component.
  * @author Danyal Shah
  */
 const Dashboard = () => {
@@ -18,7 +22,6 @@ const Dashboard = () => {
   const [stats, setStats] = useState<any[]>([]);
   const [activity, setActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -203,7 +206,6 @@ const Dashboard = () => {
                 <Users className="h-6 w-6" />
                 <span>Users</span>
               </Link>
-
             </Button>
           </div>
         </CardContent>
@@ -214,6 +216,9 @@ const Dashboard = () => {
 
 /**
  * A wrapper component for the Dashboard with a sidebar menu.
+ * Provides a layout for the dashboard with a sidebar navigation menu.
+ *
+ * @returns The dashboard page wrapped in a sidebar.
  */
 const Page = () => {
   return (
@@ -226,4 +231,3 @@ const Page = () => {
 }
 
 export default Page
-

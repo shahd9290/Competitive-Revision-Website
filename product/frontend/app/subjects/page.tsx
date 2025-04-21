@@ -8,7 +8,15 @@ import { SubjectGrid } from "@/components/subject-grid"
 import { DashboardShell } from "@/components/dashboard-shell"
 
 /**
- * Main page component that displays subjects and topics based on user qualification
+ * Main page component that displays subjects and topics based on user qualification.
+ *
+ * This component fetches the user's qualification and then retrieves the subjects
+ * associated with that qualification. If no subjects are found for the qualification,
+ * an informative message is displayed. It also handles the loading state while the
+ * data is being fetched.
+ *
+ * @returns The rendered Subjects page with the user's subjects or a loading message.
+ * @author Danyal Shah
  */
 export default function SubjectsPage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -59,7 +67,6 @@ export default function SubjectsPage() {
 
   return (
       <DashboardShell>
-        {/*<div className="flex flex-col gap-6 px-4 md:px-6 py-8">*/}
         <div className="flex flex-col flex-1 justify-center min-h-[calc(100vh-100px)] gap-6 px-4 md:px-6 py-8">
           {isLoading ? (
               <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
@@ -82,4 +89,3 @@ export default function SubjectsPage() {
       </DashboardShell>
   )
 }
-

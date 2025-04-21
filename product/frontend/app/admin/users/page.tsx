@@ -7,13 +7,18 @@ import {usersColumns} from "@/components/TableColumns";
 import {Button} from "@/components/ui/button";
 
 /**
- * A dashboard component displaying user information and statistics.
+ * A component for displaying the users dashboard.
  *
+ * Fetches the list of users from the backend and displays them in a table.
+ * If no users are available or an error occurs, a message is shown to the user.
+ *
+ * @returns The rendered users dashboard component.
  * @author Danyal Shah
  */
 const UsersDash = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [users, setUsers] = useState([]);
+
     const usersReq = async() => {
         try {
             const response = await axios.get(`${apiUrl}/api/admin/users/get`, {withCredentials: true});
@@ -23,6 +28,7 @@ const UsersDash = () => {
             setUsers([]);
         }
     }
+
     useEffect(() => {
         usersReq();
     }, []);
@@ -47,6 +53,9 @@ const UsersDash = () => {
 
 /**
  * A wrapper component for the UsersDash with a sidebar menu.
+ *
+ * @returns The rendered page component containing the sidebar and users dashboard.
+ * @author Danyal Shah
  */
 const Page = () => {
 
