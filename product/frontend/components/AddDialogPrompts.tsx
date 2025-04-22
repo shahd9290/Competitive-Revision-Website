@@ -374,7 +374,7 @@ export function TopicDialog({setOpenDialog, qualifications, subjects, refetch}) 
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
-                <Button type="submit" disabled={loading}
+                <Button type="submit" disabled={loading || !dirty}
                         className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
@@ -500,7 +500,7 @@ export function SubjectDialog({setOpenDialog, qualifications, refetch}) {
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
-                <Button type="submit" disabled={loading}
+                <Button type="submit" disabled={loading || !dirty}
                         className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
@@ -600,7 +600,7 @@ export function QualificationDialog({setOpenDialog, refetch}) {
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
-                <Button type="submit" disabled={loading}
+                <Button type="submit" disabled={loading || !dirty}
                         className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>
@@ -768,7 +768,7 @@ export function UserDialog({setOpenDialog, qualifications, refetch}) {
                         className=" bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md">
                     Cancel
                 </Button>
-                <Button type="submit" disabled={loading}
+                <Button type="submit" disabled={loading || !dirty}
                         className="bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-md">
                     {loading ? "Submitting..." : "Confirm"}
                 </Button>

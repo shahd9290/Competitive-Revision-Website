@@ -125,10 +125,6 @@ export function CancelUnsavedDialog({open, setOpen, setEdit}) {
     )
 }
 
-Here's a TSDoc comment for the TableDropDown component:
-
-tsx
-Copy
 /**
  * A dropdown menu component that provides actions for editing and deleting a table entry.
  *

@@ -132,10 +132,6 @@ interface SubjectCardProps {
  * @returns {JSX.Element} The SubjectCard component displaying a single subject's details.
  */
 function SubjectCard({subject, onClick}: SubjectCardProps) {
-    ...
-}
-
-function SubjectCard({subject, onClick}: SubjectCardProps) {
     const topicCount = subject.topics?.length || 0
     const totalQuestions = subject.topics?.reduce((sum, topic) => sum + topic.questionCount, 0) || 0
 

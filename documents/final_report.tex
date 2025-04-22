@@ -92,7 +92,7 @@ Student Name: \studentname
 
 \vskip3em
 
-Date of Submission: 21/04/2025 
+Date of Submission: 22/04/2025 
 
 \vskip3em
 
@@ -522,7 +522,7 @@ Michael Gunnulfsen compared the two approaches~\cite{SQL_COMPARE}, identifying t
 
 With Spring Boot used as the backend, an N-tier architecture is used to provide scalability to the system. N-tier architecture is not cited in the literature however it plays a key role in modern web development. A layered structure is followed, separating logic across controllers, services, and repositories. Each layer is responsible for a specific function, with controllers managing incoming API requests, services handling business logic and repositories handling data persistence. With responsibilities delegated this way, debugging becomes easier and code reusability is supported, allowing the system to be maintainable in the long run.\\
 
-Using Next.js for the frontend allows it to follow a component-based architecture, with the ability to build the system through modular, reusable components. Gilda Pour's research~\cite{GPOUR_COMPONENT} highlights that systems following a component-based approach can be implemented rapidly with components, whether they be commercial or in-house, helping to reduce overall development time and cost. This method supports reusability, and allows the system to be scalable and easily maintainable. This architecture is greatly beneficial for this project, by allowing features such as dialog boxes to be implemented independently such that they can be reused across different areas of the system.\\
+Using Next.js for the frontend allows it to follow a component-based architecture, with the ability to build the system through modular, reusable components. Gilda Pour's research~\cite{GPOUR_COMPONENT} highlights that systems following a component-based approach can be implemented rapidly with components, whether they be commercial or in-house, helping to reduce overall development time and cost. This method supports reusability, and allows the system to be scalable and easily maintainable. This architecture is greatly beneficial for this project, by allowing features such as dialogue boxes to be implemented independently such that they can be reused across different areas of the system.\\
 
 Both of these come together to form a client-server architecture, where the frontend (client) communicates with the backend (server) through API endpoints. Kinza Yasar discusses their use~\cite{API}, and highlights how API endpoints act as specific digital locations where requests can be sent to manipulate or retrieve stored information. Edward Lile further expands on this model~\cite{CSA}, discussing that the two operate completely independently, and that changes in one do not require changes in the other. This allows for modular development and independent deployment, enabling flexibility and scalability within the architecture.
 
@@ -1947,8 +1947,8 @@ All Diagrams that are present in Section 4.3 have been included as separate imag
 
 \addcontentsline{toc}{chapter}{Appendix}
 
-\section*{User Manual}
-\addcontentsline{toc}{section}{User Manual}
+\section*{How To Install}
+\addcontentsline{toc}{section}{How To Install}
 
 For the application to function fully, both the frontend and backend need to run separately.
 
@@ -1995,77 +1995,185 @@ You can now log into the Admin dashboard using the following login details, make
 	\item Password: password
 \end{itemize}
 
+\newpage
+\section*{User Manual}
+\addcontentsline{toc}{section}{User Manual}
+
+
+\subsection*{Students}
+
+Students can register for an account at \verb|http://localhost:3000/create| before logging in at \verb|http://localhost:3000/login|\\
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.15]{create.png}\hfill
+	\includegraphics[scale=0.15]{login.png}
+	\caption{Left: The create page. Right: The login page.}
+\end{figure}
+
+They are then greeted with the user dashboard, where they can view their stats for the system. Using the sidebar on the left they can then navigate to the subjects page where they can select the subject and topic they wish to study.
+
+\begin{center}
+	\includegraphics[scale=0.3]{searchbtn.png}
+	\captionof{figure}{Navigating to the search page.}
+\end{center}
+\begin{center}
+	\includegraphics[scale=0.3]{subjectbtn.png}
+	\captionof{figure}{Selecting a subject to study.}
+\end{center}
+\begin{center}
+	\includegraphics[scale=0.3]{topicbtn.png}
+	\captionof{figure}{Selecting a topic to study.}
+\end{center}
+
+The quiz for the chosen topic is loaded. Students can enter the answer in the provided answer box. If the answer is incorrect the marks decrease and the skip button becomes enabled. If the answer is correct the question moves on. No marks are earned for skipping a question.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.15]{quiz5.png}\hfill
+	\includegraphics[scale=0.15]{quiz6.png}
+	\caption{Left: The quiz page. Right: The quiz page after an incorrect answer.}
+\end{figure}
+
+At the end of a quiz the student is shown how many marks they had earned,and how many marks they have in total. They then have the ability to return to the subjects page so they can start a new quiz.
+
+\begin{center}
+	\includegraphics[scale=0.3]{quizresults.png}
+	\captionof{figure}{The results screen of the quiz}
+\end{center}
+
+\subsection*{Admins}
+Admins can log into the system at \verb|http://localhost:3000/admin/login|. They cannot create accounts outside of the system, they will have to be created within. An admin account is provided with the system as seen in the installation guide.
+\begin{center}
+	\includegraphics[scale=0.3]{admin-login.png}
+\end{center}
+
+After logging into the system they are greeted with the admin dashboard, where they can view statistics related to the application as a whole. Using the sidebar, or quick access bar at the bottom of the page, the admin can navigate to a dedicated data table. Each of them function similarly so we will only focus on one here. From the table page, the admin can sort and filter data, as well as add new information to the system. 
+
+\begin{center}
+	\includegraphics[scale=0.3]{subjectsnav.png}
+	\captionof{figure}{Red: Filtering; Blue: Sorting; Green: Pagination}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.3]{tablecontrols.png}
+	\captionof{figure}{Red: Filtering; Blue: Sorting; Green: Pagination}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.3]{add-outline.png}
+	\captionof{figure}{Users can click here to add a new item to the given table.}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.3]{addsubject.png}
+	\captionof{figure}{A dialogue prompt appears, with fields that the admin can fill to add their entity.}
+\end{center}
+
+Submitting the information will cause the data to refresh, displaying the new item in the list. From here, the admin can still edit or delete available data via the row action menus. 
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.15]{rowactions1.png}\hfill
+	\includegraphics[scale=0.15]{rowactions2.png}
+	\caption{Opening the row actions menu}
+\end{figure}
+
+Clicking on the edit button will open a new dialogue box pre-filled with the row's information, the admin can then change these before submitting to update the information in that row of the table
+
+\begin{center}
+	\includegraphics[scale=0.3]{editaction.png}
+	\captionof{figure}{Clicking on the edit button in the row action menu will trigger the edit dialogue box.}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.3]{editsubject.png}
+	\captionof{figure}{The values shown are the current values, changing these will enable the submit button so the admin can submit a change to the entity.}
+\end{center}
+
+In the row actions menu, clicking on the delete button will open an alert prompt warning the user that deletion is permanent, requiring confirmation from the user to proceed with deleting the entity.
+
+\begin{center}
+	\includegraphics[scale=0.3]{deleteaction.png}
+	\captionof{figure}{Clicking on the delete button in the row action menu will trigger the alert dialogue.}
+\end{center}
+
+\begin{center}
+	\includegraphics[scale=0.3]{deletesubject.png}
+	\captionof{figure}{The user is required to click "Confirm" before the entity is removed from the system.}
+\end{center}
+
+\newpage
 \section*{Demo}
 \addcontentsline{toc}{section}{Demo}
 A video demonstration of the application can be viewed here: \url{https://youtu.be/1nWVz-bocpM}
 
-
 \section*{Diary}
 \addcontentsline{toc}{section}{Diary}
 
-\subsection*{30/09/24 - 06/10/24}
+\subsubsection*{30/09/24 - 06/10/24}
 \begin{itemize}
     \item Composed Abstract for Project Plan
 \end{itemize}
 
-\subsection*{07/10/24 - 10/10/24}
+\subsubsection*{07/10/24 - 10/10/24}
 \begin{itemize}
     \item Completed Project Plan
 \end{itemize}
 
-\subsection*{11/10/24}
+\subsubsection*{11/10/24}
 \begin{itemize}
     \item Begin designing key components for the software
     \item Import base project for frontend and backend.
 \end{itemize}
 
-\subsection*{12/10/24 - 13/10/24}
+\subsubsection*{12/10/24 - 13/10/24}
 \begin{itemize}
     \item Created initial versions for login/registration screens.
     \item Backend functionality still to be implemented. 
 \end{itemize}
 
-\subsection*{14/10/24 - 20/10/24}
+\subsubsection*{14/10/24 - 20/10/24}
 \begin{itemize}
     \item Implemented backend functionality for user authentication and refresh tokens. 
     \item Linked to frontend. 
     \item Implemented semi-automated token refreshing (Relies on user to load a new page at the moment).
 \end{itemize}
 
-\subsection*{04/11/24 - 08/11/24}
+\subsubsection*{04/11/24 - 08/11/24}
 \begin{itemize}
     \item Begin work on Question Bank
 \end{itemize}
 
-\subsection*{12/11/24 - 16/11/24}
+\subsubsection*{12/11/24 - 16/11/24}
 \begin{itemize}
     \item Created Subject and Qualification models. 
     \item Qualifications embedded into the system. 
     \item Subject Search functionality to be implemented.
 \end{itemize}
 
-\subsection*{23/11/24 - 24/11/24}
+\subsubsection*{23/11/24 - 24/11/24}
 \begin{itemize}
     \item Implemented Topics
     \item Begin search implementation to frontend.
 \end{itemize}
 
-\subsection*{27/11/24 - 03/12/24}
+\subsubsection*{27/11/24 - 03/12/24}
 \begin{itemize}
-    \item Integrated Modal into search - with topics for the subject in each dialog box.
+    \item Integrated Modal into search - with topics for the subject in each dialogue box.
 \end{itemize}
 
-\subsection*{03/12/24 - 08/12/24}
+\subsubsection*{03/12/24 - 08/12/24}
 \begin{itemize}
     \item Completed Tests for all components \& worked on interim report.
 \end{itemize}
 
-\subsection*{08/12/24 - 13/12/24}
+\subsubsection*{08/12/24 - 13/12/24}
 \begin{itemize}
     \item Continued to work on and complete Interim Report.
 \end{itemize}
 
-\subsection*{15/12/24 - 22/12/24}
+\subsubsection*{15/12/24 - 22/12/24}
 \begin{itemize}
     \item Increased security. 
     \begin{itemize}
@@ -2075,12 +2183,12 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \item Created Question Model for backend.
 \end{itemize}
 
-\subsection*{23/12/24 - 29/12/24}
+\subsubsection*{23/12/24 - 29/12/24}
 \begin{itemize}
     \item Added backend functionality so questions can be saved to the system.
 \end{itemize}
 
-\subsection*{30/12/24 - 05/01/25}
+\subsubsection*{30/12/24 - 05/01/25}
 \begin{itemize}
     \item Completed Quiz System. 
     \begin{itemize}
@@ -2089,28 +2197,28 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \end{itemize}
 \end{itemize}
 
-\subsection*{20/01/25 - 27/01/25}
+\subsubsection*{20/01/25 - 27/01/25}
 \begin{itemize}
     \item Save user attempts to the database.
 \end{itemize}
 
-\subsection*{27/01/25 - 03/02/25}
+\subsubsection*{27/01/25 - 03/02/25}
 \begin{itemize}
     \item Recent attempts is included when loading user dashboard. 
     \item Displayed in a table with their score as a percentage.
 \end{itemize}
 
-\subsection*{03/02/25 - 10/02/25}
+\subsubsection*{03/02/25 - 10/02/25}
 \begin{itemize}
     \item Begin work on admin dashboard - copied login page for admin authentication.
 \end{itemize}
 
-\subsection*{10/02/25 - 17/02/25}
+\subsubsection*{10/02/25 - 17/02/25}
 \begin{itemize}
     \item Implemented Role Based Access Control
 \end{itemize}
 
-\subsection*{17/02/25 - 24/02/25}
+\subsubsection*{17/02/25 - 24/02/25}
 \begin{itemize}
     \item Begin to restructure backend
     \begin{itemize}
@@ -2118,7 +2226,7 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \end{itemize}
 \end{itemize}
 
-\subsection*{24/02/25 - 03/03/25}
+\subsubsection*{24/02/25 - 03/03/25}
 \begin{itemize}
     \item Begin implementation of admin dashboard. Includes:
     \begin{itemize}
@@ -2129,7 +2237,7 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \end{itemize}
 \end{itemize}
 
-\subsection*{03/03/25 - 10/03/25}
+\subsubsection*{03/03/25 - 10/03/25}
 \begin{itemize}
     \item Fix bugs
     \item Optimise data fetching
@@ -2137,7 +2245,7 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \item Qualification Data fetched from backend.
 \end{itemize}
 
-\subsection*{10/03/25 - 17/03/25}
+\subsubsection*{10/03/25 - 17/03/25}
 \begin{itemize}
     \item Table actions. 
     \begin{itemize}
@@ -2149,7 +2257,7 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \item Implemented Add button to each table.
 \end{itemize}
 
-\subsection*{17/03/25 - 24/03/25}
+\subsubsection*{17/03/25 - 24/03/25}
 \begin{itemize}
     \item Backend Restructuring
     \item Add button functional for all data tables. 
@@ -2157,14 +2265,14 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \item Reduced code repetition.
 \end{itemize}
 
-\subsection*{24/03/25 - 31/03/25}
+\subsubsection*{24/03/25 - 31/03/25}
 \begin{itemize}
-    \item Implementation of edit dialogs for questions and qualifications. 
+    \item Implementation of edit dialogues for questions and qualifications. 
 \end{itemize}
 
-\subsection*{31/03/25 - 07/04/25}
+\subsubsection*{31/03/25 - 07/04/25}
 \begin{itemize}
-    \item Complete edit dialog for remaining data tables. 
+    \item Complete edit dialogue for remaining data tables. 
     \item Quiz cannot be loaded if no questions are present. 
     \item Recent Attempts deleted when user/topic deleted. 
     \item Implemented Admin Dashboard with activity log \& global recent attempts. 
@@ -2177,12 +2285,12 @@ A video demonstration of the application can be viewed here: \url{https://youtu.
     \end{itemize}
 \end{itemize}
 
-\subsection*{07/04/25 - 11/04/25}
+\subsubsection*{07/04/25 - 11/04/25}
 \begin{itemize}
     \item Introduced Toaster prompts for better user experience.
 \end{itemize}
 
-\subsection*{11/04/25 - 24/04/25}
+\subsubsection*{11/04/25 - 24/04/25}
 \begin{itemize}
     \item Work on Final Report
 \end{itemize}
