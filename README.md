@@ -1,5 +1,13 @@
 # Advanced Web Development - Study Application
 
+This project was developed for my CS3821 - Final Year Project module, spanning the entirety of my third and final year of my degree. For this project, I was tasked with developing a web application used to provide a particular service online. 
+
+I had chosen to develop a Study Application, based on my prior experience in the education industry, as well as the fact that it is not a common topic for these particular projects.
+
+Grade: 89%
+
+---
+
 ## Setting up Frontend
 The frontend will require [Node.js](https://nodejs.org/en) to be installed.
 
