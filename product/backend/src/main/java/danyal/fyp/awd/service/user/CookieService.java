@@ -33,7 +33,7 @@ public class CookieService {
     public ResponseCookie createTokenCookie(String token) {
         return ResponseCookie.from("token", token)
                 .httpOnly(true)
-                .sameSite("Strict")
+                .sameSite("None")
                 .secure(true)
                 .path("/")
                 .maxAge(ttl.getSeconds())
@@ -54,7 +54,7 @@ public class CookieService {
 
         return ResponseCookie.from("tokenExpiry", String.valueOf(expiryI.getEpochSecond()))
                 .httpOnly(true)
-                .sameSite("Strict")
+                .sameSite("None")
                 .secure(true)
                 .path("/")
                 .maxAge(ttl.getSeconds())
