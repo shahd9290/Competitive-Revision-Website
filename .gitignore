@@ -104,3 +104,5 @@ product/backend/src/main/resources/jwt/app.key
 product/backend/src/main/resources/jwt/app.pub
 product/backend/src/test/resources/jwt/app.key
 product/backend/src/test/resources/jwt/app.pub
+
+**/.DS_Store
