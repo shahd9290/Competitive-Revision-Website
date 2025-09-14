@@ -37,7 +37,7 @@ const UsersDash = () => {
         <div className="flex items-center justify-center min-h-screen ">
             <div className="w-full max-w-7xl p-6 rounded-lg bg-white">
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Users</h1>
-                {users && users.length > 0 ? (
+                {users && users.length >= 0 ? (
                     <div className="container mx-auto">
                         <DataTable columns={usersColumns(usersReq)} data={users} name={"User"} refetch={usersReq}/>
                     </div>

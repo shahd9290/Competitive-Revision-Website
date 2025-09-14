@@ -36,7 +36,7 @@ const QualificationsDash = () => {
         <div className="flex items-center justify-center min-h-screen ">
             <div className="w-full max-w-7xl p-6 rounded-lg bg-white">
                 <h1 className="flex items-center justify-center align-middle text-4xl p-6">Qualifications</h1>
-                {qualifications && qualifications.length > 0 ? (
+                {qualifications && qualifications.length >= 0 ? (
                     <div className="container mx-auto">
                         <DataTable columns={qualificationsColumns(qualsReq)} data={qualifications} name={"Qualification"} refetch={qualsReq}/>
                     </div>
