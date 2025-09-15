@@ -42,7 +42,7 @@ describe("Dashboard Page", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         // Set your API URL so that Dashboard picks it up.
-        process.env.NEXT_PUBLIC_API_URL = "http://localhost:8080";
+        process.env.API_URL = "http://localhost:8080";
     });
 
     it("renders the dashboard stat cards with correct values", async () => {

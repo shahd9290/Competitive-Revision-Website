@@ -3,7 +3,7 @@ import {useState} from "react";
 import axios from "axios";
 
 export default function Home() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.API_URL;
 
     const [qualification, setQualification] = useState('');
     const [subject, setSubject] = useState('');

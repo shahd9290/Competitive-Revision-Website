@@ -8,7 +8,7 @@ import {CancelUnsavedDialog} from "@/components/DialogPrompts";
 import axios from "axios";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useToast} from "@/hooks/use-toast";
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.API_URL;
 
 /**
  * A component that provides a dialog for editing a question.

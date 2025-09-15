@@ -19,7 +19,7 @@ import { DashboardShell } from "@/components/dashboard-shell"
  * @author Danyal Shah
  */
 export default function SubjectsPage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+  const apiUrl = process.env.API_URL
   const [subjects, setSubjects] = useState([])
   const [userQual, setUserQual] = useState("")
   const [isLoading, setIsLoading] = useState(true)

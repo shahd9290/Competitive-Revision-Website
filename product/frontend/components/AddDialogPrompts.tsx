@@ -10,7 +10,7 @@ import {Button} from "@/components/ui/button";
 import {useToast} from "@/hooks/use-toast";
 import {CancelUnsavedDialog} from "@/components/DialogPrompts";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.API_URL;
 /**
  * A dialog component for adding a question.
  *

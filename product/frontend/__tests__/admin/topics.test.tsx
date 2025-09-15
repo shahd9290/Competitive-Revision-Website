@@ -21,7 +21,7 @@ const apiUrl = "http://localhost:8080";
 describe("Topics Dashboard Page", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        process.env.NEXT_PUBLIC_API_URL = apiUrl;
+        process.env.API_URL = apiUrl;
     });
 
     it("renders the dashboard header and topics table when data is loaded", async () => {

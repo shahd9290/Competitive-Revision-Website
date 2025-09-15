@@ -19,7 +19,7 @@ import Link from "next/link";
  * @author Danyal Shah
  */
 const Dashboard = () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.API_URL;
     const [user, setUser] = useState([]);
 
     useEffect(() => {
