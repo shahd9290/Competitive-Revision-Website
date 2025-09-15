@@ -15,7 +15,7 @@ import {qualificationsColumns} from "@/components/TableColumns";
  * @author Danyal Shah
  */
 const QualificationsDash = () => {
-    const apiUrl = process.env.API_URL;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [qualifications, setQualifications] = useState([]);
 
     const qualsReq = async() => {

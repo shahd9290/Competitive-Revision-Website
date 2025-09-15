@@ -15,7 +15,7 @@ import {subjectColumns} from "@/components/TableColumns";
  * @author Danyal Shah
  */
 const SubjectsDash = () => {
-    const apiUrl = process.env.API_URL;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [subjects, setSubjects] = useState([]);
 
     const subjectsReq = async() => {

@@ -71,7 +71,7 @@ describe("Quiz Page", () => {
         (useRouter as jest.Mock).mockReturnValue({
             push: mockPush,
         });
-        process.env.API_URL = "http://localhost:8080";
+        process.env.NEXT_PUBLIC_API_URL = "http://localhost:8080";
     });
 
     it("renders the quiz page and displays the question", async () => {

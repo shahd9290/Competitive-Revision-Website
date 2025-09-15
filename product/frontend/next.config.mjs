@@ -4,7 +4,7 @@ const nextConfig = {
     domains: ["assets.aceternity.com"],
   },
   env: {
-    API_URL: process.env.API_URL, // read from environment
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL, // read from environment
   },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },

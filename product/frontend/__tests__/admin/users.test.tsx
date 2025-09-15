@@ -22,7 +22,7 @@ const apiUrl = "http://localhost:8080";
 describe("Users Dashboard Page", () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        process.env.API_URL = apiUrl;
+        process.env.NEXT_PUBLIC_API_URL = apiUrl;
     });
 
     it("renders the dashboard header and users table when data is loaded", async () => {

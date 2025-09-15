@@ -15,7 +15,7 @@ import axios from "axios";
  * @author Danyal Shah
  */
 export default function RegisterPage() {
-    const apiUrl = process.env.API_URL
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const [qualifications, setQualifications] = useState([]);
 
     useEffect(() => {

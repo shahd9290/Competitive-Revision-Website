@@ -31,7 +31,7 @@ interface SearchParams {
  * @author Danyal Shah
  */
 const Quiz = ({ searchParams }: { searchParams: SearchParams }) => {
-  const apiUrl = process.env.API_URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [questions, setQuestions] = useState<Question[]>([])
   const [topic, setTopic] = useState<Topic | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)

@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {MoreHorizontal} from "lucide-react";
 
-const apiUrl = process.env.API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 interface TableDropDownProps {
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;

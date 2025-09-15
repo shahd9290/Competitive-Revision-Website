@@ -18,7 +18,7 @@ import Link from "next/link";
  * @author Danyal Shah
  */
 const Dashboard = () => {
-  const apiUrl = process.env.API_URL
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL
   const [stats, setStats] = useState<any[]>([]);
   const [activity, setActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

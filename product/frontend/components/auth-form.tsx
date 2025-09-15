@@ -51,7 +51,7 @@ export function AuthForm({
                              redirectPath,
                              additionalFields = [],
                          }: AuthFormProps) {
-    const apiUrl = process.env.API_URL
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const router = useRouter()
     const {toast} = useToast()
     const [formData, setFormData] = useState<Record<string, string>>({

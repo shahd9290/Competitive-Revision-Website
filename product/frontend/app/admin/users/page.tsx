@@ -16,7 +16,7 @@ import {Button} from "@/components/ui/button";
  * @author Danyal Shah
  */
 const UsersDash = () => {
-    const apiUrl = process.env.API_URL;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const [users, setUsers] = useState([]);
 
     const usersReq = async() => {

@@ -9,7 +9,7 @@ import {DeleteDialog, TableDropDown} from "@/components/DialogPrompts";
 import {EditQualification, EditQuestion, EditSubject, EditTopic, EditUser} from "@/components/EditDialogPrompts";
 import {useToast} from "@/hooks/use-toast";
 
-const apiUrl = process.env.API_URL
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 /**
  * The column definitions for the attempts table.

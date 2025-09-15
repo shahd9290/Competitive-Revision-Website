@@ -27,7 +27,7 @@ import {QualificationDialog, QuestionDialog, SubjectDialog, TopicDialog, UserDia
 import axios from "axios";
 import {UUID} from "node:crypto";
 
-const apiUrl = process.env.API_URL
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 /**
  * Original Documentation - https://ui.aceternity.com/components/data-table
