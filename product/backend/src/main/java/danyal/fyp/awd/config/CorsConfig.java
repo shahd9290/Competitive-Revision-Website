@@ -1,6 +1,7 @@
 package danyal.fyp.awd.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -23,10 +24,14 @@ public class CorsConfig implements CorsConfigurationSource {
      * @param request the {@link HttpServletRequest} for which the CORS configuration is applied.
      * @return a {@link CorsConfiguration} object that specifies the CORS rules.
      */
+
+    @Value("${FRONTEND}")
+    private String frontendURI;
+
     @Override
     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOrigins(List.of(frontendURI));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
