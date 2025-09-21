@@ -32,6 +32,7 @@ public class CookieService {
      */
     public ResponseCookie createTokenCookie(String token) {
         return ResponseCookie.from("token", token)
+		.domain(".danyalshah.com")
                 .httpOnly(true)
                 .sameSite("None")
                 .secure(true)
@@ -53,7 +54,8 @@ public class CookieService {
         Instant expiryI = Instant.now().plus(expiryD);
 
         return ResponseCookie.from("tokenExpiry", String.valueOf(expiryI.getEpochSecond()))
-                .httpOnly(true)
+                .domain(".danyalshah.com")
+		.httpOnly(true)
                 .sameSite("None")
                 .secure(true)
                 .path("/")
