@@ -46,10 +46,14 @@ public class UserRegistrationService {
      * @throws ValidationException if the username or email already exists.
      */
     @Transactional
-    public void registerUser(RegistrationRequestDto request) throws QualificationException {
+    public void registerUser(RegistrationRequestDto request) throws Exception {
 
         if (userRepository.existsByUsername(request.username()) || userRepository.existsByEmail(request.email())) {
             throw new ValidationException("Username or Email already exists");
+        }
+
+        if (!request.role().equals("ROLE_USER")) {
+            throw new Exception("Invalid");
         }
 
         User user = new User();
@@ -57,8 +61,7 @@ public class UserRegistrationService {
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setMarks(0);
-        if (request.role().equals("ROLE_USER"))
-            user.setQualificationId(qualificationService.getIdByName(request.qualification()));
+        user.setQualificationId(qualificationService.getIdByName(request.qualification()));
         user.setRole(roleService.getRole(request.role()));
         userRepository.save(user);
         String roleName = request.role();

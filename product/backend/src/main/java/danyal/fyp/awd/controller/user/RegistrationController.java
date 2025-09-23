@@ -36,7 +36,7 @@ public class RegistrationController {
         try {
             userRegistrationService.registerUser(registrationDTO);
             return ResponseEntity.ok("User Registered Successfully");
-        } catch (ValidationException | QualificationException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
